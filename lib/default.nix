@@ -2,6 +2,7 @@
   lib,
   system,
   inputs,
+  username,
   ...
 }: let
   pkgs = import inputs.nixpkgs {
@@ -13,6 +14,6 @@
 in {
   inherit imports pkgs;
 
-  hosts = import ./hosts.nix {inherit lib system pkgs inputs imports;};
-  apps = import ./apps.nix {inherit lib home-manager pkgs;};
+  hosts = import ./hosts.nix {inherit lib system pkgs inputs imports username;};
+  apps = import ./apps.nix {inherit lib home-manager pkgs username;};
 }

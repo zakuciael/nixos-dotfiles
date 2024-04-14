@@ -19,10 +19,11 @@
   } @ inputs: let
     pkgs = lib.my.pkgs;
     system = "x86_64-linux";
+    username = "zakuciael";
     lib = nixpkgs.lib.extend (self: super: {
       hm = home-manager.lib.hm;
       my = import ./lib {
-        inherit lib system inputs;
+        inherit lib system inputs username;
       };
     });
   in {

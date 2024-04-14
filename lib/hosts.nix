@@ -4,6 +4,7 @@
   pkgs,
   inputs,
   imports,
+  username,
   ...
 }: {
   mkHost = {name}:
@@ -11,7 +12,7 @@
       inherit system;
 
       specialArgs = {
-        inherit pkgs lib inputs;
+        inherit pkgs lib inputs username;
         hostname = name;
       };
 

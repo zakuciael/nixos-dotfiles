@@ -3,6 +3,7 @@
   pkgs,
   lib,
   hostname,
+  username,
   ...
 }:
 with lib; let
@@ -15,11 +16,11 @@ in {
   };
 
   config = mkIf cfg.enable {
-    users.users."zakuciael".shell = mkIf cfg.default pkgs.fish;
+    users.users."${username}".shell = mkIf cfg.default pkgs.fish;
     programs.fish.enable = cfg.enable;
     environment.shells = mkIf cfg.default (with pkgs; [fish]);
 
-    home-manager.users.zakuciael = {
+    home-manager.users.${username} = {
       programs = {
         direnv = {
           enable = cfg.enableDirenv;
@@ -29,7 +30,7 @@ in {
               load_dotenv = true;
               disable_stdin = true;
             };
-            whitelist.prefix = ["/home/zakuciael/dev" "/home/zakuciael/nixos"];
+            whitelist.prefix = ["/home/${username}/dev" "/home/${username}/nixos"];
           };
         };
 

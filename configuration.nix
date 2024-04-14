@@ -2,6 +2,7 @@
   config,
   pkgs,
   lib,
+  username,
   ...
 }: {
   # NixOS configuration
@@ -77,7 +78,7 @@
   };
 
   # Configure user
-  users.users."zakuciael" = {
+  users.users.${username} = {
     isNormalUser = true;
     description = "Krzysztof Saczuk";
     extraGroups = ["wheel"];
@@ -88,6 +89,14 @@
     extraSpecialArgs = {inherit pkgs lib;};
     useUserPackages = true;
     useGlobalPkgs = true;
+    users.${username}.home = {
+      inherit username;
+      stateVersion = "23.11";
+      homeDirectory = "/home/${username}";
+      packages = with pkgs; [
+        (import ./scripts/fix_elgato.nix {inherit pkgs;})
+      ];
+    };
   };
 
   # Configure environment
@@ -95,7 +104,7 @@
     systemPackages = with pkgs; [neovim git bash];
     variables = {
       EDITOR = "nvim";
-      NIXOS_CONFIG = "/home/zakuciael/nixos";
+      NIXOS_CONFIG = "/home/${username}/nixos";
     };
     shells = with pkgs; [bash];
   };

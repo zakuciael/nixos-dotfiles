@@ -3,6 +3,7 @@
   lib,
   config,
   home-manager,
+  username,
   ...
 }:
 with lib; let
@@ -22,7 +23,7 @@ in {
       enableSSHSupport = true;
     };
 
-    home-manager.users.zakuciael = {
+    home-manager.users.${username} = {
       programs = {
         gpg.enable = true;
 

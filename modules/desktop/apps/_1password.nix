@@ -3,6 +3,7 @@
   lib,
   config,
   home-manager,
+  username,
   ...
 }:
 with lib;
@@ -11,11 +12,11 @@ with lib.my; {
     _1password.enable = true;
     _1password-gui = {
       enable = true;
-      polkitPolicyOwners = ["zakuciael"];
+      polkitPolicyOwners = [username];
     };
   };
 
-  home-manager.users.zakuciael.programs = {
+  home-manager.users.${username}.programs = {
     git = mkIf (config.modules.dev.git.enable) {
       extraConfig = {
         commit.gpgsign = true;

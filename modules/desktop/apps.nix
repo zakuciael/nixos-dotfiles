@@ -3,6 +3,7 @@
   lib,
   config,
   home-manager,
+  username,
   ...
 }:
 with lib;
@@ -14,7 +15,7 @@ in {
   };
 
   config = mkIf (cfg.enable) {
-    home-manager.users.zakuciael = {
+    home-manager.users.${username} = {
       programs.fish.shellAliases.open = "xdg-open";
       home.packages = with pkgs; [
         discord

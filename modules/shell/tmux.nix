@@ -2,6 +2,7 @@
   config,
   pkgs,
   lib,
+  username,
   ...
 }:
 with lib; let
@@ -12,7 +13,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    home-manager.users.zakuciael = {
+    home-manager.users.${username} = {
       programs.tmux = {
         enable = true;
         mouse = true;
