@@ -10,9 +10,6 @@
     homeDirectory = "/home/zakuciael";
     packages = with pkgs; [
       (import ../../scripts/fix_elgato.nix {inherit pkgs;})
-      firefox
-      discord
-      vscode
     ];
   };
 
@@ -35,7 +32,9 @@
     };
   };
 
-  programs.ssh = let agentPath = "~/.1password/agent.sock"; in {
+  programs.ssh = let
+    agentPath = "~/.1password/agent.sock";
+  in {
     enable = true;
     extraConfig = ''
       Host *
