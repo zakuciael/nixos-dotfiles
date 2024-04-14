@@ -44,20 +44,22 @@
   console.keyMap = "pl";
   services.xserver.layout = "pl";
 
-  # Boot configuration
+  # Global packages
+  environment = {
+    systemPackages = with pkgs; [neovim git bash];
+    variables = {
+      EDITOR = "nvim";
+      NIXOS_CONFIG = "/home/${username}/nixos";
+    };
+    shells = with pkgs; [bash];
+  };
+
+  # Linux Kernel settings
   boot = {
     supportedFilesystems = ["ntfs"];
 
-    loader = {
-      efi.canTouchEfiVariables = true;
-      grub = {
-        enable = true;
-        configurationLimit = 30;
-        efiSupport = true;
-        device = "nodev";
-        useOSProber = true;
-      };
-    };
+    initrd.availableKernelModules = ["ehci_pci" "ahci" "nvme" "xhci_pci" "usbhid" "usb_storage" "sd_mod"];
+    loader.efi.canTouchEfiVariables = true;
   };
 
   # Enable sound with pipewire.
@@ -77,14 +79,14 @@
     #media-session.enable = true;
   };
 
-  # Configure user
+  # User settings
   users.users.${username} = {
     isNormalUser = true;
     description = "Krzysztof Saczuk";
     extraGroups = ["wheel"];
   };
 
-  # Configure home-manager
+  # Home-manager
   home-manager = {
     extraSpecialArgs = {inherit pkgs lib;};
     useUserPackages = true;
@@ -93,24 +95,16 @@
       inherit username;
       stateVersion = "23.11";
       homeDirectory = "/home/${username}";
+      # TODO: Dynamic custom scripts
       packages = with pkgs; [
         (import ./scripts/fix_elgato.nix {inherit pkgs;})
       ];
     };
   };
 
-  # Configure environment
-  environment = {
-    systemPackages = with pkgs; [neovim git bash];
-    variables = {
-      EDITOR = "nvim";
-      NIXOS_CONFIG = "/home/${username}/nixos";
-    };
-    shells = with pkgs; [bash];
-  };
-
-  # Configure modules
+  # Internal modules
   modules = {
+    dev.git.enable = true;
     shell = {
       tmux.enable = true;
       fish = {
@@ -121,11 +115,6 @@
     };
   };
 
-  # This value determines the NixOS release from which the default
-  # settings for stateful data, like file locations and database versions
-  # on your system were taken. It‘s perfectly fine and recommended to leave
-  # this value at the release version of the first install of this system.
-  # Before changing this value read the documentation for this option
-  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "23.11"; # Did you read the comment?
+  # System
+  system.stateVersion = "23.11";
 }
