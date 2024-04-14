@@ -8,6 +8,7 @@
   modules = {
     hardware = {
       grub.enable = true;
+      sound.enable = true;
     };
     desktop = {
       apps.enable = true;
