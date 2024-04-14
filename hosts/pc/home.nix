@@ -13,6 +13,9 @@
     ];
   };
 
+  # Let Home Manager install and manage itself.
+  programs.home-manager.enable = true;
+
   # TODO: Move to module
   programs.direnv = {
     enable = true;

@@ -84,7 +84,6 @@
   };
 
   # Configure home-manager
-  programs.home-manager.enable = true; # Let Home Manager install and manage itself.
   home-manager = {
     extraSpecialArgs = {inherit pkgs lib;};
     useUserPackages = true;
