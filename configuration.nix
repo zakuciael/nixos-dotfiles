@@ -19,8 +19,9 @@
     allowUnfree = true;
   };
 
-  # Timezone
+  # System time
   time.timeZone = "Europe/Warsaw";
+  time.hardwareClockInLocalTime = true;
 
   # System locale
   i18n = {
