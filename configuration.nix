@@ -80,7 +80,7 @@
   users.users."zakuciael" = {
     isNormalUser = true;
     description = "Krzysztof Saczuk";
-    extraGroups = ["networkmanager" "wheel"];
+    extraGroups = ["wheel"];
   };
 
   # Configure home-manager
