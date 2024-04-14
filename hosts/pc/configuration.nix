@@ -9,6 +9,7 @@
     hardware = {
       grub.enable = true;
       sound.enable = true;
+      amdgpu.enable = true;
     };
     desktop = {
       apps.enable = true;

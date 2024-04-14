@@ -16,9 +16,8 @@
 
   swapDevices = [];
 
-  boot.initrd.kernelModules = ["amdgpu" "kvm-intel"];
+  boot.initrd.kernelModules = ["kvm-intel"];
   boot.kernelPackages = pkgs.linuxPackages_latest;
-  hardware.enableRedistributableFirmware = true;
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
