@@ -34,8 +34,6 @@
     in
       mappedHosts;
 
-    devShells.${system}.nixos = pkgs.mkShell {
-      nativeBuildInputs = with pkgs; [nixd inputs.alejandra.defaultPackage.${system}];
-    };
+    devShells.${system}.default = import ./shell.nix { inherit pkgs system inputs; };
   };
 }
