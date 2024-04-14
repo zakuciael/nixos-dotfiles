@@ -12,10 +12,4 @@
       (import ../../scripts/fix_elgato.nix {inherit pkgs;})
     ];
   };
-
-  # TODO: Move to module
-  programs.direnv = {
-    enable = true;
-    nix-direnv.enable = true;
-  };
 }

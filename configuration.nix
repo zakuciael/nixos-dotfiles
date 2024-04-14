@@ -106,6 +106,7 @@
       tmux.enable = true;
       fish = {
         enable = true;
+        enableDirenv = true;
         default = true;
       };
     };
