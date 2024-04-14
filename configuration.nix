@@ -48,13 +48,10 @@
     supportedFilesystems = ["ntfs"];
 
     loader = {
-      efi = {
-        canTouchEfiVariables = true;
-        efiSysMountPoint = "/boot";
-      };
-
+      efi.canTouchEfiVariables = true;
       grub = {
-        configurationLimit = 5;
+        enable = true;
+        configurationLimit = 30;
         efiSupport = true;
         device = "nodev";
         useOSProber = true;
