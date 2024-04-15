@@ -1,19 +1,19 @@
 {pkgs, ...}:
 pkgs.writeShellApplication {
   name = "rofi-powermenu";
-  runtimeInputs = with pkgs; [rofi-wayland toybox mpc-cli alsa-utils bspwm];
+  runtimeInputs = with pkgs; [rofi-wayland toybox mpc-cli alsa-utils bspwm (nerdfonts.override {fonts = ["JetBrainsMono"];})];
   text = ''
     # CMDs
     uptime=$(${pkgs.toybox}/bin/uptime -p | sed -e 's/up //g')
 
     # Options
-    shutdown=''
-    reboot=''
-    lock=''
-    suspend=''
-    logout=''
-    yes=''
-    no=''
+    shutdown='⏻'
+    reboot=''
+    lock=''
+    suspend=''
+    logout=''
+    yes=''
+    no=''
 
     # Rofi CMD
     rofi_cmd() {
