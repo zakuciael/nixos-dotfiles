@@ -24,13 +24,22 @@
     home-manager,
     ...
   } @ inputs: let
-    pkgs = lib.my.pkgs;
     system = "x86_64-linux";
     username = "zakuciael";
+    mkPkgs = p:
+      import p {
+        inherit system;
+
+        config.allowUnfree = true;
+      };
+
+    pkgs = mkPkgs inputs.nixpkgs;
+    unstable = mkPkgs inputs.nixpkgs-unstable;
+
     lib = nixpkgs.lib.extend (self: super: {
       hm = home-manager.lib.hm;
       my = import ./lib {
-        inherit lib system inputs username;
+        inherit lib system inputs pkgs unstable username;
       };
     });
   in {

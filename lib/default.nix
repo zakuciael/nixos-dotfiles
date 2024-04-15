@@ -4,18 +4,19 @@
   system,
   inputs,
   username,
+  pkgs,
+  unstable,
   ...
 }: let
   mapper = import ./mapper.nix {inherit lib pkgs;};
-  pkgs = import inputs.nixpkgs {
-    inherit system;
-    config.allowUnfree = true;
-  };
   imports = import ./imports.nix {inherit lib;};
-  home-manager = inputs.home-manager;
-in {
-  inherit imports pkgs mapper;
 
-  hosts = import ./hosts.nix {inherit lib system pkgs inputs imports username;};
-  apps = import ./apps.nix {inherit lib home-manager pkgs username;};
+  home-manager = inputs.home-manager;
+  dotfiles = mapper.mapDirToAttrs ./../dotfiles;
+  scripts = mapper.mapDirToAttrs ./../scripts;
+in {
+  inherit imports pkgs unstable mapper scripts;
+
+  hosts = import ./hosts.nix {inherit lib system pkgs unstable inputs imports username dotfiles scripts;};
+  apps = import ./apps.nix {inherit lib home-manager pkgs unstable username dotfiles scripts;};
 }

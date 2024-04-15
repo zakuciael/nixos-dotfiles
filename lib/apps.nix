@@ -1,8 +1,11 @@
 {
   lib,
   pkgs,
+  unstable,
+  dotfiles,
   home-manager,
   username,
+  scripts,
   ...
 }: {
   desktopApps = config: cfg: let
@@ -15,7 +18,7 @@
     lib.attrsets.mapAttrs' (n: v: {
       name = builtins.replaceStrings [".nix"] [""] n;
       value = import "${sourceDir}/${n}" {
-        inherit cfg pkgs home-manager config lib username;
+        inherit cfg pkgs unstable dotfiles scripts home-manager config lib username;
       };
     })
     appFiles;

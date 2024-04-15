@@ -2,6 +2,9 @@
   lib,
   system,
   pkgs,
+  unstable,
+  dotfiles,
+  scripts,
   inputs,
   imports,
   username,
@@ -12,7 +15,7 @@
       inherit system;
 
       specialArgs = {
-        inherit pkgs lib inputs username system;
+        inherit pkgs unstable lib dotfiles scripts inputs username system;
         hostname = name;
       };
 
