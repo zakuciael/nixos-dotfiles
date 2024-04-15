@@ -7,8 +7,8 @@
 			"label": "nix: rebuild the system",
 			"problemMatcher": [],
 			"presentation": {
-				"echo": false,
-				"reveal": "silent",
+				"echo": true,
+				"reveal": "always",
 				"focus": false,
 				"panel": "dedicated",
 				"showReuseMessage": false,
