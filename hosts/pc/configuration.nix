@@ -16,6 +16,7 @@
       };
       sound.enable = true;
       amdgpu.enable = true;
+      docker.enable = true;
     };
     desktop = {
       apps.enable = true;
