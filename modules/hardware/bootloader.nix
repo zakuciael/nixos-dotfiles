@@ -10,6 +10,11 @@ with lib.my; let
 in {
   options.modules.hardware.grub = {
     enable = mkEnableOption "Enable GRUB2 as bootloader";
+    theme = mkOption {
+      type = types.nullOr types.package;
+      example = pkgs.nixos-grub2-theme;
+      description = "Set GRUB theme";
+    };
   };
 
   config = mkIf (cfg.enable) {
@@ -18,6 +23,8 @@ in {
       efiSupport = true;
       device = "nodev";
       useOSProber = true;
+      splashImage = "${cfg.theme}/splash_image.jpg";
+      theme = cfg.theme;
     };
   };
 }

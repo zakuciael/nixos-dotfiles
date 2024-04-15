@@ -4,7 +4,14 @@
   inputs = {
     nixpkgs.url = "nixpkgs/nixos-23.11";
     nixpkgs-unstable.url = "nixpkgs/nixos-unstable";
-    home-manager.url = "github:nix-community/home-manager/release-23.11";
+    home-manager = {
+      url = "github:nix-community/home-manager/release-23.11";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    distro-grub-themes = {
+      url = "github:zakuciael/distro-grub-themes";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     alejandra = {
       url = "github:kamadorueda/alejandra/3.0.0";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -34,6 +41,6 @@
     in
       mappedHosts;
 
-    devShells.${system}.default = import ./shell.nix { inherit pkgs system inputs; };
+    devShells.${system}.default = import ./shell.nix {inherit pkgs system inputs;};
   };
 }

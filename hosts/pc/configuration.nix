@@ -1,13 +1,19 @@
 {
   config,
   pkgs,
+  lib,
+  system,
+  inputs,
   ...
 }: {
   imports = [./hardware.nix ./networking.nix];
 
   modules = {
     hardware = {
-      grub.enable = true;
+      grub = {
+        enable = true;
+        theme = inputs.distro-grub-themes.packages.${system}.nixos-grub-theme;
+      };
       sound.enable = true;
       amdgpu.enable = true;
     };

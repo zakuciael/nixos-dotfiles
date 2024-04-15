@@ -12,7 +12,7 @@
       inherit system;
 
       specialArgs = {
-        inherit pkgs lib inputs username;
+        inherit pkgs lib inputs username system;
         hostname = name;
       };
 
