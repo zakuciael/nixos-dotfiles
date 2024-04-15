@@ -63,6 +63,7 @@
       sound.enable = true;
       amdgpu.enable = true;
       docker.enable = true;
+      yubikey.enable = true;
     };
     desktop = {
       apps.enable = true;
