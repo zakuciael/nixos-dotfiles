@@ -44,6 +44,17 @@
   console.keyMap = "pl";
   services.xserver.layout = "pl";
 
+  # Fonts
+  fonts.packages = with pkgs; [
+    noto-fonts
+    noto-fonts-extra
+    noto-fonts-color-emoji
+    noto-fonts-cjk-sans
+    noto-fonts-cjk-serif
+    noto-fonts-emoji-blob-bin
+    (nerdfonts.override {fonts = ["JetBrainsMono"];})
+  ];
+
   # Global packages
   environment = {
     systemPackages = with pkgs; [neovim git bash];
