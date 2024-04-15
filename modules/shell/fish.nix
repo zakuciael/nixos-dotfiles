@@ -34,6 +34,8 @@ in {
           };
         };
 
+        starship.enable = true;
+
         fish = {
           enable = true;
           shellAliases = {
