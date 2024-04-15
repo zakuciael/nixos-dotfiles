@@ -15,6 +15,7 @@ in {
 
   config = mkIf (cfg.enable) (mkMerge (with desktopApps; [
     _1password
+    alacritty
     {
       services.xserver = {
         enable = true;

@@ -21,6 +21,7 @@ in {
         discord
         vscode
         google-chrome
+        warp-terminal
       ];
     };
   };
