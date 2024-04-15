@@ -27,6 +27,26 @@
 			"}\n"
 		]
 	},
+	"App Module": {
+		"prefix": ["nix-app-module", "nixam"],
+		"description": "Generate a app Nix module",
+		"scope": "nix",
+		"isFileTemplate": true,
+		"body": [
+			"{",
+			"\tpkgs,",
+			"\tlib,",
+			"\tconfig,",
+			"\thome-manager,",
+			"\tusername,",
+			"\t...",
+			"}:",
+			"with lib;",
+			"with lib.my; {",
+			"\t${0}",
+			"}"
+		]
+	},
 	"Generic Module": {
 		"prefix": ["nix-module", "nixm"],
 		"description": "Generates a generic Nix module",
