@@ -19,6 +19,7 @@ in {
       programs.fish.shellAliases.open = "xdg-open";
       home.packages = with pkgs; [
         discord
+        vesktop
         vscode
         google-chrome
         warp-terminal
