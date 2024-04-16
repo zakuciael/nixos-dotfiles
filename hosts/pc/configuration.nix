@@ -67,7 +67,11 @@
     };
     desktop = {
       apps.enable = true;
-      gnome.enable = true;
+      sddm.enable = true;
+      hyprland.enable = true;
+    };
+    services = {
+      polkit.enable = true;
     };
   };
 }
