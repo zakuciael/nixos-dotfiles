@@ -16,6 +16,8 @@ with lib.my; {
     };
   };
 
+  services.gnome.gnome-keyring.enable = true;
+
   home-manager.users.${username}.programs = {
     git = mkIf (config.modules.dev.git.enable) {
       extraConfig = {
