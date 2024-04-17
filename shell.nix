@@ -5,5 +5,5 @@
   ...
 }:
 pkgs.mkShell {
-  nativeBuildInputs = with pkgs; [nixd inputs.alejandra.defaultPackage.${system}];
+  nativeBuildInputs = [inputs.nixd.packages.${system}.default inputs.alejandra.defaultPackage.${system}];
 }
