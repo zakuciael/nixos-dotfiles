@@ -20,30 +20,30 @@ with lib.my; {
         enable = true;
         layout = [
           {
-            output = "HDMI-A-0";
-            monitorConfig = ''
-              Option "Mode" "1920x1080"
-              Option "PreferredMode" "1920x1080"
-              Option "Position" "3000 440"
-            '';
-          }
-          {
-            output = "DisplayPort-0";
+            output = {
+              xserver = "DisplayPort-0";
+              wayland = "DP-1";
+            };
             primary = true;
-            monitorConfig = ''
-              Option "Mode" "1920x1080"
-              Option "PreferredMode" "1920x1080"
-              Option "Position" "1080 393"
-            '';
+            mode = "1920x1080";
+            position = "1080x393";
           }
           {
-            output = "DisplayPort-1";
-            monitorConfig = ''
-              Option "Mode" "1920x1080"
-              Option "PreferredMode" "1920x1080"
-              Option "Position" "0 0"
-              Option "Rotate" "left"
-            '';
+            output = {
+              xserver = "DisplayPort-1";
+              wayland = "DP-2";
+            };
+            mode = "1920x1080";
+            position = "0x0";
+            rotate = "left";
+          }
+          {
+            output = {
+              xserver = "HDMI-A-0";
+              wayland = "HDMI-A-1";
+            };
+            mode = "1920x1080";
+            position = "300x440";
           }
         ];
       };
