@@ -53,6 +53,6 @@
     in
       mappedHosts;
 
-    devShells.${system}.default = import ./shell.nix {inherit pkgs system inputs;};
+    devShells.${system}.default = import ./shell.nix {inherit pkgs unstable system inputs;};
   };
 }
