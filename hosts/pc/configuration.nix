@@ -1,9 +1,16 @@
 {
   system,
   inputs,
+  username,
   ...
 }: {
   imports = [./hardware.nix ./networking.nix];
+
+  environment = {
+    variables = {
+      FLAKE = "/home/${username}/nixos";
+    };
+  };
 
   modules = {
     hardware = {

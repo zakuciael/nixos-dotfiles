@@ -39,7 +39,7 @@ in {
         fish = {
           enable = true;
           shellAliases = {
-            re = "sudo nixos-rebuild switch --flake ${config.environment.variables.NIXOS_CONFIG}#${hostname}";
+            re = "nh os switch -H ${hostname}";
             nfu = "nix flake update";
             repl = "nix repl -f '<nixpkgs>'";
             vim = "nvim";

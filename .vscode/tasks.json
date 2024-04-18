@@ -3,7 +3,7 @@
 	"tasks": [
 		{
 			"type": "shell",
-			"command": "sudo nixos-rebuild switch --flake $NIXOS_CONFIG#pc",
+			"command": "nh os switch . -H pc",
 			"label": "nix: rebuild the system",
 			"problemMatcher": [],
 			"presentation": {

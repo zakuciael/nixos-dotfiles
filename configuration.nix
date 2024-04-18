@@ -1,5 +1,4 @@
 {
-  config,
   pkgs,
   lib,
   username,
@@ -62,7 +61,6 @@
     systemPackages = with pkgs; [neovim git bash];
     variables = {
       EDITOR = "nvim";
-      NIXOS_CONFIG = "/home/${username}/nixos";
     };
     shells = with pkgs; [bash];
   };
@@ -92,7 +90,7 @@
       stateVersion = "23.11";
       homeDirectory = "/home/${username}";
       # TODO: Dynamic custom scripts
-      packages = with pkgs; [
+      packages = [
         (import ./scripts/fix_elgato.nix {inherit pkgs;})
       ];
     };
