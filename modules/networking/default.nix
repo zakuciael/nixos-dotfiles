@@ -1,7 +1,7 @@
 {lib, ...}:
 with lib; {
   networking = {
-    hostName = "nixos";
+    hostName = mkDefault "nixos";
     firewall = {
       enable = true;
       allowPing = false;
