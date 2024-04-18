@@ -23,6 +23,7 @@ in {
     alacritty
     _1password
     rofi
+    nh
     {
       programs.hyprland = {
         enable = true;
