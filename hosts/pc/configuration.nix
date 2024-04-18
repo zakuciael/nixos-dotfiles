@@ -43,7 +43,7 @@ with lib.my; {
               wayland = "HDMI-A-1";
             };
             mode = "1920x1080";
-            position = "300x440";
+            position = "3000x440";
           }
         ];
       };

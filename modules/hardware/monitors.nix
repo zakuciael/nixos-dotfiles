@@ -117,10 +117,10 @@ in {
 
   config = mkIf (cfg.enable) {
     home-manager.users.${username} = {
-      wayland.windowManager.hyprland.settings.monitor = mkIf (programs.hyprland.enable) hyprlandMonitorLayout;
+      wayland.windowManager.hyprland.settings.monitor = mkIf (config.programs.hyprland.enable) hyprlandMonitorLayout;
     };
 
-    services.xserver = mkIf (services.xserver.enable) {
+    services.xserver = mkIf (config.services.xserver.enable) {
       deviceSection = xrandrDeviceSection;
       extraConfig = xrandrMonitorSections;
       exportConfiguration = true;
