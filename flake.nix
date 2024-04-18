@@ -29,6 +29,7 @@
   } @ inputs: let
     system = "x86_64-linux";
     username = "zakuciael";
+
     mkPkgs = p:
       import p {
         inherit system;
@@ -36,7 +37,17 @@
         config.allowUnfree = true;
       };
 
-    pkgs = mkPkgs inputs.nixpkgs;
+    pkgs = import inputs.nixpkgs {
+      inherit system;
+      config.allowUnfree = true;
+
+      # TODO: Replace this dirty trick when nixos 24.05 releases
+      overlays = [
+        (final: prev: {
+          nh = unstable.nh;
+        })
+      ];
+    };
     unstable = mkPkgs inputs.nixpkgs-unstable;
 
     lib = nixpkgs.lib.extend (self: super: {
