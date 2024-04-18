@@ -1,13 +1,10 @@
-{
-  pkgs,
-  unstable,
-  lib,
-  config,
-  home-manager,
-  username,
-  ...
-}:
-with lib;
-with lib.my; {
-  programs.nh.enable = true;
+{...}: {
+  programs.nh = {
+    enable = true;
+    clean = {
+      enable = true;
+      dates = "weekly";
+      extraArgs = "--keep 10 --keep-since 7d";
+    };
+  };
 }
