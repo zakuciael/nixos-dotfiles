@@ -16,5 +16,15 @@
         "editor.formatOnType": false
     },
     "nix.enableLanguageServer": true,
-    "nix.serverPath": "nixd"
+    "nix.serverPath": "nil",
+    "nix.serverSettings": {
+        "nil": {
+            "nix": {
+                "flake": {
+                    "autoEvalInputs": false,
+                    "nixpkgsInputName": "nixpkgs",
+                }
+            }
+        }
+    }
 }
