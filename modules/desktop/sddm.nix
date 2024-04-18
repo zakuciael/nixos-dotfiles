@@ -13,6 +13,8 @@ in {
   };
 
   config = mkIf (cfg.enable) {
+    security.pam.services.sddm.enableGnomeKeyring = config.services.gnome.gnome-keyring.enable;
+
     services.xserver = {
       enable = true;
       displayManager.sddm = {
