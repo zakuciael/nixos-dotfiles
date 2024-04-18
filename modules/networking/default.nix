@@ -1,8 +1,5 @@
-{
-  config,
-  pkgs,
-  ...
-}: {
+{lib, ...}:
+with lib; {
   networking = {
     hostName = "nixos";
     firewall = {

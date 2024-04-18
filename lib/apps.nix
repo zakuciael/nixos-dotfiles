@@ -15,7 +15,7 @@
       (n: v: ((lib.strings.hasSuffix ".nix" n) && v == "regular"))
       (builtins.readDir sourceDir);
   in
-    lib.attrsets.mapAttrs' (n: v: {
+    lib.attrsets.mapAttrs' (n: _: {
       name = builtins.replaceStrings [".nix"] [""] n;
       value = import "${sourceDir}/${n}" {
         inherit cfg pkgs unstable dotfiles scripts home-manager config lib username;

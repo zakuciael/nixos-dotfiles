@@ -1,8 +1,6 @@
 {
   pkgs,
   lib,
-  config,
-  home-manager,
   username,
   dotfiles,
   scripts,

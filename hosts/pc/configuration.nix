@@ -1,13 +1,8 @@
 {
-  config,
-  pkgs,
-  lib,
   system,
   inputs,
   ...
-}:
-with lib;
-with lib.my; {
+}: {
   imports = [./hardware.nix ./networking.nix];
 
   modules = {

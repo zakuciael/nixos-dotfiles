@@ -1,13 +1,8 @@
 {
   pkgs,
-  lib,
-  config,
-  home-manager,
   username,
   ...
-}:
-with lib;
-with lib.my; {
+}: {
   home-manager.users.${username}.programs.alacritty = {
     enable = true;
     settings = {

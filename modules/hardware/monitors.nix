@@ -1,8 +1,6 @@
 {
-  pkgs,
   lib,
   config,
-  home-manager,
   username,
   ...
 }:
@@ -56,10 +54,6 @@ with lib.my; let
     monitors = reverseList (foldl mkMonitor [] xrandrHeads);
   in
     concatMapStrings (getAttr "value") monitors;
-  prefixStringLines = prefix: str:
-    concatMapStringsSep "\n" (line: prefix + line) (splitString "\n" str);
-
-  indent = prefixStringLines "  ";
 in {
   options.modules.hardware.monitors = {
     enable = mkEnableOption "Enable X server monitor layout configuration";

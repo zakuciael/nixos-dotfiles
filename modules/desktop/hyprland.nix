@@ -4,7 +4,6 @@
   config,
   inputs,
   system,
-  home-manager,
   username,
   scripts,
   ...
