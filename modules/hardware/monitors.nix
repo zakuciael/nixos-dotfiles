@@ -19,10 +19,9 @@ with lib.my; let
         else transforms.normal
       }'';
   in
-    forEach cfg.layout (config:
-      lib.debug.traceVal ''
-        ${config.output.wayland},${config.mode},${config.position},1${optionalString (config.rotate != "normal") ",${mkTransform config.rotate}"}
-      '');
+    forEach cfg.layout (config: ''
+      ${config.output.wayland},${config.mode},${config.position},1${optionalString (config.rotate != "normal") ",${mkTransform config.rotate}"}
+    '');
   xrandrHeads =
     imap1 (num: config: {
       name = "multihead${toString num}";
