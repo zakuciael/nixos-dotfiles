@@ -16,6 +16,7 @@ in {
 
     services.xserver = {
       enable = true;
+      # TODO: Update this configuration when nixos 24.05 releases
       displayManager.sddm = {
         enable = true;
         autoNumlock = true;
