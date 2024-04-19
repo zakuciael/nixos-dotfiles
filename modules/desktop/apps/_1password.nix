@@ -15,6 +15,10 @@ with lib.my; {
     };
   };
 
+  modules.desktop.hyprland.autostart.programs = [
+    "${pkgs._1password-gui}/bin/1password"
+  ];
+
   home-manager.users.${username}.programs = {
     git = mkIf (config.modules.dev.git.enable) {
       extraConfig = {

@@ -16,6 +16,10 @@ in {
   config = mkIf (cfg.enable) {
     programs.noisetorch.enable = true;
 
+    modules.desktop.hyprland.autostart.programs = [
+      "${pkgs.vesktop}/bin/vencorddesktop"
+    ];
+
     home-manager.users.${username} = {
       programs.fish.shellAliases.open = "xdg-open";
       home.packages = with pkgs; [
