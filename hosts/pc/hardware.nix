@@ -14,6 +14,7 @@
     fsType = "vfat";
   };
 
+  swapDevices = [{device = "/dev/disk/by-partlabel/swap";}];
 
   boot.initrd.kernelModules = ["kvm-intel"];
   boot.kernelPackages = pkgs.linuxPackages_latest;
