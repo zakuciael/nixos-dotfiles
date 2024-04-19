@@ -14,6 +14,8 @@ in {
   };
 
   config = mkIf (cfg.enable) {
+    programs.noisetorch.enable = true;
+
     home-manager.users.${username} = {
       programs.fish.shellAliases.open = "xdg-open";
       home.packages = with pkgs; [
@@ -22,6 +24,7 @@ in {
         vscode
         google-chrome
         warp-terminal
+        wakatime
       ];
     };
   };
