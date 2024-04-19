@@ -12,8 +12,6 @@ in {
   };
 
   config = mkIf (cfg.enable) {
-    security.pam.services.sddm.enableGnomeKeyring = config.services.gnome.gnome-keyring.enable;
-
     services.xserver = {
       enable = true;
       # TODO: Update this configuration when nixos 24.05 releases
