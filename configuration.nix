@@ -73,6 +73,12 @@
 
     initrd.availableKernelModules = ["ehci_pci" "ahci" "nvme" "xhci_pci" "usbhid" "usb_storage" "sd_mod"];
     loader.efi.canTouchEfiVariables = true;
+
+    tmp = {
+      cleanOnBoot = true;
+      useTmpfs = true;
+      tmpfsSize = "25%";
+    };
   };
 
   # User settings

@@ -14,11 +14,6 @@
     fsType = "vfat";
   };
 
-  boot.tmp = {
-    cleanOnBoot = true;
-    useTmpfs = true;
-    tmpfsSize = "25%";
-  };
 
   boot.initrd.kernelModules = ["kvm-intel"];
   boot.kernelPackages = pkgs.linuxPackages_latest;
