@@ -5,12 +5,12 @@
   ...
 }: {
   fileSystems."/" = {
-    device = "/dev/disk/by-uuid/b4810647-5a2a-47dd-9c41-e2be29f12fe6";
+    device = "/dev/disk/by-partlabel/nixos";
     fsType = "ext4";
   };
 
   fileSystems."/boot" = {
-    device = "/dev/disk/by-uuid/5BCB-27B7";
+    device = "/dev/disk/by-partlabel/efi";
     fsType = "vfat";
   };
 
