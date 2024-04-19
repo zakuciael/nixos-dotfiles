@@ -11,12 +11,11 @@
   mapper = import ./mapper.nix {inherit lib pkgs;};
   imports = import ./imports.nix {inherit lib;};
 
-  home-manager = inputs.home-manager;
   dotfiles = mapper.mapDirToAttrs ./../dotfiles;
   scripts = mapper.mapDirToAttrs ./../scripts;
 in {
   inherit imports pkgs unstable mapper scripts;
 
   hosts = import ./hosts.nix {inherit lib system pkgs unstable inputs imports username dotfiles scripts;};
-  apps = import ./apps.nix {inherit lib home-manager pkgs unstable username dotfiles scripts;};
+  apps = import ./apps.nix {inherit lib pkgs unstable username dotfiles scripts;};
 }
