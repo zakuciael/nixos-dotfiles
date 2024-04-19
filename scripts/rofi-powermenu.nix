@@ -1,10 +1,14 @@
-{pkgs, ...}:
+{
+  pkgs,
+  inputs,
+  ...
+}:
 pkgs.writeShellApplication {
   name = "rofi-powermenu";
-  runtimeInputs = with pkgs; [rofi-wayland toybox mpc-cli alsa-utils bspwm (nerdfonts.override {fonts = ["JetBrainsMono"];})];
+  runtimeInputs = with pkgs; [rofi-wayland toybox mpc-cli alsa-utils bspwm inputs.hyprland];
   text = ''
     # CMDs
-    uptime=$(${pkgs.toybox}/bin/uptime -p | sed -e 's/up //g')
+    uptime=$(uptime -p | sed -e 's/up //g')
 
     # Options
     shutdown='⏻'
@@ -51,16 +55,18 @@ pkgs.writeShellApplication {
       selected="$(confirm_exit)"
       if [[ "$selected" == "$yes" ]]; then
         if [[ $1 == '--shutdown' ]]; then
-          ${pkgs.systemd}/bin/systemctl poweroff
+          systemctl poweroff
         elif [[ $1 == '--reboot' ]]; then
-          ${pkgs.systemd}/bin/systemctl reboot
+          systemctl reboot
         elif [[ $1 == '--suspend' ]]; then
-          ${pkgs.mpc-cli}/bin/mpc -q pause
-          ${pkgs.alsa-utils}/bin/amixer set Master mute
-          ${pkgs.systemd}/bin/systemctl suspend
+          mpc -q pause
+          amixer set Master mute
+          systemctl suspend
         elif [[ $1 == '--logout' ]]; then
           if [[ "$DESKTOP_SESSION" == 'bspwm' ]]; then
             bspc quit
+          elif [[ "$DESKTOP_SESSION" == 'hyprland' ]]; then
+            hyprctl dispatch exit
           fi
         fi
       else

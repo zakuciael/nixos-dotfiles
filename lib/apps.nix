@@ -2,6 +2,7 @@
   lib,
   pkgs,
   unstable,
+  inputs,
   dotfiles,
   username,
   scripts,
@@ -17,7 +18,7 @@
     lib.attrsets.mapAttrs' (n: _: {
       name = builtins.replaceStrings [".nix"] [""] n;
       value = import "${sourceDir}/${n}" {
-        inherit cfg pkgs unstable dotfiles scripts config lib username;
+        inherit cfg pkgs unstable dotfiles scripts config lib username inputs;
       };
     })
     appFiles;
