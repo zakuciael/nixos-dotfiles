@@ -30,7 +30,7 @@ in {
               load_dotenv = true;
               disable_stdin = true;
             };
-            whitelist.prefix = ["/home/${username}/dev" "/home/${username}/nixos"];
+            whitelist.prefix = ["/home/${username}/dev"];
           };
         };
 

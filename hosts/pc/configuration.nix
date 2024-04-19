@@ -8,7 +8,7 @@
 
   environment = {
     variables = {
-      FLAKE = "/home/${username}/nixos";
+      FLAKE = "/home/${username}/dev/config/nixos-dotfiles";
     };
   };
 
