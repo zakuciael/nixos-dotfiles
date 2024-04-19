@@ -12,6 +12,8 @@ in {
   };
 
   config = mkIf (cfg.enable) {
+    # TODO: Add ~/.config/Yubico/u2f_keys to repo when secret managment is in place
+
     security.pam = {
       u2f = {
         enable = true;
