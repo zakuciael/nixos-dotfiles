@@ -14,6 +14,15 @@
     fsType = "vfat";
   };
 
+  fileSystems."/media/games/windows" = {
+    device = "/dev/disk/by-partlabel/windows-games";
+    fsType = "ntfs";
+  };
+
+  fileSystems."/media/games/linux" = {
+    device = "/dev/disk/by-partlabel/linux-games";
+  };
+
   swapDevices = [{device = "/dev/disk/by-partlabel/swap";}];
 
   boot.initrd.kernelModules = ["kvm-intel"];
