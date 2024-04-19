@@ -55,6 +55,7 @@
       amdgpu.enable = true;
       docker.enable = true;
       yubikey.enable = true;
+      keyring.enable = true;
     };
     desktop = {
       apps.enable = true;
