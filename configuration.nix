@@ -2,6 +2,7 @@
   pkgs,
   lib,
   username,
+  inputs,
   ...
 }: {
   # NixOS configuration
@@ -84,6 +85,7 @@
   # Home-manager
   home-manager = {
     extraSpecialArgs = {inherit pkgs lib;};
+    sharedModules = [inputs.nix-colors.homeManagerModules.default];
     useUserPackages = true;
     useGlobalPkgs = true;
     users.${username}.home = {

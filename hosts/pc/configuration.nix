@@ -12,6 +12,8 @@
     };
   };
 
+  home-manager.users.${username}.colorScheme = inputs.nix-colors.colorSchemes.catppuccin-mocha;
+
   modules = {
     hardware = {
       grub = {
