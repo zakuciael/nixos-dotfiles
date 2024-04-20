@@ -1,4 +1,22 @@
-### Project folder structure
+<!--suppress HtmlDeprecatedAttribute, CheckImageSize -->
+<h2 align="center">
+  <a href="https://github.com/zakuciael/nixos-dotfiles">
+    <img alt="My NixOS Dotfiles" src="assets/nixos-logo.svg" width="150px" />
+  </a>
+  <br />
+  My NixOS Dotfiles
+</h2>
+
+<h4 align="center">
+    A repository containing configuration files for my NixOS machine.
+</h4>
+<br />
+
+
+## Folder structure
+> [!NOTE]
+> The folder structure is work in progress. Do not assume anything about the stability of the path of the modules in this repository, yet.
+
 ```bash
 .
 ├── hosts/ 
@@ -37,3 +55,12 @@
 ├── shell.nix                    # Default dev shell
 └── flake.nix                    # Flake configuration
 ```
+
+## Credits
+- Radosaw Ratyna ([@Wittano](https://github.com/Wittano)) - For huge inspiration on how to structure my config and a massive portion of the code in the `lib/` directory.
+- Thomas Marchand ([@Th0rgal](https://github.com/Th0rgal)) - For the README logo, which you can find [here](https://github.com/NixOS/nixos-artwork/issues/50).
+- Tyler Kelley ([@Zaney](https://gitlab.com/Zaney)) - For his [dotfiles](https://gitlab.com/Zaney/zaneyos) which inspired me on how I want my OS to look like.
+
+## License
+This project is distributed under the MIT License. 
+See [LICENSE](LICENSE) for more information.
