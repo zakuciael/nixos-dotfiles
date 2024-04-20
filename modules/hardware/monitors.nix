@@ -7,20 +7,20 @@
 with lib;
 with lib.my; let
   cfg = config.modules.hardware.monitors;
+  monitorTransforms = {
+    normal = "0";
+    left = "1";
+    right = "4";
+  };
   hyprlandMonitorLayout = let
-    transforms = {
-      normal = "0";
-      left = "1";
-      right = "4";
-    };
-    mkTransform = rotate: ''transform,${
-        if transforms ? "${rotate}"
-        then transforms.${rotate}
-        else transforms.normal
+    mkHyprlandTransform = rotate: ''transform,${
+        if monitorTransforms ? "${rotate}"
+        then monitorTransforms.${rotate}
+        else monitorTransforms.normal
       }'';
   in
     forEach cfg.layout (config: ''
-      ${config.output.wayland},${config.mode},${config.position},1${optionalString (config.rotate != "normal") ",${mkTransform config.rotate}"}
+      ${config.output.wayland},${config.mode},${config.position},1${optionalString (config.rotate != "normal") ",${mkHyprlandTransform config.rotate}"}
     '');
   xrandrHeads =
     imap1 (num: config: {
@@ -88,11 +88,7 @@ in {
             };
 
             rotate = mkOption {
-              type = enum [
-                "normal"
-                "left"
-                "right"
-              ];
+              type = enum (mapAttrsToList (name: value: name) monitorTransforms);
               default = "normal";
             };
           };
