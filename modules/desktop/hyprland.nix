@@ -14,9 +14,67 @@ with lib.my; let
   desktopApps = apps.desktopApps config cfg;
   launcherScript = import scripts."rofi-launcher.nix".source {inherit pkgs inputs;};
   powermenuScript = import scripts."rofi-powermenu.nix".source {inherit pkgs inputs;};
+  workspaceOptions = with types; {
+    selector = mkOption {
+      type = str;
+      description = "Workspace selector";
+    };
+    monitor = mkOption {
+      type = nullOr str;
+      description = "Binds the workspace to the specific monitor";
+      default = null;
+    };
+    default = mkOption {
+      type = nullOr bool;
+      description = "Makes the workspace default";
+      default = null;
+    };
+    rules = mkOption {
+      type = listOf str;
+      description = "Additional rules added to the workspace";
+      default = [];
+    };
+  };
+  hyprlandWorkspaces = let
+    mkHyprlandWorkspace = workspace:
+      concatStrings [
+        workspace.selector
+        (optionalString (!builtins.isNull workspace.monitor) ",monitor:${workspace.monitor}")
+        (optionalString (!builtins.isNull workspace.default) ",default:${
+          if workspace.default
+          then "true"
+          else "false"
+        }")
+        (optionalString (workspace.rules != []) (concatStrings (builtins.map (val: ",${val}") workspace.rules)))
+      ];
+  in
+    builtins.map mkHyprlandWorkspace cfg.settings.workspaces;
 in {
   options.modules.desktop.hyprland = {
     enable = mkEnableOption "Enable hyprland desktop";
+    settings = mkOption {
+      type = with types;
+        submodule {
+          options = {
+            workspaces = mkOption {
+              type = listOf (submodule {options = workspaceOptions;});
+              description = "A list of workspaces to automatically setup";
+              default = [];
+              example = [
+                {
+                  selector = "1";
+                  monitor = "DP-1";
+                  default = true;
+                }
+                {
+                  selector = "r[2-4]";
+                  monitor = "DP-1";
+                }
+              ];
+            };
+          };
+        };
+    };
     autostart.programs = mkOption {
       type = with types;
         listOf (coercedTo str (cmd: {inherit cmd;}) (submodule {
@@ -49,6 +107,7 @@ in {
     _1password
     rofi
     nh
+    waybar
     {
       programs.hyprland = {
         enable = true;
@@ -63,10 +122,20 @@ in {
           enable = true;
 
           settings = {
-            "$mod" = "SUPER";
+            # Input settings
+            input = {
+              kb_layout = config.services.xserver.layout;
+            };
+
+            # Workspaces
+            workspace = hyprlandWorkspaces;
+
+            # Autostart programs
             "exec-once" = builtins.map (program: program.cmd) (builtins.filter (program: program.once) cfg.autostart.programs);
             exec = builtins.map (program: program.cmd) (builtins.filter (program: !program.once) cfg.autostart.programs);
 
+            # Keybinds
+            "$mod" = "SUPER";
             bind = [
               "$mod, return, exec, alacritty"
               "$mod, W, killactive"
