@@ -16,7 +16,8 @@ in {
         "live_config_reload" = false;
       };
       env.TERM = "xterm-256color";
-      colors = mkIf (colorScheme.author != "") (with colorScheme.colors; {
+
+      colors = assert assertMsg (colorScheme.author != "") "You need to select a nix-colors theme to use this Alacritty config"; (with colorScheme.palette; {
         bright = {
           black = "0x${base00}";
           blue = "0x${base0D}";
