@@ -3,7 +3,7 @@
 	"tasks": [
 		{
 			"type": "shell",
-			"command": "nh os switch . -H pc",
+			"command": "nh os switch . -H pc -- --show-trace",
 			"label": "nix: rebuild the system",
 			"problemMatcher": [],
 			"presentation": {
