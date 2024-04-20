@@ -34,9 +34,26 @@ with lib.my; let
       description = "Additional rules added to the workspace";
       default = [];
     };
+    binds = mkOption {
+      type = listOf (submodule {
+        options = {
+          mods = mkOption {
+            type = nullOr str;
+            description = "A modifier key used for the binding";
+            default = null;
+          };
+          key = mkOption {
+            type = str;
+            description = "A key name used for the binding";
+          };
+        };
+      });
+      description = "A list of keybinds used to access this workspace";
+      default = [];
+    };
   };
-  hyprlandWorkspaces = let
-    mkHyprlandWorkspace = workspace:
+  workspaces = let
+    mkWorkspace = workspace:
       concatStrings [
         workspace.selector
         (optionalString (!builtins.isNull workspace.monitor) ",monitor:${workspace.monitor}")
@@ -48,7 +65,13 @@ with lib.my; let
         (optionalString (workspace.rules != []) (concatStrings (builtins.map (val: ",${val}") workspace.rules)))
       ];
   in
-    builtins.map mkHyprlandWorkspace cfg.settings.workspaces;
+    builtins.map mkWorkspace cfg.settings.workspaces;
+  workspaceBinds = let
+    mkWorkspaceBinds = workspace:
+      builtins.map (bind: "${optionalString (!builtins.isNull bind.mods) bind.mods},${bind.key},workspace,${workspace.selector}")
+      workspace.binds;
+  in
+    flatten (builtins.map mkWorkspaceBinds cfg.settings.workspaces);
 in {
   options.modules.desktop.hyprland = {
     enable = mkEnableOption "Enable hyprland desktop";
@@ -107,7 +130,6 @@ in {
     _1password
     rofi
     nh
-    waybar
     {
       programs.hyprland = {
         enable = true;
@@ -128,7 +150,7 @@ in {
             };
 
             # Workspaces
-            workspace = hyprlandWorkspaces;
+            workspace = workspaces;
 
             # Autostart programs
             "exec-once" = builtins.map (program: program.cmd) (builtins.filter (program: program.once) cfg.autostart.programs);
@@ -136,12 +158,14 @@ in {
 
             # Keybinds
             "$mod" = "SUPER";
-            bind = [
-              "$mod, return, exec, alacritty"
-              "$mod, W, killactive"
-              "SHIFT CTRL, space, exec, ${launcherScript}/bin/rofi-launcher drun"
-              "SHIFT CTRL, Q, exec, ${powermenuScript}/bin/rofi-powermenu"
-            ];
+            bind =
+              [
+                "$mod, return, exec, alacritty"
+                "$mod, W, killactive"
+                "SHIFT CTRL, space, exec, ${launcherScript}/bin/rofi-launcher drun"
+                "SHIFT CTRL, Q, exec, ${powermenuScript}/bin/rofi-powermenu"
+              ]
+              ++ workspaceBinds;
             bindm = [
               "$mod, mouse:272, movewindow"
               "$mod, mouse:273, resizewindow"
