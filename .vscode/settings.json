@@ -26,5 +26,19 @@
                 }
             }
         }
-    }
+    },
+    "conventionalCommits.scopes": [
+        "vscode",
+        "modules",
+        "apps",
+        "readme",
+        "config",
+        "hardware",
+        "services",
+        "scripts",
+        "dev",
+        "hyprland",
+        "sddm",
+        "gnome"
+    ]
 }
