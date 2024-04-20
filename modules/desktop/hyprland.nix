@@ -137,6 +137,7 @@ in {
     _1password
     rofi
     nh
+    waybar
     {
       programs.hyprland = {
         enable = true;
