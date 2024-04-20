@@ -1,5 +1,6 @@
 {
   pkgs,
+  unstable,
   lib,
   config,
   username,
@@ -24,11 +25,12 @@ in {
       programs.fish.shellAliases.open = "xdg-open";
       home.packages = with pkgs; [
         discord
-        vesktop
+        unstable.vesktop
         vscode
         google-chrome
         warp-terminal
         wakatime
+        spotify
       ];
     };
   };
