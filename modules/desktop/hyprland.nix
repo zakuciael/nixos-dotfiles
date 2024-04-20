@@ -39,12 +39,16 @@ with lib.my; let
         options = {
           mods = mkOption {
             type = nullOr str;
-            description = "A modifier key used for the binding";
+            description = "A modifier key used for the 'workspace switch' binding";
             default = null;
+          };
+          alt_mods = mkOption {
+            type = nullOr str;
+            description = "A modifier key used for the 'move to workspace' binding";
           };
           key = mkOption {
             type = str;
-            description = "A key name used for the binding";
+            description = "A key name for the bindings";
           };
         };
       });
@@ -68,7 +72,10 @@ with lib.my; let
     builtins.map mkWorkspace cfg.settings.workspaces;
   workspaceBinds = let
     mkWorkspaceBinds = workspace:
-      builtins.map (bind: "${optionalString (!builtins.isNull bind.mods) bind.mods},${bind.key},workspace,${workspace.selector}")
+      builtins.map (bind: [
+        "${optionalString (!builtins.isNull bind.mods) bind.mods},${bind.key},workspace,${workspace.selector}"
+        "${optionalString (!builtins.isNull bind.alt_mods) bind.alt_mods},${bind.key},movetoworkspace,${workspace.selector}"
+      ])
       workspace.binds;
   in
     flatten (builtins.map mkWorkspaceBinds cfg.settings.workspaces);

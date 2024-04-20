@@ -80,10 +80,12 @@ in {
             binds = [
               {
                 mods = "$mod";
+                alt_mods = "$mod SHIFT";
                 key = selector;
               }
               {
                 mods = "$mod";
+                alt_mods = "$mod SHIFT";
                 key = bind_key;
               }
             ];
