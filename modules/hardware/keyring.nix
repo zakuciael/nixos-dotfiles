@@ -13,6 +13,7 @@ in {
 
   config = mkIf (cfg.enable) {
     security.pam.services.login.enableGnomeKeyring = true;
+    security.pam.services.sddm.enableGnomeKeyring = true;
     services.gnome.gnome-keyring.enable = true;
   };
 }
