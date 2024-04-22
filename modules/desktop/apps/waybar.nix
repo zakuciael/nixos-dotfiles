@@ -48,8 +48,8 @@ in {
         };
         "clock" = {
           format = "{: %H:%M}";
-          tooltip = false;
-          # TODO: Make a nice looking calendar tooltip
+            tooltip = true;
+            tooltip-format = "{:%A, %d %B %Y }";
         };
         "memory" = {
           interval = 5;
