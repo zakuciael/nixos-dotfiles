@@ -104,9 +104,10 @@ in {
       }
     ];
 
+      # TODO: Fix hover on workspaces
     style = assert assertMsg (colorScheme.author != "") "You need to select a nix-colors theme to use this Waybar config"; (with colorScheme.palette; ''
       * {
-        font-size: 16px;
+          font-size: 14px;
         font-family: JetBrainsMono Nerd Font, Font Awesome, sans-serif;
         font-weight: bold;
       }
@@ -119,7 +120,7 @@ in {
       }
 
       #workspaces {
-        background: linear-gradient(180deg, #${base00}, #${base01});
+          background: linear-gradient(180deg, #${base02}, #${base00});
         margin: 5px;
         padding: 0px 1px;
         border-radius: 15px;
@@ -134,14 +135,14 @@ in {
         border-radius: 15px;
         border: 0px;
         color: #${base00};
-        background-color: #${base00};
+          background-color: #${base04};
         opacity: 1.0;
         transition: all 0.3s ease-in-out;
       }
 
       #workspaces button.active {
         color: #${base00};
-        background: #${base04};
+          background: #${base07};
         border-radius: 15px;
         min-width: 40px;
         transition: all 0.3s ease-in-out;
@@ -150,7 +151,7 @@ in {
 
       #workspaces button:hover {
         color: #${base00};
-        background: #${base04};
+          background: #${base0D};
         border-radius: 15px;
         opacity: 1.0;
       }
@@ -174,7 +175,7 @@ in {
       }
 
       #memory {
-        color: #${base0F};
+          color: #${base0D};
         background: #${base00};
         border-radius: 15px 50px 15px 50px;
         margin: 5px;
@@ -182,7 +183,7 @@ in {
       }
 
       #clock {
-        color: #${base0B};
+          color: #${base05};
         background: #${base00};
         border-radius: 15px 50px 15px 50px;
         margin: 5px;
@@ -190,7 +191,7 @@ in {
       }
 
       #cpu {
-        color: #${base07};
+          color: #${base0C};
         background: #${base00};
         border-radius: 50px 15px 50px 15px;
         margin: 5px;
@@ -198,7 +199,7 @@ in {
       }
 
       #disk {
-        color: #${base03};
+          color: #${base0B};
         background: #${base00};
         border-radius: 15px 50px 15px 50px;
         margin: 5px;
@@ -222,7 +223,7 @@ in {
       }
 
       #pulseaudio {
-        color: #${base0D};
+          color: #${base0E};
         background: #${base00};
         border-radius: 50px 15px 50px 15px;
         margin: 5px;
@@ -445,5 +446,6 @@ in {
       padding: 2px 5px 2px 15px;
     }
     */
+  };
   };
 }
