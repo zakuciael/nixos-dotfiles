@@ -79,6 +79,7 @@ with lib.my; let
       workspace.binds;
   in
     flatten (builtins.map mkWorkspaceBinds cfg.settings.workspaces);
+  mkSortByPriority = {priority, ...} @ a: {priority, ...} @ b: a.priority < b.priority;
 in {
   options.modules.desktop.hyprland = {
     enable = mkEnableOption "Enable hyprland desktop";
@@ -117,6 +118,11 @@ in {
               type = bool;
               default = true;
               description = "If the program should only be executed on launch";
+            };
+            priority = mkOption {
+              type = int;
+              default = 99;
+              description = "The priority in which the program should be started";
             };
           };
         }));
@@ -161,8 +167,8 @@ in {
             workspace = workspaces;
 
             # Autostart programs
-            "exec-once" = builtins.map (program: program.cmd) (builtins.filter (program: program.once) cfg.autostart.programs);
-            exec = builtins.map (program: program.cmd) (builtins.filter (program: !program.once) cfg.autostart.programs);
+            "exec-once" = builtins.map (program: program.cmd) (lists.sort mkSortByPriority (builtins.filter (program: program.once) cfg.autostart.programs));
+            exec = builtins.map (program: program.cmd) (lists.sort mkSortByPriority (builtins.filter (program: !program.once) cfg.autostart.programs));
 
             # Keybinds
             "$mod" = "SUPER";
