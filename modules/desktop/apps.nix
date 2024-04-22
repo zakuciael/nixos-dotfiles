@@ -36,6 +36,7 @@ in {
         warp-terminal
         wakatime
         spotify
+        unstable.graphite-cli
       ];
     };
   };
