@@ -3,7 +3,7 @@
 	"tasks": [
 		{
 			"type": "shell",
-			"command": "nh os switch . -H pc -- --show-trace",
+			"command": "nh os test . -H pc -- --show-trace && echo -e '\\033[1;32m>\\033[0m Done!'",
 			"label": "nix: rebuild the system",
 			"problemMatcher": [],
 			"presentation": {
