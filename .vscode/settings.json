@@ -39,6 +39,9 @@
         "dev",
         "hyprland",
         "sddm",
-        "gnome"
+        "gnome",
+        "alacritty",
+        "keyring",
+        "waybar"
     ]
 }
