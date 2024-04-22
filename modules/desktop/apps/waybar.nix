@@ -44,7 +44,7 @@ in {
         };
         "hyprland/window" = {
           max-length = 25;
-          separate-outputs = false;
+            separate-outputs = true;
         };
         "clock" = {
           format = "{: %H:%M}";
