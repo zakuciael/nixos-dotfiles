@@ -18,6 +18,7 @@ in {
   ];
 
   home-manager.users.${username} = {
+    home.packages = with pkgs; [pavucontrol];
     programs.waybar = {
       inherit package;
     enable = true;
@@ -77,20 +78,20 @@ in {
         "pulseaudio" = {
           format = "{icon} {volume}% {format_source}";
           format-bluetooth = "{volume}% {icon} {format_source}";
-          format-bluetooth-muted = " {icon} {format_source}";
-          format-muted = " {format_source}";
+            format-bluetooth-muted = "󰝟 {icon} {format_source}";
+            format-muted = "󰝟 {format_source}";
           format-source = " {volume}%";
           format-source-muted = "";
           format-icons = {
             headphone = "";
             hands-free = "";
-            headset = "";
+              headset = "󰋎";
             phone = "";
             portable = "";
             car = "";
             default = ["" "" ""];
           };
-          on-click = "sleep 0.1 && pavucontrol";
+            on-click = "sleep 0.1 && ${pkgs.pavucontrol}/bin/pavucontrol";
         };
 
         /*
