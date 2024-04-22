@@ -62,7 +62,7 @@ in {
           tooltip = true;
         };
         "disk" = {
-          format = " {free}";
+            format = " {free} / {total}";
           tooltip = true;
         };
         "network" = {
