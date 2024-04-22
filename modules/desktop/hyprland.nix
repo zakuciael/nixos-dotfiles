@@ -152,6 +152,8 @@ in {
       };
 
       home-manager.users.${username} = {
+        home.packages = with pkgs; [playerctl];
+
         imports = [inputs.hyprland.homeManagerModules.default];
 
         wayland.windowManager.hyprland = {
@@ -172,10 +174,24 @@ in {
 
             # Keybinds
             "$mod" = "SUPER";
-            bind =
+            bind = with pkgs;
               [
                 "$mod, return, exec, alacritty"
-                "$mod, W, killactive"
+                "$mod, W, killactive,"
+                "$mod, F, togglefloating,"
+                "$mod, M, fullscreen, 1"
+                "$mod, LEFT, movefocus, l"
+                "$mod, RIGHT, movefocus, r"
+                "$mod, UP, movefocus, u"
+                "$mod, DOWN, movefocus, d"
+                ", XF86AudioRaiseVolume, exec, ${wireplumber}/bin/wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+"
+                ", XF86AudioLowerVolume, exec, ${wireplumber}/bin/wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"
+                ", XF86AudioMute, exec, ${wireplumber}/bin/wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
+                ", XF86AudioMicMute, exec, ${wireplumber}/bin/wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"
+                ", XF86AudioPlay, exec, ${playerctl}/bin/playerctl play-pause"
+                ", XF86AudioNext, exec, ${playerctl}/bin/playerctl next"
+                ", XF86AudioPrev, exec, ${playerctl}/bin/playerctl previous"
+                ", XF86audiostop, exec, ${playerctl}/bin/playerctl stop"
                 "SHIFT CTRL, space, exec, ${launcherScript}/bin/rofi-launcher drun"
                 "SHIFT CTRL, Q, exec, ${powermenuScript}/bin/rofi-powermenu"
               ]
