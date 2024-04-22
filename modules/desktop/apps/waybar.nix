@@ -7,11 +7,20 @@
 }:
 with lib; let
   colorScheme = config.home-manager.users.${username}.colorScheme;
+  package = pkgs.waybar;
 in {
-  home-manager.users.${username}.programs.waybar = {
+  modules.desktop.hyprland.autostart.programs = [
+    {
+      cmd = "${pkgs.toybox}/bin/pkill waybar && ${package}/bin/waybar";
+      once = false;
+      priority = 0;
+    }
+  ];
+
+  home-manager.users.${username} = {
+    programs.waybar = {
+      inherit package;
     enable = true;
-    package = pkgs.waybar;
-    systemd.enable = true;
 
     settings = [
       {
