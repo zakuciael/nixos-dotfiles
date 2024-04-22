@@ -33,14 +33,14 @@ in {
         modules-right = ["tray"];
 
         "hyprland/workspaces" = {
-          format = "{name}";
+            format = "{icon}";
           format-icons = {
             default = " ";
             active = " ";
             urgent = " ";
           };
-          on-scroll-up = "hyprctl dispatch workspace e+1";
-          on-scroll-down = "hyprctl dispatch workspace e-1";
+            on-scroll-up = "hyprctl dispatch workspace m+1";
+            on-scroll-down = "hyprctl dispatch workspace m-1";
         };
         "hyprland/window" = {
           max-length = 25;
