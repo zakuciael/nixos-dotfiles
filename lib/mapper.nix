@@ -14,6 +14,8 @@ with lib; rec {
       else sourceAttrs // mapDirToAttrs source)
     (attrsets.filterAttrs (n: v: n != ".git") (builtins.readDir path));
 
+  toINI = name: attrs: (pkgs.formats.ini {}).generate name attrs;
+
   toTOML = name: attrs: (pkgs.formats.toml {}).generate name attrs;
 
   toCfg = name: attrs: let
