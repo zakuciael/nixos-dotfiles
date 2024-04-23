@@ -47,15 +47,15 @@
         ]
       },
       "locked": {
-        "lastModified": 1713277137,
-        "narHash": "sha256-LIRUD9+KF8ofxcl9BIDFkkVsTZ5MIS8Afng/if+s63k=",
-        "owner": "zakuciael",
+        "lastModified": 1713374342,
+        "narHash": "sha256-tY/WtdV15S3Q83jE7u9kg/f+FoJswVDHR39/KHHK5Pw=",
+        "owner": "AdisonCavani",
         "repo": "distro-grub-themes",
-        "rev": "768d066516142ac9eeebdb4c4a8201309d380461",
+        "rev": "03685a905a0a589c2940f0de9a93ad3b1f1e1e19",
         "type": "github"
       },
       "original": {
-        "owner": "zakuciael",
+        "owner": "AdisonCavani",
         "repo": "distro-grub-themes",
         "type": "github"
       }
