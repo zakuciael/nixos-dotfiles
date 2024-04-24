@@ -11,7 +11,7 @@ with lib; let
 in {
   modules.desktop.hyprland.autostart.programs = [
     {
-      cmd = "${pkgs.toybox}/bin/pkill waybar && ${package}/bin/waybar";
+      cmd = "${pkgs.toybox}/bin/pkill waybar; ${package}/bin/waybar";
       once = false;
       priority = 0;
     }
