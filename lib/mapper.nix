@@ -14,6 +14,22 @@ with lib; rec {
       else sourceAttrs // mapDirToAttrs source)
     (attrsets.filterAttrs (n: v: n != ".git") (builtins.readDir path));
 
+  mapKeyToNumpad = num: let
+    keys = [
+      "KP_End"
+      "KP_Down"
+      "KP_Next"
+      "KP_Left"
+      "KP_Begin"
+      "KP_Right"
+      "KP_Home"
+      "KP_Up"
+      "KP_Prior"
+      "KP_Insert"
+    ];
+  in
+    builtins.elemAt keys (num - 1);
+
   toINI = name: attrs: (pkgs.formats.ini {}).generate name attrs;
 
   toTOML = name: attrs: (pkgs.formats.toml {}).generate name attrs;
