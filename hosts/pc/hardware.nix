@@ -23,6 +23,11 @@
     device = "/dev/disk/by-partlabel/linux-games";
   };
 
+  # TODO: Temp, remove when full transision to NixOS is done.
+  fileSystems."/media/arch" = {
+    device = "/dev/disk/by-uuid/0db30fcb-b052-4ef0-9c08-1382d82b4eb5";
+  };
+
   swapDevices = [{device = "/dev/disk/by-partlabel/swap";}];
 
   boot.initrd.kernelModules = ["kvm-intel"];
