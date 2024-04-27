@@ -28,9 +28,40 @@ with lib.my; let
       "$mod SHIFT, ${mapper.mapKeyToNumpad x}, split:movetoworkspace, ${ws}"
     ])
     workspaceCount);
+  monitorBinds = debug.traceVal (lib.flatten (builtins.map (config: [
+      # Focus monitor
+      "$mod ALT, ${config.key}, focusmonitor, ${config.monitor}"
+      # Move to monitor
+      "$mod ALT SHIFT, ${config.key}, movewindow, mon:${config.monitor}"
+    ])
+    cfg.monitorBinds));
 in {
   options.modules.desktop.hyprland = {
     enable = mkEnableOption "Enable hyprland desktop";
+    monitorBinds = mkOption {
+      type = with types;
+        listOf (submodule {
+          options = {
+            monitor = mkOption {
+              type = str;
+              description = "A name of the monitor output";
+              example = "DP-1";
+            };
+            key = mkOption {
+              type = str;
+              description = "A key used for the monitor keybind";
+              example = "KP_End";
+            };
+          };
+        });
+      default = [];
+      example = [
+        {
+          monitor = "DP-1";
+          key = "KP_End";
+        }
+      ];
+    };
     autostart.programs = mkOption {
       type = with types;
         listOf (coercedTo str (cmd: {inherit cmd;}) (submodule {
@@ -128,7 +159,8 @@ in {
                 "SHIFT CTRL, space, exec, ${launcherScript}/bin/rofi-launcher drun"
                 "SHIFT CTRL, Q, exec, ${powermenuScript}/bin/rofi-powermenu"
               ]
-              ++ workspaceBinds;
+              ++ workspaceBinds
+              ++ monitorBinds;
             bindm = [
               "$mod, mouse:272, movewindow"
               "$mod, mouse:273, resizewindow"

@@ -8,6 +8,7 @@
   inputs,
   imports,
   username,
+  mapper,
   ...
 }: {
   mkHost = {name}:
@@ -15,7 +16,7 @@
       inherit system;
 
       specialArgs = {
-        inherit pkgs unstable lib dotfiles scripts inputs username system;
+        inherit pkgs unstable lib dotfiles scripts inputs username system mapper;
         hostname = name;
       };
 

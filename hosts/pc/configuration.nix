@@ -3,6 +3,7 @@
   system,
   inputs,
   username,
+  mapper,
   ...
 }: let
   monitors = {
@@ -67,7 +68,23 @@ in {
     desktop = {
       apps.enable = true;
       sddm.enable = true;
-      hyprland.enable = true;
+      hyprland = {
+        enable = true;
+        monitorBinds = [
+          {
+            monitor = monitors.main.wayland;
+            key = mapper.mapKeyToNumpad 1;
+          }
+          {
+            monitor = monitors.left.wayland;
+            key = mapper.mapKeyToNumpad 2;
+          }
+          {
+            monitor = monitors.right.wayland;
+            key = mapper.mapKeyToNumpad 3;
+          }
+        ];
+      };
     };
     services = {
       polkit.enable = true;

@@ -229,11 +229,11 @@
         "xdph": "xdph"
       },
       "locked": {
-        "lastModified": 1714172141,
-        "narHash": "sha256-vA113HFDJF8vVetyghoguJ/vgROzUeobK/0I5+ibLUk=",
+        "lastModified": 1714184224,
+        "narHash": "sha256-yEoweaoJaoulLAZkzg71n1TvZuQgzZB3cG/GBXZfu6I=",
         "owner": "hyprwm",
         "repo": "Hyprland",
-        "rev": "3692091ceea3c227da0dcbc4e4ce0d6c4b0ebf59",
+        "rev": "25aec3ac8ce65ed224f025f8f6dfef73780577a4",
         "type": "github"
       },
       "original": {
@@ -324,36 +324,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1713989318,
-        "narHash": "sha256-WSsEQQxZQ+bsAWRhi1iXvP8sxgRyNtY3X1V3CfFdP5Q=",
+        "lastModified": 1714171579,
+        "narHash": "sha256-eaWDIvt8ufUKKz3Lc2a3PyemLJG1m9RYlF+HP3hWbaw=",
         "owner": "hyprwm",
         "repo": "hyprwayland-scanner",
-        "rev": "1cfe2d26a82ce794fd33ec06fa022e68501c5a45",
+        "rev": "126dad854f22fe30e6b82cd21808e76903d90ac5",
         "type": "github"
       },
       "original": {
         "owner": "hyprwm",
         "repo": "hyprwayland-scanner",
-        "type": "github"
-      }
-    },
-    "hyprsplit": {
-      "inputs": {
-        "hyprland": [
-          "hyprland"
-        ]
-      },
-      "locked": {
-        "lastModified": 1713816483,
-        "narHash": "sha256-cbP0s/hNxSZU4d1IcoImOyUKwRheSk/1qv4nEEpbA3c=",
-        "owner": "shezdy",
-        "repo": "hyprsplit",
-        "rev": "49b31eb73fe06fb8944e07b9ffa1b7e88b3a5965",
-        "type": "github"
-      },
-      "original": {
-        "owner": "shezdy",
-        "repo": "hyprsplit",
         "type": "github"
       }
     },
@@ -403,11 +383,11 @@
         "nixpkgs": "nixpkgs_3"
       },
       "locked": {
-        "lastModified": 1714182688,
-        "narHash": "sha256-aqQGcjgH0LebseuBUaY8hNH3bpMasqTzg73Q6T60i9I=",
+        "lastModified": 1714185516,
+        "narHash": "sha256-GgHKme2gMMsqscmk0NlmJ1HmYY7ztxDUYJdO6f3Fizs=",
         "owner": "nix-community",
         "repo": "nixd",
-        "rev": "df9d7a71ddd8d01de096fd3c0cb0c5642f27bde8",
+        "rev": "e1f6f717af7b14ff826f268646375f7964f477a6",
         "type": "github"
       },
       "original": {
