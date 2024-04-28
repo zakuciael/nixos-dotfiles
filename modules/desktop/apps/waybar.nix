@@ -33,7 +33,7 @@ in {
           modules-right = ["tray"];
 
           "hyprland/workspaces" = {
-            format = "{icon}";
+            format = "{name}";
             format-icons = {
               default = " ";
               active = " ";
@@ -62,7 +62,7 @@ in {
             tooltip = true;
           };
           "disk" = {
-            format = " {free} / {total}";
+            format = " {free}";
             tooltip = true;
           };
           "network" = {
@@ -93,18 +93,9 @@ in {
             };
             on-click = "sleep 0.1 && ${pkgs.pavucontrol}/bin/pavucontrol";
           };
-
-          /*
-          "clock" = {
-            format = '' {:L%H:%M}'';
-            tooltip = true;
-            tooltip-format = "<big>{:%A, %d.%B %Y }</big><tt><small>{calendar}</small></tt>";
-          };
-          */
         }
       ];
 
-      # TODO: Fix hover on workspaces
       style = assert assertMsg (colorScheme.author != "") "You need to select a nix-colors theme to use this Waybar config"; (with colorScheme.palette; ''
         * {
           font-size: 14px;
@@ -163,7 +154,7 @@ in {
         }
 
         tooltip label {
-          color: #${base07};
+          color: #${base05};
         }
 
         #window {
