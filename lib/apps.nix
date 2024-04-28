@@ -6,6 +6,7 @@
   dotfiles,
   username,
   scripts,
+  mapper,
   ...
 }: {
   desktopApps = config: cfg: let
@@ -18,7 +19,7 @@
     lib.attrsets.mapAttrs' (n: _: {
       name = builtins.replaceStrings [".nix"] [""] n;
       value = import "${sourceDir}/${n}" {
-        inherit cfg pkgs unstable dotfiles scripts config lib username inputs;
+        inherit cfg pkgs unstable dotfiles scripts config lib username inputs mapper;
       };
     })
     appFiles;

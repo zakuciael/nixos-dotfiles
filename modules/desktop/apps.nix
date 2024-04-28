@@ -37,6 +37,8 @@ in {
         wakatime
         spotify
         unstable.graphite-cli
+        cinnamon.nemo
+        libsForQt5.ark
       ];
     };
   };

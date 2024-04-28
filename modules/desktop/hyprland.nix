@@ -144,6 +144,7 @@ in {
     rofi
     nh
     waybar
+    gtk
     {
       programs.hyprland = {
         enable = true;
