@@ -1,20 +1,17 @@
 {
-  config,
   lib,
   pkgs,
   username,
+  desktop,
+  colorScheme,
   ...
 }:
 with lib; let
-  colorScheme = config.home-manager.users.${username}.colorScheme;
   package = pkgs.waybar;
 in {
-  modules.desktop.hyprland.autostart.programs = [
-    {
-      cmd = "${pkgs.toybox}/bin/pkill waybar; ${package}/bin/waybar";
-      once = false;
-      priority = 0;
-    }
+  # TODO: Add priority for waybar, so it starts before any other app
+  modules.desktop.${desktop}.autostartPrograms = [
+    "${package}/bin/waybar"
   ];
 
   home-manager.users.${username} = {
@@ -96,7 +93,7 @@ in {
         }
       ];
 
-      style = assert assertMsg (colorScheme.author != "") "You need to select a nix-colors theme to use this Waybar config"; (with colorScheme.palette; ''
+      style = with colorScheme.palette; ''
         * {
           font-size: 14px;
           font-family: JetBrainsMono Nerd Font, Font Awesome, sans-serif;
@@ -220,7 +217,7 @@ in {
           margin: 5px;
           padding: 2px 20px;
         }
-      '');
+      '';
     };
   };
 }

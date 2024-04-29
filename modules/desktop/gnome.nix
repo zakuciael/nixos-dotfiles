@@ -4,24 +4,22 @@
   ...
 }:
 with lib;
-with lib.my; let
-  cfg = config.modules.desktop.gnome;
-  desktopApps = apps.desktopApps config cfg;
-in {
-  options.modules.desktop.gnome = {
-    enable = mkEnableOption "Enable Gnome desktop";
-  };
+with lib.my;
+  desktop.mkDesktopModule {
+    inherit config;
 
-  config = mkIf (cfg.enable) (mkMerge (with desktopApps; [
-    _1password
-    alacritty
-    rofi
-    {
+    name = "gnome";
+    desktopApps = [
+      "_1password"
+      "alacritty"
+      "rofi"
+    ];
+
+    extraConfig = {
       services.xserver = {
         enable = true;
         displayManager.gdm.enable = true;
         desktopManager.gnome.enable = true;
       };
-    }
-  ]));
-}
+    };
+  }

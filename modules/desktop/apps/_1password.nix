@@ -3,6 +3,7 @@
   lib,
   pkgs,
   username,
+  desktop,
   ...
 }:
 with lib;
@@ -15,7 +16,7 @@ with lib.my; {
     };
   };
 
-  modules.desktop.hyprland.autostart.programs = [
+  modules.desktop.${desktop}.autostartPrograms = [
     "${pkgs._1password-gui}/bin/1password"
   ];
 
