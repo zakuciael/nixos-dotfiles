@@ -1,22 +1,20 @@
 {
   lib,
-  system,
   pkgs,
   unstable,
+  inputs,
+  username,
   dotfiles,
   scripts,
-  inputs,
-  imports,
-  username,
-  mapper,
   ...
-}: {
+}:
+with lib.my; {
   mkHost = {name}:
-    inputs.nixpkgs.lib.nixosSystem rec {
-      inherit system;
+    inputs.nixpkgs.lib.nixosSystem {
+      inherit (pkgs) system;
 
       specialArgs = {
-        inherit pkgs unstable lib dotfiles scripts inputs username system mapper;
+        inherit lib pkgs unstable inputs username dotfiles scripts;
         hostname = name;
       };
 
@@ -27,6 +25,7 @@
 
           # TODO: Replace this dirty trick when nixos 24.05 releases
           "${unstable.path}/nixos/modules/programs/nh.nix"
+
           inputs.home-manager.nixosModules.home-manager
         ]
         ++ (imports.importModulesPath ./../modules);
