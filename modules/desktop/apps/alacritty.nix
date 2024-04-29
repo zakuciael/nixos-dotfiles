@@ -1,13 +1,11 @@
 {
-  config,
   lib,
   pkgs,
   username,
+  colorScheme,
   ...
 }:
-with lib; let
-  colorScheme = config.home-manager.users.${username}.colorScheme;
-in {
+with lib; {
   home-manager.users.${username}.programs.alacritty = {
     enable = true;
     settings = {
@@ -17,7 +15,7 @@ in {
       };
       env.TERM = "xterm-256color";
 
-      colors = assert assertMsg (colorScheme.author != "") "You need to select a nix-colors theme to use this Alacritty config"; (with colorScheme.palette; {
+      colors = with colorScheme.palette; {
         bright = {
           black = "0x${base00}";
           blue = "0x${base0D}";
@@ -46,7 +44,7 @@ in {
           background = "0x${base00}";
           foreground = "0x${base06}";
         };
-      });
+      };
     };
   };
 }

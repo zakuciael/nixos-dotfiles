@@ -9,12 +9,8 @@
 }:
 with lib;
 with lib.my; let
-  cfg = config.modules.desktop.hyprland;
-  colorScheme = config.home-manager.users.${username}.colorScheme;
-  desktopApps = apps.desktopApps config cfg;
   launcherScript = import scripts."rofi-launcher.nix".source {inherit pkgs inputs;};
   powermenuScript = import scripts."rofi-powermenu.nix".source {inherit pkgs inputs;};
-  mkSortByPriority = {priority, ...} @ a: {priority, ...} @ b: a.priority < b.priority;
   workspaceCount = 9;
   workspaceBinds = lib.flatten (builtins.genList (i: let
       x = i + 1;
@@ -28,80 +24,60 @@ with lib.my; let
       "$mod SHIFT, ${mapper.mapKeyToNumpad x}, split:movetoworkspace, ${ws}"
     ])
     workspaceCount);
-  monitorBinds = lib.flatten (builtins.map (config: [
-      # Focus monitor
-      "$mod ALT, ${config.key}, focusmonitor, ${config.monitor}"
-      # Move to monitor
-      "$mod ALT SHIFT, ${config.key}, movewindow, mon:${config.monitor}"
-    ])
-    cfg.monitorBinds);
-in {
-  options.modules.desktop.hyprland = {
-    enable = mkEnableOption "Enable hyprland desktop";
-    monitorBinds = mkOption {
-      type = with types;
-        listOf (submodule {
-          options = {
-            monitor = mkOption {
-              type = str;
-              description = "A name of the monitor output";
-              example = "DP-1";
-            };
-            key = mkOption {
-              type = str;
-              description = "A key used for the monitor keybind";
-              example = "KP_End";
-            };
-          };
-        });
-      default = [];
-      example = [
-        {
-          monitor = "DP-1";
-          key = "KP_End";
-        }
-      ];
-    };
-    autostart.programs = mkOption {
-      type = with types;
-        listOf (coercedTo str (cmd: {inherit cmd;}) (submodule {
-          options = {
-            cmd = mkOption {
-              type = str;
-              description = "A command to execute to start the program";
-            };
-            once = mkOption {
-              type = bool;
-              default = true;
-              description = "If the program should only be executed on launch";
-            };
-            priority = mkOption {
-              type = int;
-              default = 99;
-              description = "The priority in which the program should be started";
-            };
-          };
-        }));
-      description = "A list of programs to autostart when Hyprland loads";
-      default = [];
-      example = [
-        "${pkgs.discord}/bin/discord"
-        {
-          cmd = "${pkgs.nitrogen}/bin/nitrogen --restore";
-          once = false;
-        }
-      ];
-    };
-  };
+in
+  desktop.mkDesktopModule {
+    inherit config;
 
-  config = mkIf (cfg.enable) (mkMerge (with desktopApps; [
-    alacritty
-    _1password
-    rofi
-    nh
-    waybar
-    gtk
-    {
+    name = "hyprland";
+    desktopApps = [
+      "alacritty"
+      "_1password"
+      "rofi"
+      "nh"
+      "waybar"
+      "gtk"
+    ];
+
+    extraOptions = with lib; {
+      monitorBinds = mkOption {
+        type = with types;
+          listOf (submodule {
+            options = {
+              monitor = mkOption {
+                type = str;
+                description = "A name of the monitor output";
+                example = "DP-1";
+              };
+              key = mkOption {
+                type = str;
+                description = "A key used for the monitor keybind";
+                example = "KP_End";
+              };
+            };
+          });
+        default = [];
+        example = [
+          {
+            monitor = "DP-1";
+            key = "KP_End";
+          }
+        ];
+      };
+    };
+
+    extraConfig = {
+      cfg,
+      colorScheme,
+      ...
+    }: let
+      monitorBinds = lib.flatten (builtins.map (config: [
+          # Focus monitor
+          "$mod ALT, ${config.key}, focusmonitor, ${config.monitor}"
+          # Move to monitor
+          "$mod ALT SHIFT, ${config.key}, movewindow, mon:${config.monitor}"
+        ])
+        cfg.monitorBinds);
+    in {
       programs.hyprland = {
         enable = true;
         package = inputs.hyprland.packages.hyprland;
@@ -129,7 +105,7 @@ in {
             };
 
             # General settings
-            general = assert assertMsg (colorScheme.author != "") "You need to select a nix-colors theme to use this Hyprland config"; (with colorScheme.palette; {
+            general = with colorScheme.palette; {
               gaps_in = 6;
               gaps_out = 8;
               border_size = 3;
@@ -137,7 +113,7 @@ in {
               "col.inactive_border" = "rgba(${base00}cc) rgba(${base01}cc) 45deg";
               layout = "dwindle";
               resize_on_border = true;
-            });
+            };
 
             # Decoration settings
             decoration = {
@@ -183,11 +159,6 @@ in {
               new_is_master = true;
             };
 
-            # Autostart programs
-            # TODO: Replace by an generated bash script to actually support priority
-            "exec-once" = builtins.map (program: program.cmd) (lists.sort mkSortByPriority (builtins.filter (program: program.once) cfg.autostart.programs));
-            exec = builtins.map (program: program.cmd) (lists.sort mkSortByPriority (builtins.filter (program: !program.once) cfg.autostart.programs));
-
             # Keybinds
             "$mod" = "SUPER";
             bind =
@@ -223,6 +194,5 @@ in {
           };
         };
       };
-    }
-  ]));
-}
+    };
+  }

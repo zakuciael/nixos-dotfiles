@@ -5,6 +5,7 @@
   unstable,
   inputs,
   username,
+  desktop,
   ...
 }:
 with lib;
@@ -18,7 +19,7 @@ in {
   config = mkIf (cfg.enable) {
     programs.noisetorch.enable = true;
 
-    modules.desktop.hyprland.autostart.programs = [
+    modules.desktop.${desktop}.autostartPrograms = [
       "${pkgs.vesktop}/bin/vencorddesktop"
     ];
 
