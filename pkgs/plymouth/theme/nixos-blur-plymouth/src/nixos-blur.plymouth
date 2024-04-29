@@ -1,0 +1,9 @@
+[Plymouth Theme]
+Name=nixos-blur
+Description=nixos logo blurring
+Comment=created By Gurkan (gurkan.in)
+ModuleName=script
+
+[script]
+ImageDir=etc/plymouth/themes/nixos-blur
+ScriptFile=etc/plymouth/themes/nixos-blur/nixos-blur.script

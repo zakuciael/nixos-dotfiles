@@ -70,10 +70,12 @@
         hyprsplit = flakeInputs.hyprsplit.packages.${system};
       };
 
+    private-pkgs = lib.my.pkgs.importPkgs ./pkgs;
+
     lib = nixpkgs.lib.extend (self: super: {
       hm = home-manager.lib.hm;
       my = import ./lib {
-        inherit lib pkgs unstable inputs username;
+        inherit lib pkgs unstable private-pkgs inputs username;
       };
     });
   in {

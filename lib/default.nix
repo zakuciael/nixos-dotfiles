@@ -3,6 +3,7 @@
   lib,
   pkgs,
   unstable,
+  private-pkgs,
   inputs,
   username,
   ...
@@ -15,6 +16,7 @@
 in {
   inherit imports mapper;
 
-  hosts = import ./hosts.nix {inherit lib pkgs unstable inputs username dotfiles scripts;};
-  apps = import ./apps.nix {inherit lib pkgs unstable inputs username dotfiles scripts;};
+  pkgs = import ./pkgs.nix {inherit lib pkgs;};
+  hosts = import ./hosts.nix {inherit lib pkgs unstable private-pkgs inputs username dotfiles scripts;};
+  apps = import ./apps.nix {inherit lib pkgs unstable private-pkgs inputs username dotfiles scripts;};
 }
