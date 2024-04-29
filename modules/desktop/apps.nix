@@ -5,12 +5,16 @@
   unstable,
   inputs,
   username,
-  desktop,
   ...
 }:
 with lib;
 with builtins; let
   cfg = config.modules.desktop.apps;
+  mkAutostartModules = programs:
+    builtins.listToAttrs (builtins.map (desktop: {
+      name = desktop;
+      value = {autostartPrograms = programs;};
+    }) (builtins.attrNames config.modules.desktop.wm));
 in {
   options.modules.desktop.apps = {
     enable = mkEnableOption "Install desktop applications";
@@ -19,8 +23,8 @@ in {
   config = mkIf (cfg.enable) {
     programs.noisetorch.enable = true;
 
-    modules.desktop.${desktop}.autostartPrograms = [
-      "${pkgs.vesktop}/bin/vencorddesktop"
+    modules.desktop.wm = mkAutostartModules [
+      "${unstable.vesktop}/bin/vesktop"
     ];
 
     home-manager.users.${username} = {

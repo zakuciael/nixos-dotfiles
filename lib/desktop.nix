@@ -25,27 +25,27 @@ with lib.my; let
       programs = builtins.concatStringsSep "\n" (builtins.map (x: ''"${x}"'') cmds);
     in
       pkgs.writeShellScript "autostart.sh" ''
-        export DISPLAY=":0"
+        LOG_DIR=$HOME/.local/share/${desktop}
 
-        log_dir=$HOME/.local/share/${desktop}
+        exec_app() {
+          EXEC_PATH=$(echo "$1" | awk '{ print $1 }')
+          APP_NAME=$(basename "$EXEC_PATH")
+          TIMESTAMP=$(date +"%D %T")
 
-        _log_app() {
-          exec_path=$(echo "$1" | awk '{ print $1 }')
-          app_name=$(basename "$exec_path")
-          time=$(date +"%D %T")
-
-          echo "[autostart] $time: Launch $app_name"
-          ${pkgs.bash}/bin/bash -c "$1" 2>"$log_dir/$app_name.log" || echo "[warning] $" &
+          echo "[autostart] $time: Launching $APP_NAME"
+          ${pkgs.bash}/bin/bash -c "$1" &>"$LOG_DIR/$APP_NAME.log" || echo "[warning] There was a problem launching $APP_NAME" &
         }
 
-        declare -a programs
+        declare -a APPS
 
-        programs=(${programs})
+        APPS=(${programs})
 
         IFS=""
 
-        for app in ''${programs[*]}; do
-          _log_app "$app"
+        mkdir -p "$LOG_DIR"
+
+        for APP in ''${APPS[*]}; do
+          exec_app "$APP"
         done
       '';
 in {
@@ -58,8 +58,8 @@ in {
     extraConfig ? {},
     extraOptions ? {},
   }: let
-    cfg = config.modules.desktop.${name};
-    self = modules.desktop.${name};
+    cfg = config.modules.desktop.wm.${name};
+    self = modules.desktop.wm.${name};
     desktopName = name;
 
     includedApps = builtins.map (appName: mkDesktopApp config appName desktopName) desktopApps;
@@ -69,6 +69,7 @@ in {
       then
         extraConfig {
           inherit self cfg;
+          autostartScript = autostartPath;
           colorScheme = assert assertMsg
           (config.home-manager.users.${username}.colorScheme.author != "")
           "You need to select a nix-colors theme to use this ${desktopName} config";
@@ -110,7 +111,7 @@ in {
       };
     };
   in {
-    options.modules.desktop.${name} = moduleOptions // extraOptionsModule;
+    options.modules.desktop.wm.${name} = moduleOptions // extraOptionsModule;
 
     config = mkIf (cfg.enable) (mkMerge ([
         autostartScriptMountModule

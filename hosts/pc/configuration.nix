@@ -67,7 +67,7 @@ in {
     desktop = {
       apps.enable = true;
       sddm.enable = true;
-      hyprland = {
+      wm.hyprland = {
         enable = true;
         monitorBinds = [
           {
