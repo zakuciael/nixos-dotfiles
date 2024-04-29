@@ -57,7 +57,7 @@
 ```
 
 ## Credits
-- Radosaw Ratyna ([@Wittano](https://github.com/Wittano)) - For huge inspiration on how to structure my config and a massive portion of the code in the `lib/` directory.
+- Radosław Ratyna ([@Wittano](https://github.com/Wittano)) - For huge inspiration on how to structure my config and a massive portion of the code in the `lib/` directory.
 - Thomas Marchand ([@Th0rgal](https://github.com/Th0rgal)) - For the README logo, which you can find [here](https://github.com/NixOS/nixos-artwork/issues/50).
 - Tyler Kelley ([@Zaney](https://gitlab.com/Zaney)) - For his [dotfiles](https://gitlab.com/Zaney/zaneyos) which inspired me on how I want my OS to look like.
 
