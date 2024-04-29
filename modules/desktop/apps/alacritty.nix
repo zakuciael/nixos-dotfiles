@@ -1,8 +1,8 @@
 {
-  pkgs,
-  username,
   config,
   lib,
+  pkgs,
+  username,
   ...
 }:
 with lib; let

@@ -31,7 +31,7 @@
     nixpkgs,
     home-manager,
     ...
-  } @ inputs: let
+  } @ flakeInputs: let
     system = "x86_64-linux";
     username = "zakuciael";
 
@@ -55,10 +55,25 @@
     };
     unstable = mkPkgs inputs.nixpkgs-unstable;
 
+    inputs =
+      flakeInputs
+      // {
+        distro-grub-themes = flakeInputs.distro-grub-themes.packages.${system};
+        nil = flakeInputs.nil.packages.${system};
+        nixd = flakeInputs.nixd.packages.${system};
+        alejandra = flakeInputs.alejandra.packages.${system};
+        hyprland =
+          flakeInputs.hyprland
+          // {
+            packages = flakeInputs.hyprland.packages.${system};
+          };
+        hyprsplit = flakeInputs.hyprsplit.packages.${system};
+      };
+
     lib = nixpkgs.lib.extend (self: super: {
       hm = home-manager.lib.hm;
       my = import ./lib {
-        inherit lib system inputs pkgs unstable username;
+        inherit lib pkgs unstable inputs username;
       };
     });
   in {
@@ -68,7 +83,5 @@
       mappedHosts = builtins.mapAttrs (n: v: mkHost {name = n;}) hosts;
     in
       mappedHosts;
-
-    devShells.${system}.default = import ./shell.nix {inherit pkgs unstable system inputs;};
   };
 }

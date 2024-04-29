@@ -1,9 +1,8 @@
 {
-  pkgs,
-  lib,
   config,
+  lib,
+  pkgs,
   inputs,
-  system,
   username,
   scripts,
   ...
@@ -29,13 +28,13 @@ with lib.my; let
       "$mod SHIFT, ${mapper.mapKeyToNumpad x}, split:movetoworkspace, ${ws}"
     ])
     workspaceCount);
-  monitorBinds = debug.traceVal (lib.flatten (builtins.map (config: [
+  monitorBinds = lib.flatten (builtins.map (config: [
       # Focus monitor
       "$mod ALT, ${config.key}, focusmonitor, ${config.monitor}"
       # Move to monitor
       "$mod ALT SHIFT, ${config.key}, movewindow, mon:${config.monitor}"
     ])
-    cfg.monitorBinds));
+    cfg.monitorBinds);
 in {
   options.modules.desktop.hyprland = {
     enable = mkEnableOption "Enable hyprland desktop";
@@ -105,21 +104,17 @@ in {
     {
       programs.hyprland = {
         enable = true;
-        package = inputs.hyprland.packages.${system}.hyprland;
+        package = inputs.hyprland.packages.hyprland;
         xwayland.enable = true;
       };
 
       home-manager.users.${username} = {
         home.packages = with pkgs; [playerctl];
 
-        imports = [inputs.hyprland.homeManagerModules.default];
-
         wayland.windowManager.hyprland = {
           enable = true;
 
-          plugins = [
-            inputs.hyprsplit.packages.${system}.hyprsplit
-          ];
+          plugins = [inputs.hyprsplit.default];
 
           settings = {
             # Plugins

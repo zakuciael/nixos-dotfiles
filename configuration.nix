@@ -127,7 +127,10 @@ in {
   # Home-manager
   home-manager = {
     extraSpecialArgs = {inherit pkgs lib;};
-    sharedModules = [inputs.nix-colors.homeManagerModules.default];
+    sharedModules = [
+      inputs.nix-colors.homeManagerModules.default
+      inputs.hyprland.homeManagerModules.default
+    ];
     useUserPackages = true;
     useGlobalPkgs = true;
     users.${username}.home = {

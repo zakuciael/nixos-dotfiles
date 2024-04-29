@@ -1,11 +1,10 @@
 {
-  pkgs,
-  inputs,
-  unstable,
-  lib,
   config,
+  lib,
+  pkgs,
+  unstable,
+  inputs,
   username,
-  system,
   ...
 }:
 with lib;
@@ -26,9 +25,9 @@ in {
     home-manager.users.${username} = {
       programs.fish.shellAliases.open = "xdg-open";
       home.packages = with pkgs; [
-        inputs.nil.packages.${system}.default
-        inputs.nixd.packages.${system}.default
-        inputs.alejandra.defaultPackage.${system}
+        inputs.nil.default
+        inputs.nixd.default
+        inputs.alejandra.default
         discord
         unstable.vesktop
         vscode

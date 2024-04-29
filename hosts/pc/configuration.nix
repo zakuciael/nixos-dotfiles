@@ -1,10 +1,10 @@
 {
-  system,
+  lib,
   inputs,
   username,
-  mapper,
   ...
 }: let
+  inherit (lib.my) mapper;
   monitors = {
     main = {
       xserver = "DisplayPort-0";
@@ -34,7 +34,7 @@ in {
     hardware = {
       grub = {
         enable = true;
-        theme = inputs.distro-grub-themes.packages.${system}.nixos-grub-theme;
+        theme = inputs.distro-grub-themes.nixos-grub-theme;
       };
       monitors = {
         enable = true;

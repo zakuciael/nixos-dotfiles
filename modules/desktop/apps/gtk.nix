@@ -1,9 +1,10 @@
 {
+  lib,
   pkgs,
   username,
-  mapper,
   ...
 }: let
+  inherit (lib.my) mapper;
   whitesur-kde-opaque = pkgs.whitesur-kde.overrideAttrs {
     pname = "whitesur-kde-opaque";
     installPhase = ''

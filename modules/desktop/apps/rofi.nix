@@ -1,7 +1,7 @@
 {
+  lib,
   pkgs,
   inputs,
-  lib,
   username,
   dotfiles,
   scripts,
