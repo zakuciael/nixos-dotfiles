@@ -11,6 +11,7 @@
 with lib;
 with lib.my; let
   cfg = config.modules.desktop.hyprland;
+  colorScheme = config.home-manager.users.${username}.colorScheme;
   desktopApps = apps.desktopApps config cfg;
   launcherScript = import scripts."rofi-launcher.nix".source {inherit pkgs inputs;};
   powermenuScript = import scripts."rofi-powermenu.nix".source {inherit pkgs inputs;};
@@ -129,6 +130,62 @@ in {
             # Input settings
             input = {
               kb_layout = config.services.xserver.layout;
+              follow_mouse = 2;
+            };
+
+            # General settings
+            general = assert assertMsg (colorScheme.author != "") "You need to select a nix-colors theme to use this Hyprland config"; (with colorScheme.palette; {
+              gaps_in = 6;
+              gaps_out = 8;
+              border_size = 3;
+              "col.active_border" = "rgba(${base0C}ff) rgba(${base0D}ff) rgba(${base0B}ff) rgba(${base0E}ff) 45deg";
+              "col.inactive_border" = "rgba(${base00}cc) rgba(${base01}cc) 45deg";
+              layout = "dwindle";
+              resize_on_border = true;
+            });
+
+            # Decoration settings
+            decoration = {
+              rounding = 10;
+              drop_shadow = false;
+              blur = {
+                enabled = true;
+                size = 5;
+                passes = 3;
+                new_optimizations = true;
+                ignore_opacity = true;
+              };
+            };
+
+            # Animation settings
+            animations = {
+              enabled = true;
+              bezier = [
+                "wind, 0.05, 0.9, 0.1, 1.05"
+                "winIn, 0.1, 1.1, 0.1, 1.1"
+                "winOut, 0.3, -0.3, 0, 1"
+                "liner, 1, 1, 1, 1"
+              ];
+              animation = [
+                "windows, 1, 6, wind, slide"
+                "windowsIn, 1, 6, winIn, slide"
+                "windowsOut, 1, 5, winOut, slide"
+                "windowsMove, 1, 5, wind, slide"
+                "border, 1, 1, liner"
+                "borderangle, 1, 80, liner, loop"
+                "fade, 1, 10, default"
+                "workspaces, 1, 5, wind"
+              ];
+            };
+
+            # Layout settings
+            dwindle = {
+              pseudotile = true;
+              preserve_split = true;
+            };
+
+            master = {
+              new_is_master = true;
             };
 
             # Autostart programs
