@@ -43,6 +43,7 @@ in {
         unstable.graphite-cli
         cinnamon.nemo
         libsForQt5.ark
+        gnome-text-editor
       ];
     };
   };

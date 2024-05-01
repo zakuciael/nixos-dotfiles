@@ -3,23 +3,8 @@
   inputs,
   username,
   ...
-}: let
-  inherit (lib.my) mapper;
-  monitors = {
-    main = {
-      xserver = "DisplayPort-0";
-      wayland = "DP-1";
-    };
-    left = {
-      xserver = "DisplayPort-1";
-      wayland = "DP-2";
-    };
-    right = {
-      xserver = "HDMI-A-0";
-      wayland = "HDMI-A-1";
-    };
-  };
-in {
+}:
+with lib.my; {
   imports = [./hardware.nix ./networking.nix];
 
   environment = {
@@ -36,25 +21,60 @@ in {
         enable = true;
         theme = inputs.distro-grub-themes.nixos-grub-theme;
       };
-      monitors = {
+      monitor-layout = {
         enable = true;
-        layout = [
+        layout = let
+          mkWorkspaces = names:
+            builtins.listToAttrs (builtins.map (name: let
+                fixedName =
+                  if builtins.typeOf name == "string"
+                  then name
+                  else (toString name);
+              in {
+                name = fixedName;
+                value = {
+                  keybinds = [fixedName (mapper.mapKeyToNumpad name)];
+                };
+              })
+              names);
+        in [
           {
-            output = monitors.main;
+            monitor = {
+              xorg = "DisplayPort-1";
+              wayland = "DP-2";
+            };
+            mode = "1920x1080";
+            pos = {
+              x = 0;
+              y = 0;
+            };
+            rotate = "left";
+            workspaces = mkWorkspaces [4 5 6];
+          }
+          {
+            monitor = {
+              xorg = "DisplayPort-0";
+              wayland = "DP-1";
+            };
             primary = true;
             mode = "1920x1080";
-            position = "1080x393";
+            pos = {
+              x = 1080;
+              y = 393;
+            };
+            workspaces = mkWorkspaces [1 2 3];
           }
           {
-            output = monitors.left;
+            monitor = {
+              xorg = "HDMI-A-0";
+              wayland = "HDMI-A-1";
+            };
             mode = "1920x1080";
-            position = "0x0";
-            rotate = "left";
-          }
-          {
-            output = monitors.right;
-            mode = "1920x1080";
-            position = "3000x440";
+            pos = {
+              x = 3000;
+              y = 440;
+            };
+            workspaces = mkWorkspaces [7 8 9];
           }
         ];
       };
@@ -66,23 +86,7 @@ in {
     desktop = {
       apps.enable = true;
       sddm.enable = true;
-      wm.hyprland = {
-        enable = true;
-        monitorBinds = [
-          {
-            monitor = monitors.main.wayland;
-            key = mapper.mapKeyToNumpad 1;
-          }
-          {
-            monitor = monitors.left.wayland;
-            key = mapper.mapKeyToNumpad 2;
-          }
-          {
-            monitor = monitors.right.wayland;
-            key = mapper.mapKeyToNumpad 3;
-          }
-        ];
-      };
+      wm.hyprland.enable = true;
     };
     services = {
       polkit.enable = true;

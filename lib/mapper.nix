@@ -30,6 +30,11 @@ with lib; rec {
   in
     builtins.elemAt keys (num - 1);
 
+  toString = value:
+    if builtins.typeOf value == "bool"
+    then (boolToString value)
+    else (builtins.toString value);
+
   toINI = name: attrs: (pkgs.formats.ini {}).generate name attrs;
 
   toTOML = name: attrs: (pkgs.formats.toml {}).generate name attrs;
