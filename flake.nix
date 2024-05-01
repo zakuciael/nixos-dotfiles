@@ -16,10 +16,6 @@
       url = "github:kamadorueda/alejandra/3.0.0";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    hyprsplit = {
-      url = "github:shezdy/hyprsplit";
-      inputs.hyprland.follows = "hyprland";
-    };
     hyprland.url = "github:hyprwm/Hyprland";
     nixd.url = "github:nix-community/nixd";
     nil.url = "github:oxalica/nil";
@@ -67,7 +63,6 @@
           // {
             packages = flakeInputs.hyprland.packages.${system};
           };
-        hyprsplit = flakeInputs.hyprsplit.packages.${system};
       };
 
     private-pkgs = lib.my.pkgs.importPkgs ./pkgs;

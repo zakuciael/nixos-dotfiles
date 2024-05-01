@@ -11,19 +11,6 @@ with lib;
 with lib.my; let
   launcherScript = import scripts."rofi-launcher.nix".source {inherit pkgs inputs;};
   powermenuScript = import scripts."rofi-powermenu.nix".source {inherit pkgs inputs;};
-  workspaceCount = 9;
-  workspaceBinds = lib.flatten (builtins.genList (i: let
-      x = i + 1;
-      ws = "${toString x}";
-    in [
-      # Default
-      "$mod, ${ws}, split:workspace, ${ws}"
-      "$mod SHIFT, ${ws}, split:movetoworkspace, ${ws}"
-      # Numpad
-      "$mod, ${mapper.mapKeyToNumpad x}, split:workspace, ${ws}"
-      "$mod SHIFT, ${mapper.mapKeyToNumpad x}, split:movetoworkspace, ${ws}"
-    ])
-    workspaceCount);
 in
   desktop.mkDesktopModule {
     inherit config;
@@ -39,47 +26,12 @@ in
       "gtk"
     ];
 
-    extraOptions = with lib; {
-      monitorBinds = mkOption {
-        type = with types;
-          listOf (submodule {
-            options = {
-              monitor = mkOption {
-                type = str;
-                description = "A name of the monitor output";
-                example = "DP-1";
-              };
-              key = mkOption {
-                type = str;
-                description = "A key used for the monitor keybind";
-                example = "KP_End";
-              };
-            };
-          });
-        default = [];
-        example = [
-          {
-            monitor = "DP-1";
-            key = "KP_End";
-          }
-        ];
-      };
-    };
-
     extraConfig = {
       cfg,
       autostartScript,
       colorScheme,
       ...
-    }: let
-      monitorBinds = lib.flatten (builtins.map (config: [
-          # Focus monitor
-          "$mod ALT, ${config.key}, focusmonitor, ${config.monitor}"
-          # Move to monitor
-          "$mod ALT SHIFT, ${config.key}, movewindow, mon:${config.monitor}"
-        ])
-        cfg.monitorBinds);
-    in {
+    }: {
       programs.hyprland = {
         enable = true;
         package = inputs.hyprland.packages.hyprland;
@@ -92,16 +44,9 @@ in
         wayland.windowManager.hyprland = {
           enable = true;
 
-          plugins = [inputs.hyprsplit.default];
-
           settings = {
             # Autostart script
-            exec-once = autostartScript;
-
-            # Plugins
-            plugin = {
-              hyprsplit.num_workspaces = workspaceCount;
-            };
+            exec-once = [autostartScript];
 
             # Input settings
             input = {
@@ -166,21 +111,18 @@ in
 
             # Keybinds
             "$mod" = "SUPER";
-            bind =
-              [
-                "$mod, return, exec, alacritty"
-                "$mod, W, killactive,"
-                "$mod, F, togglefloating,"
-                "$mod, M, fullscreen, 1"
-                "$mod, LEFT, movefocus, l"
-                "$mod, RIGHT, movefocus, r"
-                "$mod, UP, movefocus, u"
-                "$mod, DOWN, movefocus, d"
-                "SHIFT CTRL, space, exec, ${launcherScript}/bin/rofi-launcher drun"
-                "SHIFT CTRL, Q, exec, ${powermenuScript}/bin/rofi-powermenu"
-              ]
-              ++ workspaceBinds
-              ++ monitorBinds;
+            bind = [
+              "$mod, return, exec, alacritty"
+              "$mod, W, killactive,"
+              "$mod, F, togglefloating,"
+              "$mod, M, fullscreen, 1"
+              "$mod, LEFT, movefocus, l"
+              "$mod, RIGHT, movefocus, r"
+              "$mod, UP, movefocus, u"
+              "$mod, DOWN, movefocus, d"
+              "SHIFT CTRL, space, exec, ${launcherScript}/bin/rofi-launcher drun"
+              "SHIFT CTRL, Q, exec, ${powermenuScript}/bin/rofi-powermenu"
+            ];
 
             bindl = with pkgs; [
               ", XF86AudioRaiseVolume, exec, ${wireplumber}/bin/wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+"
