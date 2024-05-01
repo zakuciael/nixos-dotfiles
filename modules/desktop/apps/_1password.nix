@@ -16,7 +16,7 @@ with lib.my; {
     };
   };
 
-  modules.desktop.${desktop}.autostartPrograms = [
+  modules.desktop.wm.${desktop}.autostartPrograms = [
     "${pkgs._1password-gui}/bin/1password"
   ];
 

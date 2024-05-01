@@ -29,6 +29,7 @@ in
     inherit config;
 
     name = "hyprland";
+    autostartPath = ".config/hypr/autostart.sh";
     desktopApps = [
       "alacritty"
       "_1password"
@@ -67,6 +68,7 @@ in
 
     extraConfig = {
       cfg,
+      autostartScript,
       colorScheme,
       ...
     }: let
@@ -93,6 +95,9 @@ in
           plugins = [inputs.hyprsplit.default];
 
           settings = {
+            # Autostart script
+            exec-once = autostartScript;
+
             # Plugins
             plugin = {
               hyprsplit.num_workspaces = workspaceCount;

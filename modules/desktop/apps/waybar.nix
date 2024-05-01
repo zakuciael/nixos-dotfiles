@@ -10,7 +10,7 @@ with lib; let
   package = pkgs.waybar;
 in {
   # TODO: Add priority for waybar, so it starts before any other app
-  modules.desktop.${desktop}.autostartPrograms = [
+  modules.desktop.wm.${desktop}.autostartPrograms = [
     "${package}/bin/waybar"
   ];
 
