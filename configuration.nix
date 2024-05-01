@@ -118,6 +118,8 @@
   # Internal modules
   modules = {
     dev.git.enable = true;
+    services.xdg.enable = true;
+    hardware.grub.enable = true;
     shell = {
       tmux.enable = true;
       fish = {
