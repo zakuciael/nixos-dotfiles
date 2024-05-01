@@ -1,3 +1,13 @@
+<h2 align="center">
+    <img alt="I have big plans for this code. please, no mor refactors. big plans..." src="assets/big-plans.png" width="500px">
+    <br />
+</h2>
+
+<h4 align="center">
+    A TODO list for this repository, updated whenever I have "big plans for this code".
+</h4>
+<br />
+
 # All desktops
 - Add screenshot tool.
 - Refactor autostart programs so that they are managed by `systemd` instead of an bash script.
