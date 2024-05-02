@@ -15,7 +15,6 @@
 - Fix 1password Quick Access focus issues.
 - Fix blur problem in Google Chrome.  
   Related: [Xwayland apps](#configuration)
-- Set a wallpaper. duh.
 - Add some of the keybinds from previous OS.
 - Setup notification daemon ([swaync](https://github.com/ErikReider/SwayNotificationCenter))
 - Setup lock screen ([hyprlock](https://github.com/hyprwm/hyprlock))

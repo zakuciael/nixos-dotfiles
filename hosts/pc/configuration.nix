@@ -2,6 +2,7 @@
   lib,
   inputs,
   username,
+  dotfiles,
   ...
 }:
 with lib.my; {
@@ -51,6 +52,7 @@ with lib.my; {
             };
             rotate = "left";
             workspaces = mkWorkspaces [4 5 6];
+            wallpaper = dotfiles.wallpapers.pc."left.png".source;
           }
           {
             # Main
@@ -65,6 +67,7 @@ with lib.my; {
               y = 393;
             };
             workspaces = mkWorkspaces [1 2 3];
+            wallpaper = dotfiles.wallpapers.pc."main.png".source;
           }
           {
             # Right
@@ -78,6 +81,7 @@ with lib.my; {
               y = 440;
             };
             workspaces = mkWorkspaces [7 8 9];
+            wallpaper = dotfiles.wallpapers.pc."right.jpg".source;
           }
         ];
       };
@@ -94,6 +98,7 @@ with lib.my; {
     services = {
       polkit.enable = true;
       gnome-keyring.enable = true;
+      wallpaper.enable = true;
     };
   };
 }

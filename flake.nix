@@ -20,6 +20,10 @@
       url = "github:hyprwm/contrib";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    hyprpaper = {
+      url = "github:hyprwm/hyprpaper";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     hyprland.url = "github:hyprwm/Hyprland";
     nixd.url = "github:nix-community/nixd";
     nil.url = "github:oxalica/nil";
@@ -63,6 +67,7 @@
         nixd = flakeInputs.nixd.packages.${system};
         alejandra = flakeInputs.alejandra.packages.${system};
         hyprland-contrib = flakeInputs.hyprland-contrib.packages.${system};
+        hyprpaper = flakeInputs.hyprpaper.packages.${system};
         hyprland =
           flakeInputs.hyprland
           // {

@@ -31,6 +31,7 @@ in {
             y = 0;
           };
           rotate = "normal";
+          wallpaper = "$HOME/Pictures/Wallpapers/unixporn.png";
           workspaces = {
             "1" = {
               keybinds = ["1" "KP_End"];
@@ -86,6 +87,12 @@ in {
               example = "normal";
               default = null;
               type = nullOr (enum (mapAttrsToList (name: _: name) monitorRotations));
+            };
+            wallpaper = mkOption {
+              description = "Monitor wallpaper.";
+              example = "$HOME/Pictures/Wallpapers/the_storm_is_approaching.png";
+              default = null;
+              type = nullOr path;
             };
             workspaces = mkOption {
               description = "Monitor workspace definitions.";
@@ -216,6 +223,11 @@ in {
           keybindDefs);
       };
     };
+
+    # Configure per-monitor wallpapers
+    modules.services.wallpaper.settings = builtins.map (layout: {
+      inherit (layout) monitor wallpaper;
+    }) (builtins.filter (layout: layout.wallpaper != null) cfg.layout);
 
     # Xorg monitor layout
     services.xserver = mkIf (config.services.xserver.enable && cfg.layout != []) (let

@@ -44,6 +44,7 @@ in {
         cinnamon.nemo
         libsForQt5.ark
         gnome-text-editor
+        gnome.eog
       ];
     };
   };
