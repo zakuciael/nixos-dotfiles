@@ -23,11 +23,12 @@
   };
 in {
   home-manager.users.${username} = {
-    home.packages = with pkgs; [qt6Packages.qt6ct libsForQt5.qt5ct];
-
-    sessionVariables = {
-      QT_QPA_PLATFORMTHEME = "qt5ct";
-      QT_QPA_PLATFORM = "wayland;xcb";
+    home = {
+      packages = with pkgs; [qt6Packages.qt6ct libsForQt5.qt5ct];
+      sessionVariables = {
+        QT_QPA_PLATFORMTHEME = "qt5ct";
+        QT_QPA_PLATFORM = "wayland;xcb";
+      };
     };
 
     qt = {
