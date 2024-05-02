@@ -15,7 +15,6 @@ in {
   ];
 
   home-manager.users.${username} = {
-    home.packages = with pkgs; [pavucontrol];
     programs.waybar = {
       inherit package;
       enable = true;

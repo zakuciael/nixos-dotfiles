@@ -1,6 +1,8 @@
 {
   config,
   lib,
+  pkgs,
+  username,
   ...
 }:
 with lib;
@@ -18,6 +20,8 @@ in {
   };
 
   config = mkIf (cfg.enable) {
+    home-manager.users.${username}.home.packages = with pkgs; [pavucontrol];
+
     sound.enable = true;
     security.rtkit.enable = true;
 
