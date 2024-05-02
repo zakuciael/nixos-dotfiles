@@ -4,7 +4,35 @@
 		{
 			"type": "shell",
 			"command": "nh os test . -H pc -- --show-trace && echo -e '\\033[1;32m>\\033[0m Done!'",
-			"label": "nix: rebuild the system",
+			"label": "nix: test system",
+			"problemMatcher": [],
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "dedicated",
+				"showReuseMessage": false,
+				"clear": true
+			}
+		},
+		{
+			"type": "shell",
+			"command": "nh os test -n . -H pc -- --show-trace && echo -e '\\033[1;32m>\\033[0m Done!'",
+			"label": "nix: dry-build system",
+			"problemMatcher": [],
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "dedicated",
+				"showReuseMessage": false,
+				"clear": true
+			}
+		},
+		{
+			"type": "shell",
+			"command": "nh os switch -n . -H pc -- --show-trace && echo -e '\\033[1;32m>\\033[0m Done!'",
+			"label": "nix: switch system",
 			"problemMatcher": [],
 			"presentation": {
 				"echo": true,
