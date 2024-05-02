@@ -15,8 +15,7 @@ in {
 
   config = mkIf (cfg.enable) {
     security.polkit.enable = true;
-
-    home-manager.users.${username}.home.packages = with pkgs; [polkit_gnome];
+    environment.systemPackages = with pkgs; [polkit_gnome];
 
     systemd.user.services."polkit-gnome-authentication-agent-1" = {
       description = "Polkit authentication manager";
