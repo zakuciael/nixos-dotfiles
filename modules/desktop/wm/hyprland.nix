@@ -24,6 +24,7 @@ in
       "nh"
       "waybar"
       "gtk"
+      "qt"
       "grimblast"
     ];
 
