@@ -6,7 +6,7 @@
 }:
 with lib;
 with lib.my; let
-  cfg = config.modules.hardware.monitor-layout;
+  cfg = config.modules.hardware.layout;
 
   monitorRotations = {
     normal = "0";
@@ -14,7 +14,7 @@ with lib.my; let
     right = "4";
   };
 in {
-  options.modules.hardware.monitor-layout = {
+  options.modules.hardware.layout = {
     enable = mkEnableOption "monitor layout configuration";
     layout = mkOption {
       description = "Monitor layout that should be set in the supported WMs.";
@@ -46,24 +46,7 @@ in {
       type = with types;
         listOf (submodule {
           options = {
-            monitor = mkOption {
-              description = "Monitor definition on supported DMs.";
-              example = {};
-              type = submodule {
-                options = {
-                  xorg = mkOption {
-                    description = "Name of the monitor on the Xorg display server.";
-                    example = "DisplayPort-0";
-                    type = str;
-                  };
-                  wayland = mkOption {
-                    description = "Name of the monitor on the Wayland display server.";
-                    example = "DP-1";
-                    type = str;
-                  };
-                };
-              };
-            };
+            monitor = defs.monitor;
             primary = mkOption {
               description = "Whether to mark this monitor as primary.";
               example = true;
@@ -261,7 +244,7 @@ in {
               rotate = optionalString (curr.layout.rotate != null) ''Option "Rotate" "${curr.layout.rotate}"'';
             in ''
               Section "Monitor"
-	      	      Identifier "${curr.name}"
+              Identifier "${curr.name}"
                 ${primary}
                 ${mode}
                 ${pos}

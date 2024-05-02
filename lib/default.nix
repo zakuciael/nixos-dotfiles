@@ -10,11 +10,12 @@
 }: let
   imports = import ./imports.nix {inherit lib;};
   mapper = import ./mapper.nix {inherit lib pkgs;};
+  defs = import ./defs.nix {inherit lib;};
 
   dotfiles = mapper.mapDirToAttrs ./../dotfiles;
   scripts = mapper.mapDirToAttrs ./../scripts;
 in {
-  inherit imports mapper;
+  inherit imports mapper defs;
 
   pkgs = import ./pkgs.nix {inherit lib pkgs;};
   hosts = import ./hosts.nix {inherit lib pkgs unstable private-pkgs inputs username dotfiles scripts;};

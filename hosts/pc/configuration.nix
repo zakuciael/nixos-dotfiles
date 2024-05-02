@@ -21,7 +21,7 @@ with lib.my; {
         enable = true;
         theme = inputs.distro-grub-themes.nixos-grub-theme;
       };
-      monitor-layout = {
+      layout = {
         enable = true;
         layout = let
           mkWorkspaces = names:
@@ -39,6 +39,7 @@ with lib.my; {
               names);
         in [
           {
+            # Left
             monitor = {
               xorg = "DisplayPort-1";
               wayland = "DP-2";
@@ -52,6 +53,7 @@ with lib.my; {
             workspaces = mkWorkspaces [4 5 6];
           }
           {
+            # Main
             monitor = {
               xorg = "DisplayPort-0";
               wayland = "DP-1";
@@ -65,6 +67,7 @@ with lib.my; {
             workspaces = mkWorkspaces [1 2 3];
           }
           {
+            # Right
             monitor = {
               xorg = "HDMI-A-0";
               wayland = "HDMI-A-1";
