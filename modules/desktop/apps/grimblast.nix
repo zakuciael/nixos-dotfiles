@@ -3,12 +3,12 @@
   username,
   ...
 }: {
-  environment.systemPackages = [
-    inputs.hyprland-contrib.grimblast
-  ];
-
   # Add keybinds to Hyprland
   home-manager.users.${username} = {
+    home.packages = [
+      inputs.hyprland-contrib.grimblast
+    ];
+
     wayland.windowManager.hyprland.settings.bind = let
       grimblastExec = "${inputs.hyprland-contrib.grimblast}/bin/grimblast --notify";
     in [
