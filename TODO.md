@@ -9,7 +9,6 @@
 <br />
 
 # All desktops
-- Add screenshot tool.
 - Refactor autostart programs so that they are managed by `systemd` instead of an bash script.
 
 # Hyprland
