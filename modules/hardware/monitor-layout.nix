@@ -261,6 +261,7 @@ in {
               rotate = optionalString (curr.layout.rotate != null) ''Option "Rotate" "${curr.layout.rotate}"'';
             in ''
               Section "Monitor"
+	      	      Identifier "${curr.name}"
                 ${primary}
                 ${mode}
                 ${pos}
