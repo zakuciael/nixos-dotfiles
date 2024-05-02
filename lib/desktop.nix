@@ -78,13 +78,13 @@ in {
       else extraConfig;
 
     moduleOptions = with lib; {
-      enable = mkEnableOption "Enable ${name} desktop";
+      enable = mkEnableOption "${name} desktop";
       # TODO: Add priority system
       autostartPrograms = mkOption {
-        type = with types; listOf str;
+        description = "A list of programs to autostart when the desktop loads";
         example = ["${pkgs.hello}/bin/hello --special-args"];
         default = [];
-        description = "A list of programs to autostart when the desktop loads";
+        type = with types; listOf str;
       };
     };
 

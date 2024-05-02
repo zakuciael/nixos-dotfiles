@@ -8,7 +8,7 @@ with lib.my; let
   cfg = config.modules.desktop.sddm;
 in {
   options.modules.desktop.sddm = {
-    enable = mkEnableOption "Enable SDDM as display manager";
+    enable = mkEnableOption "SDDM as a display manager";
   };
 
   config = mkIf (cfg.enable) {

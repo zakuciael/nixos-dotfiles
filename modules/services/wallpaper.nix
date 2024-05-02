@@ -11,7 +11,7 @@ with lib.my; let
   home = config.home-manager.users.${username};
 in {
   options.modules.services.wallpaper = {
-    enable = mkEnableOption "Wallpaper configuration";
+    enable = mkEnableOption "wallpaper config";
     settings = mkOption {
       description = "Per-monitor wallpaper settings";
       example = [

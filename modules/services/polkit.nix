@@ -10,7 +10,7 @@ with lib.my; let
   cfg = config.modules.services.polkit;
 in {
   options.modules.services.polkit = {
-    enable = mkEnableOption "Enable polkit authentication manager";
+    enable = mkEnableOption "polkit authentication manager";
   };
 
   config = mkIf (cfg.enable) {

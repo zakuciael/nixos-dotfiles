@@ -17,7 +17,7 @@ with builtins; let
     }) (builtins.attrNames config.modules.desktop.wm));
 in {
   options.modules.desktop.apps = {
-    enable = mkEnableOption "Install desktop applications";
+    enable = mkEnableOption "general desktop applications";
   };
 
   config = mkIf (cfg.enable) {

@@ -9,7 +9,7 @@ with lib; let
   cfg = config.modules.shell.tmux;
 in {
   options.modules.shell.tmux = {
-    enable = mkEnableOption "Enable Tmux shell multiplexer";
+    enable = mkEnableOption "Tmux shell multiplexer";
   };
 
   config = mkIf cfg.enable {

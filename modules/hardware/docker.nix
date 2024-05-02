@@ -9,7 +9,7 @@ with lib.my; let
   cfg = config.modules.hardware.docker;
 in {
   options.modules.hardware.docker = {
-    enable = mkEnableOption "Enable docker service";
+    enable = mkEnableOption "docker service";
   };
 
   config = mkIf (cfg.enable) {

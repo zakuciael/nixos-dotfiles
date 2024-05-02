@@ -8,12 +8,12 @@ with lib.my; let
   cfg = config.modules.hardware.sound;
 in {
   options.modules.hardware.sound = {
-    enable = mkEnableOption "Enable sound";
+    enable = mkEnableOption "sound driver";
     driver = mkOption {
-      type = types.str;
-      default = "pipewire";
-      example = "pipewire";
       description = "Select sound driver";
+      example = "pulseaudio";
+      default = "pipewire";
+      type = types.str;
     };
   };
 

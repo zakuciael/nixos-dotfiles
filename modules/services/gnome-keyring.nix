@@ -11,7 +11,7 @@ with lib.my; let
   displayManagers = ["sddm" "gdm" "lightdm"];
 in {
   options.modules.services.gnome-keyring = {
-    enable = mkEnableOption "Enable GNOME keyring";
+    enable = mkEnableOption "GNOME keyring";
   };
 
   config = mkIf (cfg.enable) {

@@ -15,7 +15,7 @@ with lib.my; let
   };
 in {
   options.modules.hardware.layout = {
-    enable = mkEnableOption "monitor layout configuration";
+    enable = mkEnableOption "monitor layout";
     layout = mkOption {
       description = "Monitor layout that should be set in the supported WMs.";
       example = [

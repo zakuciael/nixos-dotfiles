@@ -8,7 +8,7 @@ with lib.my; let
   cfg = config.modules.hardware.amdgpu;
 in {
   options.modules.hardware.amdgpu = {
-    enable = mkEnableOption "Enable AMD GPU drivers";
+    enable = mkEnableOption "AMD GPU drivers";
   };
 
   config = mkIf (cfg.enable) {

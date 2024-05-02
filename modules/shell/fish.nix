@@ -10,9 +10,14 @@ with lib; let
   cfg = config.modules.shell.fish;
 in {
   options.modules.shell.fish = {
-    enable = mkEnableOption "Enable fish shell";
-    enableDirenv = mkEnableOption "Enable direnv";
-    default = mkEnableOption "Enable fish shell as default shell for main user";
+    enable = mkEnableOption "fish shell";
+    direnv.enable = mkEnableOption "direnv integration";
+    default = mkOption {
+      description = "Whether to set fish as a default shell for the user";
+      example = true;
+      default = false;
+      type = types.bool;
+    };
   };
 
   config = mkIf cfg.enable {
@@ -23,8 +28,8 @@ in {
     home-manager.users.${username} = {
       programs = {
         direnv = {
-          enable = cfg.enableDirenv;
-          nix-direnv.enable = cfg.enableDirenv;
+          enable = cfg.direnv.enable;
+          nix-direnv.enable = cfg.direnv.enable;
           config = {
             global = {
               load_dotenv = true;

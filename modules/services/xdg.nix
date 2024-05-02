@@ -11,7 +11,7 @@ with lib.my; let
   homeDirectory = config.home-manager.users.${username}.home.homeDirectory;
 in {
   options.modules.services.xdg = {
-    enable = mkEnableOption "XDG user dir configuration";
+    enable = mkEnableOption "XDG user dirs";
   };
 
   config = mkIf (cfg.enable) {
