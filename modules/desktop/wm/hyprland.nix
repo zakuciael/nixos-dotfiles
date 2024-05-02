@@ -41,7 +41,12 @@ in
       };
 
       home-manager.users.${username} = {
-        home.packages = with pkgs; [playerctl];
+        # TODO: Move this and media controls to an app config for a player script
+        home = {
+          packages = with pkgs; [playerctl];
+          # Make chrome and electron apps run native on wayland
+          sessionVariables.NIXOS_OZONE_WL = "1";
+        };
 
         wayland.windowManager.hyprland = {
           enable = true;
