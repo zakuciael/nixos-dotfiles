@@ -26,31 +26,15 @@ in {
       services."gnome-keyring-daemon" = {
         Unit = {
           Description = "GNOME Keyring daemon";
-          Requires = ["gnome-keyring-daemon.socket"];
         };
         Service = {
           Type = "simple";
           StandardError = "journal";
-          ExecStart = "${pkgs.gnome.gnome-keyring}/bin/gnome-keyring-daemon --foreground --components=\"pkcs11,secrets\" --control-directory=%t/keyring";
+          ExecStart = ''${pkgs.gnome.gnome-keyring}/bin/gnome-keyring-daemon --start --components="pkcs11,secrets"'';
           Restart = "on-failure";
         };
         Install = {
-          Also = ["gnome-keyring-daemon.socket"];
-          WantedBy = ["default.target"];
-        };
-      };
-      sockets."gnome-keyring-daemon" = {
-        Unit = {
-          Description = "GNOME Keyring daemon";
-        };
-        Socket = {
-          Priority = 6;
-          Backlog = 5;
-          ListenStream = "%t/keyring/control";
-          DirectoryMode = 0700;
-        };
-        Install = {
-          WantedBy = ["sockets.target"];
+          WantedBy = ["graphical-session.target"];
         };
       };
     };
