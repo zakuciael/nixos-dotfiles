@@ -1,6 +1,7 @@
-{...}: {
+{unstable, ...}: {
   programs.nh = {
     enable = true;
+    package = unstable.nh;
     clean = {
       enable = true;
       dates = "weekly";

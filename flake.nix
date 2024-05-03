@@ -46,13 +46,6 @@
     pkgs = import inputs.nixpkgs {
       inherit system;
       config.allowUnfree = true;
-
-      # TODO: Replace this dirty trick when nixos 24.05 releases
-      overlays = [
-        (final: prev: {
-          nh = unstable.nh;
-        })
-      ];
     };
 
     unstable = import inputs.nixpkgs-unstable {
