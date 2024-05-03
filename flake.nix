@@ -24,6 +24,10 @@
       url = "github:hyprwm/hyprpaper";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    waybar = {
+      url = "github:Alexays/Waybar";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
     hyprland.url = "github:hyprwm/Hyprland";
     nixd.url = "github:nix-community/nixd";
     nil.url = "github:oxalica/nil";
@@ -39,13 +43,6 @@
     system = "x86_64-linux";
     username = "zakuciael";
 
-    mkPkgs = p:
-      import p {
-        inherit system;
-
-        config.allowUnfree = true;
-      };
-
     pkgs = import inputs.nixpkgs {
       inherit system;
       config.allowUnfree = true;
@@ -57,7 +54,15 @@
         })
       ];
     };
-    unstable = mkPkgs inputs.nixpkgs-unstable;
+
+    unstable = import inputs.nixpkgs-unstable {
+      inherit system;
+      config.allowUnfree = true;
+
+      overlays = [
+        flakeInputs.waybar.overlays.default
+      ];
+    };
 
     inputs =
       flakeInputs
