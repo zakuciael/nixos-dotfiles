@@ -24,7 +24,7 @@ with lib.my; {
           ./../configuration.nix
           ./../hosts/${name}/configuration.nix
 
-          # TODO: Replace this dirty trick when nixos 24.05 releases
+          # TODO: Remove this when nixos 24.05 releases
           "${unstable.path}/nixos/modules/programs/nh.nix"
 
           inputs.home-manager.nixosModules.home-manager
