@@ -35,8 +35,8 @@ in {
         inputs.alejandra.default
         discord
         unstable.vesktop
-        vscode
-        google-chrome
+        unstable.vscode
+        unstable.google-chrome
         warp-terminal
         wakatime
         spotify
