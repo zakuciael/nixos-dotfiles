@@ -44,9 +44,9 @@ in {
             separate-outputs = true;
           };
           "clock" = {
-            format = "{: %H:%M}";
+            format = " {:%H:%M}";
             tooltip = true;
-            tooltip-format = "{:%A, %d %B %Y }";
+            tooltip-format = "{:%A, %d %B %Y}";
           };
           "memory" = {
             interval = 5;
