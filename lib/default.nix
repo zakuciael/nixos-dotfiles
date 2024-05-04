@@ -1,4 +1,3 @@
-# Credits for portions of this code goes here: https://github.com/Wittano/nix-dotfiles/
 {
   lib,
   pkgs,
@@ -13,7 +12,7 @@
   defs = import ./defs.nix {inherit lib;};
 
   dotfiles = mapper.mapDirToAttrs ./../dotfiles;
-  scripts = mapper.mapDirToAttrs ./../scripts;
+  scripts = import ./scripts.nix {inherit lib pkgs unstable private-pkgs inputs dotfiles;};
 in {
   inherit utils mapper defs;
 
