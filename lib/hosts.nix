@@ -29,6 +29,9 @@ with lib.my; {
 
           inputs.home-manager.nixosModules.home-manager
         ]
-        ++ (imports.importModulesPath ./../modules);
+        ++ (utils.recursiveReadDir ./../modules {
+          ignoredDirs = ["apps"];
+          fileExts = ["nix"];
+        });
     };
 }
