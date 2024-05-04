@@ -27,7 +27,7 @@
 
 # Configuration
 - De-duplicate flake inputs.
-- Implement `overlays` module.
+- Implement `scripts` module for dynamic custom script injection.
 - Better way of creating user.  
   Right now `username` is the only variable, we should allow dynamic descriptions too.  
   Look at: [configuration.nix](configuration.nix#94).
