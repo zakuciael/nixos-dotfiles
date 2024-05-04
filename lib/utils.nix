@@ -2,7 +2,7 @@
 with lib; rec {
   recursiveReadDir = path: {
     ignoredDirs ? [],
-    fileExts ? [],
+    suffixes ? [],
   } @ settings:
     builtins.filter (file: file != null) (flatten (
       mapAttrsToList (name: value: let
@@ -10,7 +10,7 @@ with lib; rec {
       in
         if value == "regular"
         then
-          if builtins.any (ext: hasSuffix ext newPath) fileExts
+          if suffixes == [] || builtins.any (ext: hasSuffix ext newPath) suffixes
           then newPath
           else null
         else recursiveReadDir newPath settings)

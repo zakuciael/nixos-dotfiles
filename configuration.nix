@@ -1,7 +1,6 @@
 {
   lib,
   pkgs,
-  private-pkgs,
   inputs,
   username,
   scripts,
@@ -84,7 +83,7 @@
 
     plymouth = {
       enable = true;
-      themePackages = with private-pkgs; [nixos-blur-plymouth];
+      themePackages = with pkgs; [nixos-blur-plymouth];
       theme = "nixos-blur";
     };
   };
