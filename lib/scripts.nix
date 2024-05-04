@@ -2,7 +2,6 @@
   lib,
   pkgs,
   unstable,
-  private-pkgs,
   inputs,
   dotfiles,
   ...
@@ -11,8 +10,8 @@ with lib;
 with lib.my; let
   scripts =
     builtins.map
-    (file: import file {inherit lib pkgs unstable private-pkgs inputs dotfiles;})
-    (utils.recursiveReadDir ./../scripts {fileExts = ["nix"];});
+    (file: import file {inherit lib pkgs unstable inputs dotfiles;})
+    (utils.recursiveReadDir ./../scripts {suffixes = ["nix"];});
 in {
   shellExports =
     builtins.map

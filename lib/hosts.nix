@@ -2,7 +2,6 @@
   lib,
   pkgs,
   unstable,
-  private-pkgs,
   inputs,
   username,
   dotfiles,
@@ -15,7 +14,7 @@ with lib.my; {
       inherit (pkgs) system;
 
       specialArgs = {
-        inherit lib pkgs unstable private-pkgs inputs username dotfiles scripts;
+        inherit lib pkgs unstable inputs username dotfiles scripts;
         hostname = name;
       };
 
@@ -31,7 +30,7 @@ with lib.my; {
         ]
         ++ (utils.recursiveReadDir ./../modules {
           ignoredDirs = ["apps"];
-          fileExts = ["nix"];
+          suffixes = ["nix"];
         });
     };
 }
