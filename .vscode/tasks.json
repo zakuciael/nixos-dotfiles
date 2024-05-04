@@ -31,7 +31,7 @@
 		},
 		{
 			"type": "shell",
-			"command": "nh os switch -n . -H pc -- --show-trace && echo -e '\\033[1;32m>\\033[0m Done!'",
+			"command": "nh os switch . -H pc -- --show-trace && echo -e '\\033[1;32m>\\033[0m Done!'",
 			"label": "nix: switch system",
 			"problemMatcher": [],
 			"presentation": {
