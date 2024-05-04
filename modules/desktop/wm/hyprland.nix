@@ -37,13 +37,12 @@ with lib.my;
         xwayland.enable = true;
       };
 
+      # Make chrome and electron apps run native on wayland
+      environment.sessionVariables.NIXOS_OZONE_WL = "1";
+
       home-manager.users.${username} = {
         # TODO: Move this and media controls to an app config for a player script
-        home = {
-          packages = with pkgs; [playerctl];
-          # Make chrome and electron apps run native on wayland
-          sessionVariables.NIXOS_OZONE_WL = "1";
-        };
+        home.packages = with pkgs; [playerctl];
 
         wayland.windowManager.hyprland = {
           enable = true;
