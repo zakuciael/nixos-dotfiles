@@ -27,6 +27,7 @@
 
 # Configuration
 - De-duplicate flake inputs.
+- Move `pkgs` to `overlays` module.
 - Implement `scripts` module for dynamic custom script injection.
 - Better way of creating user.  
   Right now `username` is the only variable, we should allow dynamic descriptions too.  
