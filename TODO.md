@@ -26,6 +26,8 @@
 - Add support for user icons
 
 # Configuration
+- De-duplicate flake inputs.
+- Implement `overlays` module.
 - Better way of creating user.  
   Right now `username` is the only variable, we should allow dynamic descriptions too.  
   Look at: [configuration.nix](configuration.nix#94).
