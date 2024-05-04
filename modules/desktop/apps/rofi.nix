@@ -1,19 +1,14 @@
 {
   lib,
   pkgs,
-  inputs,
   username,
   dotfiles,
-  scripts,
   ...
 }:
 with lib;
-with lib.my; let
-  launcherScript = import scripts."rofi-launcher.nix".source {inherit pkgs inputs;};
-  powermenuScript = import scripts."rofi-powermenu.nix".source {inherit pkgs inputs;};
-in {
+with lib.my; {
   home-manager.users.${username} = {
-    home.packages = with pkgs; [rofi-wayland launcherScript powermenuScript];
+    home.packages = with pkgs; [rofi-wayland];
     xdg.configFile.rofi.source = dotfiles.rofi.source;
   };
 }

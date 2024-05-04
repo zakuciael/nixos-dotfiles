@@ -8,10 +8,7 @@
   ...
 }:
 with lib;
-with lib.my; let
-  launcherScript = import scripts."rofi-launcher.nix".source {inherit pkgs inputs;};
-  powermenuScript = import scripts."rofi-powermenu.nix".source {inherit pkgs inputs;};
-in
+with lib.my;
   desktop.mkDesktopModule {
     inherit config;
 
@@ -127,8 +124,8 @@ in
               "$mod, RIGHT, movefocus, r"
               "$mod, UP, movefocus, u"
               "$mod, DOWN, movefocus, d"
-              "SHIFT CTRL, space, exec, ${launcherScript}/bin/rofi-launcher drun"
-              "SHIFT CTRL, Q, exec, ${powermenuScript}/bin/rofi-powermenu"
+              "SHIFT CTRL, space, exec, ${scripts.packages.rofi-launcher}/bin/rofi-launcher drun"
+              "SHIFT CTRL, Q, exec, ${scripts.packages.rofi-powermenu}/bin/rofi-powermenu"
             ];
 
             bindl = with pkgs; [

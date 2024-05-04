@@ -4,6 +4,7 @@
   private-pkgs,
   inputs,
   username,
+  scripts,
   ...
 }: {
   # NixOS configuration
@@ -108,10 +109,7 @@
       inherit username;
       stateVersion = "23.11";
       homeDirectory = "/home/${username}";
-      # TODO: Dynamic custom scripts
-      packages = [
-        (import ./scripts/fix_elgato.nix {inherit pkgs;})
-      ];
+      packages = scripts.shellExports;
     };
   };
 
