@@ -20,4 +20,5 @@ in {
   pkgs = import ./pkgs.nix {inherit lib pkgs;};
   hosts = import ./hosts.nix {inherit lib pkgs unstable private-pkgs inputs username dotfiles scripts;};
   desktop = import ./desktop.nix {inherit lib pkgs unstable private-pkgs inputs username dotfiles scripts;};
+  overlays = import ./overlays.nix {inherit lib pkgs unstable private-pkgs inputs;};
 }

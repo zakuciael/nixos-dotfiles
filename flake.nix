@@ -46,15 +46,15 @@
     pkgs = import inputs.nixpkgs {
       inherit system;
       config.allowUnfree = true;
+
+      overlays = lib.my.overlays.pkgs;
     };
 
     unstable = import inputs.nixpkgs-unstable {
       inherit system;
       config.allowUnfree = true;
 
-      overlays = [
-        flakeInputs.waybar.overlays.default
-      ];
+      overlays = lib.my.overlays.unstable;
     };
 
     inputs =
