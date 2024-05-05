@@ -1,0 +1,21 @@
+name: Update dependencies
+on:
+  workflow_dispatch:
+  schedule:
+    - cron:  '0 0 * * *' # Run every day at 00:00
+
+jobs:
+  update:
+    name: Update flake.lock
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Intall Nix
+        uses: DeterminateSystems/nix-installer-action@v10
+      - name: Update flake.lock file
+        uses: DeterminateSystems/update-flake-lock@v21
+        with:
+          pr-title: "chore(deps): update flake.lock"
+          pr-labels: |
+            type: deps
