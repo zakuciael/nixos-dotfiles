@@ -42,6 +42,20 @@
 				"showReuseMessage": false,
 				"clear": true
 			}
+		},
+		{
+			"type": "shell",
+			"command": "nix flake check . --show-trace && echo -e '\\033[1;32m>\\033[0m Done!'",
+			"label": "nix: flake check",
+			"problemMatcher": [],
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "dedicated",
+				"showReuseMessage": false,
+				"clear": true
+			}
 		}
 	]
 }
