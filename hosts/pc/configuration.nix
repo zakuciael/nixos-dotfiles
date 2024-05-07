@@ -16,6 +16,11 @@ with lib.my; {
 
   home-manager.users.${username}.colorScheme = inputs.nix-colors.colorSchemes.catppuccin-mocha;
 
+  # Configure Secret Managment through sops-nix.
+  sops.age.keyFile = "/home/${username}/.config/sops/age/keys.txt";
+  sops.defaultSopsFile = ./secrets.yaml;
+  sops.defaultSopsFormat = "yaml";
+
   modules = {
     hardware = {
       grub = {

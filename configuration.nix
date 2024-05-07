@@ -1,4 +1,5 @@
 {
+  config,
   lib,
   pkgs,
   inputs,
@@ -12,8 +13,14 @@
       max-jobs = 6;
       cores = 6;
       auto-optimise-store = true;
-      substituters = ["https://hyprland.cachix.org"];
-      trusted-public-keys = ["hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="];
+      substituters = [
+        "https://hyprland.cachix.org"
+        "https://cache.thalheim.io"
+      ];
+      trusted-public-keys = [
+        "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
+        "cache.thalheim.io-1:R7msbosLEZKrxk/lKxf9BTjOOH7Ax3H0Qj0/6wiHOgc="
+      ];
       experimental-features = ["nix-command" "flakes"];
     };
     package = pkgs.nixFlakes;
@@ -89,8 +96,10 @@
   };
 
   # User settings
+  sops.secrets."users/${username}/password".neededForUsers = true;
   users.users.${username} = {
     isNormalUser = true;
+    hashedPasswordFile = config.sops.secrets."users/${username}/password".path;
     description = "Krzysztof Saczuk";
     extraGroups = ["wheel"];
   };
@@ -99,8 +108,9 @@
   home-manager = {
     extraSpecialArgs = {inherit pkgs lib;};
     sharedModules = [
-      inputs.nix-colors.homeManagerModules.default
       inputs.hyprland.homeManagerModules.default
+      inputs.nix-colors.homeManagerModule
+      inputs.sops-nix.homeManagerModule
     ];
     useUserPackages = true;
     useGlobalPkgs = true;

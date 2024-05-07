@@ -45,6 +45,8 @@ in {
         libsForQt5.ark
         gnome-text-editor
         gnome.eog
+        sops
+        age
       ];
     };
   };

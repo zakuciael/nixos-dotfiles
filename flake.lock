@@ -1,5 +1,25 @@
 {
   "nodes": {
+    "age-plugin-op": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1713113173,
+        "narHash": "sha256-D20fwVqpY1aGecwIX+G6ocJHVRw2biIdm7O2Uu7u/Hw=",
+        "owner": "bromanko",
+        "repo": "age-plugin-op",
+        "rev": "da9269c5773779fffc607191c7317e88fb20c8e5",
+        "type": "github"
+      },
+      "original": {
+        "owner": "bromanko",
+        "repo": "age-plugin-op",
+        "type": "github"
+      }
+    },
     "alejandra": {
       "inputs": {
         "fenix": "fenix",
@@ -502,6 +522,22 @@
         "type": "github"
       }
     },
+    "nixpkgs-stable": {
+      "locked": {
+        "lastModified": 1714858427,
+        "narHash": "sha256-tCxeDP4C1pWe2rYY3IIhdA40Ujz32Ufd4tcrHPSKx2M=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "b980b91038fc4b09067ef97bbe5ad07eecca1e76",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "release-23.11",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nixpkgs-unstable": {
       "locked": {
         "lastModified": 1714635257,
@@ -582,6 +618,7 @@
     },
     "root": {
       "inputs": {
+        "age-plugin-op": "age-plugin-op",
         "alejandra": "alejandra",
         "distro-grub-themes": "distro-grub-themes",
         "home-manager": "home-manager",
@@ -593,6 +630,7 @@
         "nixd": "nixd",
         "nixpkgs": "nixpkgs_5",
         "nixpkgs-unstable": "nixpkgs-unstable",
+        "sops-nix": "sops-nix",
         "waybar": "waybar"
       }
     },
@@ -635,6 +673,28 @@
       "original": {
         "owner": "oxalica",
         "repo": "rust-overlay",
+        "type": "github"
+      }
+    },
+    "sops-nix": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "nixpkgs-stable": "nixpkgs-stable"
+      },
+      "locked": {
+        "lastModified": 1711119062,
+        "narHash": "sha256-pJGGsuQpVvZwMxJfQH0DGtIEFc25MdqLiWeJfGcSJIY=",
+        "owner": "Mic92",
+        "repo": "sops-nix",
+        "rev": "de84e9c41eb67c121bb9bfd19361351e6b68dd84",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Mic92",
+        "ref": "yubikey-support",
+        "repo": "sops-nix",
         "type": "github"
       }
     },
