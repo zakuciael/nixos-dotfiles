@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  inputs,
   username,
   desktop,
   ...
@@ -15,6 +16,8 @@ with lib.my; {
       polkitPolicyOwners = [username];
     };
   };
+
+  environment.systemPackages = [inputs.age-plugin-op.default];
 
   modules.desktop.wm.${desktop}.autostartPrograms = [
     "${pkgs._1password-gui}/bin/1password"
