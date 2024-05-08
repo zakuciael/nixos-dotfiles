@@ -105,5 +105,6 @@ with lib.my; {
       gnome-keyring.enable = true;
       wallpaper.enable = true;
     };
+    dev.ides = ["rust-rover" "webstorm" "idea-ultimate"];
   };
 }
