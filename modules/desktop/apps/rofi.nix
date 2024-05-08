@@ -1,14 +1,17 @@
 {
-  lib,
   pkgs,
+  inputs,
   username,
   dotfiles,
   ...
-}:
-with lib;
-with lib.my; {
+}: {
   home-manager.users.${username} = {
-    home.packages = with pkgs; [rofi-wayland];
+    programs.rofi = {
+      enable = true;
+      package = pkgs.rofi-wayland;
+      plugins = [inputs.rofi-jetbrains.default];
+    };
+
     xdg.configFile.rofi.source = dotfiles.rofi.source;
   };
 }

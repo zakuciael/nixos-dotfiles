@@ -32,6 +32,7 @@ with lib.my; let
       webstorm
     ])
   );
+  installedIDEs = builtins.map (name: avaiableIdes.${name}) cfg;
 in {
   options.modules.dev.ides = mkOption {
     description = "A list of JetBrains IDEs names to install";
@@ -42,7 +43,17 @@ in {
 
   config = mkIf (cfg != []) {
     home-manager.users.${username} = {
-      home.packages = builtins.map (name: avaiableIdes.${name}) cfg;
+      home = {
+        packages = installedIDEs;
+
+        file = builtins.listToAttrs (builtins.map (ide: {
+            name = ".local/share/JetBrains/apps/${ide.pname}";
+            value = {
+              source = "${ide}/${ide.pname}";
+            };
+          })
+          installedIDEs);
+      };
     };
   };
 }

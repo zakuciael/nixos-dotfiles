@@ -114,7 +114,7 @@
       inherit username;
       stateVersion = "23.11";
       homeDirectory = "/home/${username}";
-      packages = scripts.shellExports;
+      packages = scripts.mkShellExports config;
     };
   };
 

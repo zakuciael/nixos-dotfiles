@@ -36,6 +36,10 @@
       url = "github:bromanko/age-plugin-op";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    rofi-jetbrains = {
+      url = "github:zakuciael/rofi-jetbrains";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     hyprland.url = "github:hyprwm/Hyprland";
     nixd.url = "github:nix-community/nixd";
     nil.url = "github:oxalica/nil";
@@ -74,6 +78,7 @@
         alejandra = flakeInputs.alejandra.packages.${system};
         hyprland-contrib = flakeInputs.hyprland-contrib.packages.${system};
         hyprpaper = flakeInputs.hyprpaper.packages.${system};
+        rofi-jetbrains = flakeInputs.rofi-jetbrains.packages.${system};
         age-plugin-op =
           flakeInputs.age-plugin-op.packages.${system}
           // {
