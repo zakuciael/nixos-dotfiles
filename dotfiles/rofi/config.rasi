@@ -21,6 +21,10 @@ configuration {
 	steal-focus: false;
 /*	dpi: -1;*/
 
+	/*---------- JetBrains settings ----------*/
+	jetbrains-custom-aliases: ["rs:RR", "web:WS", "cpp:CL"];
+    jetbrains-install-dir: "~/.local/share/JetBrains/apps/";
+
 	/*---------- Matching setting ----------*/
 	matching: "normal";
 	tokenize: true;

@@ -1,11 +1,20 @@
 {
+  config,
   pkgs,
   inputs,
+  username,
   ...
 }: {
   package = pkgs.writeShellApplication {
     name = "rofi-powermenu";
-    runtimeInputs = with pkgs; [rofi-wayland toybox mpc-cli alsa-utils bspwm inputs.hyprland];
+    runtimeInputs = with pkgs; [
+      config.home-manager.users.${username}.programs.rofi.finalPackage
+      toybox
+      mpc-cli
+      alsa-utils
+      bspwm
+      inputs.hyprland
+    ];
     text = ''
       # CMDs
       uptime=$(uptime -p | sed -e 's/up //g')

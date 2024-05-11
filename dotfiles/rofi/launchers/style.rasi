@@ -10,7 +10,7 @@
 /*****----- Configuration -----*****/
 /* TODO: Add jetbrains plugin */
 configuration {
-	modi:                       "drun,ssh,filebrowser,window";
+	modi:                       "drun,jetbrains,ssh,filebrowser,window";
   show-icons:                 true;
   display-drun:               "";
   display-ssh:                "";

@@ -8,7 +8,9 @@
   ...
 }:
 with lib;
-with lib.my;
+with lib.my; let
+  scriptPackages = scripts.mkScriptPackages config;
+in
   desktop.mkDesktopModule {
     inherit config;
 
@@ -123,8 +125,9 @@ with lib.my;
               "$mod, RIGHT, movefocus, r"
               "$mod, UP, movefocus, u"
               "$mod, DOWN, movefocus, d"
-              "SHIFT CTRL, space, exec, ${scripts.packages.rofi-launcher}/bin/rofi-launcher drun"
-              "SHIFT CTRL, Q, exec, ${scripts.packages.rofi-powermenu}/bin/rofi-powermenu"
+              "SHIFT CTRL, space, exec, ${scriptPackages.rofi-launcher}/bin/rofi-launcher drun"
+              "SHIFT CTRL, R, exec, ${scriptPackages.rofi-launcher}/bin/rofi-launcher jetbrains"
+              "SHIFT CTRL, Q, exec, ${scriptPackages.rofi-powermenu}/bin/rofi-powermenu"
             ];
 
             bindl = with pkgs; [

@@ -31,6 +31,6 @@ with lib.my; let
       (builtins.map (config: attrByPath [attr] null config) overlays)
     );
 in {
-  pkgs = (getOverlaysFromAttr "pkgs") ++ privatePkgsOverlays;
+  pkgs = privatePkgsOverlays ++ (getOverlaysFromAttr "pkgs");
   unstable = getOverlaysFromAttr "unstable";
 }

@@ -11,7 +11,7 @@
   defs = import ./defs.nix {inherit lib;};
 
   dotfiles = mapper.mapDirToAttrs ./../dotfiles;
-  scripts = import ./scripts.nix {inherit lib pkgs unstable inputs dotfiles;};
+  scripts = import ./scripts.nix {inherit lib pkgs unstable inputs username dotfiles;};
 in {
   inherit utils mapper defs;
 
