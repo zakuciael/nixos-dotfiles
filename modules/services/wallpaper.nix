@@ -1,7 +1,7 @@
 {
   config,
   lib,
-  inputs,
+  pkgs,
   username,
   ...
 }:
@@ -62,7 +62,7 @@ in {
             X-Restart-Triggers = ["${home.xdg.configFile."hypr/hyprpaper.conf".source}"];
           };
           Service = {
-            ExecStart = "${getExe inputs.hyprpaper.default}";
+            ExecStart = "${getExe pkgs.hyprpaper}";
             Restart = "always";
             RestartSec = "10";
           };

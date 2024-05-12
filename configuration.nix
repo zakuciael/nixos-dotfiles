@@ -14,11 +14,9 @@
       cores = 6;
       auto-optimise-store = true;
       substituters = [
-        "https://hyprland.cachix.org"
         "https://cache.thalheim.io"
       ];
       trusted-public-keys = [
-        "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
         "cache.thalheim.io-1:R7msbosLEZKrxk/lKxf9BTjOOH7Ax3H0Qj0/6wiHOgc="
       ];
       experimental-features = ["nix-command" "flakes"];
@@ -104,7 +102,6 @@
   home-manager = {
     extraSpecialArgs = {inherit pkgs lib;};
     sharedModules = [
-      inputs.hyprland.homeManagerModules.default
       inputs.nix-colors.homeManagerModule
       inputs.sops-nix.homeManagerModule
     ];
