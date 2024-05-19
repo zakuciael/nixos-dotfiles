@@ -105,6 +105,12 @@ with lib.my; {
       gnome-keyring.enable = true;
       wallpaper.enable = true;
     };
-    dev.ides = ["rust-rover" "webstorm" "idea-ultimate"];
+    dev = {
+      ides = ["rust-rover" "webstorm" "idea-ultimate"];
+      nostale = {
+        enable = true;
+        installPath = "/media/games/linux/Other/NosTale";
+      };
+    };
   };
 }
