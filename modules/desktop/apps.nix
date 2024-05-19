@@ -47,6 +47,9 @@ in {
         gnome.eog
         sops
         age
+        imhex
+        mongodb-tools
+        mongodb-compass
       ];
     };
   };

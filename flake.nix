@@ -28,6 +28,10 @@
       url = "github:zakuciael/rofi-jetbrains";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nostale-dev-env = {
+      url = "github:zakuciael/nostale-dev-env";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nixd.url = "github:nix-community/nixd";
     nil.url = "github:oxalica/nil";
     nix-colors.url = "github:misterio77/nix-colors";
@@ -64,6 +68,9 @@
         nixd = flakeInputs.nixd.packages.${system};
         alejandra = flakeInputs.alejandra.packages.${system};
         rofi-jetbrains = flakeInputs.rofi-jetbrains.packages.${system};
+        nostale-dev-env =
+          flakeInputs.nostale-dev-env
+          // {packages = flakeInputs.nostale-dev-env.packages.${system};};
         age-plugin-op =
           flakeInputs.age-plugin-op.packages.${system}
           // {
@@ -84,5 +91,7 @@
       mappedHosts = builtins.mapAttrs (n: v: mkHost {name = n;}) hosts;
     in
       mappedHosts;
+
+    inherit pkgs lib;
   };
 }

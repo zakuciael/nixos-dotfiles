@@ -19,8 +19,11 @@
       trusted-public-keys = [
         "cache.thalheim.io-1:R7msbosLEZKrxk/lKxf9BTjOOH7Ax3H0Qj0/6wiHOgc="
       ];
-      experimental-features = ["nix-command" "flakes"];
     };
+    extraOptions = ''
+      experimental-features = nix-command flakes
+      !include ${config.sops.secrets."nix/access-tokens".path}
+    '';
     package = pkgs.nixFlakes;
   };
 
@@ -89,13 +92,21 @@
     };
   };
 
+  # SOPS
+  sops.secrets = {
+    "users/${username}/password".neededForUsers = true;
+    "nix/access-tokens" = {
+      mode = "0440";
+      group = config.users.groups.keys.name;
+    };
+  };
+
   # User settings
-  sops.secrets."users/${username}/password".neededForUsers = true;
   users.users.${username} = {
     isNormalUser = true;
     hashedPasswordFile = config.sops.secrets."users/${username}/password".path;
     description = "Krzysztof Saczuk";
-    extraGroups = ["wheel"];
+    extraGroups = ["wheel" config.users.groups.keys.name];
   };
 
   # Home-manager

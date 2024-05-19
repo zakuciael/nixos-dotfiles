@@ -22,5 +22,7 @@ jobs:
         uses: DeterminateSystems/flake-checker-action@v5
       - name: Intall Nix
         uses: DeterminateSystems/nix-installer-action@v10
+        with:
+          github-token: ${{ secrets.PAT }}
       - name: Check repository
         run: nix flake check
