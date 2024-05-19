@@ -1,16 +1,14 @@
 {
-  inputs,
+  pkgs,
   username,
   ...
 }: {
   # Add keybinds to Hyprland
   home-manager.users.${username} = {
-    home.packages = [
-      inputs.hyprland-contrib.grimblast
-    ];
+    home.packages = with pkgs; [grimblast];
 
     wayland.windowManager.hyprland.settings.bind = let
-      grimblastExec = "${inputs.hyprland-contrib.grimblast}/bin/grimblast --notify";
+      grimblastExec = "${pkgs.grimblast}/bin/grimblast --notify";
     in [
       # Screenshot entire monitor
       ", Print, exec, ${grimblastExec} copy output" # Copy to clipboard

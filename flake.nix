@@ -16,18 +16,6 @@
       url = "github:kamadorueda/alejandra/3.0.0";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    hyprland-contrib = {
-      url = "github:hyprwm/contrib";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    hyprpaper = {
-      url = "github:hyprwm/hyprpaper";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    waybar = {
-      url = "github:Alexays/Waybar";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
-    };
     sops-nix = {
       url = "github:Mic92/sops-nix/yubikey-support";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -40,7 +28,6 @@
       url = "github:zakuciael/rofi-jetbrains";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    hyprland.url = "github:hyprwm/Hyprland";
     nixd.url = "github:nix-community/nixd";
     nil.url = "github:oxalica/nil";
     nix-colors.url = "github:misterio77/nix-colors";
@@ -76,18 +63,11 @@
         nil = flakeInputs.nil.packages.${system};
         nixd = flakeInputs.nixd.packages.${system};
         alejandra = flakeInputs.alejandra.packages.${system};
-        hyprland-contrib = flakeInputs.hyprland-contrib.packages.${system};
-        hyprpaper = flakeInputs.hyprpaper.packages.${system};
         rofi-jetbrains = flakeInputs.rofi-jetbrains.packages.${system};
         age-plugin-op =
           flakeInputs.age-plugin-op.packages.${system}
           // {
             default = flakeInputs.age-plugin-op.packages.${system}.age-plugin-op;
-          };
-        hyprland =
-          flakeInputs.hyprland
-          // {
-            packages = flakeInputs.hyprland.packages.${system};
           };
       };
 

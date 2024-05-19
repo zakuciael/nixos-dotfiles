@@ -1,7 +1,6 @@
 {
   config,
   pkgs,
-  inputs,
   username,
   ...
 }: {
@@ -13,7 +12,7 @@
       mpc-cli
       alsa-utils
       bspwm
-      inputs.hyprland
+      hyprland
     ];
     text = ''
       # CMDs

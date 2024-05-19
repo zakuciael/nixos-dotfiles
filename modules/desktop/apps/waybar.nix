@@ -1,14 +1,13 @@
 {
   lib,
   pkgs,
-  unstable,
   username,
   desktop,
   colorScheme,
   ...
 }:
 with lib; let
-  package = unstable.waybar;
+  package = pkgs.waybar;
 in {
   # TODO: Add priority for waybar, so it starts before any other app
   modules.desktop.wm.${desktop}.autostartPrograms = [

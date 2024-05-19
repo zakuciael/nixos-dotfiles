@@ -2,7 +2,6 @@
   config,
   lib,
   pkgs,
-  inputs,
   username,
   scripts,
   ...
@@ -35,7 +34,6 @@ in
     }: {
       programs.hyprland = {
         enable = true;
-        package = inputs.hyprland.packages.hyprland;
         xwayland.enable = true;
       };
 
@@ -48,6 +46,7 @@ in
 
         wayland.windowManager.hyprland = {
           enable = true;
+          xwayland.enable = true;
 
           settings = {
             # Autostart script
