@@ -238,7 +238,10 @@ in {
         })
         cfg.layout;
     in {
-      deviceSection = concatLines (builtins.map (x: ''Option "monitor-${x.layout.monitor.xorg}" "${x.name}"'') heads);
+      deviceSection = concatLines (
+        (builtins.map (x: ''Option "monitor-${x.layout.monitor.xorg}" "${x.name}"'') heads)
+        ++ [''Option "DRI" "3"'']
+      );
       extraConfig = with lib; let
         mkMonitorSection = prev: curr:
           (singleton {

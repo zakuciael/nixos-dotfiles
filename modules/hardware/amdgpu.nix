@@ -12,9 +12,16 @@ in {
   };
 
   config = mkIf (cfg.enable) {
-    services.xserver.videoDrivers = mkIf config.services.xserver.enable ["amdgpu"];
-
-    hardware.enableRedistributableFirmware = true;
+    services.xserver.videoDrivers = ["amdgpu"];
     boot.initrd.kernelModules = ["amdgpu"];
+
+    hardware = {
+      enableRedistributableFirmware = true;
+      opengl = {
+        enable = true;
+        driSupport = true;
+        driSupport32Bit = true;
+      };
+    };
   };
 }
