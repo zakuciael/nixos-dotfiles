@@ -14,6 +14,8 @@ in {
 
   config = mkIf cfg.enable {
     home-manager.users.${username} = {
+      stylix.targets.tmux.enable = true;
+
       programs.tmux = {
         enable = true;
         mouse = true;

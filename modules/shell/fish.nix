@@ -26,6 +26,8 @@ in {
     environment.shells = mkIf cfg.default (with pkgs; [fish]);
 
     home-manager.users.${username} = {
+      stylix.targets.fish.enable = true;
+
       programs = {
         direnv = {
           enable = cfg.direnv.enable;

@@ -44,6 +44,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "flake-utils";
     };
+    stylix = {
+      url = "github:danth/stylix/release-23.11";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
+    };
     nil = {
       url = "github:oxalica/nil";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
@@ -86,8 +91,12 @@
           // {packages = flakeInputs.nostale-dev-env.packages.${system};};
         age-plugin-op =
           flakeInputs.age-plugin-op.packages.${system}
+          // {default = flakeInputs.age-plugin-op.packages.${system}.age-plugin-op;};
+        stylix =
+          flakeInputs.stylix
           // {
-            default = flakeInputs.age-plugin-op.packages.${system}.age-plugin-op;
+            packages = flakeInputs.stylix.packages.${system};
+            nixosModules = flakeInputs.stylix.nixosModules // {default = flakeInputs.stylix.nixosModules.stylix;};
           };
       };
 
@@ -104,5 +113,7 @@
       mappedHosts = builtins.mapAttrs (n: v: mkHost {name = n;}) hosts;
     in
       mappedHosts;
+
+    inherit pkgs lib inputs;
   };
 }
