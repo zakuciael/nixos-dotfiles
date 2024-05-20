@@ -4,6 +4,12 @@
   inputs = {
     nixpkgs.url = "nixpkgs/nixos-23.11";
     nixpkgs-unstable.url = "nixpkgs/nixos-unstable";
+    flake-utils.url = "github:numtide/flake-utils";
+    nix-colors.url = "github:misterio77/nix-colors";
+    fenix = {
+      url = "github:nix-community/fenix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     home-manager = {
       url = "github:nix-community/home-manager/release-23.11";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -11,14 +17,17 @@
     distro-grub-themes = {
       url = "github:AdisonCavani/distro-grub-themes";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
     };
     alejandra = {
       url = "github:kamadorueda/alejandra/3.0.0";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.fenix.follows = "fenix";
     };
     sops-nix = {
       url = "github:Mic92/sops-nix/yubikey-support";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs-stable.follows = "nixpkgs";
     };
     age-plugin-op = {
       url = "github:bromanko/age-plugin-op";
@@ -27,14 +36,19 @@
     rofi-jetbrains = {
       url = "github:zakuciael/rofi-jetbrains";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+      inputs.fenix.follows = "fenix";
     };
     nostale-dev-env = {
       url = "github:zakuciael/nostale-dev-env";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
     };
-    nixd.url = "github:nix-community/nixd";
-    nil.url = "github:oxalica/nil";
-    nix-colors.url = "github:misterio77/nix-colors";
+    nil = {
+      url = "github:oxalica/nil";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      inputs.flake-utils.follows = "flake-utils";
+    };
   };
 
   outputs = {
@@ -65,7 +79,6 @@
       // {
         distro-grub-themes = flakeInputs.distro-grub-themes.packages.${system};
         nil = flakeInputs.nil.packages.${system};
-        nixd = flakeInputs.nixd.packages.${system};
         alejandra = flakeInputs.alejandra.packages.${system};
         rofi-jetbrains = flakeInputs.rofi-jetbrains.packages.${system};
         nostale-dev-env =
@@ -91,7 +104,5 @@
       mappedHosts = builtins.mapAttrs (n: v: mkHost {name = n;}) hosts;
     in
       mappedHosts;
-
-    inherit pkgs lib;
   };
 }
