@@ -31,7 +31,6 @@ in {
       programs.fish.shellAliases.open = "xdg-open";
       home.packages = with pkgs; [
         inputs.nil.default
-        inputs.nixd.default
         inputs.alejandra.default
         discord
         unstable.vesktop
