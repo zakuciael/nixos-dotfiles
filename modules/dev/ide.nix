@@ -14,7 +14,7 @@ with lib.my; let
       name = value.pname;
       inherit value;
     })
-    (with pkgs.jetbrains; [
+    (with unstable.jetbrains; [
       clion
       datagrip
       dataspell
@@ -28,7 +28,7 @@ with lib.my; let
       pycharm-professional
       rider
       ruby-mine
-      unstable.jetbrains.rust-rover
+      rust-rover
       webstorm
     ])
   );

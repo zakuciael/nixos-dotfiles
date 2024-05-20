@@ -113,7 +113,5 @@
       mappedHosts = builtins.mapAttrs (n: v: mkHost {name = n;}) hosts;
     in
       mappedHosts;
-
-    inherit pkgs lib inputs;
   };
 }
