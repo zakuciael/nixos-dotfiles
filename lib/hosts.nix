@@ -28,6 +28,7 @@ with lib.my; {
 
           inputs.home-manager.nixosModules.default
           inputs.sops-nix.nixosModules.default
+          inputs.stylix.nixosModules.default
         ]
         ++ (utils.recursiveReadDir ./../modules {
           ignoredDirs = ["apps"];
