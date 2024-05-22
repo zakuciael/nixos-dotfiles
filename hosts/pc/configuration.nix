@@ -117,6 +117,7 @@ in {
       wallpaper.enable = true;
     };
     dev = {
+      tools.enable = true;
       ides = ["rust-rover" "webstorm" "idea-ultimate"];
       nostale = {
         enable = true;
