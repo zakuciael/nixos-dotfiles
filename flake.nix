@@ -113,5 +113,7 @@
       mappedHosts = builtins.mapAttrs (n: v: mkHost {name = n;}) hosts;
     in
       mappedHosts;
+
+    devShells.${system}.default = pkgs.callPackage ./shell.nix {};
   };
 }
