@@ -20,6 +20,12 @@
         "editor.formatOnType": false
     },
     "cSpell.language": "en,pl,en-US",
+    "cSpell.enableFiletypes": [
+        "markdown",
+        "nix",
+        "yaml",
+        "yml"
+    ],
     "cSpell.words": [
         "bootloader",
         "flatpak",
