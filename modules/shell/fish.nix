@@ -53,8 +53,8 @@ in {
 
             # Programs
             neofetch = "nix run nixpkgs#neofetch";
-            btop = "nix run nixpkgs#btop";
             onefetch = "nix run nixpkgs#onefetch";
+            nix-prefetch = "nix run nixpkgs#nix-prefetch";
           };
         };
       };
