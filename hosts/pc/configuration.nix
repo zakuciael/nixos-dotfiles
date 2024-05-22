@@ -19,12 +19,12 @@ in {
 
   home-manager.users.${username} = {
     inherit colorScheme;
-    stylix.base16Scheme = colorScheme;
+    stylix.base16Scheme = colorScheme.palette;
     stylix.autoEnable = false;
   };
 
   stylix.image = ""; # Workaround for Stylix requirement for this to be set.
-  stylix.base16Scheme = colorScheme;
+  stylix.base16Scheme = colorScheme.palette;
   stylix.autoEnable = false;
 
   # Configure Secret Managment through sops-nix.
