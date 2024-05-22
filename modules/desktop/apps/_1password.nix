@@ -15,6 +15,10 @@ with lib.my; {
       enable = true;
       polkitPolicyOwners = [username];
     };
+
+    fish.interactiveShellInit = ''
+      source /home/${username}/.config/op/plugins.sh
+    '';
   };
 
   environment.systemPackages = [inputs.age-plugin-op.default];
