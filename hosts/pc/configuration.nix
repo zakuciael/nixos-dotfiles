@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   inputs,
   username,
   dotfiles,
@@ -31,6 +32,10 @@ in {
   sops.age.keyFile = "/home/${username}/.config/sops/age/keys.txt";
   sops.defaultSopsFile = ./secrets.yaml;
   sops.defaultSopsFormat = "yaml";
+
+  # Configure ZSA keyboards
+  hardware.keyboard.zsa.enable = true;
+  environment.systemPackages = with pkgs; [wally-cli];
 
   modules = {
     hardware = {
