@@ -3,13 +3,14 @@
   pkgs,
   unstable,
   inputs,
+  system,
   ...
 }:
 with lib;
 with lib.my; let
   overlays =
     builtins.map
-    (file: import file {inherit lib pkgs unstable inputs;})
+    (file: import file {inherit lib pkgs unstable inputs system;})
     (utils.recursiveReadDir ./../overlays {suffixes = ["nix"];});
   privatePkgsOverlays = let
     suffix = "default.nix";

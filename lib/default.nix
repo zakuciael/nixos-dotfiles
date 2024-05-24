@@ -4,6 +4,7 @@
   unstable,
   inputs,
   username,
+  system,
   ...
 }: let
   utils = import ./utils.nix {inherit lib;};
@@ -17,5 +18,5 @@ in {
 
   hosts = import ./hosts.nix {inherit lib pkgs unstable inputs username dotfiles scripts;};
   desktop = import ./desktop.nix {inherit lib pkgs unstable inputs username dotfiles scripts;};
-  overlays = import ./overlays.nix {inherit lib pkgs unstable inputs;};
+  overlays = import ./overlays.nix {inherit lib pkgs unstable inputs system;};
 }
