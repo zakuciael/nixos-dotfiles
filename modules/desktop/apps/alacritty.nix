@@ -4,10 +4,11 @@
   ...
 }: {
   home-manager.users.${username} = {
-    stylix.targets.alacritty.enable = true;
+    # stylix.targets.alacritty.enable = true;
 
     programs.alacritty = {
       enable = true;
+      catppuccin.enable = true;
       settings = {
         general = {
           shell = "${pkgs.fish}/bin/fish";

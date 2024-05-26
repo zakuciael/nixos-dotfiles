@@ -115,6 +115,7 @@
     sharedModules = [
       inputs.nix-colors.homeManagerModule
       inputs.sops-nix.homeManagerModule
+      inputs.catppuccin.homeManagerModule
     ];
     useUserPackages = true;
     useGlobalPkgs = true;

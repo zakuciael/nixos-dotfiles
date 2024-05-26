@@ -25,6 +25,7 @@ in
       "qt"
       "grimblast"
       "steam"
+      "btop"
     ];
 
     extraConfig = {

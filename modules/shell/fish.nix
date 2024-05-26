@@ -26,8 +26,6 @@ in {
     environment.shells = mkIf cfg.default (with pkgs; [fish]);
 
     home-manager.users.${username} = {
-      stylix.targets.fish.enable = true;
-
       programs = {
         direnv = {
           enable = cfg.direnv.enable;
@@ -45,6 +43,7 @@ in {
 
         fish = {
           enable = true;
+          catppuccin.enable = true;
           shellAliases = {
             re = "nh os switch -H ${hostname} && echo -e '\\033[32m>\\033[0m Done!'";
             nfu = "nix flake update";

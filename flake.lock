@@ -208,6 +208,21 @@
         "type": "github"
       }
     },
+    "catppuccin": {
+      "locked": {
+        "lastModified": 1716337435,
+        "narHash": "sha256-eZqH1vLI9eKL/N5toXxOrQO80G0y4pWZrYCp472YBVQ=",
+        "owner": "catppuccin",
+        "repo": "nix",
+        "rev": "fea5242c0eacc5efa81be0e36206a62e889dbd82",
+        "type": "github"
+      },
+      "original": {
+        "owner": "catppuccin",
+        "repo": "nix",
+        "type": "github"
+      }
+    },
     "distro-grub-themes": {
       "inputs": {
         "flake-utils": [
@@ -480,6 +495,7 @@
       "inputs": {
         "age-plugin-op": "age-plugin-op",
         "alejandra": "alejandra",
+        "catppuccin": "catppuccin",
         "distro-grub-themes": "distro-grub-themes",
         "fenix": "fenix",
         "flake-utils": "flake-utils",

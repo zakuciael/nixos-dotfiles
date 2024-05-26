@@ -6,6 +6,7 @@
     nixpkgs-unstable.url = "nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
     nix-colors.url = "github:misterio77/nix-colors";
+    catppuccin.url = "github:catppuccin/nix";
     fenix = {
       url = "github:nix-community/fenix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -98,6 +99,16 @@
             packages = flakeInputs.stylix.packages.${system};
             nixosModules = flakeInputs.stylix.nixosModules // {default = flakeInputs.stylix.nixosModules.stylix;};
           };
+        catppuccin =
+          flakeInputs.catppuccin
+          // {
+            homeManagerModule = flakeInputs.catppuccin.homeManagerModules.catppuccin;
+            nixosModules =
+              flakeInputs.catppuccin.nixosModules
+              // {
+                default = flakeInputs.catppuccin.nixosModules.catppuccin;
+              };
+          };
       };
 
     lib = nixpkgs.lib.extend (self: super: {
@@ -115,5 +126,7 @@
       mappedHosts;
 
     devShells.${system}.default = pkgs.callPackage ./shell.nix {};
+
+    inherit pkgs unstable inputs lib;
   };
 }

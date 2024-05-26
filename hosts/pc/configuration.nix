@@ -18,22 +18,23 @@ in {
     };
   };
 
+  # Color theme configuration
+  catppuccin.flavor = "mocha";
   home-manager.users.${username} = {
     inherit colorScheme;
     stylix.base16Scheme = colorScheme.palette;
     stylix.autoEnable = false;
   };
 
-  stylix.image = ""; # Workaround for Stylix requirement for this to be set.
   stylix.base16Scheme = colorScheme.palette;
   stylix.autoEnable = false;
 
-  # Configure Secret Managment through sops-nix.
+  # Secret management configuration
   sops.age.keyFile = "/home/${username}/.config/sops/age/keys.txt";
   sops.defaultSopsFile = ./secrets.yaml;
   sops.defaultSopsFormat = "yaml";
 
-  # Configure ZSA keyboards
+  # ZSA keyboard configuration
   hardware.keyboard.zsa.enable = true;
   environment.systemPackages = with pkgs; [wally-cli];
 
