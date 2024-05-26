@@ -14,13 +14,12 @@ in {
 
   config = mkIf cfg.enable {
     home-manager.users.${username} = {
-      stylix.targets.tmux.enable = true;
-
       programs.tmux = {
         enable = true;
+        catppuccin.enable = true;
         mouse = true;
         newSession = false;
-        plugins = with pkgs.tmuxPlugins; [sensible yank catppuccin];
+        plugins = with pkgs.tmuxPlugins; [sensible yank];
         shell = "${pkgs.fish}/bin/fish";
         prefix = "C-Space";
         baseIndex = 1;
