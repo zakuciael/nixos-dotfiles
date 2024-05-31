@@ -33,6 +33,16 @@
   };
 
   swapDevices = [{device = "/dev/disk/by-partlabel/swap";}];
+  modules.hardware.grub.extraEntries = ''
+    menuentry "Windows" --class windows {
+      insmod part_gpt
+      insmod fat
+      insmod search_fs_uuid
+      insmod chain
+      search --no-floppy --fs-uuid --set=root F042-E2DF
+      chainloader /efi/Microsoft/Boot/bootmgfw.efi
+    }
+  '';
 
   boot.initrd.kernelModules = ["kvm-intel"];
   boot.kernelPackages = pkgs.linuxPackages_latest;
