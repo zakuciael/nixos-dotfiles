@@ -22,7 +22,7 @@ in {
           chainloader /EFI/Microsoft/Boot/bootmgfw.efi
         }
       '';
-      type = types.string;
+      type = types.str;
     };
     resolution = mkOption {
       description = "Set the resolution to use in the GRUB menu";
