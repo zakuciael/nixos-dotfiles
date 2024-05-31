@@ -11,7 +11,6 @@ with lib; let
 in {
   options.modules.shell.fish = {
     enable = mkEnableOption "fish shell";
-    direnv.enable = mkEnableOption "direnv integration";
     default = mkOption {
       description = "Whether to set fish as a default shell for the user";
       example = true;
@@ -26,98 +25,7 @@ in {
     programs.fish.enable = true;
 
     home-manager.users.${username} = {
-      home.sessionVariables = {
-        DIRENV_LOG_FORMAT = "";
-      };
-
       programs = {
-        direnv = {
-          enable = cfg.direnv.enable;
-          nix-direnv.enable = cfg.direnv.enable;
-          config = {
-            global = {
-              load_dotenv = true;
-              disable_stdin = true;
-            };
-            whitelist.prefix = ["/home/${username}/dev"];
-          };
-        };
-
-        starship = {
-          enable = true;
-          catppuccin.enable = true;
-          settings = {
-            add_newline = true;
-
-            directory.read_only = " 󰌾";
-            docker_context.symbol = " ";
-            nix_shell.symbol = " ";
-            git_branch.symbol = " ";
-            hostname.ssh_symbol = "󰖟 ";
-            kubernetes = {
-              symbol = "󱃾 ";
-              disabled = false;
-            };
-
-            package.symbol = "󰏗 ";
-            c.symbol = " ";
-            cmake.symbol = " ";
-            golang.symbol = " ";
-            java.symbol = " ";
-            kotlin.symbol = " ";
-            lua.symbol = " ";
-            nodejs.symbol = "󰎙 ";
-            python.symbol = " ";
-            php.symbol = " ";
-            ruby.symbol = " ";
-            rust.symbol = " ";
-            dotnet.symbol = "󰪮 ";
-            gradle.symbol = " ";
-
-            os.symbols = {
-              Alpaquita = " ";
-              Alpine = " ";
-              Amazon = " ";
-              Android = " ";
-              Arch = " ";
-              Artix = " ";
-              CentOS = " ";
-              Debian = " ";
-              DragonFly = " ";
-              Emscripten = " ";
-              EndeavourOS = " ";
-              Fedora = " ";
-              FreeBSD = " ";
-              Garuda = "󰛓 ";
-              Gentoo = " ";
-              HardenedBSD = "󰞌 ";
-              Illumos = "󰈸 ";
-              Linux = " ";
-              Mabox = " ";
-              Macos = " ";
-              Manjaro = " ";
-              Mariner = " ";
-              MidnightBSD = " ";
-              Mint = " ";
-              NetBSD = " ";
-              NixOS = " ";
-              OpenBSD = "󰈺 ";
-              openSUSE = " ";
-              OracleLinux = "󰌷 ";
-              Pop = " ";
-              Raspbian = " ";
-              Redhat = " ";
-              RedHatEnterprise = " ";
-              Redox = "󰀘 ";
-              Solus = "󰠳 ";
-              SUSE = " ";
-              Ubuntu = " ";
-              Unknown = " ";
-              Windows = "󰍲 ";
-            };
-          };
-        };
-
         fish = {
           enable = true;
           catppuccin.enable = true;
