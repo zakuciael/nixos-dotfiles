@@ -27,6 +27,13 @@ in {
         mongosh
         mongodb-tools
         mongodb-compass
+
+        # HTTPie
+        httpie
+        httpie-desktop
+
+        # Benchmarking
+        hyperfine
       ];
     };
   };
