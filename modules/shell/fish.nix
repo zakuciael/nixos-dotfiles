@@ -29,6 +29,11 @@ in {
         fish = {
           enable = true;
           catppuccin.enable = true;
+          functions = {
+            fish_greeting = ''
+              ${pkgs.krabby}/bin/krabby random --no-title
+            '';
+          };
           shellAliases = {
             re = "nh os switch -H ${hostname} && echo -e '\\033[32m>\\033[0m Done!'";
             nfu = "nix flake update";
