@@ -134,6 +134,7 @@
     hardware.grub.enable = true;
     shell = {
       tmux.enable = true;
+      nix.enable = true;
       direnv.enable = true;
       starship.enable = true;
       fish = {
