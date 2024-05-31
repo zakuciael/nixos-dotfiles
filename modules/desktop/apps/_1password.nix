@@ -17,7 +17,7 @@ with lib.my; {
     };
 
     fish.interactiveShellInit = ''
-      source /home/${username}/.config/op/plugins.sh
+      source $HOME/.config/op/plugins.sh
     '';
   };
 
@@ -39,10 +39,7 @@ with lib.my; {
 
     ssh = {
       enable = true;
-      extraConfig = ''
-        Host *
-            IdentityAgent ~/.1password/agent.sock
-      '';
+      extraConfig = "IdentityAgent ~/.1password/agent.sock";
     };
   };
 }
