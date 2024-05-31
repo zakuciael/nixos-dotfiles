@@ -26,6 +26,7 @@ in
       "grimblast"
       "steam"
       "btop"
+      "bat"
     ];
 
     extraConfig = {
