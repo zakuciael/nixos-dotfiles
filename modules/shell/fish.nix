@@ -56,7 +56,7 @@ in {
             hostname.ssh_symbol = "󰖟 ";
             kubernetes = {
               symbol = "󱃾 ";
-              detect_env_vars = ["KUBECONFIG"];
+              disabled = false;
             };
 
             package.symbol = "󰏗 ";
@@ -122,9 +122,9 @@ in {
           enable = true;
           catppuccin.enable = true;
           shellAliases = {
-            re = "nh os switch -H ${hostname} && echo -e '\\033[32m>\\033[0m Done!";
+            re = "nh os switch -H ${hostname} && echo -e '\\033[32m>\\033[0m Done!'";
             nfu = "nix flake update";
-            repl = "nix repl -f '<nixpkgs>";
+            repl = "nix repl -f '<nixpkgs>'";
             vim = "nvim";
 
             # Programs
