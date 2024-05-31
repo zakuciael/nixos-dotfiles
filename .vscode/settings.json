@@ -58,7 +58,9 @@
         "pc",
         "hosts",
         "desktop",
-        "bootloader"
+        "bootloader",
+        "fish",
+        "git"
     ],
     "todohighlight.isEnable": true,
     "todohighlight.isCaseSensitive": true,
