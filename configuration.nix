@@ -138,9 +138,9 @@
       direnv.enable = true;
       starship.enable = true;
       zoxide.enable = true;
+      eza.enable = true;
       fish = {
         enable = true;
-        direnv.enable = true;
         default = true;
       };
     };
