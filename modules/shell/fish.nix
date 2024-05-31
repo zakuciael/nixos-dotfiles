@@ -43,15 +43,88 @@ in {
           };
         };
 
-        starship.enable = true;
+        starship = {
+          enable = true;
+          catppuccin.enable = true;
+          settings = {
+            add_newline = true;
+
+            directory.read_only = " 󰌾";
+            docker_context.symbol = " ";
+            nix_shell.symbol = " ";
+            git_branch.symbol = " ";
+            hostname.ssh_symbol = "󰖟 ";
+            kubernetes = {
+              symbol = "󱃾 ";
+              detect_env_vars = ["KUBECONFIG"];
+            };
+
+            package.symbol = "󰏗 ";
+            c.symbol = " ";
+            cmake.symbol = " ";
+            golang.symbol = " ";
+            java.symbol = " ";
+            kotlin.symbol = " ";
+            lua.symbol = " ";
+            nodejs.symbol = "󰎙 ";
+            python.symbol = " ";
+            php.symbol = " ";
+            ruby.symbol = " ";
+            rust.symbol = " ";
+            dotnet.symbol = "󰪮 ";
+            gradle.symbol = " ";
+
+            os.symbols = {
+              Alpaquita = " ";
+              Alpine = " ";
+              Amazon = " ";
+              Android = " ";
+              Arch = " ";
+              Artix = " ";
+              CentOS = " ";
+              Debian = " ";
+              DragonFly = " ";
+              Emscripten = " ";
+              EndeavourOS = " ";
+              Fedora = " ";
+              FreeBSD = " ";
+              Garuda = "󰛓 ";
+              Gentoo = " ";
+              HardenedBSD = "󰞌 ";
+              Illumos = "󰈸 ";
+              Linux = " ";
+              Mabox = " ";
+              Macos = " ";
+              Manjaro = " ";
+              Mariner = " ";
+              MidnightBSD = " ";
+              Mint = " ";
+              NetBSD = " ";
+              NixOS = " ";
+              OpenBSD = "󰈺 ";
+              openSUSE = " ";
+              OracleLinux = "󰌷 ";
+              Pop = " ";
+              Raspbian = " ";
+              Redhat = " ";
+              RedHatEnterprise = " ";
+              Redox = "󰀘 ";
+              Solus = "󰠳 ";
+              SUSE = " ";
+              Ubuntu = " ";
+              Unknown = " ";
+              Windows = "󰍲 ";
+            };
+          };
+        };
 
         fish = {
           enable = true;
           catppuccin.enable = true;
           shellAliases = {
-            re = "nh os switch -H ${hostname} && echo -e '\\033[32m>\\033[0m Done!'";
+            re = "nh os switch -H ${hostname} && echo -e '\\033[32m>\\033[0m Done!";
             nfu = "nix flake update";
-            repl = "nix repl -f '<nixpkgs>'";
+            repl = "nix repl -f '<nixpkgs>";
             vim = "nvim";
 
             # Programs
