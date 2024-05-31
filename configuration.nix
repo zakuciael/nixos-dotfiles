@@ -64,7 +64,7 @@
     noto-fonts-cjk-sans
     noto-fonts-cjk-serif
     noto-fonts-emoji-blob-bin
-    (nerdfonts.override {fonts = ["JetBrainsMono"];})
+    nerdfonts
   ];
 
   # Global packages
