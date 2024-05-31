@@ -129,6 +129,7 @@ in {
     };
     dev = {
       tools.enable = true;
+      kubernetes.enable = true;
       ides = ["rust-rover" "webstorm" "idea-ultimate"];
       nostale = {
         enable = true;
