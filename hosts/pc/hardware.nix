@@ -27,13 +27,22 @@
     device = "/dev/md/storage";
   };
 
-  # TODO: Temp, remove when full transision to NixOS is done.
+  # TODO: Temp, remove when full transition to NixOS is done.
   fileSystems."/media/arch" = {
     device = "/dev/disk/by-uuid/0db30fcb-b052-4ef0-9c08-1382d82b4eb5";
   };
 
   swapDevices = [{device = "/dev/disk/by-partlabel/swap";}];
+
   modules.hardware.grub.extraEntries = ''
+    menuentry "Arch Linux" --class arch {
+      insmod part_gpt
+      insmod fat
+      search --no-floppy --fs-uuid --set=root 5BCB-27B7
+      linux /vmlinuz-linux root=UUID=0db30fcb-b052-4ef0-9c08-1382d82b4eb5
+      initrd /initramfs-linux.img
+    }
+
     menuentry "Windows" --class windows {
       insmod part_gpt
       insmod fat
