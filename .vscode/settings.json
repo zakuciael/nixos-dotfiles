@@ -49,7 +49,8 @@
         "thalheim",
         "togglable",
         "usbhid",
-        "xhci"
+        "xhci",
+        "zoxide"
     ],
     "conventionalCommits.scopes": [
         "vscode",
@@ -78,7 +79,8 @@
         "desktop",
         "bootloader",
         "fish",
-        "git"
+        "git",
+        "shell"
     ],
     "todohighlight.isEnable": true,
     "todohighlight.isCaseSensitive": true,
