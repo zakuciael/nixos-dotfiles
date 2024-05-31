@@ -143,6 +143,7 @@ in {
       zoxide.enable = true;
       eza.enable = true;
       bat.enable = true;
+      tools.enable = true;
     };
   };
 }

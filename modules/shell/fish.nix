@@ -39,11 +39,6 @@ in {
             nfu = "nix flake update";
             repl = "nix repl -f '<nixpkgs>'";
             vim = "nvim";
-
-            # Programs
-            neofetch = "nix run nixpkgs#neofetch";
-            onefetch = "nix run nixpkgs#onefetch";
-            nix-prefetch = "nix run nixpkgs#nix-prefetch";
           };
         };
       };
