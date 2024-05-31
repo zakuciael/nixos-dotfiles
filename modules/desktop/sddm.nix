@@ -12,10 +12,9 @@ in {
   };
 
   config = mkIf (cfg.enable) {
-    services.xserver = {
-      enable = true;
-      # TODO: Update this configuration when nixos 24.05 releases
-      displayManager.sddm = {
+    services.xserver.enable = true;
+    services.displayManager = {
+      sddm = {
         enable = true;
         autoNumlock = true;
       };

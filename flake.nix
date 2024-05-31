@@ -2,7 +2,7 @@
   description = "A Super-Duper Invincible Shining Sparkly Magic NixOS Config"; # Credits: Genshin Impact
 
   inputs = {
-    nixpkgs.url = "nixpkgs/nixos-23.11";
+    nixpkgs.url = "nixpkgs/nixos-24.05";
     nixpkgs-unstable.url = "nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
     nix-colors.url = "github:misterio77/nix-colors";
@@ -12,7 +12,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     home-manager = {
-      url = "github:nix-community/home-manager/release-23.11";
+      url = "github:nix-community/home-manager/release-24.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     distro-grub-themes = {
@@ -52,7 +52,7 @@
     };
     nil = {
       url = "github:oxalica/nil";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "flake-utils";
     };
   };

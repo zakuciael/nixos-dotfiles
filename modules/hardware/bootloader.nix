@@ -38,8 +38,6 @@ in {
   };
 
   config = mkIf (cfg.enable) {
-    # TODO: Replace OS Prober with manual boot entries generated from options
-
     boot.loader.grub = {
       inherit (cfg) extraEntries;
 

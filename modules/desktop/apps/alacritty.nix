@@ -1,8 +1,10 @@
 {
-  pkgs,
+  config,
+  lib,
   username,
   ...
-}: {
+}:
+with lib; {
   home-manager.users.${username} = {
     # stylix.targets.alacritty.enable = true;
 
@@ -10,10 +12,8 @@
       enable = true;
       catppuccin.enable = true;
       settings = {
-        general = {
-          shell = "${pkgs.fish}/bin/fish";
-          "live_config_reload" = false;
-        };
+        shell = getExe config.users.users.${username}.shell;
+        "live_config_reload" = false;
         window = {
           padding = {
             x = 10;
