@@ -27,6 +27,10 @@ in {
 
         git = {
           enable = true;
+          delta = {
+            enable = true;
+            catppuccin.enable = true;
+          };
           userName = "Krzysztof Saczuk";
           userEmail = "me@krzysztofsaczuk.pl";
           extraConfig = {
