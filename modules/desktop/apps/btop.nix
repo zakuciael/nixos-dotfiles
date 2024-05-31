@@ -1,14 +1,8 @@
-{
-  config,
-  lib,
-  pkgs,
-  username,
-  ...
-}:
-with lib;
-with lib.my; {
+{username, ...}: {
   home-manager.users.${username} = {
-    home.packages = with pkgs; [btop];
-    programs.btop.catppuccin.enable = true;
+    programs.btop = {
+      enable = true;
+      catppuccin.enable = true;
+    };
   };
 }
