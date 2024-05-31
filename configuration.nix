@@ -54,7 +54,7 @@
   };
 
   console.keyMap = "pl";
-  services.xserver.layout = "pl";
+  services.xserver.xkb.layout = "pl";
 
   # Fonts
   fonts.packages = with pkgs; [
@@ -121,7 +121,7 @@
     useGlobalPkgs = true;
     users.${username}.home = {
       inherit username;
-      stateVersion = "23.11";
+      stateVersion = "24.05";
       homeDirectory = "/home/${username}";
       packages = scripts.mkShellExports config;
     };
@@ -147,5 +147,5 @@
   };
 
   # System
-  system.stateVersion = "23.11";
+  system.stateVersion = "24.05";
 }

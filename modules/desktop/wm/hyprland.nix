@@ -59,7 +59,7 @@ in
 
             # Input settings
             input = {
-              kb_layout = config.services.xserver.layout;
+              kb_layout = config.services.xserver.xkb.layout;
               follow_mouse = 2;
             };
 

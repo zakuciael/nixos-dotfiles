@@ -28,6 +28,7 @@
     ],
     "cSpell.words": [
         "ahci",
+        "alacritty",
         "bootloader",
         "bootmgfw",
         "catppuccin",
@@ -37,6 +38,7 @@
         "Filesystems",
         "flatpak",
         "Hyprland",
+        "hyprpaper",
         "insmod",
         "jetbrains",
         "menuentry",
@@ -51,6 +53,7 @@
         "pkgs",
         "polkit",
         "Redistributable",
+        "stylix",
         "substituters",
         "swraid",
         "thalheim",
@@ -58,6 +61,7 @@
         "usbhid",
         "vfat",
         "xhci",
+        "xorg",
         "zoxide"
     ],
     "conventionalCommits.scopes": [

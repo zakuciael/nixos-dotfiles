@@ -23,9 +23,6 @@ with lib.my; {
           ./../configuration.nix
           ./../hosts/${name}/configuration.nix
 
-          # TODO: Remove this when nixos 24.05 releases
-          "${unstable.path}/nixos/modules/programs/nh.nix"
-
           inputs.home-manager.nixosModules.default
           inputs.sops-nix.nixosModules.default
           inputs.stylix.nixosModules.default

@@ -16,7 +16,6 @@ in {
     home-manager.users.${username} = {
       programs.eza = {
         enable = true;
-        enableAliases = true;
         git = config.modules.dev.git.enable;
         icons = true;
       };
