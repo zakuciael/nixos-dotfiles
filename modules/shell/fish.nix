@@ -22,10 +22,14 @@ in {
 
   config = mkIf cfg.enable {
     users.users."${username}".shell = mkIf cfg.default pkgs.fish;
-    programs.fish.enable = cfg.enable;
     environment.shells = mkIf cfg.default (with pkgs; [fish]);
+    programs.fish.enable = true;
 
     home-manager.users.${username} = {
+      home.sessionVariables = {
+        DIRENV_LOG_FORMAT = "";
+      };
+
       programs = {
         direnv = {
           enable = cfg.direnv.enable;
