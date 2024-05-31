@@ -133,12 +133,6 @@
     services.xdg.enable = true;
     hardware.grub.enable = true;
     shell = {
-      tmux.enable = true;
-      nix.enable = true;
-      direnv.enable = true;
-      starship.enable = true;
-      zoxide.enable = true;
-      eza.enable = true;
       fish = {
         enable = true;
         default = true;
