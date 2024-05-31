@@ -27,11 +27,29 @@
         "yml"
     ],
     "cSpell.words": [
+        "ahci",
         "bootloader",
+        "catppuccin",
+        "direnv",
+        "ehci",
+        "Filesystems",
         "flatpak",
         "Hyprland",
+        "jetbrains",
+        "neovim",
+        "nerdfonts",
+        "nixos",
+        "nixpkgs",
+        "nvim",
+        "nvme",
+        "optimise",
+        "pkgs",
         "polkit",
-        "togglable"
+        "substituters",
+        "thalheim",
+        "togglable",
+        "usbhid",
+        "xhci"
     ],
     "conventionalCommits.scopes": [
         "vscode",
