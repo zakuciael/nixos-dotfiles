@@ -42,6 +42,7 @@ in {
     hardware = {
       grub = {
         enable = true;
+        resolution = "1920x1080";
         theme = inputs.distro-grub-themes.nixos-grub-theme;
       };
       layout = {

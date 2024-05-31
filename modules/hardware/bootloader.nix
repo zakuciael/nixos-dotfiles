@@ -10,6 +10,12 @@ with lib.my; let
 in {
   options.modules.hardware.grub = {
     enable = mkEnableOption "GRUB2 as bootloader";
+    resolution = mkOption {
+      description = "Set the resolution to use in the GRUB menu";
+      example = "1920x1080";
+      type = types.str;
+      default = "auto";
+    };
     theme = mkOption {
       description = "Set GRUB theme";
       example = pkgs.nixos-grub2-theme;
@@ -26,6 +32,8 @@ in {
       device = "nodev";
       useOSProber = true;
       splashImage = "${cfg.theme}/splash_image.jpg";
+      gfxmodeEfi = cfg.resolution;
+      gfxmodeBios = cfg.resolution;
       theme = cfg.theme;
     };
   };
