@@ -57,7 +57,8 @@
         "pkgs",
         "pc",
         "hosts",
-        "desktop"
+        "desktop",
+        "bootloader"
     ],
     "todohighlight.isEnable": true,
     "todohighlight.isCaseSensitive": true,
