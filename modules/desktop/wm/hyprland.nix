@@ -26,7 +26,6 @@ in
       "grimblast"
       "steam"
       "btop"
-      "bat"
     ];
 
     extraConfig = {
@@ -47,7 +46,7 @@ in
 
       home-manager.users.${username} = {
         # TODO: Move this and media controls to an app config for a player script
-        home.packages = with pkgs; [playerctl];
+        home.packages = with pkgs; [wl-clipboard playerctl];
 
         wayland.windowManager.hyprland = {
           enable = true;

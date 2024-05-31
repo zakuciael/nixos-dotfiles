@@ -142,6 +142,7 @@ in {
       starship.enable = true;
       zoxide.enable = true;
       eza.enable = true;
+      bat.enable = true;
     };
   };
 }
