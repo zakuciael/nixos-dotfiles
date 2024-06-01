@@ -95,7 +95,7 @@ in {
       style = with colorScheme.palette; ''
         * {
           font-size: 14px;
-          font-family: JetBrainsMono Nerd Font, Font Awesome, sans-serif;
+          font-family: JetBrains Mono, sans-serif;
           font-weight: bold;
         }
 

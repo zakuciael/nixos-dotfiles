@@ -57,15 +57,36 @@
   services.xserver.xkb.layout = "pl";
 
   # Fonts
-  fonts.packages = with pkgs; [
-    noto-fonts
-    noto-fonts-extra
-    noto-fonts-color-emoji
-    noto-fonts-cjk-sans
-    noto-fonts-cjk-serif
-    noto-fonts-emoji-blob-bin
-    nerdfonts
-  ];
+  fonts = {
+    packages = with pkgs; [
+      noto-fonts
+      noto-fonts-extra
+      noto-fonts-color-emoji
+      noto-fonts-cjk-sans
+      noto-fonts-cjk-serif
+      noto-fonts-emoji-blob-bin
+      jetbrains-mono
+      icomoon-feather
+      (nerdfonts.override {fonts = ["NerdFontsSymbolsOnly"];})
+    ];
+    fontconfig = {
+      enable = true;
+      localConf = ''
+        <?xml version="1.0"?>
+        <!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">
+        <fontconfig>
+          <alias>
+            <family>JetBrains Mono</family>
+            <prefer>
+              <family>JetBrains Mono</family>
+              <family>icomoon-feather</family>
+              <family>Symbols Nerd Font Mono</family>
+            </prefer>
+          </alias>
+        </fontconfig>
+      '';
+    };
+  };
 
   # Global packages
   environment = {
