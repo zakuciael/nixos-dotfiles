@@ -2,7 +2,9 @@
   lib,
   pkgs,
 }:
-with lib; rec {
+with lib;
+with lib.my;
+with lib.my.utils; rec {
   mapDirToAttrs = path:
     builtins.mapAttrs
     (n: v: let
@@ -40,7 +42,7 @@ with lib; rec {
   toTOML = name: attrs: (pkgs.formats.toml {}).generate name attrs;
 
   toCfg = name: attrs: let
-    # This script fix problem for nitrogen, becauses for some resons
+    # This script fix problem for nitrogen, because for some reason
     # nitrogen read path with " chars and throws exception for that
     fixCfgPaths =
       builtins.toFile "fixCfgPaths.py"
@@ -85,4 +87,92 @@ with lib; rec {
           python ${fixCfgPaths} $out
         '';
     });
+
+  toRasiKeyValue = {indent ? ""}: name: value:
+    if isRasiSection value
+    then toRasiSection {inherit indent;} name value # Sections
+    else if isMultiEntry value
+    then concatStringsSep "\n" (builtins.map (v: toRasiKeyValue {inherit indent;} name v) value.data) # Multi entry
+    else if hasPrefix "@import" name || hasPrefix "@theme" name
+    then "${indent}${name} ${toRasiValue name (
+      if isDerivation value
+      then "${value}"
+      else value
+    )}" # Imports and Themes
+    else "${indent}${name}: ${toRasiValue name value};"; # Normal values
+
+  toRasiSection = {indent ? ""}: name: value:
+    mkAssertions "toRasiSection" [
+      {
+        assertion = (isAttrs value) && !(isLiteral value);
+        message = "${name} is a ${typeOf value} while a set was expected";
+      }
+    ] (
+      let
+        configStr = toRasi {indent = indent + "  ";} value;
+      in ''
+        ${indent}${name} {
+        ${configStr}
+        ${indent}}''
+    );
+
+  toRasiValue = name: value: let
+    formatters = {
+      "bool" = {
+        test = isBool;
+        mapper = _: boolToString;
+      };
+      "int" = {
+        test = isInt;
+        mapper = _: builtins.toString;
+      };
+      "string" = {
+        test = isString;
+        mapper = _: value: ''"${value}"'';
+      };
+      "list" = {
+        test = isList;
+        mapper = name: value: "[ ${
+          strings.concatStringsSep
+          ","
+          (imap0 (i: v: toRasiValue "${name}[${toString i}]" v) value)
+        } ]";
+      };
+      "literal" = {
+        test = isLiteral;
+        mapper = _: value: value.data;
+      };
+    };
+  in
+    mkAssertions "toRasiValue" [
+      {
+        assertion = builtins.any (test: test value) (mapAttrsToList (_: x: x.test) formatters);
+        message = "${name} is a ${utils.typeOf value} while one of [${
+          concatStringsSep
+          ", "
+          (builtins.attrNames formatters)
+        }] was expected";
+      }
+    ] (formatters.${utils.typeOf value}.mapper name value);
+
+  toRasi = {indent ? ""}: attrs:
+    mkAssertions "toRasi" [
+      {
+        assertion = isAttrs attrs;
+        message = "value is a ${utils.typeOf attrs} while a set was expected";
+      }
+    ] (let
+      filteredAttrs =
+        filterAttrs
+        (_: value: value.data != null) (toDag attrs);
+    in
+      concatStringsSep "\n"
+      (
+        builtins.map ({
+          name,
+          data,
+        }:
+          toRasiKeyValue {inherit indent;} name data)
+        (utils.sortAttrs filteredAttrs)
+      ));
 }

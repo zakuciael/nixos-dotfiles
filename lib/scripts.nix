@@ -10,9 +10,11 @@
 with lib;
 with lib.my; let
   mkScripts = config:
-    builtins.map
-    (file: import file {inherit config lib pkgs unstable inputs username dotfiles;})
-    (utils.recursiveReadDir ./../scripts {suffixes = ["nix"];});
+    builtins.filter (value: hasAttrByPath ["package"] value) (
+      builtins.map
+      (file: import file {inherit config lib pkgs unstable inputs username dotfiles;})
+      (utils.recursiveReadDir ./../scripts {suffixes = ["nix"];})
+    );
 in {
   mkShellExports = config:
     builtins.map

@@ -2,7 +2,7 @@
 with lib;
 with lib.types; {
   monitor = mkOption {
-    description = "Monitor definition for diffrent window servers.";
+    description = "Monitor definition for different window servers.";
     example = {};
     type = submodule {
       options = {
