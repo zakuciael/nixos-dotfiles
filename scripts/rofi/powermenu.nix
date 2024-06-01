@@ -16,16 +16,16 @@
     ];
     text = ''
       # CMDs
-      uptime=$(uptime -p | sed -e 's/up //g')
+      uptime=$(uptime -p | sed -e 's/up //g' | sed -e 's/,  load average:.*//g')
 
       # Options
-      shutdown='⏻'
-      reboot=''
-      lock=''
-      suspend=''
-      logout=''
-      yes=''
-      no=''
+      shutdown=''
+      reboot=''
+      lock=''
+      suspend=''
+      logout=''
+      yes=''
+      no=''
 
       # Rofi CMD
       rofi_cmd() {

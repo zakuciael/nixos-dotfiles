@@ -37,6 +37,7 @@
         "ehci",
         "Filesystems",
         "flatpak",
+        "fontconfig",
         "Hyprland",
         "hyprpaper",
         "insmod",

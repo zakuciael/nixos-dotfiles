@@ -27,7 +27,7 @@ with lib; {
         scrolling.history = 100000;
         font = {
           normal = {
-            family = "JetBrainsMono Nerd Font Mono";
+            family = "JetBrains Mono";
             style = "Regular";
           };
           size = 11;
