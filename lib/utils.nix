@@ -1,5 +1,14 @@
-{lib, ...}:
-with lib; rec {
+{
+  lib,
+  pkgs,
+  username,
+  ...
+}:
+with lib;
+with lib.hm.dag; let
+  inherit (lib.my.mapper) toRasi;
+  inherit (pkgs) writeTextFile;
+in rec {
   recursiveReadDir = path: {
     ignoredDirs ? [],
     suffixes ? [],
@@ -20,4 +29,106 @@ with lib; rec {
         (builtins.readDir path)
       )
     ));
+
+  typeOf = value:
+    if isLiteral value
+    then "literal"
+    else if isMultiEntry value
+    then "multi entry"
+    else (builtins.typeOf value);
+
+  indentLines = prefix: str:
+    concatMapStringsSep "\n" (line: prefix + line) (splitString "\n" str);
+
+  isRasiSection = value:
+    isAttrs value && !(isLiteral value) && !(isMultiEntry value) && (!isDerivation value);
+
+  isLiteral = value:
+    isAttrs value && value ? _type && value._type == "literal";
+
+  isMultiEntry = value:
+    isAttrs value && value ? _type && value._type == "multi_entry";
+
+  isDerivation = value:
+    isAttrs value && value ? drvPath && value ? drvAttrs;
+
+  mkLiteral = value: {
+    _type = "literal";
+    data = value;
+  };
+
+  mkMultiEntry = value: {
+    _type = "multi_entry";
+    data = value;
+  };
+
+  mkAssertions = name: assertions: value: let
+    failedAssertions = builtins.map (x: x.message) (builtins.filter (x: !x.assertion) assertions);
+  in
+    if failedAssertions != []
+    then throw "${name} failed assertions:\n${concatStringsSep "\n" (map (x: "- ${x}") failedAssertions)}"
+    else value;
+
+  toDag = attrs:
+    if !(isDag attrs)
+    then
+      (builtins.mapAttrs (_: value:
+        if !(isEntry value)
+        then entryAnywhere value
+        else value)
+      attrs)
+    else attrs;
+
+  sortAttrs = attrs: let
+    sortedAttrs = topoSort (toDag attrs);
+    sortedAttrsStr = builtins.toJSON sortedAttrs;
+    newAttrs =
+      if sortedAttrs ? result
+      then sortedAttrs.result
+      else abort "Unable to sort, dependency cycle detected: ${sortedAttrsStr}";
+  in
+    newAttrs;
+
+  writeRofiScript = {
+    name,
+    config,
+    text,
+    runtimeEnv ? {},
+    meta ? {},
+    runtimeInputs ? [],
+    imports ? [],
+    theme ? {},
+    configuration ? {},
+  }: let
+    configFile = pkgs.writeTextFile {
+      name = "config.rasi";
+      text = ''
+        /* Configuration */
+        ${optionalString (configuration != {}) (toRasi {} {configuration = configuration;})}
+        /* Imports */
+        ${optionalString (imports != []) (toRasi {} {"@import" = mkMultiEntry imports;})}
+        /* Theme */
+        ${optionalString (theme != {}) (toRasi {} theme)}
+      '';
+    };
+  in
+    pkgs.writeShellApplication {
+      inherit name meta text;
+      runtimeInputs = [config.home-manager.users.${username}.programs.rofi.finalPackage] ++ runtimeInputs;
+      runtimeEnv =
+        runtimeEnv
+        // {
+          ROFI_CONFIG_FILE = configFile;
+        };
+    };
+
+  writeRasiFile = {
+    name,
+    attrs,
+    destination ? "",
+  }:
+    writeTextFile {
+      inherit name destination;
+      text = toRasi {} attrs;
+    };
 }
