@@ -56,6 +56,10 @@ in {
           enable = true;
           catppuccin.enable = true;
         };
+        cava = {
+          enable = true;
+          catppuccin.enable = true;
+        };
       };
     };
   };
