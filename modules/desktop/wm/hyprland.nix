@@ -60,6 +60,8 @@ in
             input = {
               kb_layout = config.services.xserver.xkb.layout;
               follow_mouse = 2;
+              float_switch_override_focus = 0;
+              mouse_refocus = false;
             };
 
             # General settings
@@ -71,6 +73,14 @@ in
               "col.inactive_border" = "rgba(${base00}cc) rgba(${base01}cc) 45deg";
               layout = "dwindle";
               resize_on_border = true;
+              no_focus_fallback = true;
+              no_cursor_warps = true;
+            };
+
+            # Misc settings
+            misc = {
+              disable_hyprland_logo = true;
+              disable_splash_rendering = true;
             };
 
             # Decoration settings
