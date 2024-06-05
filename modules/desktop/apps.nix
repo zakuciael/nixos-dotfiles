@@ -23,17 +23,12 @@ in {
   config = mkIf (cfg.enable) {
     programs.noisetorch.enable = true;
 
-    modules.desktop.wm = mkAutostartModules [
-      "${unstable.vesktop}/bin/vesktop"
-    ];
-
     home-manager.users.${username} = {
       programs.fish.shellAliases.open = "xdg-open";
       home.packages = with pkgs; [
         inputs.nil.default
         inputs.alejandra.default
         discord
-        unstable.vesktop
         unstable.vscode
         unstable.google-chrome
         warp-terminal

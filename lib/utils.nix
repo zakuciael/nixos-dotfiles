@@ -30,6 +30,27 @@ in rec {
       )
     ));
 
+  findLayoutConfig = with lib;
+    config: predicate: let
+      default = {
+        index = null;
+        data = null;
+      };
+      mappedLayouts =
+        imap0
+        (index: data: {inherit index data;})
+        config.modules.hardware.layout.layout;
+    in
+      getAttr "data" (findFirst predicate default mappedLayouts);
+
+  findLayoutWorkspace = layoutConfig: predicate: let
+    workspaces = builtins.map (x: x.value // {inherit (x) name;}) (attrsToList layoutConfig.workspaces);
+  in
+    findFirst predicate null workspaces;
+
+  getLayoutMonitor = layoutConfig: wmType:
+    getAttr "${wmType}" layoutConfig.monitor;
+
   typeOf = value:
     if isLiteral value
     then "literal"
