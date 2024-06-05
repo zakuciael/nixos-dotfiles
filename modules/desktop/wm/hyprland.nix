@@ -148,7 +148,9 @@ in
               "$mod, mouse:273, resizewindow"
             ];
 
-            windowrulev2 = [
+            # TODO: Check which of those rules leave and which delete
+            /*
+               windowrulev2 = [
               # -- Fix odd behaviors in IntelliJ IDEs --
               #! Fix focus issues when dialogs are opened or closed
               "windowdance,class:^(jetbrains-.*)$,floating:1"
@@ -164,6 +166,7 @@ in
               #! Disable window flicker when autocomplete or tooltips appear
               "nofocus,class:^(jetbrains-.*)$,title:^(win.*)$,floating:1"
             ];
+            */
           };
         };
       };
