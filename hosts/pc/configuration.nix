@@ -1,5 +1,4 @@
 {
-  config,
   lib,
   pkgs,
   inputs,
@@ -109,6 +108,15 @@ in {
       apps.enable = true;
       sddm.enable = true;
       wm.hyprland.enable = true;
+      gaming = {
+        enable = true;
+        steam.enable = true;
+        mihoyo.enable = true;
+        disks = {
+          linux.device = "/dev/disk/by-partlabel/linux-games";
+          windows.device = "/dev/disk/by-partlabel/windows-games";
+        };
+      };
     };
     services = {
       polkit.enable = true;

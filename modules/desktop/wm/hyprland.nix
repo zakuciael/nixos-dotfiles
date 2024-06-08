@@ -24,7 +24,6 @@ in
       "gtk"
       "qt"
       "grimblast"
-      "steam"
       "vesktop"
     ];
 

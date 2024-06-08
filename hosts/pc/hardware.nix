@@ -3,7 +3,8 @@
   lib,
   pkgs,
   ...
-}: {
+}:
+with lib; {
   fileSystems."/" = {
     device = "/dev/disk/by-partlabel/nixos";
     fsType = "ext4";
@@ -12,15 +13,6 @@
   fileSystems."/boot" = {
     device = "/dev/disk/by-partlabel/efi";
     fsType = "vfat";
-  };
-
-  fileSystems."/media/games/windows" = {
-    device = "/dev/disk/by-partlabel/windows-games";
-    fsType = "ntfs";
-  };
-
-  fileSystems."/media/games/linux" = {
-    device = "/dev/disk/by-partlabel/linux-games";
   };
 
   fileSystems."/media/storage" = {
@@ -54,9 +46,9 @@
   '';
 
   boot.initrd.kernelModules = ["kvm-intel"];
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelPackages = mkDefault pkgs.linuxPackages_latest;
   boot.swraid.enable = true;
 
-  nixpkgs.hostPlatform = lib.mkDefault pkgs.system;
-  hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+  nixpkgs.hostPlatform = mkDefault pkgs.system;
+  hardware.cpu.intel.updateMicrocode = mkDefault config.hardware.enableRedistributableFirmware;
 }
