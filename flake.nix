@@ -5,6 +5,7 @@
     nixpkgs.url = "nixpkgs/nixos-24.05";
     nixpkgs-unstable.url = "nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
+    flake-compat.url = "github:edolstra/flake-compat";
     nix-colors.url = "github:misterio77/nix-colors";
     catppuccin.url = "github:catppuccin/nix";
     fenix = {
@@ -24,14 +25,15 @@
       url = "github:kamadorueda/alejandra/3.0.0";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.fenix.follows = "fenix";
+      inputs.flakeCompat.follows = "flake-compat";
     };
     sops-nix = {
-      url = "github:Mic92/sops-nix/yubikey-support";
+      url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.nixpkgs-stable.follows = "nixpkgs";
     };
     age-plugin-op = {
-      url = "github:bromanko/age-plugin-op";
+      url = "github:bromanko/age-plugin-op/v0.1.0";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     rofi-jetbrains = {
@@ -45,13 +47,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "flake-utils";
     };
-    stylix = {
-      url = "github:danth/stylix/release-23.11";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.home-manager.follows = "home-manager";
-    };
     nil = {
-      url = "github:oxalica/nil";
+      url = "github:oxalica/nil/2023-08-09";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "flake-utils";
     };
@@ -93,12 +90,6 @@
         age-plugin-op =
           flakeInputs.age-plugin-op.packages.${system}
           // {default = flakeInputs.age-plugin-op.packages.${system}.age-plugin-op;};
-        stylix =
-          flakeInputs.stylix
-          // {
-            packages = flakeInputs.stylix.packages.${system};
-            nixosModules = flakeInputs.stylix.nixosModules // {default = flakeInputs.stylix.nixosModules.stylix;};
-          };
         catppuccin =
           flakeInputs.catppuccin
           // {
