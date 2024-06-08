@@ -52,6 +52,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "flake-utils";
     };
+    aagl = {
+      url = "github:ezKEa/aagl-gtk-on-nix/release-24.05";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-compat.follows = "flake-compat";
+    };
   };
 
   outputs = {
@@ -100,6 +105,7 @@
                 default = flakeInputs.catppuccin.nixosModules.catppuccin;
               };
           };
+        aagl = flakeInputs.aagl // {packages = flakeInputs.aagl.packages.${system};};
       };
 
     lib = nixpkgs.lib.extend (self: super: {
