@@ -40,7 +40,8 @@ in {
       services.hyprpaper = {
         enable = true;
         settings = {
-          ipc = "off";
+          ipc = false;
+          splash = false;
           preload = builtins.map (x: ''${x.wallpaper}'') cfg.settings;
           wallpaper = builtins.map (x: ''${x.monitor.wayland},${x.wallpaper}'') cfg.settings;
         };
