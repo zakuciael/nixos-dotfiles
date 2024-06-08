@@ -19,6 +19,9 @@ in {
 
   # Color theme configuration
   catppuccin.flavor = "mocha";
+  home-manager.users.${username} = {
+    inherit colorScheme;
+  };
 
   # Secret management configuration
   sops.age.keyFile = "/home/${username}/.config/sops/age/keys.txt";
