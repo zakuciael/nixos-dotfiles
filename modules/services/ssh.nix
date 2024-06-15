@@ -29,17 +29,6 @@ in {
       cfg.remotes
     );
 
-    /*
-       sops.secrets = {
-      "ssh_servers/prod-1" = {
-        owner = username;
-      };
-      "ssh_servers/raspberry-pi" = {
-        owner = username;
-      };
-    };
-    */
-
     home-manager.users.${username}.programs.ssh = {
       enable = true;
       includes =
@@ -48,21 +37,6 @@ in {
             config.sops.secrets."ssh_servers/${remote}".path
         )
         cfg.remotes;
-
-      /*
-         matchBlocks = {
-        "prod-1" = {
-          host = "prod-1";
-          hostname = "51.83.129.177";
-          user = "zakku";
-        };
-        "raspberry-pi" = {
-          host = "raspberry-pi";
-          hostname = "192.168.1.11";
-          user = "zakku";
-        };
-      };
-      */
     };
   };
 }
