@@ -73,7 +73,6 @@ in
               layout = "dwindle";
               resize_on_border = true;
               no_focus_fallback = true;
-              no_cursor_warps = true;
             };
 
             # Misc settings
