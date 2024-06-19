@@ -12,6 +12,7 @@ with lib.my;
 with lib.my.utils; let
   layout = findLayoutConfig config ({index, ...}: index == 1); # Main monitor
   monitor = getLayoutMonitor layout "wayland";
+  class = "1Password";
 in {
   programs = {
     _1password.enable = true;
@@ -56,15 +57,15 @@ in {
         ];
 
         windowrulev2 = [
-          "float, class:(1Password)"
-          "center, class:(1Password)"
-          "monitor ${monitor}, class:(1Password)"
-          # "stayfocused,class:^(1Password)$"
-          "forceinput,class:^(1Password)$"
-          "windowdance,class:^(1Password)$"
-          "noblur,class:^(1Password)$"
-          "noinitialfocus,class:^(1Password)$"
-          "dimaround,class:^(1Password)$"
+          "float, class:(${class})"
+          "center, class:(${class})"
+          "monitor ${monitor}, class:(${class})"
+          # "stayfocused,class:^(${class})$"
+          "forceinput,class:^(${class})$"
+          "windowdance,class:^(${class})$"
+          "noblur,class:^(${class})$"
+          "noinitialfocus,class:^(${class})$"
+          "dimaround,class:^(${class})$"
         ];
       };
 
@@ -73,7 +74,7 @@ in {
         bind = Ctrl Shift, P, submap, 1pass
 
         submap = 1pass
-        bind = Ctrl Shift, P, closewindow, class:^(1Password)$
+        bind = Ctrl Shift, P, closewindow, class:^(${class})$
         bind = Ctrl Shift, P, submap, reset
 
         submap = reset

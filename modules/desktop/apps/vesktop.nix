@@ -12,6 +12,7 @@ with lib.my.utils; let
   vesktop = unstable.vesktop;
   layout = findLayoutConfig config ({index, ...}: index == 0); # Left monitor
   workspace = findLayoutWorkspace layout ({default, ...}: default); # Default workspace
+  class = "^(vesktop)$";
 in {
   modules.desktop.wm.${desktop}.autostartPrograms = [
     "${vesktop}/bin/vesktop"
@@ -22,8 +23,8 @@ in {
 
     wayland.windowManager.hyprland.settings = mkIf (config.modules.desktop.wm.hyprland.enable) {
       windowrulev2 = [
-        "workspace ${workspace.name}, class:^(vesktop)$"
-        "noinitialfocus, class:^(vesktop)$"
+        "workspace ${workspace.name}, class:${class}"
+        "noinitialfocus, class:${class}"
       ];
     };
   };
