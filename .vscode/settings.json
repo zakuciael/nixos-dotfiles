@@ -52,6 +52,7 @@
         "drun",
         "ehci",
         "fenix",
+        "fetchurl",
         "filebrowser",
         "Filesystems",
         "flatpak",
@@ -97,6 +98,7 @@
         "partlabel",
         "pkgs",
         "playerctl",
+        "pname",
         "polkit",
         "powermenu",
         "pseudotile",
@@ -160,7 +162,8 @@
         "bootloader",
         "fish",
         "git",
-        "shell"
+        "shell",
+        "gaming"
     ],
     "todohighlight.isEnable": true,
     "todohighlight.isCaseSensitive": true,
