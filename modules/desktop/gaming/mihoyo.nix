@@ -57,9 +57,6 @@ with lib.my.utils; let
 in {
   options.modules.desktop.gaming.mihoyo = {
     enable = mkEnableOption "miHoYo games";
-    test = mkOption {
-      type = types.raw;
-    };
   };
 
   config = mkIf (cfg.enable) {
