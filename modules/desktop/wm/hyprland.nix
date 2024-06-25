@@ -136,9 +136,11 @@ in
               "$mod, RIGHT, movefocus, r"
               "$mod, UP, movefocus, u"
               "$mod, DOWN, movefocus, d"
-              "SHIFT CTRL, space, exec, ${scriptPackages.rofi-launcher}/bin/rofi-launcher drun"
-              "SHIFT CTRL, R, exec, ${scriptPackages.rofi-launcher}/bin/rofi-launcher jetbrains"
-              "SHIFT CTRL, Q, exec, ${scriptPackages.rofi-powermenu}/bin/rofi-powermenu"
+              "$mod, KP_Subtract, exec, ${getExe scriptPackages.elgato-mic-fix}"
+              "SHIFT CTRL, space, exec, ${getExe scriptPackages.rofi-launcher} drun"
+              "SHIFT CTRL, R, exec, ${getExe scriptPackages.rofi-launcher} jetbrains"
+              "SHIFT CTRL, E, exec, ${getExe pkgs.cinnamon.nemo}"
+              "SHIFT CTRL, Q, exec, ${getExe scriptPackages.rofi-powermenu}"
             ];
 
             bindl = with pkgs; [
