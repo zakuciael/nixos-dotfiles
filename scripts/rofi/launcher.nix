@@ -29,7 +29,14 @@ in {
   package = writeRofiScript {
     inherit config;
     name = "rofi-launcher";
-    text = ''rofi -theme "$ROFI_CONFIG_FILE" -show "$1"'';
+    text = ''
+      args=()
+      if [ -n "''${1+x}" ]; then
+        args+=( '-show' "$1" )
+      fi
+
+      rofi -theme "$ROFI_CONFIG_FILE" "''${args[@]}"
+    '';
     imports = [(import ./assets/theme.nix {inherit lib pkgs;})];
     configuration =
       {
