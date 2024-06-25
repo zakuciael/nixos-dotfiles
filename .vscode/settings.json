@@ -163,7 +163,8 @@
         "fish",
         "git",
         "shell",
-        "gaming"
+        "gaming",
+        "secrets"
     ],
     "todohighlight.isEnable": true,
     "todohighlight.isCaseSensitive": true,
