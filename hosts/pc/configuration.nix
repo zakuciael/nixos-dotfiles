@@ -125,10 +125,7 @@ in {
       polkit.enable = true;
       gnome-keyring.enable = true;
       wallpaper.enable = true;
-      ssh = {
-        enable = true;
-        remotes = ["prod-1" "raspberry-pi"];
-      };
+      ssh.enable = true;
     };
     dev = {
       tools.enable = true;
