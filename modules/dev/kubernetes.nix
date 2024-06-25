@@ -24,6 +24,9 @@ in {
         };
         fish.shellAliases = {
           k = "kubectl";
+          kn = "kubectl config set-context --current --namespace";
+          kc = "kubectl config use-context";
+          kcr = "kubectl config unset current-context";
         };
       };
     };
