@@ -9,7 +9,7 @@
     nix-colors.url = "github:misterio77/nix-colors";
     catppuccin.url = "github:catppuccin/nix";
     fenix = {
-      url = "github:nix-community/fenix";
+      url = "github:nix-community/fenix/monthly";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     home-manager = {
