@@ -39,7 +39,7 @@ with lib.my.utils; let
     desktopEntry = makeDesktopItem {
       inherit name desktopName;
       genericName = desktopName;
-      exec = "${package}/bin/${package.pname} --run-game";
+      exec = "${getExe package} --run-game";
       categories = ["Game"];
       icon = name;
     };
