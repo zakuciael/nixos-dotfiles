@@ -34,7 +34,7 @@ in {
             tree = "tre";
 
             # On-demand tools
-            dig = "nix run nixpkgs#dog"; # A command-line DNS client.
+            dig = "nix run nixpkgs#dogdns"; # A command-line DNS client.
             dua = "nix run nixpkgs#dua -- i"; # View disk space usage and delete unwanted data, fast.
             procs = "nix run nixpkgs#procs"; # A modern replacement for ps written in Rust
             gping = "nix run nixpkgs#gping"; # Ping, but with a graph
