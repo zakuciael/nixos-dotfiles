@@ -37,9 +37,19 @@ with lib.my.utils; rec {
     then (boolToString value)
     else (builtins.toString value);
 
+  fromYAML = f: let
+    jsonFile =
+      pkgs.runCommand "in.json"
+      {nativeBuildInputs = [pkgs.remarshal];}
+      ''yaml2json < "${f}" > "$out"'';
+  in
+    builtins.fromJSON (builtins.readFile jsonFile);
+
   toINI = name: attrs: (pkgs.formats.ini {}).generate name attrs;
 
   toTOML = name: attrs: (pkgs.formats.toml {}).generate name attrs;
+
+  toYAML = name: attrs: (pkgs.formats.yaml {}).generate name attrs;
 
   toCfg = name: attrs: let
     # This script fix problem for nitrogen, because for some reason
