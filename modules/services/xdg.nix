@@ -31,23 +31,18 @@ in {
     home-manager.users.${username} = {
       gtk.gtk3.bookmarks = [
         (utils.mkGtkBookmark {
-          name = "Documents";
           path = userDirs.documents;
         })
         (utils.mkGtkBookmark {
-          name = "Downloads";
           path = userDirs.download;
         })
         (utils.mkGtkBookmark {
-          name = "Videos";
           path = userDirs.videos;
         })
         (utils.mkGtkBookmark {
-          name = "Pictures";
           path = userDirs.pictures;
         })
         (utils.mkGtkBookmark {
-          name = "Music";
           path = userDirs.music;
         })
       ];
