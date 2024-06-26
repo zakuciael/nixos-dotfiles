@@ -73,6 +73,11 @@ in rec {
   isDerivation = value:
     isAttrs value && value ? drvPath && value ? drvAttrs;
 
+  mkGtkBookmark = {
+    name ? null,
+    path,
+  }: ''file://${builtins.toPath path}${optionalString (name != null) " ${name}"}'';
+
   mkLiteral = value: {
     _type = "literal";
     data = value;
