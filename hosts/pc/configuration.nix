@@ -1,4 +1,5 @@
 {
+  config,
   lib,
   pkgs,
   inputs,
@@ -19,8 +20,25 @@ in {
 
   # Color theme configuration
   catppuccin.flavor = "mocha";
-  home-manager.users.${username} = {
+
+  # User settings
+  home-manager.users."${username}" = {
+    # nix-colors color scheme
     inherit colorScheme;
+
+    # Custom bookmarks
+    gtk.gtk3.bookmarks = let
+      homeDirectory = config.home-manager.users.${username}.home.homeDirectory;
+    in [
+      (utils.mkGtkBookmark {
+        name = "Development";
+        path = "${homeDirectory}/dev";
+      })
+      (utils.mkGtkBookmark {
+        name = "NixOS Config";
+        path = "${homeDirectory}/dev/config/nixos-dotfiles";
+      })
+    ];
   };
 
   # Secret management configuration
