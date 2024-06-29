@@ -1,5 +1,6 @@
 {
   pkgs,
+  unstable,
   username,
   ...
 }: {
@@ -24,7 +25,7 @@
       };
       iconTheme = {
         name = "WhiteSur-dark";
-        package = pkgs.whitesur-icon-theme.override {
+        package = unstable.whitesur-icon-theme.override {
           boldPanelIcons = true;
           alternativeIcons = true;
           themeVariants = ["default"];
