@@ -2,6 +2,7 @@
 with lib; {
   networking = {
     hostName = mkDefault "nixos";
+    networkmanager.enable = true;
     firewall = {
       enable = true;
       allowPing = false;
