@@ -51,6 +51,8 @@ with lib.my.utils; rec {
 
   toYAML = name: attrs: (pkgs.formats.yaml {}).generate name attrs;
 
+  toJSON = name: attrs: (pkgs.formats.json {}).generate name attrs;
+
   toCfg = name: attrs: let
     # This script fix problem for nitrogen, because for some reason
     # nitrogen read path with " chars and throws exception for that

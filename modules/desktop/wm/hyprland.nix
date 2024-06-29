@@ -25,6 +25,7 @@ in
       "qt"
       "grimblast"
       "vesktop"
+      "swaync"
     ];
 
     extraConfig = {
@@ -124,6 +125,16 @@ in
             master = {
               new_is_master = true;
             };
+
+            # Layer rules
+            layerrule = [
+              "blur, swaync-control-center"
+              "blur, swaync-notification-window"
+              "ignorezero, swaync-control-center"
+              "ignorezero, swaync-notification-window"
+              "ignorealpha 0.5, swaync-control-center"
+              "ignorealpha 0.5, swaync-notification-window"
+            ];
 
             # Keybinds
             "$mod" = "SUPER";
