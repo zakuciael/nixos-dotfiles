@@ -112,6 +112,8 @@
         "stdenv",
         "submap",
         "substituters",
+        "swaync",
+        "swaynotificationcenter",
         "swraid",
         "textbox",
         "thalheim",
