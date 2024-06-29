@@ -45,7 +45,7 @@ in {
 
             neofetch = "nix run nixpkgs#neofetch";
             onefetch = "nix run nixpkgs#onefetch";
-            nix-prefetch = "nix run nixpkgs#nix-prefetch";
+            nix-prefetch = "nix run nixpkgs#nix-prefetch -- --option extra-experimental-features flakes";
           };
         };
         btop = {
