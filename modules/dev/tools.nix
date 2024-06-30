@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  unstable,
   username,
   ...
 }:
@@ -21,7 +22,7 @@ in {
 
         # Reverse Engineering
         ghidra-bin
-        imhex
+        unstable.imhex
 
         # MongoDB
         mongosh
