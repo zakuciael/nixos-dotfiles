@@ -2,23 +2,23 @@
 with lib; {
   # Adds fixes for https://github.com/NixOS/nixpkgs/issues/309532
   unstable = singleton (final: prev: {
-    # TODO: Remove when this https://github.com/NixOS/nixpkgs/pull/323510 is merged to upstream
-    glfw3 = prev.glfw3.overrideAttrs (prevAttrs: let
-      inherit (prev) stdenv libxkbcommon libdecor wayland;
-    in {
-      postPatch = optionalString stdenv.isLinux ''
-        substituteInPlace src/wl_init.c \
-          --replace-fail "libxkbcommon.so.0" "${getLib libxkbcommon}/lib/libxkbcommon.so.0" \
-          --replace-fail "libdecor-0.so.0" "${getLib libdecor}/lib/libdecor-0.so.0" \
-          --replace-fail "libwayland-client.so.0" "${getLib wayland}/lib/libwayland-client.so.0" \
-          --replace-fail "libwayland-cursor.so.0" "${getLib wayland}/lib/libwayland-cursor.so.0" \
-          --replace-fail "libwayland-egl.so.1" "${getLib wayland}/lib/libwayland-egl.so.1"
-      '';
-    });
-
     # TODO: Remove when this https://github.com/NixOS/nixpkgs/pull/323501 is merged to upstream
     imhex = prev.imhex.overrideAttrs (prevAttrs: let
       inherit (prev) fetchFromGitHub;
+
+      # TODO: Remove when this https://github.com/NixOS/nixpkgs/pull/323510 is merged to upstream
+      glfw3-patched = prev.glfw3.overrideAttrs (prevAttrs: let
+        inherit (prev) stdenv libxkbcommon libdecor wayland;
+      in {
+        postPatch = optionalString stdenv.isLinux ''
+          substituteInPlace src/wl_init.c \
+            --replace-fail "libxkbcommon.so.0" "${getLib libxkbcommon}/lib/libxkbcommon.so.0" \
+            --replace-fail "libdecor-0.so.0" "${getLib libdecor}/lib/libdecor-0.so.0" \
+            --replace-fail "libwayland-client.so.0" "${getLib wayland}/lib/libwayland-client.so.0" \
+            --replace-fail "libwayland-cursor.so.0" "${getLib wayland}/lib/libwayland-cursor.so.0" \
+            --replace-fail "libwayland-egl.so.1" "${getLib wayland}/lib/libwayland-egl.so.1"
+        '';
+      });
 
       version = "1.35.3";
       patterns_version = "1.35.3";
@@ -58,7 +58,7 @@ with lib; {
         dbus
         file
         fmt_8
-        final.glfw3
+        glfw3-patched
         gtk3
         jansson
         libGLU
