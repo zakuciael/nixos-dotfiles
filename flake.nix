@@ -53,7 +53,7 @@
       inputs.flake-utils.follows = "flake-utils";
     };
     aagl = {
-      url = "github:ezKEa/aagl-gtk-on-nix/release-24.05";
+      url = "github:zakuciael/aagl-gtk-on-nix";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-compat.follows = "flake-compat";
     };
