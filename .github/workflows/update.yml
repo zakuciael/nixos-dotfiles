@@ -15,11 +15,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
       - name: Intall Nix
-        uses: DeterminateSystems/nix-installer-action@v10
+        uses: DeterminateSystems/nix-installer-action@v12
         with:
           github-token: ${{ secrets.PAT }}
       - name: Update flake.lock file
-        uses: DeterminateSystems/update-flake-lock@v21
+        uses: DeterminateSystems/update-flake-lock@v23
         with:
           sign-commits: true
           gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
