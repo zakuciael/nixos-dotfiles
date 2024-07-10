@@ -19,9 +19,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
       - name: Check flake.lock
-        uses: DeterminateSystems/flake-checker-action@v5
+        uses: DeterminateSystems/flake-checker-action@v8
       - name: Intall Nix
-        uses: DeterminateSystems/nix-installer-action@v10
+        uses: DeterminateSystems/nix-installer-action@v12
         with:
           github-token: ${{ secrets.PAT }}
       - name: Check repository
