@@ -144,7 +144,6 @@ in {
       gnome-keyring.enable = true;
       wallpaper.enable = true;
       ssh.enable = true;
-      twingate.enable = true;
     };
     dev = {
       tools.enable = true;
