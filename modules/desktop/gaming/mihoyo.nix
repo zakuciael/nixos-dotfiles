@@ -77,8 +77,12 @@ in {
         windowrulev2 = [
           "float, class:${launcherClass}"
           "size 70% 70%, class:${launcherClass}"
-          "monitor ${monitor}, class:${launcherClass}"
-          "monitor ${monitor}, title:${gameTitle}"
+          "monitor DP-1, class:${launcherClass}"
+          "center, class:${launcherClass}"
+
+          "float, title:${gameTitle}"
+          "monitor DP-1, title:${gameTitle}"
+          "center, title:${gameTitle}"
         ];
       };
     };
