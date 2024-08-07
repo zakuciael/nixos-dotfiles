@@ -170,7 +170,8 @@
         "git",
         "shell",
         "gaming",
-        "secrets"
+        "secrets",
+        "flake"
     ],
     "todohighlight.isEnable": true,
     "todohighlight.isCaseSensitive": true,
