@@ -35,6 +35,9 @@ in {
 
         # Benchmarking
         hyperfine
+
+        # FTP
+        filezilla
       ];
     };
   };
