@@ -32,14 +32,24 @@ in {
     "${pkgs._1password-gui}/bin/1password"
   ];
 
+  sops.secrets = {
+    "1password/ssh_agent" = {
+      mode = "0440";
+      group = config.users.groups.keys.name;
+    };
+  };
+
   home-manager.users.${username} = {
     programs = {
       git = mkIf (config.modules.dev.git.enable) {
+        signing = {
+          signByDefault = true;
+          key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEcrcFZPwdfoZb0ZP3SUr/ZgN6Hycpk57Ky1UMmPbAg8";
+        };
+
         extraConfig = {
-          commit.gpgsign = true;
           gpg.format = "ssh";
           gpg.ssh.program = "${pkgs._1password-gui}/bin/op-ssh-sign";
-          user.signingkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEcrcFZPwdfoZb0ZP3SUr/ZgN6Hycpk57Ky1UMmPbAg8";
         };
       };
 
@@ -47,6 +57,12 @@ in {
         enable = true;
         extraConfig = "IdentityAgent ~/.1password/agent.sock";
       };
+    };
+
+    xdg.configFile."1Password/ssh/agent.toml" = {
+      source =
+        config.home-manager.users.${username}.lib.file.mkOutOfStoreSymlink
+        config.sops.secrets."1password/ssh_agent".path;
     };
 
     wayland.windowManager.hyprland = mkIf (config.modules.desktop.wm.hyprland.enable) {
