@@ -171,7 +171,8 @@
         "shell",
         "gaming",
         "secrets",
-        "flake"
+        "flake",
+        "laptop"
     ],
     "todohighlight.isEnable": true,
     "todohighlight.isCaseSensitive": true,
