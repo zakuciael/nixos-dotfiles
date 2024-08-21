@@ -22,6 +22,7 @@ in {
           chainloader /EFI/Microsoft/Boot/bootmgfw.efi
         }
       '';
+      default = "";
       type = types.str;
     };
     resolution = mkOption {
