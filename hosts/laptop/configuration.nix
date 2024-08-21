@@ -1,0 +1,88 @@
+{
+  config,
+  lib,
+  pkgs,
+  inputs,
+  username,
+  dotfiles,
+  ...
+}:
+with lib.my; let
+  colorScheme = inputs.nix-colors.colorSchemes.catppuccin-mocha;
+in {
+  imports = [./hardware.nix ./networking.nix];
+
+  environment = {
+    variables = {
+      FLAKE = "/home/${username}/dev/config/nixos-dotfiles";
+    };
+  };
+
+  # Color theme configuration
+  catppuccin.flavor = "mocha";
+
+  # User settings
+  home-manager.users."${username}" = {
+    # nix-colors color scheme
+    inherit colorScheme;
+
+    # Custom bookmarks
+    gtk.gtk3.bookmarks = let
+      homeDirectory = config.home-manager.users.${username}.home.homeDirectory;
+    in [
+      (utils.mkGtkBookmark {
+        name = "Development";
+        path = "${homeDirectory}/dev";
+      })
+      (utils.mkGtkBookmark {
+        name = "NixOS Config";
+        path = "${homeDirectory}/dev/config/nixos-dotfiles";
+      })
+    ];
+  };
+
+  # Secret management configuration
+  sops.age.keyFile = "/home/${username}/.config/sops/age/keys.txt";
+  sops.defaultSopsFile = ./secrets.yaml;
+  sops.defaultSopsFormat = "yaml";
+
+  modules = {
+    hardware = {
+      grub = {
+        enable = true;
+        resolution = "1920x1080";
+        theme = inputs.distro-grub-themes.nixos-grub-theme;
+      };
+      sound.enable = true;
+      # amdgpu.enable = true;
+      # docker.enable = true;
+      # yubikey.enable = true;
+    };
+    desktop = {
+      apps.enable = true;
+      sddm.enable = true;
+      wm.hyprland.enable = true;
+    };
+    services = {
+      polkit.enable = true;
+      gnome-keyring.enable = true;
+      # wallpaper.enable = true;
+      ssh.enable = true;
+    };
+    dev = {
+      tools.enable = true;
+      # kubernetes.enable = true;
+      # ides = ["rust-rover" "webstorm" "idea-ultimate" "rider"];
+    };
+    shell = {
+      tmux.enable = true;
+      nix.enable = true;
+      direnv.enable = true;
+      starship.enable = true;
+      zoxide.enable = true;
+      eza.enable = true;
+      bat.enable = true;
+      tools.enable = true;
+    };
+  };
+}
