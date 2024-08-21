@@ -6,7 +6,7 @@
 }:
 with lib;
 with lib.hm.dag; let
-  inherit (lib.my.mapper) toRasi;
+  inherit (lib.my.mapper) toRasi mapKeyToNumpad;
   inherit (pkgs) writeTextFile;
 in rec {
   recursiveReadDir = path: {
@@ -33,12 +33,16 @@ in rec {
   findLayoutConfig = with lib;
     config: predicate: let
       default = {
+        name = null;
         index = null;
         data = null;
       };
       mappedLayouts =
         imap0
-        (index: data: {inherit index data;})
+        (index: data: {
+          inherit (data) name;
+          inherit index data;
+        })
         config.modules.hardware.layout.layout;
     in
       getAttr "data" (findFirst predicate default mappedLayouts);
@@ -94,6 +98,17 @@ in rec {
     if failedAssertions != []
     then throw "${name} failed assertions:\n${concatStringsSep "\n" (map (x: "- ${x}") failedAssertions)}"
     else value;
+
+  mkLayoutWorkspaces = names:
+    builtins.listToAttrs (builtins.map (name: let
+        fixedName = toString name;
+      in {
+        name = fixedName;
+        value = {
+          keybinds = [fixedName (mapKeyToNumpad name)];
+        };
+      })
+      names);
 
   toDag = attrs:
     if !(isDag attrs)

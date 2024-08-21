@@ -9,7 +9,7 @@ with lib;
 with lib.my;
 with lib.my.utils; let
   cfg = config.modules.desktop.gaming.minecraft;
-  layout = findLayoutConfig config ({index, ...}: index == 1); # Main monitor
+  layout = findLayoutConfig config ({name, ...}: name == "main"); # Main monitor
   monitor = getLayoutMonitor layout "wayland";
   minecraftClass = "(Minecraft)";
 in {

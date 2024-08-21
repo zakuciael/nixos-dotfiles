@@ -11,7 +11,7 @@ with lib.my.utils; let
   inherit (pkgs) makeDesktopItem fetchurl symlinkJoin;
   inherit (pkgs.stdenv) mkDerivation;
   cfg = config.modules.desktop.gaming.mihoyo;
-  layout = findLayoutConfig config ({index, ...}: index == 1); # Main monitor
+  layout = findLayoutConfig config ({name, ...}: name == "main"); # Main monitor
   monitor = getLayoutMonitor layout "wayland";
   launcherClass = "^(moe.launcher.an-anime-game-launcher)$";
   gameTitle = "^(Genshin Impact)$";
@@ -77,11 +77,11 @@ in {
         windowrulev2 = [
           "float, class:${launcherClass}"
           "size 70% 70%, class:${launcherClass}"
-          "monitor DP-1, class:${launcherClass}"
+          "monitor ${monitor}, class:${launcherClass}"
           "center, class:${launcherClass}"
 
           "float, title:${gameTitle}"
-          "monitor DP-1, title:${gameTitle}"
+          "monitor ${monitor}, title:${gameTitle}"
           "center, title:${gameTitle}"
         ];
       };

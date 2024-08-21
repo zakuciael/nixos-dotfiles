@@ -7,7 +7,8 @@
   dotfiles,
   ...
 }:
-with lib.my; let
+with lib.my;
+with lib.my.utils; let
   colorScheme = inputs.nix-colors.colorSchemes.catppuccin-mocha;
 in {
   imports = [./hardware.nix ./networking.nix];
@@ -52,6 +53,21 @@ in {
         enable = true;
         resolution = "1920x1080";
         theme = inputs.distro-grub-themes.nixos-grub-theme;
+      };
+      layout = {
+        enable = true;
+        layout = [
+          {
+            name = "main";
+            monitor = {
+              xorg = "eDP1";
+              wayland = "eDP-1";
+            };
+            mode = "1920x1080";
+            workspaces = mkLayoutWorkspaces [1 2 3 4 5 6 7 8 9];
+            wallpaper = dotfiles.wallpapers.pc."main.png".source;
+          }
+        ];
       };
       sound.enable = true;
       # amdgpu.enable = true;

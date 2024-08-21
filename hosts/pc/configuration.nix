@@ -7,7 +7,8 @@
   dotfiles,
   ...
 }:
-with lib.my; let
+with lib.my;
+with lib.my.utils; let
   colorScheme = inputs.nix-colors.colorSchemes.catppuccin-mocha;
 in {
   imports = [./hardware.nix ./networking.nix];
@@ -59,23 +60,9 @@ in {
       };
       layout = {
         enable = true;
-        layout = let
-          mkWorkspaces = names:
-            builtins.listToAttrs (builtins.map (name: let
-                fixedName =
-                  if builtins.typeOf name == "string"
-                  then name
-                  else (toString name);
-              in {
-                name = fixedName;
-                value = {
-                  keybinds = [fixedName (mapper.mapKeyToNumpad name)];
-                };
-              })
-              names);
-        in [
+        layout = [
           {
-            # Left
+            name = "left";
             monitor = {
               xorg = "DisplayPort-1";
               wayland = "DP-2";
@@ -86,11 +73,11 @@ in {
               y = 0;
             };
             rotate = "left";
-            workspaces = mkWorkspaces [4 5 6];
+            workspaces = mkLayoutWorkspaces [4 5 6];
             wallpaper = dotfiles.wallpapers.pc."left.png".source;
           }
           {
-            # Main
+            name = "main";
             monitor = {
               xorg = "DisplayPort-0";
               wayland = "DP-1";
@@ -101,11 +88,11 @@ in {
               x = 1080;
               y = 393;
             };
-            workspaces = mkWorkspaces [1 2 3];
+            workspaces = mkLayoutWorkspaces [1 2 3];
             wallpaper = dotfiles.wallpapers.pc."main.png".source;
           }
           {
-            # Right
+            name = "right";
             monitor = {
               xorg = "HDMI-A-0";
               wayland = "HDMI-A-1";
@@ -115,7 +102,7 @@ in {
               x = 3000;
               y = 440;
             };
-            workspaces = mkWorkspaces [7 8 9];
+            workspaces = mkLayoutWorkspaces [7 8 9];
             wallpaper = dotfiles.wallpapers.pc."right.jpg".source;
           }
         ];

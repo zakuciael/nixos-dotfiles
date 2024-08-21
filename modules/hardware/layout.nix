@@ -20,6 +20,7 @@ in {
       description = "Monitor layout that should be set in the supported WMs.";
       example = [
         {
+          name = "main";
           monitor = {
             xorg = "DisplayPort-0";
             wayland = "DP-1";
@@ -48,6 +49,11 @@ in {
         listOf (submodule {
           options = {
             monitor = defs.monitor;
+            name = mkOption {
+              description = "Monitor common name used to identify it in layout";
+              example = "main";
+              type = str;
+            };
             primary = mkOption {
               description = "Whether to mark this monitor as primary.";
               example = true;
@@ -232,8 +238,8 @@ in {
     # Xorg monitor layout
     services.xserver = mkIf (config.services.xserver.enable && cfg.layout != []) (let
       heads =
-        imap1 (i: layout: {
-          name = "multihead-${toString i}";
+        builtins.map (layout: {
+          inherit (layout) name;
           inherit layout;
         })
         cfg.layout;

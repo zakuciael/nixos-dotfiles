@@ -10,7 +10,11 @@ with lib;
 with lib.my;
 with lib.my.utils; let
   vesktop = unstable.vesktop;
-  layout = findLayoutConfig config ({index, ...}: index == 0); # Left monitor
+  leftLayout = findLayoutConfig config ({name, ...}: name == "left"); # Left monitor
+  layout =
+    if leftLayout != null
+    then leftLayout
+    else findLayoutConfig config ({name, ...}: name == "main"); # Left monitor or main if not found
   workspace = findLayoutWorkspace layout ({default, ...}: default); # Default workspace
   class = "^(vesktop)$";
 in {

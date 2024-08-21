@@ -9,7 +9,7 @@
 with lib;
 with lib.my;
 with lib.my.utils; let
-  layout = findLayoutConfig config ({index, ...}: index == 1); # Main monitor
+  layout = findLayoutConfig config ({name, ...}: name == "main"); # Main monitor
   monitor = getLayoutMonitor layout "wayland";
 in {
   home-manager.users.${username} = {
