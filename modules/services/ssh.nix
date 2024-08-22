@@ -20,12 +20,7 @@ in {
       enable = mkEnableOption "openssh server";
       listenAddresses = mkOption {
         inherit (options.services.openssh.listenAddresses) description example type;
-        default = [
-          {
-            addr = "192.168.1.0";
-            port = 22;
-          }
-        ];
+        default = [];
       };
     };
     remotes = mkOption {
@@ -57,7 +52,7 @@ in {
       allowSFTP = true;
       listenAddresses = cfg.server.listenAddresses;
       settings = {
-        PermitRootLogin = false;
+        PermitRootLogin = "no";
         PasswordAuthentication = false;
       };
     };
