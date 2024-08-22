@@ -24,5 +24,8 @@ with lib; {
   boot.kernelPackages = mkDefault pkgs.linuxPackages_latest;
 
   nixpkgs.hostPlatform = mkDefault pkgs.system;
-  hardware.cpu.intel.updateMicrocode = mkDefault config.hardware.enableRedistributableFirmware;
+  hardware = {
+    enableAllFirmware = true;
+    cpu.intel.updateMicrocode = mkDefault config.hardware.enableRedistributableFirmware;
+  };
 }
