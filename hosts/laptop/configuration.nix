@@ -71,14 +71,13 @@ in {
             };
             mode = "1920x1080";
             workspaces = mkLayoutWorkspaces [1 2 3 4 5 6 7 8 9];
-            wallpaper = dotfiles.wallpapers.pc."main.png".source;
+            wallpaper = dotfiles.wallpapers.laptop."main.jpeg".source;
           }
         ];
       };
       sound.enable = true;
-      # amdgpu.enable = true;
       # docker.enable = true;
-      # yubikey.enable = true;
+      yubikey.enable = true;
     };
     desktop = {
       apps.enable = true;
@@ -88,7 +87,7 @@ in {
     services = {
       polkit.enable = true;
       gnome-keyring.enable = true;
-      # wallpaper.enable = true;
+      wallpaper.enable = true;
       ssh = {
         enable = true;
         server = {
