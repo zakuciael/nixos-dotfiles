@@ -10,6 +10,7 @@
 with lib;
 with lib.my;
 with lib.my.utils; let
+  publicKeys = builtins.attrNames (mapper.fromYAML config.sops.defaultSopsFile)."1password".ssh_public_keys;
   layout = findLayoutConfig config ({name, ...}: name == "main"); # Main monitor
   monitor = getLayoutMonitor layout "wayland";
   class = "1Password";
@@ -32,12 +33,24 @@ in {
     "${pkgs._1password-gui}/bin/1password"
   ];
 
-  sops.secrets = {
-    "1password/ssh_agent" = {
-      mode = "0440";
-      group = config.users.groups.keys.name;
-    };
-  };
+  sops.secrets =
+    {
+      "1password/ssh_agent" = {
+        mode = "0440";
+        group = config.users.groups.keys.name;
+      };
+    }
+    // (listToAttrs (
+      builtins.map (publicKey: {
+        name = "1password/ssh_public_keys/${publicKey}";
+        value = {
+          mode = "0600";
+          owner = username;
+          path = "${config.users.users.${username}.home}/.ssh/${publicKey}.pub";
+        };
+      })
+      publicKeys
+    ));
 
   home-manager.users.${username} = {
     programs = {
