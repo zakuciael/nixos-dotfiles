@@ -88,6 +88,12 @@ in {
                 };
               });
             };
+            scale = mkOption {
+              description = "Monitor scale.";
+              example = 1.2;
+              default = null;
+              type = nullOr float;
+            };
             rotate = mkOption {
               description = "Monitor rotation.";
               example = "normal";
@@ -177,7 +183,10 @@ in {
                   if (layout.pos != null)
                   then "${toString layout.pos.x}x${toString layout.pos.y}"
                   else "auto"; # TODO: Check if `auto-right` can be used
-                scale = "1";
+                scale =
+                  if (layout.scale != null)
+                  then (toString layout.scale)
+                  else "1";
                 transform = optionalString (layout.rotate != null) ",transform,${monitorRotations.${layout.rotate}}";
               in ''${monitor},${mode},${pos},${scale}${transform}''
             )
