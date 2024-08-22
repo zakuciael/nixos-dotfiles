@@ -1,5 +1,6 @@
 {
   config,
+  options,
   lib,
   username,
   ...
@@ -13,10 +14,22 @@ with lib.my; let
     then cfg.remotes
     else all_remotes;
 in {
-  options.modules.services.ssh = {
+  options.modules.services.ssh = with types; {
     enable = mkEnableOption "my ssh configuration";
+    server = {
+      enable = mkEnableOption "openssh server";
+      listenAddresses = mkOption {
+        inherit (options.services.openssh.listenAddresses) description example type;
+        default = [
+          {
+            addr = "192.168.1.0";
+            port = 22;
+          }
+        ];
+      };
+    };
     remotes = mkOption {
-      type = with types; nullOr (listOf str);
+      type = nullOr (listOf str);
       description = ''
         List of remotes which configuration will be sourced from SOPS secrets
 
@@ -37,6 +50,17 @@ in {
       })
       remotes
     );
+
+    services.openssh = mkIf (cfg.server.enable) {
+      enable = true;
+      openFirewall = true;
+      allowSFTP = true;
+      listenAddresses = cfg.server.listenAddresses;
+      settings = {
+        PermitRootLogin = false;
+        PasswordAuthentication = false;
+      };
+    };
 
     home-manager.users.${username}.programs.ssh = {
       enable = true;

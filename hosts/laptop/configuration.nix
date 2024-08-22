@@ -47,6 +47,12 @@ in {
   sops.defaultSopsFile = ./secrets.yaml;
   sops.defaultSopsFormat = "yaml";
 
+  users.users.${username} = {
+    openssh.authorizedKeys.keys = [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIATlv70/tWh3bGxYH1WshsBo/v7FnqvQ8kn0I1BW/pZF"
+    ];
+  };
+
   modules = {
     hardware = {
       grub = {
@@ -83,7 +89,12 @@ in {
       polkit.enable = true;
       gnome-keyring.enable = true;
       # wallpaper.enable = true;
-      ssh.enable = true;
+      ssh = {
+        enable = true;
+        server = {
+          enable = true;
+        };
+      };
     };
     dev = {
       tools.enable = true;
