@@ -120,6 +120,7 @@ in {
         enable = true;
         steam.enable = true;
         mihoyo.enable = true;
+        minecraft.enable = true;
         disks = {
           linux.device = "/dev/disk/by-partlabel/linux-games";
           windows.device = "/dev/disk/by-partlabel/windows-games";
