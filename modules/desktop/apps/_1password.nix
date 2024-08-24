@@ -10,13 +10,58 @@
 with lib;
 with lib.my;
 with lib.my.utils; let
-  publicKeys = builtins.attrNames (mapper.fromYAML config.sops.defaultSopsFile)."1password".ssh_public_keys;
   hmConfig = config.home-manager.users.${username};
   configDirectory = hmConfig.xdg.configHome;
   homeDirectory = hmConfig.home.homeDirectory;
   layout = findLayoutConfig config ({name, ...}: name == "main"); # Main monitor
   monitor = getLayoutMonitor layout "wayland";
   class = "1Password";
+
+  mkAgentEntrySecretName = entry: slot: "1password/ssh_agent/${entry}/${slot}";
+  mkAgentEntrySecret = entry: slot: {
+    name = mkAgentEntrySecretName entry slot;
+    value = {};
+  };
+  mkAgentEntry = entry:
+    listToAttrs (
+      builtins.map
+      (
+        slot: {
+          name = slot;
+          value = config.sops.placeholder.${mkAgentEntrySecretName entry.name slot};
+        }
+      ) (builtins.attrNames entry.value)
+    );
+  mkPublicKey = keyName: {
+    name = "1password/ssh_public_keys/${keyName}";
+    value = {
+      mode = "0600";
+      owner = username;
+      path = "${homeDirectory}/.ssh/public_keys/${keyName}.pub";
+    };
+  };
+
+  agentEntries = (mapper.fromYAML config.sops.defaultSopsFile)."1password".ssh_agent;
+
+  agentEntrySecrets = listToAttrs (builtins.concatLists (
+    builtins.map
+    (
+      {
+        name,
+        value,
+      }:
+        builtins.map
+        (slot: mkAgentEntrySecret name slot)
+        (builtins.attrNames value)
+    )
+    (attrsToList agentEntries)
+  ));
+
+  publicKeys = listToAttrs (
+    builtins.map
+    mkPublicKey
+    (builtins.attrNames (mapper.fromYAML config.sops.defaultSopsFile)."1password".ssh_public_keys)
+  );
 in {
   programs = {
     _1password.enable = true;
@@ -36,26 +81,17 @@ in {
     "${pkgs._1password-gui}/bin/1password"
   ];
 
-  sops.secrets =
-    {
-      "1password/ssh_agent" = {
+  sops = {
+    templates = {
+      "agent.toml" = {
         mode = "0644";
         owner = username;
-        # TODO: Replace with sops.templates
         path = "${configDirectory}/1Password/ssh/agent.toml";
+        file = mapper.toTOML "agent.toml" {ssh-keys = builtins.map mkAgentEntry (lib.attrsToList agentEntries);};
       };
-    }
-    // (listToAttrs (
-      builtins.map (publicKey: {
-        name = "1password/ssh_public_keys/${publicKey}";
-        value = {
-          mode = "0600";
-          owner = username;
-          path = "${homeDirectory}/.ssh/public_keys/${publicKey}.pub";
-        };
-      })
-      publicKeys
-    ));
+    };
+    secrets = agentEntrySecrets // publicKeys;
+  };
 
   home-manager.users.${username} = {
     programs = {
