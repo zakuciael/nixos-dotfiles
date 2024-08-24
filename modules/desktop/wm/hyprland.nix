@@ -55,6 +55,8 @@ in
           settings = {
             # Autostart script
             exec-once = [autostartScript];
+            # Source external file for quick debug
+            source = ["$HOME/.config/hypr/debug.conf"];
 
             # Input settings
             input = {
