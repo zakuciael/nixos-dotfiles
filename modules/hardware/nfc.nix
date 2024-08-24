@@ -1,14 +1,15 @@
 {
   config,
   lib,
+  pkgs,
   username,
   ...
 }:
 with lib;
 with lib.my; let
-  cfg = config.modules.hardware.docker;
+  cfg = config.modules.hardware.nfc;
 in {
-  options.modules.hardware.docker = {
+  options.modules.hardware.nfc = {
     enable = mkEnableOption "NFC support";
   };
 
