@@ -29,7 +29,6 @@ in {
         inputs.nil.default
         inputs.alejandra.default
         discord
-        unstable.vscode
         unstable.google-chrome
         warp-terminal
         wakatime

@@ -57,6 +57,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-compat.follows = "flake-compat";
     };
+    vscode-server = {
+      url = "github:nix-community/nixos-vscode-server";
+      inputs.flake-utils.follows = "flake-utils";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {
@@ -106,6 +111,11 @@
               };
           };
         aagl = flakeInputs.aagl // {packages = flakeInputs.aagl.packages.${system};};
+        vscode-server =
+          flakeInputs.vscode-server
+          // {
+            homeManagerModule = flakeInputs.vscode-server.homeModules.default;
+          };
       };
 
     lib = nixpkgs.lib.extend (self: super: {

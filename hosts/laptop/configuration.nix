@@ -97,6 +97,10 @@ in {
     };
     dev = {
       tools.enable = true;
+      vscode = {
+        enable = true;
+        server = true;
+      };
       # kubernetes.enable = true;
       # ides = ["rust-rover" "webstorm" "idea-ultimate" "rider"];
     };

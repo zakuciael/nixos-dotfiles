@@ -136,6 +136,10 @@ in {
       tools.enable = true;
       kubernetes.enable = true;
       ides = ["rust-rover" "webstorm" "idea-ultimate" "rider"];
+      vscode = {
+        enable = true;
+        server = true;
+      };
       nostale = {
         enable = true;
         installPath = "/media/games/linux/Other/NosTale";

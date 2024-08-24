@@ -139,6 +139,7 @@
       inputs.nix-colors.homeManagerModule
       inputs.sops-nix.homeManagerModule
       inputs.catppuccin.homeManagerModule
+      inputs.vscode-server.homeManagerModule
     ];
     useUserPackages = true;
     useGlobalPkgs = true;

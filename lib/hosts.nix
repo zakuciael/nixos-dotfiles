@@ -27,6 +27,7 @@ with lib.my; {
           inputs.sops-nix.nixosModules.default
           inputs.catppuccin.nixosModules.default
           inputs.aagl.nixosModules.default
+          inputs.vscode-server.nixosModules.default
         ]
         ++ (utils.recursiveReadDir ./../modules {
           ignoredDirs = ["apps"];
