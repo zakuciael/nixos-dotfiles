@@ -6,7 +6,9 @@
   username,
   scripts,
   ...
-}: {
+}:
+with lib;
+with lib.my; {
   # NixOS configuration
   nix = {
     settings = {
@@ -24,7 +26,7 @@
     };
     extraOptions = ''
       experimental-features = nix-command flakes
-      !include ${config.sops.secrets."nix/access-tokens".path}
+      !include ${config.sops.templates."nix/access_tokens.conf".path}
     '';
     package = pkgs.nixFlakes;
   };
@@ -116,12 +118,29 @@
   };
 
   # SOPS
-  sops.secrets = {
-    "users/${username}/password".neededForUsers = true;
-    "nix/access-tokens" = {
-      mode = "0440";
-      group = config.users.groups.keys.name;
+  sops = let
+    accessTokens = (mapper.fromYAML config.sops.defaultSopsFile).nix.access-tokens;
+
+    mkAccessTokenSecretName = domain: "nix/access-tokens/${domain}";
+    mkAccessTokenEntry = domain: "${domain}=${config.sops.placeholder.${mkAccessTokenSecretName domain}}";
+
+    accessTokensSecrets = listToAttrs (builtins.map (domain: {
+      name = mkAccessTokenSecretName domain;
+      value = {};
+    }) (builtins.attrNames accessTokens));
+  in {
+    templates = {
+      "nix/access_tokens.conf" = {
+        mode = "0440";
+        group = config.users.groups.keys.name;
+        content = ''
+          access-tokens = ${lib.concatStringsSep " " (builtins.map mkAccessTokenEntry (builtins.attrNames accessTokens))}
+        '';
+      };
     };
+    secrets =
+      {"users/${username}/password".neededForUsers = true;}
+      // accessTokensSecrets;
   };
 
   # User settings
