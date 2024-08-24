@@ -11,6 +11,9 @@ with lib;
 with lib.my;
 with lib.my.utils; let
   publicKeys = builtins.attrNames (mapper.fromYAML config.sops.defaultSopsFile)."1password".ssh_public_keys;
+  hmConfig = config.home-manager.users.${username};
+  configDirectory = hmConfig.xdg.configHome;
+  homeDirectory = hmConfig.home.homeDirectory;
   layout = findLayoutConfig config ({name, ...}: name == "main"); # Main monitor
   monitor = getLayoutMonitor layout "wayland";
   class = "1Password";
@@ -23,7 +26,7 @@ in {
     };
 
     fish.interactiveShellInit = ''
-      source $HOME/.config/op/plugins.sh
+      source ${configDirectory}/op/plugins.sh
     '';
   };
 
@@ -36,8 +39,10 @@ in {
   sops.secrets =
     {
       "1password/ssh_agent" = {
-        mode = "0440";
-        group = config.users.groups.keys.name;
+        mode = "0644";
+        owner = username;
+        # TODO: Replace with sops.templates
+        path = "${configDirectory}/1Password/ssh/agent.toml";
       };
     }
     // (listToAttrs (
@@ -46,7 +51,7 @@ in {
         value = {
           mode = "0600";
           owner = username;
-          path = "${config.users.users.${username}.home}/.ssh/${publicKey}.pub";
+          path = "${homeDirectory}/.ssh/public_keys/${publicKey}.pub";
         };
       })
       publicKeys
@@ -70,12 +75,6 @@ in {
         enable = true;
         extraConfig = "IdentityAgent ~/.1password/agent.sock";
       };
-    };
-
-    xdg.configFile."1Password/ssh/agent.toml" = {
-      source =
-        config.home-manager.users.${username}.lib.file.mkOutOfStoreSymlink
-        config.sops.secrets."1password/ssh_agent".path;
     };
 
     wayland.windowManager.hyprland = mkIf (config.modules.desktop.wm.hyprland.enable) {
