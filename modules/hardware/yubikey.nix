@@ -8,7 +8,7 @@ with lib.my; let
   cfg = config.modules.hardware.yubikey;
 in {
   options.modules.hardware.yubikey = {
-    enable = mkEnableOption "sudo auth with YubiKey";
+    enable = mkEnableOption "YubiKey support";
   };
 
   config = mkIf (cfg.enable) {

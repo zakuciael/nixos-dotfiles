@@ -79,6 +79,7 @@ in {
       sound.enable = true;
       # docker.enable = true;
       yubikey.enable = true;
+      nfc.enable = true;
     };
     desktop = {
       apps.enable = true;
