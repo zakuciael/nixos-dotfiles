@@ -70,6 +70,7 @@ in {
               wayland = "eDP-1";
             };
             mode = "1920x1080";
+            scale = 1.2;
             workspaces = mkLayoutWorkspaces [1 2 3 4 5 6 7 8 9];
             wallpaper = dotfiles.wallpapers.laptop."main.jpeg".source;
           }
