@@ -12,6 +12,7 @@ with lib.my; let
 in {
   options.modules.hardware.yubikey = {
     enable = mkEnableOption "YubiKey support";
+    interactive = mkEnableOption "interactive prompt";
   };
 
   config = mkIf (cfg.enable) {
@@ -27,7 +28,7 @@ in {
       u2f = {
         enable = true;
         cue = true;
-        interactive = true;
+        interactive = cfg.interactive;
         control = "sufficient";
       };
 
