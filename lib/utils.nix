@@ -6,7 +6,7 @@
 }:
 with lib;
 with lib.hm.dag; let
-  inherit (lib.my.mapper) toRasi mapKeyToNumpad;
+  inherit (lib.my.mapper) fromYAML toRasi mapKeyToNumpad;
   inherit (pkgs) writeTextFile;
 in rec {
   recursiveReadDir = path: {
@@ -29,6 +29,38 @@ in rec {
         (builtins.readDir path)
       )
     ));
+
+  recursiveReadSecretNames = {
+    config,
+    base ? null,
+  }: let
+    secrets = readSecrets {inherit config base;};
+  in
+    if builtins.isString secrets
+    then [base]
+    else if builtins.isAttrs secrets
+    then let
+      result = builtins.map (name:
+        recursiveReadSecretNames {
+          inherit config;
+          base = "${removeSuffix "/" base}/${name}";
+        }) (builtins.attrNames secrets);
+    in
+      flatten result
+    else null;
+
+  readSecrets = {
+    config,
+    base ? null,
+  }: let
+    basePath = builtins.filter (v: v != "") (splitString "/" base);
+    fullSecrets = fromYAML config.sops.defaultSopsFile;
+    secrets =
+      if base != null
+      then (attrByPath basePath null fullSecrets)
+      else fullSecrets;
+  in
+    secrets;
 
   findLayoutConfig = with lib;
     config: predicate: let
