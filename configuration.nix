@@ -119,28 +119,29 @@ with lib.my; {
 
   # SOPS
   sops = let
-    accessTokens = (mapper.fromYAML config.sops.defaultSopsFile).nix.access-tokens;
-
-    mkAccessTokenSecretName = domain: "nix/access-tokens/${domain}";
-    mkAccessTokenEntry = domain: "${domain}=${config.sops.placeholder.${mkAccessTokenSecretName domain}}";
-
-    accessTokensSecrets = listToAttrs (builtins.map (domain: {
-      name = mkAccessTokenSecretName domain;
-      value = {};
-    }) (builtins.attrNames accessTokens));
+    base = "nix/access-tokens";
+    secretNames = utils.recursiveReadSecretNames {inherit config base;};
+    secrets = utils.readSecrets {inherit config base;};
   in {
     templates = {
       "nix/access_tokens.conf" = {
         mode = "0440";
         group = config.users.groups.keys.name;
         content = ''
-          access-tokens = ${lib.concatStringsSep " " (builtins.map mkAccessTokenEntry (builtins.attrNames accessTokens))}
+          access-tokens = ${
+            lib.concatStringsSep " "
+            (
+              builtins.map
+              (domain: "${domain}=${config.sops.placeholder."${base}/${domain}"}")
+              (builtins.attrNames secrets)
+            )
+          }
         '';
       };
     };
     secrets =
       {"users/${username}/password".neededForUsers = true;}
-      // accessTokensSecrets;
+      // lib.listToAttrs (builtins.map (v: lib.nameValuePair v {}) secretNames);
   };
 
   # User settings
