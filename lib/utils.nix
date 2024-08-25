@@ -62,6 +62,15 @@ in rec {
   in
     secrets;
 
+  mkSecretName = path:
+    concatStringsSep "/" (builtins.map (v: removeSuffix "/" v) path);
+
+  mkSecretPlaceholder = config: path:
+    config.sops.placeholder."${mkSecretName path}";
+
+  mkSecretPath = config: path:
+    config.sops.secrets."${mkSecretName path}".path;
+
   findLayoutConfig = with lib;
     config: predicate: let
       default = {

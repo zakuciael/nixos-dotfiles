@@ -13,12 +13,6 @@ with lib.my; let
   secrets = utils.readSecrets {inherit config base;};
 
   mkKeyValue = key: value: "${key} ${value}";
-  mkSecretName = path:
-    concatStringsSep "/" (builtins.map (v: removeSuffix "/" v) path);
-  mkSecretPlaceholder = path:
-    config.sops.placeholder."${mkSecretName path}";
-  mkSecretPath = path:
-    config.sops.secrets."${mkSecretName path}".path;
   mkSecretSettings = secret:
     if hasSuffix "/public_key" secret
     then {
@@ -30,7 +24,7 @@ with lib.my; let
   mkPublicKeySettings = host:
     if (hasAttrByPath [host "public_key"] secrets)
     then {
-      IdentityFile = mkSecretPath [base host "public_key"];
+      IdentityFile = utils.mkSecretPath config [base host "public_key"];
       IdentitiesOnly = "yes";
     }
     else {};
@@ -43,7 +37,7 @@ with lib.my; let
           builtins.map
           (v: {
             name = v;
-            value = mkSecretPlaceholder [base host "settings" v];
+            value = utils.mkSecretPlaceholder config [base host "settings" v];
           })
           (builtins.attrNames (attrByPath [host "settings"] {} secrets))
         )
@@ -52,7 +46,7 @@ with lib.my; let
     settings // (mkPublicKeySettings host);
 
   mkHost = host: settings: ''
-    Host ${mkSecretPlaceholder [base host "host"]}
+    Host ${utils.mkSecretPlaceholder config [base host "host"]}
     ${utils.indentLines "  " (concatLines (builtins.map (v: mkKeyValue v.name v.value) (attrsToList settings)))}'';
 in {
   options.modules.services.ssh = with types; {

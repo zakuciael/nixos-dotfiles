@@ -132,7 +132,7 @@ with lib.my; {
             lib.concatStringsSep " "
             (
               builtins.map
-              (domain: "${domain}=${config.sops.placeholder."${base}/${domain}"}")
+              (entry: "${entry}=${utils.mkSecretPlaceholder config [base entry]}")
               (builtins.attrNames secrets)
             )
           }
