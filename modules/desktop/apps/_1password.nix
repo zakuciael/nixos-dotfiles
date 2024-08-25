@@ -16,36 +16,9 @@ with lib.my.utils; let
   monitor = getLayoutMonitor layout "wayland";
   class = "1Password";
 
-  mkAgentEntrySecretName = entry: slot: "1password/ssh_agent/${entry}/${slot}";
-  mkAgentEntrySecret = entry: slot: {
-    name = mkAgentEntrySecretName entry slot;
-    value = {};
-  };
-  mkAgentEntry = entry:
-    listToAttrs (
-      builtins.map
-      (
-        slot: {
-          name = slot;
-          value = config.sops.placeholder.${mkAgentEntrySecretName entry.name slot};
-        }
-      ) (builtins.attrNames entry.value)
-    );
-  agentEntries = (mapper.fromYAML config.sops.defaultSopsFile)."1password".ssh_agent;
-
-  agentEntrySecrets = listToAttrs (builtins.concatLists (
-    builtins.map
-    (
-      {
-        name,
-        value,
-      }:
-        builtins.map
-        (slot: mkAgentEntrySecret name slot)
-        (builtins.attrNames value)
-    )
-    (attrsToList agentEntries)
-  ));
+  base = "1password/ssh_agent";
+  secretNames = utils.recursiveReadSecretNames {inherit config base;};
+  secrets = utils.readSecrets {inherit config base;};
 in {
   programs = {
     _1password.enable = true;
@@ -67,14 +40,24 @@ in {
 
   sops = {
     templates = {
-      "agent.toml" = {
+      "1password/agent.toml" = {
         mode = "0644";
         owner = username;
         path = "${configDirectory}/1Password/ssh/agent.toml";
-        file = mapper.toTOML "agent.toml" {ssh-keys = builtins.map mkAgentEntry (lib.attrsToList agentEntries);};
+        file = mapper.toTOML "agent.toml" {
+          ssh-keys =
+            builtins.map
+            (
+              entry:
+                builtins.mapAttrs
+                (slot: _: utils.mkSecretPlaceholder config [base entry slot])
+                (attrByPath [entry] {} secrets)
+            )
+            (builtins.attrNames secrets);
+        };
       };
     };
-    secrets = agentEntrySecrets;
+    secrets = listToAttrs (builtins.map (v: nameValuePair v {}) secretNames);
   };
 
   home-manager.users.${username} = {
