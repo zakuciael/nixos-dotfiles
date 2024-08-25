@@ -12,7 +12,6 @@ with lib.my;
 with lib.my.utils; let
   hmConfig = config.home-manager.users.${username};
   configDirectory = hmConfig.xdg.configHome;
-  homeDirectory = hmConfig.home.homeDirectory;
   layout = findLayoutConfig config ({name, ...}: name == "main"); # Main monitor
   monitor = getLayoutMonitor layout "wayland";
   class = "1Password";
@@ -32,15 +31,6 @@ with lib.my.utils; let
         }
       ) (builtins.attrNames entry.value)
     );
-  mkPublicKey = keyName: {
-    name = "1password/ssh_public_keys/${keyName}";
-    value = {
-      mode = "0600";
-      owner = username;
-      path = "${homeDirectory}/.ssh/public_keys/${keyName}.pub";
-    };
-  };
-
   agentEntries = (mapper.fromYAML config.sops.defaultSopsFile)."1password".ssh_agent;
 
   agentEntrySecrets = listToAttrs (builtins.concatLists (
@@ -56,12 +46,6 @@ with lib.my.utils; let
     )
     (attrsToList agentEntries)
   ));
-
-  publicKeys = listToAttrs (
-    builtins.map
-    mkPublicKey
-    (builtins.attrNames (mapper.fromYAML config.sops.defaultSopsFile)."1password".ssh_public_keys)
-  );
 in {
   programs = {
     _1password.enable = true;
@@ -90,7 +74,7 @@ in {
         file = mapper.toTOML "agent.toml" {ssh-keys = builtins.map mkAgentEntry (lib.attrsToList agentEntries);};
       };
     };
-    secrets = agentEntrySecrets // publicKeys;
+    secrets = agentEntrySecrets;
   };
 
   home-manager.users.${username} = {

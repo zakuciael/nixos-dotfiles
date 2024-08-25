@@ -8,11 +8,52 @@
 with lib;
 with lib.my; let
   cfg = config.modules.services.ssh;
-  all_remotes = builtins.attrNames (mapper.fromYAML config.sops.defaultSopsFile).ssh_servers;
-  remotes =
-    if cfg.remotes != null
-    then cfg.remotes
-    else all_remotes;
+  base = "ssh_servers/";
+  secretNames = utils.recursiveReadSecretNames {inherit config base;};
+  secrets = utils.readSecrets {inherit config base;};
+
+  mkKeyValue = key: value: "${key} ${value}";
+  mkSecretName = path:
+    concatStringsSep "/" (builtins.map (v: removeSuffix "/" v) path);
+  mkSecretPlaceholder = path:
+    config.sops.placeholder."${mkSecretName path}";
+  mkSecretPath = path:
+    config.sops.secrets."${mkSecretName path}".path;
+  mkSecretSettings = secret:
+    if hasSuffix "/public_key" secret
+    then {
+      mode = "0600";
+      owner = username;
+    }
+    else {};
+
+  mkPublicKeySettings = host:
+    if (hasAttrByPath [host "public_key"] secrets)
+    then {
+      IdentityFile = mkSecretPath [base host "public_key"];
+      IdentitiesOnly = "yes";
+    }
+    else {};
+
+  mkHostSettings = host: let
+    settings =
+      if (hasAttrByPath [host "settings"] secrets)
+      then
+        listToAttrs (
+          builtins.map
+          (v: {
+            name = v;
+            value = mkSecretPlaceholder [base host "settings" v];
+          })
+          (builtins.attrNames (attrByPath [host "settings"] {} secrets))
+        )
+      else {};
+  in
+    settings // (mkPublicKeySettings host);
+
+  mkHost = host: settings: ''
+    Host ${mkSecretPlaceholder [base host "host"]}
+    ${utils.indentLines "  " (concatLines (builtins.map (v: mkKeyValue v.name v.value) (attrsToList settings)))}'';
 in {
   options.modules.services.ssh = with types; {
     enable = mkEnableOption "my ssh configuration";
@@ -23,28 +64,24 @@ in {
         default = [];
       };
     };
-    remotes = mkOption {
-      type = nullOr (listOf str);
-      description = ''
-        List of remotes which configuration will be sourced from SOPS secrets
-
-        If left empty will source all remotes from the SOPS secrets
-      '';
-      example = ["vps"];
-      default = null;
-    };
   };
 
   config = mkIf (cfg.enable) {
-    sops.secrets = listToAttrs (
-      builtins.map (remote: {
-        name = "ssh_servers/${remote}";
-        value = {
+    sops = {
+      templates = {
+        "ssh/hosts.conf" = {
+          mode = "600";
           owner = username;
+          content =
+            lib.concatLines
+            (builtins.map (host: mkHost host (mkHostSettings host))
+              (builtins.attrNames secrets));
         };
-      })
-      remotes
-    );
+      };
+      secrets = lib.listToAttrs (builtins.map (v:
+        lib.nameValuePair v (mkSecretSettings v))
+      secretNames);
+    };
 
     services.openssh = mkIf (cfg.server.enable) {
       enable = true;
@@ -59,12 +96,7 @@ in {
 
     home-manager.users.${username}.programs.ssh = {
       enable = true;
-      includes =
-        builtins.map (
-          remote:
-            config.sops.secrets."ssh_servers/${remote}".path
-        )
-        remotes;
+      includes = singleton config.sops.templates."ssh/hosts.conf".path;
     };
   };
 }
