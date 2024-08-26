@@ -106,8 +106,8 @@ in {
         enable = true;
         server = true;
       };
-      # kubernetes.enable = true;
-      # ides = ["rust-rover" "webstorm" "idea-ultimate" "rider"];
+      kubernetes.enable = true;
+      ides = ["idea-ultimate"];
     };
     shell = {
       tmux.enable = true;
