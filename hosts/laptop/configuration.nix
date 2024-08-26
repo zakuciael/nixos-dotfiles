@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  pkgs,
   inputs,
   username,
   dotfiles,
@@ -11,7 +10,11 @@ with lib.my;
 with lib.my.utils; let
   colorScheme = inputs.nix-colors.colorSchemes.catppuccin-mocha;
 in {
-  imports = [./hardware.nix ./networking.nix];
+  imports = [
+    ./hardware.nix
+    ./networking.nix
+    "${inputs.nixos-hardware.outPath}/dell/latitude/5490"
+  ];
 
   environment = {
     variables = {
