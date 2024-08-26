@@ -1,10 +1,17 @@
 {
   config,
   lib,
+  inputs,
   pkgs,
   ...
 }:
 with lib; {
+  imports = [
+    "${inputs.nixos-hardware.outPath}/common/cpu/intel"
+    "${inputs.nixos-hardware.outPath}/common/pc/laptop"
+    "${inputs.nixos-hardware.outPath}/common/pc/laptop/ssd"
+  ];
+
   boot.supportedFilesystems = ["ntfs"];
 
   fileSystems."/" = {
@@ -20,8 +27,19 @@ with lib; {
 
   swapDevices = [{device = "/dev/disk/by-uuid/760c0f81-0773-45f5-b853-08ef5eb92314";}];
 
-  boot.initrd.kernelModules = [];
-  boot.kernelPackages = mkDefault pkgs.linuxPackages_latest;
+  boot = {
+    initrd.kernelModules = [];
+    kernelPackages = mkDefault pkgs.linuxPackages_latest;
+    # Kernel Panic on suspend fix, taken from ArchLinux wiki.
+    kernelParams = [
+      "acpi_enforce_resources=lax"
+      "i915.enable_dc=0"
+    ];
+    # Audio Mute LED
+    extraModprobeConfig = ''
+      options snd-hda-intel model=mute-led-gpio
+    '';
+  };
 
   nixpkgs.hostPlatform = mkDefault pkgs.system;
   hardware = {

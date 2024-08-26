@@ -10,11 +10,7 @@ with lib.my;
 with lib.my.utils; let
   colorScheme = inputs.nix-colors.colorSchemes.catppuccin-mocha;
 in {
-  imports = [
-    ./hardware.nix
-    ./networking.nix
-    "${inputs.nixos-hardware.outPath}/dell/latitude/5490"
-  ];
+  imports = [./hardware.nix ./networking.nix];
 
   environment = {
     variables = {
