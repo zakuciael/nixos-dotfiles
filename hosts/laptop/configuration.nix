@@ -93,6 +93,7 @@ in {
       polkit.enable = true;
       gnome-keyring.enable = true;
       wallpaper.enable = true;
+      syncthing.enable = true;
       ssh = {
         enable = true;
         server = {

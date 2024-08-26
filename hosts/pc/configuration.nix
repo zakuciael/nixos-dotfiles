@@ -132,6 +132,7 @@ in {
       gnome-keyring.enable = true;
       wallpaper.enable = true;
       ssh.enable = true;
+      syncthing.enable = true;
     };
     dev = {
       tools.enable = true;
