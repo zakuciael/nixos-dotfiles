@@ -1,5 +1,6 @@
 {
   config,
+  hostname,
   lib,
   pkgs,
   username,
@@ -17,5 +18,16 @@ in {
     home-manager.users.${username}.home.packages = with pkgs; [pcsc-tools];
 
     services.pcscd.enable = true;
+
+    systemd.services = mkIf (hostname == "laptop") {
+      "controlvault2-nfc-enable" = {
+        description = "Run controlvault2-nfc-enable script on startup";
+        wantedBy = ["default.target"];
+        script = "${getExe pkgs.controlvault2-nfc-enable} on";
+        serviceConfig = {
+          Type = "oneshot";
+        };
+      };
+    };
   };
 }
