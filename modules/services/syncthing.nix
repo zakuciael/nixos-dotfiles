@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   username,
   ...
 }:
@@ -75,6 +76,13 @@ in {
             devices = ["nixos" "laptop"];
           };
         };
+      };
+    };
+
+    home-manager.users."${username}" = {
+      services.syncthing.tray = {
+        enable = true;
+        package = pkgs.syncthingtray;
       };
     };
   };
