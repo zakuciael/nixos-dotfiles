@@ -25,7 +25,7 @@ in {
           position = "top";
 
           modules-left = ["hyprland/window"];
-          modules-center = ["pulseaudio" "cpu" "hyprland/workspaces" "memory" "disk" "clock"];
+          modules-center = ["pulseaudio" "network" "cpu" "hyprland/workspaces" "memory" "battery" "disk" "clock"];
           modules-right = ["tray"];
 
           "hyprland/workspaces" = {
@@ -63,9 +63,9 @@ in {
           };
           "network" = {
             format-icons = ["󰤯" "󰤟" "󰤢" "󰤥" "󰤨"];
-            format-ethernet = " {bandwidthDownOctets}";
-            format-wifi = "{icon} {signalStrength}%";
-            format-disconnected = "󰤮";
+            format-ethernet = "󰈀 Ethernet";
+            format-wifi = "{icon} {essid}";
+            format-disconnected = "󰤮 Disconnected";
             tooltip = false;
           };
           "tray" = {
@@ -88,6 +88,19 @@ in {
               default = ["" "" ""];
             };
             on-click = "sleep 0.1 && ${pkgs.pavucontrol}/bin/pavucontrol";
+          };
+          "battery" = {
+            format-icons = ["󰁺" "󰁻" "󰁼" "󰁽" "󰁾" "󰁿" "󰂀" "󰂁" "󰂂" "󰁹"];
+            format = "{icon} {capacity}%";
+            format-charging = "󰂄 {capacity}%";
+            format-time = "{H}h {M}min";
+            tooltip = true;
+            tooltip-format = "{timeTo}";
+            interval = 60;
+            states = {
+              warning = 30;
+              critical = 15;
+            };
           };
         }
       ];
@@ -181,6 +194,14 @@ in {
           color: #${base0C};
           background: #${base00};
           border-radius: 50px 15px 50px 15px;
+          margin: 5px;
+          padding: 2px 20px;
+        }
+
+        #battery {
+          color: #${base08};
+          background: #${base00};
+          border-radius: 15px 50px 15px 50px;
           margin: 5px;
           padding: 2px 20px;
         }
