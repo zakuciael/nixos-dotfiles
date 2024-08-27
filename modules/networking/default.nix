@@ -1,7 +1,11 @@
-{lib, ...}:
+{
+  lib,
+  hostname,
+  ...
+}:
 with lib; {
   networking = {
-    hostName = mkDefault "nixos";
+    hostName = mkDefault hostname;
     networkmanager.enable = true;
     firewall = {
       enable = true;
