@@ -29,10 +29,28 @@ in {
       "net.core.wmem_max" = 7500000;
     };
 
+    # Don't create default ~/Sync folder
+    systemd.services.syncthing.environment.STNODEFAULTFOLDER = "true";
+
+    sops.secrets = {
+      "syncthing/key" = {
+        mode = "0644";
+        owner = config.services.syncthing.user;
+        group = config.services.syncthing.group;
+      };
+      "syncthing/cert" = {
+        mode = "0644";
+        owner = config.services.syncthing.user;
+        group = config.services.syncthing.group;
+      };
+    };
+
     services.syncthing = {
       enable = true;
       systemService = true;
       user = username;
+      key = config.sops.secrets."syncthing/key".path;
+      cert = config.sops.secrets."syncthing/cert".path;
       configDir = "${configDirectory}/syncthing";
       overrideDevices = true;
       overrideFolders = true;
@@ -46,8 +64,8 @@ in {
         };
 
         devices = {
-          nixos.id = "3EL5IKS-DVGUYLS-3JYXXGI-IEK2VEQ-C2ZUZ5X-PC3CAWN-GAV4OYI-PN6B2AH";
-          laptop.id = "5LUIWNJ-U6567EN-LDFDEZX-65F5MA5-DIBJZDA-LH5N2E5-VVD5CLE-UTWFSAT";
+          nixos.id = "QUDUYTK-C7ES7PH-SLQZW47-FBBSXKP-KMI6V4N-3PFF2AU-AJFOX3W-JZ4USQ4";
+          laptop.id = "ZYICIZR-XBL4Q2B-UJAC3P7-ATZE465-J6IVQIM-ZR24CBB-FWIAT27-BPU3HQM";
         };
 
         folders = {
