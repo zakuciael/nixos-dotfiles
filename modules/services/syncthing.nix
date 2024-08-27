@@ -82,6 +82,7 @@ in {
     home-manager.users."${username}" = {
       services.syncthing.tray = {
         enable = true;
+        command = "syncthingtray --wait";
         package = pkgs.syncthingtray;
       };
     };
