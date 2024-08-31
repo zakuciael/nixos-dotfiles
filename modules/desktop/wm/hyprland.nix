@@ -42,7 +42,11 @@ in
       # Make chrome and electron apps run native on wayland
       environment.sessionVariables.NIXOS_OZONE_WL = "1";
 
-      xdg.portal.extraPortals = with pkgs; [xdg-desktop-portal-gtk];
+      xdg.portal = {
+        extraPortals = with pkgs; [xdg-desktop-portal-gtk];
+        xdgOpenUsePortal = true;
+        gtkUsePortal = true;
+      };
 
       home-manager.users.${username} = {
         # TODO: Move this and media controls to an app config for a player script
