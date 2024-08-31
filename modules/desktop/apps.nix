@@ -26,18 +26,25 @@ in {
     home-manager.users.${username} = {
       programs.fish.shellAliases.open = "xdg-open";
       home.packages = with pkgs; [
+        # Nix
         inputs.nil.default
         inputs.alejandra.default
-        discord
+
+        # Browser
         unstable.google-chrome
-        warp-terminal
-        wakatime
-        spotify
-        unstable.graphite-cli
+
+        # Files
         cinnamon.nemo
         libsForQt5.ark
-        gnome-text-editor
+
+        # Music, Videos, Photos, etc.
+        spotify
         gnome.eog
+        gnome-text-editor
+        vlc
+        qalculate-gtk
+
+        # Other
         font-manager
       ];
     };

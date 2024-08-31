@@ -17,7 +17,8 @@ in {
   config = mkIf (cfg.enable) {
     home-manager.users.${username} = {
       home.packages = with pkgs; [
-        # GitHub
+        # Git
+        unstable.graphite-cli
         gh
 
         # Reverse Engineering
@@ -38,6 +39,9 @@ in {
 
         # FTP
         filezilla
+
+        # Tracking
+        wakatime
       ];
     };
   };
