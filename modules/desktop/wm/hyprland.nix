@@ -49,16 +49,18 @@ in
       };
 
       home-manager.users.${username} = {
-        # TODO: Move this and media controls to an app config for a player script
-        home.packages = with pkgs; [wl-clipboard playerctl];
-
         wayland.windowManager.hyprland = {
           enable = true;
           xwayland.enable = true;
 
           settings = {
             # Autostart script
-            exec-once = [autostartScript];
+            exec-once = [
+              autostartScript
+              (with pkgs; ''
+                ${wl-clipboard}/bin/wl-paste -t text -w ${getExe bash} -c '[ "$(${getExe xclip} -selection clipboard -o)" = "$(${wl-clipboard}/bin/wl-paste -n)" ] || [ "$(${wl-clipboard}/bin/wl-paste -l | grep image)" = "" ] && ${getExe xclip} -selection clipboard'
+              '')
+            ];
             # Source external file for quick debug
             source = ["$HOME/.config/hypr/debug.conf"];
 
@@ -165,10 +167,10 @@ in
               ", XF86AudioLowerVolume, exec, ${wireplumber}/bin/wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"
               ", XF86AudioMute, exec, ${wireplumber}/bin/wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
               ", XF86AudioMicMute, exec, ${wireplumber}/bin/wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"
-              ", XF86AudioPlay, exec, ${playerctl}/bin/playerctl play-pause"
-              ", XF86AudioNext, exec, ${playerctl}/bin/playerctl next"
-              ", XF86AudioPrev, exec, ${playerctl}/bin/playerctl previous"
-              ", XF86audiostop, exec, ${playerctl}/bin/playerctl stop"
+              ", XF86AudioPlay, exec, ${getExe playerctl} play-pause"
+              ", XF86AudioNext, exec, ${getExe playerctl} next"
+              ", XF86AudioPrev, exec, ${getExe playerctl} previous"
+              ", XF86audiostop, exec, ${getExe playerctl} stop"
             ];
             bindm = [
               "$mod, mouse:272, movewindow"
