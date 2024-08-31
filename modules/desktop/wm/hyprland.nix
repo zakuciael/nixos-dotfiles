@@ -45,7 +45,6 @@ in
       xdg.portal = {
         extraPortals = with pkgs; [xdg-desktop-portal-gtk];
         xdgOpenUsePortal = true;
-        gtkUsePortal = true;
       };
 
       home-manager.users.${username} = {
