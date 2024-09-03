@@ -26,6 +26,7 @@ in {
         script = "${getExe pkgs.controlvault2-nfc-enable} on";
         serviceConfig = {
           Type = "oneshot";
+          RemainAfterExit = true;
         };
       };
     };
