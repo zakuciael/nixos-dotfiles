@@ -67,13 +67,20 @@ in {
         devices = {
           nixos.id = "QUDUYTK-C7ES7PH-SLQZW47-FBBSXKP-KMI6V4N-3PFF2AU-AJFOX3W-JZ4USQ4";
           laptop.id = "ZYICIZR-XBL4Q2B-UJAC3P7-ATZE465-J6IVQIM-ZR24CBB-FWIAT27-BPU3HQM";
+          "sync.zakku.eu" = {
+            id = "6JPV4AX-4ALKGHX-YKKQYNR-IJPTK2O-S6TV2AM-GZ6KDA3-EZ6TNGF-ZZQIDAL";
+            addresses = [
+              "tcp://51.83.129.177:32627"
+            ];
+          };
         };
 
         folders = {
           "Development" = {
             id = "hVYpBP-yrTzAX-PxYRGw-UHvw";
             path = "${homeDirectory}/dev";
-            devices = ["nixos" "laptop"];
+            devices = ["nixos" "laptop" "sync.zakku.eu"];
+            syncOwnership = true;
           };
         };
       };
