@@ -13,6 +13,11 @@ with lib.my.utils; let
 in {
   imports = [./hardware.nix ./networking.nix];
 
+  nix.settings = {
+    max-jobs = 6;
+    cores = 6;
+  };
+
   environment = {
     variables = {
       FLAKE = "/home/${username}/dev/config/nixos-dotfiles";

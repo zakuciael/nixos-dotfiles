@@ -12,8 +12,6 @@ with lib.my; {
   # NixOS configuration
   nix = {
     settings = {
-      max-jobs = 6;
-      cores = 6;
       auto-optimise-store = true;
       substituters = [
         "https://cache.thalheim.io"
