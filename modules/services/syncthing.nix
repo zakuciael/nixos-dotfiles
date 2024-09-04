@@ -70,7 +70,7 @@ in {
           "sync.zakku.eu" = {
             id = "6JPV4AX-4ALKGHX-YKKQYNR-IJPTK2O-S6TV2AM-GZ6KDA3-EZ6TNGF-ZZQIDAL";
             addresses = [
-              "tcp://51.83.129.177:32627"
+              "tcp://51.83.129.177:22000"
             ];
           };
         };
