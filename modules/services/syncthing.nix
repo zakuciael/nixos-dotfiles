@@ -80,7 +80,7 @@ in {
             id = "hVYpBP-yrTzAX-PxYRGw-UHvw";
             path = "${homeDirectory}/dev";
             devices = ["nixos" "laptop" "sync.zakku.eu"];
-            syncOwnership = true;
+            syncOwnership = false;
           };
         };
       };
