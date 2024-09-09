@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  unstable,
   inputs,
   username,
   desktop,
@@ -21,10 +22,14 @@ with lib.my.utils; let
   secrets = utils.readSecrets {inherit config base;};
 in {
   programs = {
-    _1password.enable = true;
+    _1password = {
+      enable = true;
+      package = unstable._1password-beta;
+    };
     _1password-gui = {
       enable = true;
       polkitPolicyOwners = [username];
+      package = unstable._1password-gui-beta;
     };
 
     fish.interactiveShellInit = ''
