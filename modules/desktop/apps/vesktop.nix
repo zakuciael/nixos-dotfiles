@@ -10,12 +10,17 @@ with lib;
 with lib.my;
 with lib.my.utils; let
   vesktop = unstable.vesktop;
-  leftLayout = findLayoutConfig config ({name, ...}: name == "left"); # Left monitor
+  leftLayout = findLayoutConfig config ({name, ...}: name == "left"); # Try and find left monitor
+  # Left monitor or main if not found
   layout =
     if leftLayout != null
     then leftLayout
-    else findLayoutConfig config ({name, ...}: name == "main"); # Left monitor or main if not found
-  workspace = findLayoutWorkspace layout ({default, ...}: default); # Default workspace
+    else findLayoutConfig config ({name, ...}: name == "main");
+  # Default workspace or if left monitor was not found last workspace
+  workspace =
+    if leftLayout != null
+    then findLayoutWorkspace layout ({default, ...}: default)
+    else findLayoutWorkspace layout ({last, ...}: last);
   class = "^(vesktop)$";
 in {
   modules.desktop.wm.${desktop}.autostartPrograms = [

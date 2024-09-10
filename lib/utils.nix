@@ -89,7 +89,14 @@ in rec {
       getAttr "data" (findFirst predicate default mappedLayouts);
 
   findLayoutWorkspace = layoutConfig: predicate: let
-    workspaces = builtins.map (x: x.value // {inherit (x) name;}) (attrsToList layoutConfig.workspaces);
+    arr = attrsToList layoutConfig.workspaces;
+    workspaces = imap1 (i: x:
+      x.value
+      // {
+        inherit (x) name;
+        last = i == (builtins.length arr);
+      })
+    arr;
   in
     findFirst predicate null workspaces;
 
