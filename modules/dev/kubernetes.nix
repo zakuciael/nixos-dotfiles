@@ -15,18 +15,17 @@ in {
 
   config = mkIf (cfg.enable) {
     home-manager.users.${username} = {
-      home.packages = with pkgs; [kubectl];
+      home.packages = with pkgs; [kubectl kubectx kustomize kubernetes-helm];
 
       programs = {
         k9s = {
           enable = true;
           catppuccin.enable = true;
         };
-        fish.shellAliases = {
-          k = "kubectl";
-          kn = "kubectl config set-context --current --namespace";
-          kc = "kubectl config use-context";
-          kcr = "kubectl config unset current-context";
+        fish.shellAliases = with pkgs; {
+          k = "${getBin kubectl}/bin/kubectl";
+          kc = "${getBin kubectx}/bin/kubectx";
+          kn = "${getBin kubectx}/bin/kubens";
         };
       };
     };
