@@ -26,6 +26,7 @@ in
       "grimblast"
       "vesktop"
       "swaync"
+      "thunderbird"
     ];
 
     extraConfig = {
