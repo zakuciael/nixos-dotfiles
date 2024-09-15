@@ -26,11 +26,11 @@ in {
             set -x LESS "$LESS -R";
             set -x BATPIPE "color";
           '';
-          shellAliases = {
-            cat = "bat";
-            watch = "batwatch";
-            rcat = "command cat";
-            man = "batman";
+          shellAliases = with pkgs.bat-extras; {
+            cat = "${getExe config.home-manager.users.${username}.programs.bat.package}";
+            watch = "${getExe batwatch}";
+            rcat = "command ${getBin pkgs.toybox}/bin/cat";
+            man = "${getExe batman}";
           };
         };
         bat = {

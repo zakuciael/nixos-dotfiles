@@ -29,9 +29,9 @@ in {
 
       programs = {
         fish = {
-          shellAliases = {
-            lzd = "lazydocker";
-            tree = "tre";
+          shellAliases = with pkgs; {
+            lzd = "${getExe lazydocker}";
+            tree = "${getExe tre-command}";
 
             # On-demand tools
             dig = "nix run nixpkgs#dogdns"; # A command-line DNS client.

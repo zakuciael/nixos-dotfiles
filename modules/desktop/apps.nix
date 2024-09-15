@@ -24,7 +24,7 @@ in {
     programs.noisetorch.enable = true;
 
     home-manager.users.${username} = {
-      programs.fish.shellAliases.open = "xdg-open";
+      programs.fish.shellAliases.open = "${getBin pkgs.xdg-utils}/bin/xdg-open";
       home.packages = with pkgs; [
         # Nix
         inputs.nil.default
