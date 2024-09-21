@@ -75,7 +75,7 @@ with lib.my.utils; let
       "mail.identity.id_${id}.draft_folder" = mkLiteral (mkImapFolderAddressString account "drafts");
     }
     // optionalAttrs (hasAttrByPath ["folders" "archive"] account) {
-      "mail.identity.id_${id}.archive_enabled" = mkLiteral false;
+      "mail.identity.id_${id}.archive_enabled" = mkLiteral true;
       "mail.identity.id_${id}.draft_folder" = mkLiteral (mkImapFolderAddressString account "archive");
     };
 
@@ -118,6 +118,7 @@ with lib.my.utils; let
     }
     // optionalAttrs (hasAttrByPath ["folders" "spam"] account) {
       "mail.server.server_${id}.spamActionTargetAccount" = mkLiteral (mkImapAddressString account);
+      "mail.server.server_${id}.moveOnSpam" = mkLiteral true;
       "mail.server.server_${id}.spamActionTargetFolder" = mkLiteral (mkImapFolderAddressString account "spam");
     }
     // optionalAttrs (hasAttrByPath ["smtp"] account) {
