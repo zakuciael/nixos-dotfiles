@@ -15,7 +15,7 @@ in {
 
   config = mkIf (cfg.enable) {
     home-manager.users.${username} = {
-      home.packages = with pkgs; [kubectl kubectx kustomize kubernetes-helm];
+      home.packages = with pkgs; [kubectl kubectx kustomize kubernetes-helm kubectl-tree];
 
       programs = {
         k9s = {
