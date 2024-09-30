@@ -112,6 +112,7 @@ in {
           }
         ];
       };
+      bluetooth.enable = true;
       sound.enable = true;
       amdgpu.enable = true;
       docker.enable = true;

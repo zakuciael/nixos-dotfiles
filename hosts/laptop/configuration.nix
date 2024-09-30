@@ -80,6 +80,7 @@ in {
           }
         ];
       };
+      bluetooth.enable = true;
       sound.enable = true;
       # docker.enable = true;
       yubikey = {
