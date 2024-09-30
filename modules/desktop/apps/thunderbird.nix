@@ -92,6 +92,11 @@ with lib.my.utils; let
     // optionalAttrs (hasAttrByPath ["imap"] account) {
       "mail.server.server_${id}.directory" = "${thunderbirdProfilesPath}/${profile}/ImapMail/${id}";
       "mail.server.server_${id}.directory-rel" = "[ProfD]ImapMail/${id}";
+      "mail.server.server_${id}.authMethod" = mkLiteral (
+        if (hasAttrByPath ["imap" "oauth"] account)
+        then 10
+        else 3
+      );
       "mail.server.server_${id}.hostname" = mkSecretPlaceholder config [base account.name "imap" "host"];
       "mail.server.server_${id}.login_at_startup" = mkLiteral true;
       "mail.server.server_${id}.name" =
@@ -123,7 +128,11 @@ with lib.my.utils; let
     }
     // optionalAttrs (hasAttrByPath ["smtp"] account) {
       "mail.identity.id_${id}.smtpServer" = "smtp_${id}";
-      "mail.smtpserver.smtp_${id}.authMethod" = mkLiteral 3;
+      "mail.smtpserver.smtp_${id}.authMethod" = mkLiteral (
+        if (hasAttrByPath ["smtp" "oauth"] account)
+        then 10
+        else 3
+      );
       "mail.smtpserver.smtp_${id}.hostname" = mkSecretPlaceholder config [base account.name "smtp" "host"];
       "mail.smtpserver.smtp_${id}.port" = mkLiteral (
         if (hasAttrByPath ["smtp" "port"] account)
