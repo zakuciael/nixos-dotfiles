@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   unstable,
   username,
   desktop,
@@ -9,7 +10,7 @@
 with lib;
 with lib.my;
 with lib.my.utils; let
-  vesktop = unstable.vesktop;
+  pkg = pkgs.vesktop;
   leftLayout = findLayoutConfig config ({name, ...}: name == "left"); # Try and find left monitor
   # Left monitor or main if not found
   layout =
@@ -24,11 +25,11 @@ with lib.my.utils; let
   class = "^(vesktop)$";
 in {
   modules.desktop.wm.${desktop}.autostartPrograms = [
-    "${vesktop}/bin/vesktop"
+    "${pkg}/bin/vesktop"
   ];
 
   home-manager.users.${username} = {
-    home.packages = [vesktop];
+    home.packages = [pkg];
 
     wayland.windowManager.hyprland.settings = mkIf (config.modules.desktop.wm.hyprland.enable) {
       windowrulev2 = [

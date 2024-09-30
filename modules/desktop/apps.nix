@@ -31,7 +31,7 @@ in {
         inputs.alejandra.default
 
         # Browser
-        unstable.google-chrome
+        google-chrome
 
         # Files
         cinnamon.nemo
