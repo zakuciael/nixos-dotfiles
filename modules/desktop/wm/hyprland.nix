@@ -9,6 +9,7 @@
 with lib;
 with lib.my; let
   scriptPackages = scripts.mkScriptPackages config;
+  hmConfig = config.home-manager.users.${username};
 in
   desktop.mkDesktopModule {
     inherit config;
@@ -17,6 +18,7 @@ in
     autostartPath = ".config/hypr/autostart.sh";
     desktopApps = [
       "alacritty"
+      "kitty"
       "_1password"
       "rofi"
       "nh"
@@ -147,7 +149,7 @@ in
             # Keybinds
             "$mod" = "SUPER";
             bind = [
-              "$mod, return, exec, alacritty"
+              "$mod, return, exec, ${getExe hmConfig.programs.kitty.package}"
               "$mod, W, killactive,"
               "$mod, F, togglefloating,"
               "$mod, M, fullscreen, 1"
