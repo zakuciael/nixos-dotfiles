@@ -16,7 +16,13 @@ in {
     home-manager.users.${username} = {
       programs.tmux = {
         enable = true;
-        catppuccin.enable = true;
+        catppuccin = {
+          enable = true;
+          extraConfig = ''
+            set -g @catppuccin_window_default_text "#W"
+            set -g @catppuccin_window_current_text "#(echo '#{pane_current_path}' | rev | cut -d'/' -f-2 | rev)"
+          '';
+        };
         mouse = true;
         newSession = false;
         plugins = with pkgs.tmuxPlugins; [sensible yank];
