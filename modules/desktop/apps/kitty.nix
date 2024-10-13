@@ -1,6 +1,15 @@
-{username, ...}: {
+{
+  config,
+  username,
+  ...
+}: let
+  hmConfig = config.home-manager.users.${username};
+in {
   home-manager.users.${username} = {
     programs = {
+      fish.shellAliases = {
+        ssh = "${hmConfig.programs.kitty.package}/bin/kitten ssh";
+      };
       kitty = {
         enable = true;
         catppuccin.enable = true;
