@@ -80,9 +80,10 @@ in {
           }
         ];
       };
+      printer.enable = true;
       bluetooth.enable = true;
       sound.enable = true;
-      # docker.enable = true;
+      docker.enable = true;
       yubikey = {
         enable = true;
         interactive = true;

@@ -113,6 +113,7 @@ in {
         ];
       };
       bluetooth.enable = true;
+      printer.enable = true;
       sound.enable = true;
       amdgpu.enable = true;
       docker.enable = true;
