@@ -114,7 +114,7 @@ in {
         server = true;
       };
       kubernetes.enable = true;
-      ides = ["idea-ultimate"];
+      ides = ["idea-ultimate" "rust-rover" "goland"];
     };
     shell = {
       tmux.enable = true;
