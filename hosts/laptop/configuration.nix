@@ -84,10 +84,7 @@ in {
       bluetooth.enable = true;
       sound.enable = true;
       docker.enable = true;
-      yubikey = {
-        enable = true;
-        interactive = true;
-      };
+      yubikey.enable = true;
       nfc.enable = true;
     };
     desktop = {
