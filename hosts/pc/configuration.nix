@@ -145,7 +145,7 @@ in {
     dev = {
       tools.enable = true;
       kubernetes.enable = true;
-      ides = ["rust-rover" "webstorm" "idea-ultimate" "rider"];
+      ides = ["rust-rover" "webstorm" "idea-ultimate" "rider" "goland"];
       vscode = {
         enable = true;
         server = true;
