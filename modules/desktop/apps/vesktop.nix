@@ -33,7 +33,7 @@ in {
 
     wayland.windowManager.hyprland.settings = mkIf (config.modules.desktop.wm.hyprland.enable) {
       windowrulev2 = [
-        "workspace ${workspace.name}, class:${class}"
+        "workspace ${workspace.name} silent, class:${class}"
         "noinitialfocus, class:${class}"
       ];
     };
