@@ -46,6 +46,7 @@ in {
 
         # Other
         font-manager
+        unstable.ytmdesktop
       ];
     };
   };
