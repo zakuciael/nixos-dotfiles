@@ -27,6 +27,7 @@ with lib.my; {
       !include ${config.sops.templates."nix/access_tokens.conf".path}
     '';
     package = pkgs.nixFlakes;
+    nixPath = ["nixpkgs=${inputs.nixpkgs}"];
   };
 
   nixpkgs.config = {

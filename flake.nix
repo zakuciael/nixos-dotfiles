@@ -22,12 +22,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "flake-utils";
     };
-    alejandra = {
-      url = "github:kamadorueda/alejandra/3.0.0";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.fenix.follows = "fenix";
-      inputs.flakeCompat.follows = "flake-compat";
-    };
     sops-nix = {
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -45,11 +39,6 @@
     };
     nostale-dev-env = {
       url = "github:zakuciael/nostale-dev-env";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "flake-utils";
-    };
-    nil = {
-      url = "github:oxalica/nil";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "flake-utils";
     };
@@ -92,8 +81,6 @@
       flakeInputs
       // {
         distro-grub-themes = flakeInputs.distro-grub-themes.packages.${system};
-        nil = flakeInputs.nil.packages.${system};
-        alejandra = flakeInputs.alejandra.packages.${system};
         rofi-jetbrains = flakeInputs.rofi-jetbrains.packages.${system};
         nostale-dev-env =
           flakeInputs.nostale-dev-env

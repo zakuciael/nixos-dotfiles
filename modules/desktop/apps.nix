@@ -27,8 +27,8 @@ in {
       programs.fish.shellAliases.open = "${getBin pkgs.xdg-utils}/bin/xdg-open";
       home.packages = with pkgs; [
         # Nix
-        inputs.nil.default
-        inputs.alejandra.default
+        nixd
+        alejandra
 
         # Browser
         google-chrome
