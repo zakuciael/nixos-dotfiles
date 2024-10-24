@@ -23,6 +23,7 @@ in {
       home.packages = with inputs.nostale-dev-env.packages; [
         DevTaleGUI
         proton
+        nos-downloader
         (nostale-dev.override {
           nostale-path = cfg.installPath;
         })
