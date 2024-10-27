@@ -4,6 +4,7 @@
   pkgs,
   inputs,
   username,
+  hostname,
   scripts,
   ...
 }:
@@ -184,5 +185,12 @@ with lib.my; {
   };
 
   # System
-  system.stateVersion = "24.05";
+  system = {
+    stateVersion = "24.05";
+    autoUpgrade = {
+      enable = true;
+      flake = "github:zakuciael/nixos-dotfiles#${hostname}";
+      dates = "daily";
+    };
+  };
 }
