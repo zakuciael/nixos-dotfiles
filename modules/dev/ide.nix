@@ -10,7 +10,7 @@ with lib;
 with lib.my; let
   cfg = config.modules.dev.ides;
 
-  goland = debug.traceIf true "Patching GoLand..." (unstable.jetbrains.goland.overrideAttrs (attrs: {
+  goland = unstable.jetbrains.goland.overrideAttrs (attrs: {
     postFixup =
       (attrs.postFixup or "")
       + optionalString pkgs.stdenv.isLinux ''
@@ -20,7 +20,7 @@ with lib.my; let
 
         ln -s ${unstable.delve}/bin/dlv $out/goland/plugins/go-plugin/lib/dlv/linux/dlv
       '';
-  }));
+  });
 
   avaiableIdes = builtins.listToAttrs (
     builtins.map (value: {
