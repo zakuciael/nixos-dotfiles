@@ -24,27 +24,6 @@
         "type": "github"
       }
     },
-    "age-plugin-op": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1709080400,
-        "narHash": "sha256-1fzAdA2x26Q3N/2Myxtbky7eddJZod4ctbuiSNVX5ig=",
-        "owner": "bromanko",
-        "repo": "age-plugin-op",
-        "rev": "fd26b1a6f3d88aa7e931d227690989a6fd6f00a0",
-        "type": "github"
-      },
-      "original": {
-        "owner": "bromanko",
-        "ref": "v0.1.0",
-        "repo": "age-plugin-op",
-        "type": "github"
-      }
-    },
     "base16-schemes": {
       "flake": false,
       "locked": {
@@ -338,7 +317,6 @@
     "root": {
       "inputs": {
         "aagl": "aagl",
-        "age-plugin-op": "age-plugin-op",
         "catppuccin": "catppuccin",
         "distro-grub-themes": "distro-grub-themes",
         "fenix": "fenix",

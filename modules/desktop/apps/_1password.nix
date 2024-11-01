@@ -37,8 +37,6 @@ in {
     '';
   };
 
-  environment.systemPackages = [inputs.age-plugin-op.default];
-
   modules.desktop.wm.${desktop}.autostartPrograms = [
     "${pkgs._1password-gui}/bin/1password"
   ];
@@ -97,8 +95,8 @@ in {
           "center, class:(${class})"
           "monitor ${monitor}, class:(${class})"
           # "stayfocused,class:^(${class})$"
-          "forceinput,class:^(${class})$"
-          "windowdance,class:^(${class})$"
+          # "forceinput,class:^(${class})$" # FIXME: Not working on flake Hyprland
+          # "windowdance,class:^(${class})$" # FIXME: Not working on flake Hyprland
           "noblur,class:^(${class})$"
           "noinitialfocus,class:^(${class})$"
           "dimaround,class:^(${class})$"

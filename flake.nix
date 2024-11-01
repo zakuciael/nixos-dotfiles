@@ -27,10 +27,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.nixpkgs-stable.follows = "nixpkgs";
     };
-    age-plugin-op = {
-      url = "github:bromanko/age-plugin-op/v0.1.0";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     rofi-jetbrains = {
       url = "github:zakuciael/rofi-jetbrains";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -85,9 +81,6 @@
         nostale-dev-env =
           flakeInputs.nostale-dev-env
           // {packages = flakeInputs.nostale-dev-env.packages.${system};};
-        age-plugin-op =
-          flakeInputs.age-plugin-op.packages.${system}
-          // {default = flakeInputs.age-plugin-op.packages.${system}.age-plugin-op;};
         catppuccin =
           flakeInputs.catppuccin
           // {
