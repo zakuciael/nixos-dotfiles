@@ -59,9 +59,6 @@ in
             # Autostart script
             exec-once = [
               autostartScript
-              (with pkgs; ''
-                ${wl-clipboard}/bin/wl-paste -t text -w ${getExe bash} -c '[ "$(${getExe xclip} -selection clipboard -o)" = "$(${wl-clipboard}/bin/wl-paste -n)" ] || [ "$(${wl-clipboard}/bin/wl-paste -l | grep image)" = "" ] && ${getExe xclip} -selection clipboard'
-              '')
             ];
             # Source external file for quick debug
             source = ["$HOME/.config/hypr/debug.conf"];
