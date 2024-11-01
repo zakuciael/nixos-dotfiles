@@ -17,7 +17,7 @@ in {
       programs.eza = {
         enable = true;
         git = config.modules.dev.git.enable;
-        icons = true;
+        icons = "auto";
       };
     };
   };

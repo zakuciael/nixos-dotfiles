@@ -1,7 +1,7 @@
 {lib, ...}:
-with lib; {
-  # Adds fixes for https://github.com/NixOS/nixpkgs/issues/309532
-  unstable = singleton (final: prev: {
+with lib; # Adds fixes for https://github.com/NixOS/nixpkgs/issues/309532
+
+  singleton (final: prev: {
     # TODO: Remove when this https://github.com/NixOS/nixpkgs/pull/323501 is merged to upstream
     imhex = prev.imhex.overrideAttrs (prevAttrs: let
       inherit (prev) fetchFromGitHub;
@@ -82,5 +82,4 @@ with lib; {
         rsync -av --exclude="*_schema.json" ${patterns_src}/{constants,encodings,includes,magic,patterns} $out/share/imhex
       '';
     });
-  });
-}
+  })

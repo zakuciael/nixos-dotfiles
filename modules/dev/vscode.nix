@@ -1,7 +1,7 @@
 {
   config,
   lib,
-  unstable,
+  pkgs,
   username,
   ...
 }:
@@ -17,7 +17,7 @@ in {
     home-manager.users.${username} = {
       home.packages =
         if (cfg.enable)
-        then [unstable.vscode]
+        then [pkgs.vscode]
         else [];
       services.vscode-server.enable = cfg.server;
     };

@@ -2,7 +2,6 @@
   config,
   lib,
   pkgs,
-  unstable,
   username,
   ...
 }:
@@ -206,7 +205,6 @@ in {
   home-manager.users.${username} = {
     programs.thunderbird = {
       enable = true;
-      package = unstable.thunderbird;
       profiles = {
         "default" = {
           isDefault = true;

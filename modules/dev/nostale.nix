@@ -21,6 +21,7 @@ in {
   config = mkIf (cfg.enable) {
     home-manager.users.${username} = {
       home.packages = with inputs.nostale-dev-env.packages; [
+        # FIXME: One of those can't be built
         DevTaleGUI
         proton
         nos-downloader

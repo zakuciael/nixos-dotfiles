@@ -1,6 +1,6 @@
 {lib, ...}:
-with lib; {
-  pkgs = singleton (final: prev: {
+with lib;
+  singleton (final: prev: {
     httpie-desktop = let
       inherit (prev) fetchurl appimageTools;
 
@@ -37,5 +37,4 @@ with lib; {
           platforms = ["x86_64-linux"];
         };
       };
-  });
-}
+  })

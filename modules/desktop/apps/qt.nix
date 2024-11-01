@@ -12,10 +12,10 @@
 
       mkdir -p $out/doc
 
-      name= ./install.sh --opaque
+      name= ./install.sh -w opaque
 
       mkdir -p $out/share/sddm/themes
-      cp -a sddm/WhiteSur $out/share/sddm/themes/
+      sddm/install.sh
 
       runHook postInstall
     '';

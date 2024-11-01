@@ -2,7 +2,6 @@
   config,
   lib,
   pkgs,
-  unstable,
   username,
   ...
 }:
@@ -18,12 +17,12 @@ in {
     home-manager.users.${username} = {
       home.packages = with pkgs; [
         # Git
-        unstable.graphite-cli
+        graphite-cli
         gh
 
         # Reverse Engineering
         ghidra-bin
-        unstable.imhex
+        imhex
 
         # MongoDB
         mongosh

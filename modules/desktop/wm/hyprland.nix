@@ -157,7 +157,7 @@ in
               "$mod, KP_Subtract, exec, ${getExe scriptPackages.elgato-mic-fix}"
               "SHIFT CTRL, space, exec, ${getExe scriptPackages.rofi-launcher} drun"
               "SHIFT CTRL, R, exec, ${getExe scriptPackages.rofi-launcher} jetbrains"
-              "SHIFT CTRL, E, exec, ${getExe pkgs.cinnamon.nemo}"
+              "SHIFT CTRL, E, exec, ${getExe pkgs.nemo}"
               "SHIFT CTRL, Q, exec, ${getExe scriptPackages.rofi-powermenu}"
             ];
 

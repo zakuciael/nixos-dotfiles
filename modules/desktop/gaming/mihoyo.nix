@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  inputs,
   username,
   ...
 }:
@@ -87,6 +88,9 @@ in {
       };
     };
 
-    programs.anime-game-launcher.enable = true;
+    programs.anime-game-launcher = {
+      enable = true;
+      package = inputs.aagl.packages.anime-game-launcher;
+    };
   };
 }

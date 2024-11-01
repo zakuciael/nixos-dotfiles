@@ -2,8 +2,6 @@
   config,
   lib,
   pkgs,
-  unstable,
-  inputs,
   username,
   desktop,
   ...
@@ -24,12 +22,12 @@ in {
   programs = {
     _1password = {
       enable = true;
-      package = unstable._1password-beta;
+      package = pkgs._1password-cli-beta;
     };
     _1password-gui = {
       enable = true;
       polkitPolicyOwners = [username];
-      package = unstable._1password-gui-beta;
+      package = pkgs._1password-gui-beta;
     };
 
     fish.interactiveShellInit = ''
@@ -95,8 +93,7 @@ in {
           "center, class:(${class})"
           "monitor ${monitor}, class:(${class})"
           # "stayfocused,class:^(${class})$"
-          # "forceinput,class:^(${class})$" # FIXME: Not working on flake Hyprland
-          # "windowdance,class:^(${class})$" # FIXME: Not working on flake Hyprland
+          "allowsinput on,class:^(${class})$"
           "noblur,class:^(${class})$"
           "noinitialfocus,class:^(${class})$"
           "dimaround,class:^(${class})$"

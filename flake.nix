@@ -2,15 +2,14 @@
   description = "A Super-Duper Invincible Shining Sparkly Magic NixOS Config"; # Credits: Genshin Impact
 
   inputs = {
-    nixpkgs.url = "nixpkgs/nixos-24.05";
-    nixpkgs-unstable.url = "nixpkgs/nixos-unstable";
+    nixpkgs.url = "nixpkgs/nixos-unstable";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     flake-utils.url = "github:numtide/flake-utils";
     flake-compat.url = "github:edolstra/flake-compat";
     nix-colors.url = "github:misterio77/nix-colors";
     catppuccin.url = "github:catppuccin/nix";
     home-manager = {
-      url = "github:nix-community/home-manager/release-24.05";
+      url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     distro-grub-themes = {
@@ -34,7 +33,7 @@
       inputs.flake-utils.follows = "flake-utils";
     };
     aagl = {
-      url = "github:ezKEa/aagl-gtk-on-nix/release-24.05";
+      url = "github:ezKEa/aagl-gtk-on-nix";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-compat.follows = "flake-compat";
     };
@@ -56,16 +55,11 @@
 
     pkgs = import inputs.nixpkgs {
       inherit system;
-      config.allowUnfree = true;
+      config = {
+        allowUnfree = true;
+      };
 
-      overlays = lib.my.overlays.pkgs;
-    };
-
-    unstable = import inputs.nixpkgs-unstable {
-      inherit system;
-      config.allowUnfree = true;
-
-      overlays = lib.my.overlays.unstable;
+      overlays = lib.my.overlays.pkgs ++ lib.singleton (inputs.aagl.overlays.default);
     };
 
     inputs =
@@ -97,7 +91,7 @@
     lib = nixpkgs.lib.extend (self: super: {
       hm = home-manager.lib.hm;
       my = import ./lib {
-        inherit lib pkgs unstable inputs username system;
+        inherit lib pkgs inputs username system;
       };
     });
   in {
@@ -110,6 +104,6 @@
 
     devShells.${system}.default = pkgs.callPackage ./shell.nix {};
 
-    inherit pkgs unstable inputs lib;
+    inherit pkgs inputs lib;
   };
 }

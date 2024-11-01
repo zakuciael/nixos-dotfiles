@@ -2,7 +2,6 @@
   config,
   lib,
   pkgs,
-  unstable,
   username,
   ...
 }:
@@ -10,7 +9,7 @@ with lib;
 with lib.my; let
   cfg = config.modules.dev.ides;
 
-  goland = unstable.jetbrains.goland.overrideAttrs (attrs: {
+  goland = pkgs.jetbrains.goland.overrideAttrs (attrs: {
     postFixup =
       (attrs.postFixup or "")
       + optionalString pkgs.stdenv.isLinux ''
@@ -18,7 +17,7 @@ with lib.my; let
           rm $out/goland/plugins/go-plugin/lib/dlv/linux/dlv
         fi
 
-        ln -s ${unstable.delve}/bin/dlv $out/goland/plugins/go-plugin/lib/dlv/linux/dlv
+        ln -s ${pkgs.delve}/bin/dlv $out/goland/plugins/go-plugin/lib/dlv/linux/dlv
       '';
   });
 
@@ -27,7 +26,7 @@ with lib.my; let
       name = value.pname;
       inherit value;
     })
-    (with unstable.jetbrains; [
+    (with pkgs.jetbrains; [
       clion
       datagrip
       dataspell

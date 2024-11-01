@@ -27,14 +27,11 @@ with lib.my; {
       experimental-features = nix-command flakes
       !include ${config.sops.templates."nix/access_tokens.conf".path}
     '';
-    package = pkgs.nixFlakes;
+    package = pkgs.nixVersions.latest;
     nixPath = ["nixpkgs=${inputs.nixpkgs}"];
   };
 
-  nixpkgs.config = {
-    allowBroken = false;
-    allowUnfree = true;
-  };
+  nixpkgs.pkgs = pkgs;
 
   # System time
   time.timeZone = "Europe/Warsaw";

@@ -1,7 +1,6 @@
 {
   lib,
   pkgs,
-  unstable,
   inputs,
   username,
   dotfiles,
@@ -12,7 +11,7 @@ with lib;
 with lib.my; let
   mkDesktopApp = config: name: desktop:
     import ./../modules/desktop/apps/${name}.nix {
-      inherit config lib pkgs unstable inputs username dotfiles scripts desktop;
+      inherit config lib pkgs inputs username dotfiles scripts desktop;
       colorScheme = assert assertMsg
       (config.home-manager.users.${username}.colorScheme.author != "")
       "You need to select a nix-colors theme to use this ${name} config";

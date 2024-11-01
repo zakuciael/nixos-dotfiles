@@ -27,8 +27,10 @@ in {
     security.pam = {
       u2f = {
         enable = true;
-        cue = true;
-        interactive = cfg.interactive;
+        settings = {
+          cue = true;
+          interactive = cfg.interactive;
+        };
         control = "sufficient";
       };
 

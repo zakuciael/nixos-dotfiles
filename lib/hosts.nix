@@ -1,7 +1,6 @@
 {
   lib,
   pkgs,
-  unstable,
   inputs,
   username,
   dotfiles,
@@ -14,7 +13,7 @@ with lib.my; {
       inherit (pkgs) system;
 
       specialArgs = {
-        inherit lib pkgs unstable inputs username dotfiles scripts;
+        inherit lib pkgs inputs username dotfiles scripts;
         hostname = name;
       };
 

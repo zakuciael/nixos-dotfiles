@@ -1,7 +1,6 @@
 {
   lib,
   pkgs,
-  unstable,
   inputs,
   system,
   ...
@@ -10,7 +9,7 @@ with lib;
 with lib.my; let
   overlays =
     builtins.map
-    (file: import file {inherit lib pkgs unstable inputs system;})
+    (file: import file {inherit lib pkgs inputs system;})
     (utils.recursiveReadDir ./../overlays {suffixes = ["nix"];});
   privatePkgsOverlays = let
     suffix = "default.nix";
@@ -25,13 +24,6 @@ with lib.my; let
       }
     ))
     (utils.recursiveReadDir ./../pkgs {suffixes = [suffix];});
-  getOverlaysFromAttr = attr:
-    flatten (
-      builtins.filter
-      (overlay: overlay != null)
-      (builtins.map (config: attrByPath [attr] null config) overlays)
-    );
 in {
-  pkgs = privatePkgsOverlays ++ (getOverlaysFromAttr "pkgs");
-  unstable = getOverlaysFromAttr "unstable";
+  pkgs = privatePkgsOverlays ++ flatten (builtins.filter (overlay: overlay != null) overlays);
 }

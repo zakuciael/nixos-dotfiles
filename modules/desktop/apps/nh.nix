@@ -1,12 +1,7 @@
-{
-  lib,
-  unstable,
-  ...
-}:
+{lib, ...}:
 with lib; {
   programs.nh = {
     enable = true;
-    package = unstable.nh;
     clean = {
       enable = true;
       dates = "daily";

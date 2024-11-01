@@ -1,7 +1,6 @@
 {
   lib,
   pkgs,
-  unstable,
   inputs,
   username,
   dotfiles,
@@ -12,7 +11,7 @@ with lib.my; let
   mkScripts = config:
     builtins.filter (value: hasAttrByPath ["package"] value) (
       builtins.map
-      (file: import file {inherit config lib pkgs unstable inputs username dotfiles;})
+      (file: import file {inherit config lib pkgs inputs username dotfiles;})
       (utils.recursiveReadDir ./../scripts {suffixes = ["nix"];})
     );
 in {

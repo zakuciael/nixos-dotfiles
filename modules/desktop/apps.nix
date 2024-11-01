@@ -2,7 +2,6 @@
   config,
   lib,
   pkgs,
-  unstable,
   inputs,
   username,
   ...
@@ -34,19 +33,19 @@ in {
         google-chrome
 
         # Files
-        cinnamon.nemo
+        nemo
         libsForQt5.ark
 
         # Music, Videos, Photos, etc.
         spotify
-        gnome.eog
+        eog
         gnome-text-editor
         vlc
         qalculate-gtk
 
         # Other
         font-manager
-        unstable.ytmdesktop
+        ytmdesktop
       ];
     };
   };

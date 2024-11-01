@@ -30,7 +30,7 @@ in {
         Service = {
           Type = "simple";
           StandardError = "journal";
-          ExecStart = ''${pkgs.gnome.gnome-keyring}/bin/gnome-keyring-daemon --start --components="pkcs11,secrets"'';
+          ExecStart = ''${pkgs.gnome-keyring}/bin/gnome-keyring-daemon --start --components="pkcs11,secrets"'';
           Restart = "on-failure";
         };
         Install = {

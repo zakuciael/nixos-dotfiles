@@ -1,7 +1,7 @@
 {lib, ...}:
-with lib; {
-  unstable = singleton (final: prev: {
-    _1password-beta = prev._1password.overrideAttrs (prevAttrs: let
+with lib;
+  singleton (final: prev: {
+    _1password-cli-beta = prev._1password-cli.overrideAttrs (prevAttrs: let
       inherit (prev) stdenv fetchurl fetchzip;
 
       inherit (stdenv.hostPlatform) system;
@@ -35,5 +35,4 @@ with lib; {
         then sources.${system}
         else throw "Source for ${pname} is not available for ${system}";
     });
-  });
-}
+  })

@@ -1,6 +1,5 @@
 {
   pkgs,
-  unstable,
   username,
   ...
 }: {
@@ -8,7 +7,7 @@
 
   home-manager.users.${username} = rec {
     home = {
-      packages = with pkgs; [gnome.dconf-editor];
+      packages = with pkgs; [dconf-editor];
 
       sessionVariables = {
         XCURSOR_PATH = "${gtk.cursorTheme.package}/share/icons";
@@ -25,7 +24,7 @@
       };
       iconTheme = {
         name = "WhiteSur-dark";
-        package = unstable.whitesur-icon-theme.override {
+        package = pkgs.whitesur-icon-theme.override {
           boldPanelIcons = true;
           alternativeIcons = true;
           themeVariants = ["default"];
