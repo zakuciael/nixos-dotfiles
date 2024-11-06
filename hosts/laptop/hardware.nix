@@ -45,5 +45,10 @@ with lib; {
   hardware = {
     enableAllFirmware = true;
     cpu.intel.updateMicrocode = mkDefault config.hardware.enableRedistributableFirmware;
+
+    graphics = {
+      enable = true;
+      enable32Bit = true;
+    };
   };
 }

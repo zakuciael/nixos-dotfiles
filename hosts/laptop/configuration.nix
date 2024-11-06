@@ -112,6 +112,10 @@ in {
       };
       kubernetes.enable = true;
       ides = ["idea-ultimate" "rust-rover" "goland"];
+      nostale = {
+        enable = true;
+        installPath = "/media/games/linux/Other/NosTale";
+      };
     };
     shell = {
       tmux.enable = true;
