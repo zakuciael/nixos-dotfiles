@@ -38,9 +38,15 @@
         "yml"
     ],
     "cSpell.words": [
+        "controlvault",
         "Genshin",
+        "Gitea",
         "nixos",
-        "nixpkgs"
+        "nixpkgs",
+        "pkgs",
+        "pname",
+        "stdenv",
+        "zakuciael"
     ],
     "todohighlight.isEnable": true,
     "todohighlight.isCaseSensitive": true,
@@ -63,5 +69,8 @@
         "**/*.md",
         "**/*.nix",
         "**/*.{yml,yaml}"
+    ],
+    "nix.hiddenLanguageServerErrors": [
+        "textDocument/definition"
     ]
 }

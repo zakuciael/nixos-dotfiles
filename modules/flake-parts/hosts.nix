@@ -5,6 +5,7 @@
 }: let
   mkHost = name:
     withSystem "x86_64-linux" ({
+      self',
       inputs',
       system,
       ...
@@ -14,6 +15,7 @@
 
         specialArgs = {
           inputs = inputs';
+          custom = self'.packages;
           hostname = name;
         };
 

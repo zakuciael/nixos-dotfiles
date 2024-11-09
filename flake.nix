@@ -11,13 +11,10 @@
   outputs = {flake-parts, ...} @ inputs:
     flake-parts.lib.mkFlake {inherit inputs;} {
       debug = true;
-
       systems = ["x86_64-linux"];
-
       imports = [
         ./modules/flake-parts/hosts.nix
+        ./modules/flake-parts/pkgs.nix
       ];
-
-      flake = {};
     };
 }
