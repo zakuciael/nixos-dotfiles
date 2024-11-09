@@ -1,3 +1,4 @@
+# Generates "overlays" flake output using configuration found in the overlays/ directory.
 {lib, ...}: let
   toOverlayPath = path: ./../../overlays + builtins.toPath "/${path}.nix";
   overlays = {

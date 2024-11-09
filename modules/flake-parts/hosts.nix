@@ -1,3 +1,4 @@
+# Generates NixOS systems using configuration found in the hosts/ directory.
 {
   lib,
   self,

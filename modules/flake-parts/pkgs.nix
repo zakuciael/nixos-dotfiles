@@ -1,3 +1,4 @@
+# Generates "packages" flake output using configuration found in the pkgs/ directory.
 {
   perSystem = {pkgs, ...}: let
     pathToPackage = path: attrs: pkgs.callPackage (./../../pkgs + builtins.toPath "/${path}") attrs;
