@@ -1,6 +1,7 @@
 {
-  withSystem,
+  self,
   inputs,
+  withSystem,
   ...
 }: let
   mkHost = name:
@@ -20,6 +21,8 @@
         };
 
         modules = [
+          {nixpkgs.overlays = [self.overlays.default];}
+
           ./../../hosts/${name}/configuration.nix
         ];
       });

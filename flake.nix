@@ -15,6 +15,7 @@
       imports = [
         ./modules/flake-parts/hosts.nix
         ./modules/flake-parts/pkgs.nix
+        ./modules/flake-parts/overlays.nix
       ];
     };
 }
