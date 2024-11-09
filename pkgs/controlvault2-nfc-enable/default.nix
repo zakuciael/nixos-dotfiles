@@ -15,13 +15,9 @@ python3Packages.buildPythonApplication {
     hash = "sha256-twl/XhngpqgJnmTwgG5u/LLg2mXe7NbLeDh7SCyAi4U=";
   };
 
-  dependencies = with python3Packages; [
-    pyusb
-  ];
+  dependencies = [python3Packages.pyusb];
 
-  build-system = with python3Packages; [
-    setuptools
-  ];
+  build-system = [python3Packages.setuptools];
 
   postPatch = ''
     mv nfc.py controlvault2-nfc-enable

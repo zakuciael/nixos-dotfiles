@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="b8d59642-2768-44b5-95ed-43f470ead42b" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/git_toolbox_blame.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/rust_analyzer_vsix.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/nixos-dotfiles.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LICENSE" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/big-plans.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/nixos-logo.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/configuration.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dotfiles/wallpapers/laptop/main.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dotfiles/wallpapers/pc/left.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dotfiles/wallpapers/pc/main.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dotfiles/wallpapers/pc/right.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flake.lock" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flake.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/hosts/laptop/configuration.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/hosts/laptop/hardware.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/hosts/laptop/networking.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/hosts/laptop/secrets.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/hosts/pc/configuration.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/hosts/pc/hardware.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/hosts/pc/networking.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/hosts/pc/secrets.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/default.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/defs.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/desktop.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/hosts.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/mapper.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/overlays.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/scripts.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/utils.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/desktop/apps.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/desktop/apps/_1password.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/desktop/apps/alacritty.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/desktop/apps/grimblast.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/desktop/apps/gtk.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/desktop/apps/kitty.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/desktop/apps/nh.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/desktop/apps/qt.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/desktop/apps/rofi.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/desktop/apps/swaync.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/desktop/apps/thunderbird.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/desktop/apps/vesktop.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/desktop/apps/waybar.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/desktop/gaming/default.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/desktop/gaming/heroic.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/desktop/gaming/mihoyo.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/desktop/gaming/minecraft.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/desktop/gaming/steam.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/desktop/sddm.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/desktop/wm/gnome.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/desktop/wm/hyprland.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/dev/git.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/dev/ide.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/dev/kubernetes.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/dev/nostale.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/dev/tools.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/dev/vscode.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/hardware/amdgpu.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/hardware/automount.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/hardware/bluetooth.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/hardware/bootloader.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/hardware/docker.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/hardware/layout.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/hardware/nfc.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/hardware/printer.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/hardware/sound.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/hardware/yubikey.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/networking/default.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/services/gnome-keyring.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/services/polkit.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/services/ssh.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/services/syncthing.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/services/wallpaper.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/services/xdg.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/shell/bat.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/shell/direnv.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/shell/eza.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/shell/fish.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/shell/nix.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/shell/starship.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/shell/tmux.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/shell/tools.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/shell/zoxide.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/overlays/_1password.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/overlays/httpie-desktop.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/overlays/imhex.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/overlays/swaync.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/controlvault2-nfc-enable/default.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/default.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/nixos-blur.plymouth" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/nixos-blur.script" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-0.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-10.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-100.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-101.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-102.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-103.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-104.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-105.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-106.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-107.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-108.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-109.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-11.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-110.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-111.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-112.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-113.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-114.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-115.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-116.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-117.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-118.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-119.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-12.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-120.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-121.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-122.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-123.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-124.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-125.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-13.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-14.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-15.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-16.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-17.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-18.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-19.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-20.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-21.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-22.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-23.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-24.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-25.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-26.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-27.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-28.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-29.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-30.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-31.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-32.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-33.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-34.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-35.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-36.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-37.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-38.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-39.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-4.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-40.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-41.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-42.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-43.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-44.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-45.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-46.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-47.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-48.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-49.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-5.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-50.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-51.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-52.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-53.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-54.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-55.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-56.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-57.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-58.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-59.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-6.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-60.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-61.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-62.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-63.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-64.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-65.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-66.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-67.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-68.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-69.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-7.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-70.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-71.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-72.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-73.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-74.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-75.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-76.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-77.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-78.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-79.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-8.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-80.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-81.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-82.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-83.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-84.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-85.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-86.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-87.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-88.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-89.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-9.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-90.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-91.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-92.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-93.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-94.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-95.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-96.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-97.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-98.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkgs/plymouth/theme/nixos-blur-plymouth/src/progress-99.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/elgato-mic-fix.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/rofi/assets/theme.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/rofi/launcher.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/rofi/powermenu.nix" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/shell.nix" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;zakuciael&quot;
+  }
+}</component>
+  <component name="GitToolBoxStore">
+    <option name="recentBranches">
+      <RecentBranches>
+        <option name="branchesForRepo">
+          <list>
+            <RecentBranchesForRepo>
+              <option name="branches">
+                <list>
+                  <RecentBranch>
+                    <option name="branchName" value="refactor/i-have-big-plans" />
+                    <option name="lastUsedInstant" value="1731175655" />
+                  </RecentBranch>
+                  <RecentBranch>
+                    <option name="branchName" value="main" />
+                    <option name="lastUsedInstant" value="1731175654" />
+                  </RecentBranch>
+                </list>
+              </option>
+              <option name="repositoryRootUrl" value="file://$PROJECT_DIR$" />
+            </RecentBranchesForRepo>
+          </list>
+        </option>
+      </RecentBranches>
+    </option>
+  </component>
+  <component name="GithubProjectSettings">
+    <option name="branchProtectionPatterns">
+      <list>
+        <option value="main" />
+      </list>
+    </option>
+  </component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;git@github.com:zakuciael/nixos-dotfiles.git&quot;,
+    &quot;accountId&quot;: &quot;905c5773-df12-47ce-aed7-f866d2088250&quot;
+  }
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 7
+}</component>
+  <component name="ProjectId" id="2ocibYJ7O3svdB0tpQ5KfiHGeK8" />
+  <component name="ProjectViewState">
+    <option name="abbreviatePackageNames" value="true" />
+    <option name="flattenModules" value="true" />
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.go.formatter.settings.were.checked": "true",
+    "RunOnceActivity.go.migrated.go.modules.settings": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "refactor/i-have-big-plans",
+    "go.import.settings.migrated": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/home/zakuciael/dev/config/nixos-dotfiles",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "org.nixos.idea.settings.NixLangSettingsConfigurable",
+    "vue.rearranger.settings.migration": "true"
+  },
+  "keyToStringList": {
+    "com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File": [
+      "PLAIN_TEXT"
+    ]
+  }
+}]]></component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-28b599e66164-intellij.indexing.shared.core-IU-242.23726.103" />
+        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-IU-242.23726.103" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="b8d59642-2768-44b5-95ed-43f470ead42b" name="Changes" comment="" />
+      <created>1731175337719</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1731175337719</updated>
+      <workItem from="1731175338616" duration="839000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="refactor/i-have-big-plans" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VgoProject">
+    <settings-migrated>true</settings-migrated>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>

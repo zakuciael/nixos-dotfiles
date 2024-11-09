@@ -1,3 +1,0 @@
-.direnv/
-hosts/**/age.key
-hosts/**/.decrypted~secrets.yaml
