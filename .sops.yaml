@@ -1,7 +1,0 @@
-keys:
-  - &pc age1lxgv0sqxut6ekz9une8d4zzj4vkrlph58ewv5w6r6m0xxddw9dgs3j8q8r
-creation_rules:
-  - path_regex: hosts/pc/secrets.yaml$
-    key_groups:
-      - age:
-        - *pc
