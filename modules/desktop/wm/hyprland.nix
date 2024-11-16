@@ -92,13 +92,15 @@ in
             # Decoration settings
             decoration = {
               rounding = 10;
-              drop_shadow = false;
               blur = {
                 enabled = true;
                 size = 5;
                 passes = 3;
                 new_optimizations = true;
                 ignore_opacity = true;
+              };
+              shadow = {
+                enabled = true;
               };
             };
 
