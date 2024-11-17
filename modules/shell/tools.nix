@@ -14,6 +14,8 @@ in {
   };
 
   config = mkIf (cfg.enable) {
+    programs.nix-ld.enable = true;
+
     home-manager.users.${username} = {
       home.packages = with pkgs; [
         duf # Disk Usage/Free Utility - a better 'df' alternative
