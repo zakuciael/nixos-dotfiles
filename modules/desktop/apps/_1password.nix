@@ -5,19 +5,25 @@
   username,
   desktop,
   ...
-}:
-with lib;
-with lib.my;
-with lib.my.utils; let
+}: let
+  inherit (lib) mkIf getExe listToAttrs nameValuePair attrByPath;
+  inherit (lib.my.utils) findLayoutConfig getLayoutMonitor recursiveReadSecretNames readSecrets mkSecretPlaceholder;
+  inherit (lib.my.mapper) toTOML;
+
   hmConfig = config.home-manager.users.${username};
   configDirectory = hmConfig.xdg.configHome;
+  pkgs' = {
+    gui = config.programs._1password-gui.package;
+    cli = config.programs._1password.package;
+  };
+
   layout = findLayoutConfig config ({name, ...}: name == "main"); # Main monitor
   monitor = getLayoutMonitor layout "wayland";
   class = "1Password";
 
   base = "1password/ssh_agent";
-  secretNames = utils.recursiveReadSecretNames {inherit config base;};
-  secrets = utils.readSecrets {inherit config base;};
+  secretNames = recursiveReadSecretNames {inherit config base;};
+  secrets = readSecrets {inherit config base;};
 in {
   programs = {
     _1password = {
@@ -36,7 +42,7 @@ in {
   };
 
   modules.desktop.wm.${desktop}.autostartPrograms = [
-    "${pkgs._1password-gui}/bin/1password"
+    "${getExe pkgs'.gui}"
   ];
 
   sops = {
@@ -45,13 +51,13 @@ in {
         mode = "0644";
         owner = username;
         path = "${configDirectory}/1Password/ssh/agent.toml";
-        file = mapper.toTOML "agent.toml" {
+        file = toTOML "agent.toml" {
           ssh-keys =
             builtins.map
             (
               entry:
                 builtins.mapAttrs
-                (slot: _: utils.mkSecretPlaceholder config [base entry slot])
+                (slot: _: mkSecretPlaceholder config [base entry slot])
                 (attrByPath [entry] {} secrets)
             )
             (builtins.attrNames secrets);
@@ -71,7 +77,7 @@ in {
 
         extraConfig = {
           gpg.format = "ssh";
-          gpg.ssh.program = "${pkgs._1password-gui}/bin/op-ssh-sign";
+          gpg.ssh.program = "${pkgs'.gui}/bin/op-ssh-sign";
         };
       };
 
@@ -84,8 +90,8 @@ in {
     wayland.windowManager.hyprland = mkIf (config.modules.desktop.wm.hyprland.enable) {
       settings = {
         bind = [
-          "Ctrl Shift, O, exec, 1password --toggle"
-          "Ctrl Shift, L, exec, 1password --lock"
+          "Ctrl Shift, O, exec, ${getExe pkgs'.gui} --toggle"
+          "Ctrl Shift, L, exec, ${getExe pkgs'.gui} --lock"
         ];
 
         windowrulev2 = [
@@ -101,7 +107,7 @@ in {
       };
 
       extraConfig = ''
-        bind = Ctrl Shift, P, exec, 1password --quick-access
+        bind = Ctrl Shift, P, exec, ${getExe pkgs'.gui} --quick-access
         bind = Ctrl Shift, P, submap, 1pass
 
         submap = 1pass
