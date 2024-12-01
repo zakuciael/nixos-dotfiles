@@ -2,10 +2,11 @@
   config,
   lib,
   pkgs,
+  username,
   ...
-}:
-with lib;
-with lib.my; let
+}: let
+  inherit (lib) mkOption mkEnableOption types optionalAttrs mkIf listToAttrs attrsToList;
+
   cfg = config.modules.desktop.gaming;
   mkDiskOptions = path: {
     device = mkOption {
@@ -24,7 +25,7 @@ with lib.my; let
     value,
   }: {
     name = value.path;
-    value = {inherit (value) device;} // (lib.optionalAttrs (name == "windows") {fsType = "ntfs";});
+    value = {inherit (value) device;} // (optionalAttrs (name == "windows") {fsType = "ntfs";});
   };
 in {
   options.modules.desktop.gaming = {
@@ -36,11 +37,25 @@ in {
   };
 
   config = mkIf (cfg.enable) {
+    users.users.${username}.extraGroups = ["gamemode"];
+    home-manager.users.${username} = {
+      home.packages = [pkgs.lutris-free];
+    };
+
+    programs = {
+      gamemode = {
+        enable = true;
+      };
+      gamescope = {
+        enable = true;
+      };
+    };
+
     boot.kernelPackages = pkgs.linuxKernel.packages.linux_xanmod_stable;
 
     fileSystems =
       mkIf
       (builtins.any ({value, ...}: value.device != null) (attrsToList cfg.disks))
-      (listToAttrs (builtins.map mkFileSystemConfig (lib.attrsToList cfg.disks)));
+      (listToAttrs (builtins.map mkFileSystemConfig (attrsToList cfg.disks)));
   };
 }
