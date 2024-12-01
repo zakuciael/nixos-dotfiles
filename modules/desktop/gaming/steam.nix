@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  inputs,
   ...
 }:
 with lib; let
@@ -28,7 +29,7 @@ in {
         dedicatedServer.openFirewall = true;
         localNetworkGameTransfers.openFirewall = true;
 
-        extraCompatPackages = with pkgs; [proton-ge-bin];
+        extraCompatPackages = [pkgs.proton-ge-bin inputs.nostale-dev-env.packages.proton-ge-nostale];
       };
     };
   };
