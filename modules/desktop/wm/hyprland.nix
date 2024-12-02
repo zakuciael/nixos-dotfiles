@@ -32,7 +32,6 @@ in
     ];
 
     extraConfig = {
-      cfg,
       autostartScript,
       colorScheme,
       ...
@@ -44,6 +43,9 @@ in
 
       # Make chrome and electron apps run native on wayland
       environment.sessionVariables.NIXOS_OZONE_WL = "1";
+
+      # Set default session to non-systemd hyprland
+      services.displayManager.defaultSession = "hyprland.desktop";
 
       xdg.portal = {
         extraPortals = with pkgs; [xdg-desktop-portal-gtk];
