@@ -52,10 +52,6 @@ in {
   sops.defaultSopsFile = ./secrets.yaml;
   sops.defaultSopsFormat = "yaml";
 
-  # ZSA keyboard configuration
-  hardware.keyboard.zsa.enable = true;
-  environment.systemPackages = with pkgs; [wally-cli];
-
   modules = {
     hardware = {
       grub = {
