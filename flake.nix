@@ -30,7 +30,6 @@
     nostale-dev-env = {
       url = "github:zakuciael/nostale-dev-env";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "flake-utils";
     };
     aagl = {
       url = "github:ezKEa/aagl-gtk-on-nix";
