@@ -45,7 +45,7 @@ in
       environment.sessionVariables.NIXOS_OZONE_WL = "1";
 
       # Set default session to non-systemd hyprland
-      services.displayManager.defaultSession = "hyprland.desktop";
+      services.displayManager.defaultSession = "hyprland";
 
       xdg.portal = {
         extraPortals = with pkgs; [xdg-desktop-portal-gtk];
