@@ -68,7 +68,7 @@ with lib.my; {
       noto-fonts-emoji-blob-bin
       jetbrains-mono
       icomoon-feather
-      (nerdfonts.override {fonts = ["NerdFontsSymbolsOnly"];})
+      nerd-fonts.symbols-only
     ];
     fontconfig = {
       enable = true;
