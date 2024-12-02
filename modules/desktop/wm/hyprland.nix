@@ -26,7 +26,7 @@ in
       "gtk"
       "qt"
       "grimblast"
-      "vesktop"
+      "discord"
       "swaync"
       "thunderbird"
     ];
