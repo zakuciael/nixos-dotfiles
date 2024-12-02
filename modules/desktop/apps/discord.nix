@@ -5,11 +5,12 @@
   username,
   desktop,
   ...
-}:
-with lib;
-with lib.my;
-with lib.my.utils; let
-  pkg = pkgs.vesktop;
+}: let
+  inherit (lib) getExe mkIf;
+  inherit (lib.my.utils) findLayoutConfig findLayoutWorkspace;
+  pkg = pkgs.discord-canary.override {
+    withOpenASAR = true;
+  };
   leftLayout = findLayoutConfig config ({name, ...}: name == "left"); # Try and find left monitor
   # Left monitor or main if not found
   layout =
@@ -21,10 +22,10 @@ with lib.my.utils; let
     if leftLayout != null
     then findLayoutWorkspace layout ({default, ...}: default)
     else findLayoutWorkspace layout ({last, ...}: last);
-  class = "^(vesktop)$";
+  class = "^(discord)$";
 in {
   modules.desktop.wm.${desktop}.autostartPrograms = [
-    "${pkg}/bin/vesktop"
+    "${getExe pkg}"
   ];
 
   home-manager.users.${username} = {
