@@ -56,6 +56,9 @@
       inherit system;
       config = {
         allowUnfree = true;
+        permittedInsecurePackages = [
+          "dotnet-sdk-7.0.410" # TODO: Remove when this is merged: https://github.com/NixOS/nixpkgs/pull/360383
+        ];
       };
 
       overlays = lib.my.overlays.pkgs ++ lib.singleton (inputs.aagl.overlays.default);
