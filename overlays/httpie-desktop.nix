@@ -6,25 +6,23 @@ with lib;
 
       pname = "httpie-desktop";
       version = "2024.1.2";
-      name = "${pname}-${version}";
 
       src = fetchurl {
         url = "https://github.com/httpie/desktop/releases/download/v${version}/HTTPie-${version}.AppImage";
         sha256 = "sha256-OOP1l7J2BgO3nOPSipxfwfN/lOUsl80UzYMBosyBHrM=";
       };
 
-      contents = appimageTools.extractType2 {inherit name src;};
+      contents = appimageTools.extractType2 {inherit pname version src;};
     in
       appimageTools.wrapType2 rec {
-        inherit name src;
+        inherit pname version src;
 
         extraInstallCommands = ''
-          mv $out/bin/${name} $out/bin/${pname}
-          install -m 444 -D ${contents}/httpie.desktop $out/share/applications/${pname}.desktop
+          install -m 444 -D ${contents}/httpie.desktop $out/share/applications/httpie.desktop
 
           install -m 444 -D ${contents}/httpie.png $out/share/icons/hicolor/512x512/apps/httpie.png
 
-          substituteInPlace $out/share/applications/${pname}.desktop \
+          substituteInPlace $out/share/applications/httpie.desktop \
            --replace 'Exec=AppRun --no-sandbox %U' 'Exec=${pname} %U'
         '';
 
