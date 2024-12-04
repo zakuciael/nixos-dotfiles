@@ -13,7 +13,7 @@ in
         # All credits go to the package maintainers
         plugins = let
           pluginsJson = builtins.fromJSON (builtins.readFile ./plugins.json);
-          specialPluginsInfo = {}; # callPackage ./specialPlugins.nix {};
+          specialPluginsInfo = callPackage ./specialPlugins.nix {};
           fetchPluginSrc = url: hash: let
             isJar = hasSuffix ".jar" url;
             fetcher =
