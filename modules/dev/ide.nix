@@ -9,18 +9,6 @@ with lib;
 with lib.my; let
   cfg = config.modules.dev.ides;
 
-  goland = pkgs.jetbrains.goland.overrideAttrs (attrs: {
-    postFixup =
-      (attrs.postFixup or "")
-      + optionalString pkgs.stdenv.isLinux ''
-        if [ -f $out/goland/plugins/go-plugin/lib/dlv/linux/dlv ]; then
-          rm $out/goland/plugins/go-plugin/lib/dlv/linux/dlv
-        fi
-
-        ln -s ${pkgs.delve}/bin/dlv $out/goland/plugins/go-plugin/lib/dlv/linux/dlv
-      '';
-  });
-
   availableIdes = builtins.listToAttrs (
     builtins.map (value: {
       name = value.pname;
