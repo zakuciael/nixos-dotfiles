@@ -30,6 +30,33 @@ in rec {
       )
     ));
 
+  recursiveImportDir = path: {ignoredDirs ? []} @ settings:
+    builtins.filter (file: file != null) (flatten (mapAttrsToList (name: value: let
+      newPath = "${path}/${name}";
+    in
+      if value == "regular"
+      then
+        (
+          if
+            builtins.match ".*\\.nix" name
+            != null
+            &&
+            # ignore Emacs lock files (.#foo.nix)
+            builtins.match "\\.#.*" name == null
+          then newPath
+          else null
+        )
+      else
+        (
+          if builtins.pathExists (newPath + "/default.nix")
+          then newPath
+          else recursiveImportDir newPath settings
+        )) (
+      filterAttrs (name: _:
+        builtins.all (dir: name != dir) ignoredDirs)
+      (builtins.readDir path)
+    )));
+
   recursiveReadSecretNames = {
     config,
     base ? null,

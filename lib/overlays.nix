@@ -7,10 +7,7 @@
 }:
 with lib;
 with lib.my; let
-  overlays =
-    builtins.map
-    (file: import file {inherit lib pkgs inputs system;})
-    (utils.recursiveReadDir ./../overlays {suffixes = ["nix"];});
+  overlays = builtins.map (file: import file {inherit lib pkgs inputs system;}) (utils.recursiveImportDir ./../overlays {});
   privatePkgsOverlays = let
     suffix = "default.nix";
   in
