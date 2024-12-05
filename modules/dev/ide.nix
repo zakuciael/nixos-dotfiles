@@ -4,10 +4,51 @@
   pkgs,
   username,
   ...
-}:
-with lib;
-with lib.my; let
+}: let
+  inherit (lib) optionalString optionalAttrs concatStringsSep mkOption mkIf types;
+
   cfg = config.modules.dev.ides;
+  xdg = config.home-manager.users.${username}.xdg;
+
+  defaultPlugins = [
+    "jetbrains-ai-assistant"
+    "extra-toolwindow-colorful-icons"
+    "extra-icons"
+    "direnv-integration"
+    "-env-files-support"
+    "-ignore"
+    "nixidea"
+    "ideolog"
+    "just"
+    "wakatime"
+    "gittoolbox"
+    "conventional-commit"
+    "github-actions-manager"
+    "discord-rich-presence"
+    "grazie-pro"
+  ];
+
+  mkIDE = pkg: {
+    plugins ? [],
+    ignorePlugins ? [],
+    enableNativeWayland ? true,
+    extraVmopts ? null,
+    extraProperties ? null,
+  }: let
+    filteredPlugins = builtins.filter (plugin: !builtins.elem plugin ignorePlugins) (defaultPlugins ++ plugins);
+  in
+    pkgs.jetbrains.plugins.addPlugins (pkg.override ({
+        inherit extraProperties;
+        config_path = "${xdg.configHome}/JetBrains/${pkg.pname}";
+        caches_path = "${xdg.cacheHome}/JetBrains/${pkg.pname}";
+        plugins_path = "${xdg.dataHome}/JetBrains/${pkg.pname}";
+      }
+      // optionalAttrs (enableNativeWayland || extraVmopts != null) {
+        vmopts =
+          (optionalString enableNativeWayland "-Dawt.toolkit.name=WLToolkit ")
+          + (optionalString (extraVmopts != null) (concatStringsSep " " extraVmopts));
+      }))
+    filteredPlugins;
 
   availableIdes = builtins.listToAttrs (
     builtins.map (value: {
@@ -15,21 +56,46 @@ with lib.my; let
       inherit value;
     })
     (with pkgs.jetbrains; [
-      clion
+      (mkIDE clion {})
       datagrip
       dataspell
       gateway
-      goland
-      idea-community
-      idea-ultimate
+      (mkIDE goland {
+        enableNativeWayland = false;
+        plugins = [
+          "protocol-buffers"
+          "ini"
+          "toml"
+        ];
+      })
+      (mkIDE idea-ultimate {
+        plugins = [
+          "terraform-and-hcl"
+          "kubernetes"
+          "ini"
+          "toml"
+          "python"
+          "python-community-edition"
+          "php"
+          "go-template"
+          "go"
+        ];
+      })
       mps
-      phpstorm
-      pycharm-community
-      pycharm-professional
-      rider
-      ruby-mine
-      rust-rover
-      webstorm
+      (mkIDE phpstorm {})
+      (mkIDE pycharm-professional {})
+      (mkIDE rider {})
+      (mkIDE ruby-mine {})
+      (mkIDE rust-rover {
+        plugins = [
+          "protocol-buffers"
+          "toml"
+        ];
+        ignorePlugins = [
+          "jetbrains-ai-assistant"
+        ];
+      })
+      (mkIDE webstorm {})
     ])
   );
   installedIDEs = builtins.map (name: availableIdes.${name} or availableIdes."${name}-with-plugins") cfg;

@@ -53,6 +53,8 @@ with lib.my.utils; rec {
 
   toJSON = name: attrs: (pkgs.formats.json {}).generate name attrs;
 
+  toJavaProperties = name: attrs: (pkgs.formats.javaProperties {}).generate name attrs;
+
   toRasiKeyValue = {indent ? ""}: name: value:
     if isRasiSection value
     then toRasiSection {inherit indent;} name value # Sections

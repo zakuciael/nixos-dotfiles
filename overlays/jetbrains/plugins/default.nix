@@ -45,11 +45,11 @@ in
 
           selectFile = id: ide: build:
             if !builtins.elem ide pluginsJson.plugins."${id}".compatible
-            then throw "Plugin with id ${id} does not support IDE ${ide}"
+            then throw "Plugin with id ${id} (${pluginsJson.plugins."${id}".name}) does not support IDE ${ide}"
             else if !pluginsJson.plugins."${id}".builds ? "${build}"
-            then throw "Jetbrains IDEs with build ${build} are not in nixpkgs. Try update_plugins.py with --with-build?"
+            then throw "Jetbrains IDEs with build ${build} (${ide}) are not in nixpkgs. Try update_plugins.py with --with-build?"
             else if pluginsJson.plugins."${id}".builds."${build}" == null
-            then throw "Plugin with id ${id} does not support build ${build}"
+            then throw "Plugin with id ${id} (${pluginsJson.plugins."${id}".name}) does not support build ${build} (${ide})"
             else pluginsJson.plugins."${id}".builds."${build}";
 
           byId =
