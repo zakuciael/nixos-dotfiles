@@ -37,11 +37,12 @@
   }: let
     filteredPlugins = builtins.filter (plugin: !builtins.elem plugin ignorePlugins) (defaultPlugins ++ plugins);
   in
-    pkgs.jetbrains.plugins.addPlugins (pkg.override ({
+    pkgs.jetbrains.plugins.addPlugins (pkg.override (rec {
         inherit extraProperties;
         config_path = "${xdg.configHome}/JetBrains/${pkg.pname}";
         caches_path = "${xdg.cacheHome}/JetBrains/${pkg.pname}";
         plugins_path = "${xdg.dataHome}/JetBrains/${pkg.pname}";
+        logs_path = "${caches_path}/logs";
       }
       // optionalAttrs (enableNativeWayland || extraVmopts != null) {
         vmopts =
@@ -115,7 +116,7 @@ in {
         file = builtins.listToAttrs (builtins.map (ide: {
             name = ".local/share/JetBrains/apps/${ide.pname}";
             value = {
-              source = "${ide}/${ide.pname}";
+              source = "${ide}/${ide.meta.mainProgram}";
             };
           })
           installedIDEs);
