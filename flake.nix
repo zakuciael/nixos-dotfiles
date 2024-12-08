@@ -5,6 +5,7 @@
     nixpkgs.url = "nixpkgs/nixos-unstable-small";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     flake-utils.url = "github:numtide/flake-utils";
+    flake-parts.url = "github:hercules-ci/flake-parts";
     flake-compat.url = "github:edolstra/flake-compat";
     nix-colors.url = "github:misterio77/nix-colors";
     catppuccin.url = "github:catppuccin/nix";
@@ -23,13 +24,14 @@
       inputs.nixpkgs-stable.follows = "nixpkgs";
     };
     rofi-jetbrains = {
-      url = "github:zakuciael/rofi-jetbrains";
+      url = "github:zakuciael/rofi-jetbrains/v2.1.0";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "flake-utils";
+      inputs.flake-parts.follows = "flake-parts";
     };
     nostale-dev-env = {
       url = "github:zakuciael/nostale-dev-env";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-parts.follows = "flake-parts";
     };
     aagl = {
       url = "github:ezKEa/aagl-gtk-on-nix";

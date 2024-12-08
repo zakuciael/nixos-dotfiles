@@ -13,7 +13,7 @@ in {
     programs.rofi = {
       enable = true;
       package = pkgs.rofi-wayland;
-      plugins = [inputs.rofi-jetbrains.default];
+      plugins = [inputs.rofi-jetbrains.rofi-jetbrains-next];
     };
 
     xdg.configFile."rofi/config.rasi".text = toRasi {} {
