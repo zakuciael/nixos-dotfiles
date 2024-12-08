@@ -53,7 +53,7 @@
 
   availableIdes = builtins.listToAttrs (
     builtins.map (value: {
-      name = value.pname;
+      name = value.baseName or value.pname;
       inherit value;
     })
     (with pkgs.jetbrains; [
@@ -99,13 +99,13 @@
       (mkIDE webstorm {})
     ])
   );
-  installedIDEs = builtins.map (name: availableIdes.${name} or availableIdes."${name}-with-plugins") cfg;
+  installedIDEs = builtins.map (name: availableIdes.${name}) cfg;
 in {
   options.modules.dev.ides = mkOption {
     description = "A list of JetBrains IDEs names to install";
     example = ["rust-rover" "webstorm"];
     default = [];
-    type = with types; listOf (enum (builtins.map (name: builtins.replaceStrings ["-with-plugins"] [""] name) (builtins.attrNames availableIdes)));
+    type = with types; listOf (enum (builtins.attrNames availableIdes));
   };
 
   config = mkIf (cfg != []) {

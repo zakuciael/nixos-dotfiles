@@ -139,6 +139,7 @@
         "usbhid",
         "vesktop",
         "vfat",
+        "vmoptions",
         "vmopts",
         "waybar",
         "webstorm",

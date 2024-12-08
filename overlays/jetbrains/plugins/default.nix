@@ -70,7 +70,7 @@ in
               })
               ids);
         in {
-          # Only use if you know what youre doing
+          # Only use if you know what you are doing
           raw = {inherit files byId byName ids;};
 
           addPlugins = ide: unprocessedPlugins: let
@@ -78,15 +78,16 @@ in
               if isDerivation plugin
               then plugin
               else if byId ? "${plugin}"
-              then byId."${plugin}" ide.pname ide.buildNumber
+              then byId."${plugin}" (ide.baseName or ide.pname) ide.buildNumber
               else if byName ? "${plugin}"
-              then byName."${plugin}" ide.pname ide.buildNumber
+              then byName."${plugin}" (ide.baseName or ide.pname) ide.buildNumber
               else throw "Could not resolve plugin ${plugin}";
 
             plugins = map processPlugin unprocessedPlugins;
           in
             stdenv.mkDerivation rec {
               pname = meta.mainProgram + "-with-plugins";
+              baseName = ide.baseName or meta.mainProgram;
               version = ide.version;
               src = ide;
               dontInstall = true;
