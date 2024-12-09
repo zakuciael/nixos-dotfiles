@@ -24,7 +24,7 @@ with lib.my; {
       ];
     };
     extraOptions = ''
-      experimental-features = nix-command flakes
+      experimental-features = nix-command flakes pipe-operators
       !include ${config.sops.templates."nix/access_tokens.conf".path}
     '';
     package = pkgs.nixVersions.latest;
