@@ -1,18 +1,12 @@
-{
-  config,
-  lib,
-  pkgs,
-  inputs,
-  username,
-  ...
-}:
+{ config, lib, pkgs, inputs, username, ... }:
 with lib;
-with builtins; let
+with builtins;
+let
   cfg = config.modules.desktop.apps;
   mkAutostartModules = programs:
     builtins.listToAttrs (builtins.map (desktop: {
       name = desktop;
-      value = {autostartPrograms = programs;};
+      value = { autostartPrograms = programs; };
     }) (builtins.attrNames config.modules.desktop.wm));
 in {
   options.modules.desktop.apps = {
@@ -27,7 +21,7 @@ in {
       home.packages = with pkgs; [
         # Nix
         nixd
-        alejandra
+        inputs.nixfmt.default
 
         # Browser
         google-chrome

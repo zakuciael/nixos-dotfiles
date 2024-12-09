@@ -3,7 +3,6 @@
         "pinage404.nix-extension-pack",
         "bbenoist.nix",
         "jnoortheen.nix-ide",
-        "kamadorueda.alejandra",
         "mkhl.direnv",
         "dlasagno.rasi",
         "jgclark.vscode-todo-highlight",

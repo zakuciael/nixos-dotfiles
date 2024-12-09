@@ -43,69 +43,78 @@
       inputs.flake-utils.follows = "flake-utils";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nixfmt = {
+      url = "github:NixOS/nixfmt";
+      inputs.flake-utils.follows = "flake-utils";
+    };
   };
 
-  outputs = {
-    self,
-    nixpkgs,
-    home-manager,
-    ...
-  } @ flakeInputs: let
-    system = "x86_64-linux";
-    username = "zakuciael";
+  outputs =
+    {
+      self,
+      nixpkgs,
+      home-manager,
+      ...
+    }@flakeInputs:
+    let
+      system = "x86_64-linux";
+      username = "zakuciael";
 
-    pkgs = import inputs.nixpkgs {
-      inherit system;
-      config = {
-        allowUnfree = true;
-        permittedInsecurePackages = [];
+      pkgs = import inputs.nixpkgs {
+        inherit system;
+        config = {
+          allowUnfree = true;
+          permittedInsecurePackages = [ ];
+        };
+
+        overlays = lib.my.overlays.pkgs ++ lib.singleton (inputs.aagl.overlays.default);
       };
 
-      overlays = lib.my.overlays.pkgs ++ lib.singleton (inputs.aagl.overlays.default);
-    };
-
-    inputs =
-      flakeInputs
-      // {
+      inputs = flakeInputs // {
         distro-grub-themes = flakeInputs.distro-grub-themes.packages.${system};
         rofi-jetbrains = flakeInputs.rofi-jetbrains.packages.${system};
-        nostale-dev-env =
-          flakeInputs.nostale-dev-env
-          // {packages = flakeInputs.nostale-dev-env.packages.${system};};
-        catppuccin =
-          flakeInputs.catppuccin
-          // {
-            homeManagerModule = flakeInputs.catppuccin.homeManagerModules.catppuccin;
-            nixosModules =
-              flakeInputs.catppuccin.nixosModules
-              // {
-                default = flakeInputs.catppuccin.nixosModules.catppuccin;
-              };
+        nostale-dev-env = flakeInputs.nostale-dev-env // {
+          packages = flakeInputs.nostale-dev-env.packages.${system};
+        };
+        catppuccin = flakeInputs.catppuccin // {
+          homeManagerModule = flakeInputs.catppuccin.homeManagerModules.catppuccin;
+          nixosModules = flakeInputs.catppuccin.nixosModules // {
+            default = flakeInputs.catppuccin.nixosModules.catppuccin;
           };
-        aagl = flakeInputs.aagl // {packages = flakeInputs.aagl.packages.${system};};
-        vscode-server =
-          flakeInputs.vscode-server
-          // {
-            homeManagerModule = flakeInputs.vscode-server.homeModules.default;
-          };
+        };
+        aagl = flakeInputs.aagl // {
+          packages = flakeInputs.aagl.packages.${system};
+        };
+        vscode-server = flakeInputs.vscode-server // {
+          homeManagerModule = flakeInputs.vscode-server.homeModules.default;
+        };
+        nixfmt = flakeInputs.nixfmt.packages.${system};
       };
 
-    lib = nixpkgs.lib.extend (self: super: {
-      hm = home-manager.lib.hm;
-      my = import ./lib {
-        inherit lib pkgs inputs username system;
-      };
-    });
-  in {
-    nixosConfigurations = let
-      inherit (lib.my.hosts) mkHost;
-      hosts = builtins.readDir ./hosts;
-      mappedHosts = builtins.mapAttrs (n: v: mkHost {name = n;}) hosts;
+      lib = nixpkgs.lib.extend (
+        self: super: {
+          hm = home-manager.lib.hm;
+          my = import ./lib {
+            inherit
+              lib
+              pkgs
+              inputs
+              username
+              system
+              ;
+          };
+        }
+      );
     in
-      mappedHosts;
+    {
+      nixosConfigurations =
+        let
+          inherit (lib.my.hosts) mkHost;
+        in
+        builtins.readDir ./hosts |> builtins.mapAttrs (name: _: mkHost { inherit name; });
 
-    devShells.${system}.default = pkgs.callPackage ./shell.nix {};
+      devShells.${system}.default = pkgs.callPackage ./shell.nix { };
 
-    inherit pkgs inputs lib;
-  };
+      inherit pkgs inputs lib;
+    };
 }

@@ -206,6 +206,26 @@
         "type": "github"
       }
     },
+    "nixfmt": {
+      "inputs": {
+        "flake-utils": [
+          "flake-utils"
+        ]
+      },
+      "locked": {
+        "lastModified": 1733346278,
+        "narHash": "sha256-MoO/hSWDPMKIUMJASuYo4N7ZTRp4P1ZmDJZbt5mk834=",
+        "owner": "NixOS",
+        "repo": "nixfmt",
+        "rev": "a4639036723e510d8331124c80d9ca14dd7aba02",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "repo": "nixfmt",
+        "type": "github"
+      }
+    },
     "nixos-hardware": {
       "locked": {
         "lastModified": 1733217105,
@@ -323,6 +343,7 @@
         "flake-utils": "flake-utils",
         "home-manager": "home-manager",
         "nix-colors": "nix-colors",
+        "nixfmt": "nixfmt",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs",
         "nostale-dev-env": "nostale-dev-env",

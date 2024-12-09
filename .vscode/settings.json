@@ -4,7 +4,9 @@
     "nix.serverSettings": {
         "nixd": {
             "formatting": {
-                "command": ["alejandra"],
+                "command": [
+                    "nixfmt"
+                ],
             },
             "nixpkgs": {
                 "expr": "import <nixpkgs> { }"
@@ -19,18 +21,18 @@
     "[nix]": {
         "editor.insertSpaces": true,
         "editor.tabSize": 2,
-        "editor.defaultFormatter": "kamadorueda.alejandra",
+        "editor.defaultFormatter": "jnoortheen.nix-ide",
         "editor.formatOnPaste": true,
         "editor.formatOnSave": true,
         "editor.formatOnType": false
     },
     "cSpell.language": "en,pl,en-US",
-    "cSpell.enableFiletypes": [
-        "markdown",
-        "nix",
-        "yaml",
-        "yml"
-    ],
+    "cSpell.enabledFileTypes": {
+        "markdown": true,
+        "nix": true,
+        "yaml": true,
+        "yml": true
+    },
     "cSpell.words": [
         "aagl",
         "ahci",
