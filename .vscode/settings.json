@@ -190,7 +190,8 @@
         "gaming",
         "secrets",
         "flake",
-        "laptop"
+        "laptop",
+        "ci"
     ],
     "todohighlight.isEnable": true,
     "todohighlight.isCaseSensitive": true,

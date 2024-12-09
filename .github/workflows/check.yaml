@@ -25,4 +25,4 @@ jobs:
         with:
           github-token: ${{ secrets.PAT }}
       - name: Check repository
-        run: nix flake check
+        run: nix --extra-experimental-features pipe-operators flake check
