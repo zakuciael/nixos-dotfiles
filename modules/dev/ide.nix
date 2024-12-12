@@ -4,8 +4,16 @@
   pkgs,
   username,
   ...
-}: let
-  inherit (lib) optionalString optionalAttrs concatStringsSep mkOption mkIf types;
+}:
+let
+  inherit (lib)
+    optionalString
+    optionalAttrs
+    concatStringsSep
+    mkOption
+    mkIf
+    types
+    ;
 
   cfg = config.modules.dev.ides;
   xdg = config.home-manager.users.${username}.xdg;
@@ -28,16 +36,22 @@
     "grazie-pro"
   ];
 
-  mkIDE = pkg: {
-    plugins ? [],
-    ignorePlugins ? [],
-    enableNativeWayland ? true,
-    extraVmopts ? null,
-    extraProperties ? null,
-  }: let
-    filteredPlugins = builtins.filter (plugin: !builtins.elem plugin ignorePlugins) (defaultPlugins ++ plugins);
-  in
-    pkgs.jetbrains.plugins.addPlugins (pkg.override (rec {
+  mkIDE =
+    pkg:
+    {
+      plugins ? [ ],
+      ignorePlugins ? [ ],
+      enableNativeWayland ? true,
+      extraVmopts ? null,
+      extraProperties ? null,
+    }:
+    let
+      filteredPlugins = builtins.filter (plugin: !builtins.elem plugin ignorePlugins) (
+        defaultPlugins ++ plugins
+      );
+    in
+    pkgs.jetbrains.plugins.addPlugins (pkg.override (
+      rec {
         inherit extraProperties;
         config_path = "${xdg.configHome}/JetBrains/${pkg.pname}";
         caches_path = "${xdg.cacheHome}/JetBrains/${pkg.pname}";
@@ -48,78 +62,89 @@
         vmopts =
           (optionalString enableNativeWayland "-Dawt.toolkit.name=WLToolkit ")
           + (optionalString (extraVmopts != null) (concatStringsSep " " extraVmopts));
-      }))
-    filteredPlugins;
+      }
+    )) filteredPlugins;
 
   availableIdes = builtins.listToAttrs (
-    builtins.map (value: {
-      name = value.baseName or value.pname;
-      inherit value;
-    })
-    (with pkgs.jetbrains; [
-      (mkIDE clion {})
-      datagrip
-      dataspell
-      gateway
-      (mkIDE goland {
-        enableNativeWayland = false;
-        plugins = [
-          "protocol-buffers"
-          "ini"
-          "toml"
-        ];
+    builtins.map
+      (value: {
+        name = value.baseName or value.pname;
+        inherit value;
       })
-      (mkIDE idea-ultimate {
-        plugins = [
-          "terraform-and-hcl"
-          "kubernetes"
-          "ini"
-          "toml"
-          "python"
-          "python-community-edition"
-          "php"
-          "go-template"
-          "go"
-        ];
-      })
-      mps
-      (mkIDE phpstorm {})
-      (mkIDE pycharm-professional {})
-      (mkIDE rider {})
-      (mkIDE ruby-mine {})
-      (mkIDE rust-rover {
-        plugins = [
-          "protocol-buffers"
-          "toml"
-        ];
-        ignorePlugins = [
-          "jetbrains-ai-assistant"
-        ];
-      })
-      (mkIDE webstorm {})
-    ])
+      (
+        with pkgs.jetbrains;
+        [
+          (mkIDE clion { })
+          datagrip
+          dataspell
+          gateway
+          (mkIDE goland {
+            enableNativeWayland = false;
+            plugins = [
+              "protocol-buffers"
+              "ini"
+              "toml"
+            ];
+          })
+          (mkIDE idea-ultimate {
+            plugins = [
+              "makefile-language"
+              "terraform-and-hcl"
+              "kubernetes"
+              "ini"
+              "toml"
+              "python"
+              "python-community-edition"
+              "php"
+              "go-template"
+              "go"
+            ];
+          })
+          mps
+          (mkIDE phpstorm { })
+          (mkIDE pycharm-professional { })
+          (mkIDE rider { })
+          (mkIDE ruby-mine { })
+          (mkIDE rust-rover {
+            plugins = [
+              "protocol-buffers"
+              "toml"
+            ];
+            ignorePlugins = [
+              "jetbrains-ai-assistant"
+              "ideolog"
+            ];
+          })
+          (mkIDE webstorm { })
+        ]
+      )
   );
   installedIDEs = builtins.map (name: availableIdes.${name}) cfg;
-in {
+in
+{
   options.modules.dev.ides = mkOption {
     description = "A list of JetBrains IDEs names to install";
-    example = ["rust-rover" "webstorm"];
-    default = [];
+    example = [
+      "rust-rover"
+      "webstorm"
+    ];
+    default = [ ];
     type = with types; listOf (enum (builtins.attrNames availableIdes));
   };
 
-  config = mkIf (cfg != []) {
+  config = mkIf (cfg != [ ]) {
     home-manager.users.${username} = {
       home = {
         packages = installedIDEs;
 
-        file = builtins.listToAttrs (builtins.map (ide: {
+        file = builtins.listToAttrs (
+          builtins.map (ide: {
             name = ".local/share/JetBrains/apps/${ide.pname}";
             value = {
               source = "${ide}/${ide.meta.mainProgram}";
             };
-          })
-          installedIDEs);
+          }) installedIDEs
+        );
       };
     };
   };
