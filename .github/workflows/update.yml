@@ -21,6 +21,7 @@ jobs:
       - name: Update flake.lock file
         uses: DeterminateSystems/update-flake-lock@v23
         with:
+          nix-options: --extra-experimental-features pipe-operators
           sign-commits: true
           gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
           gpg-passphrase: ${{ secrets.GPG_PASSPHRASE }}
