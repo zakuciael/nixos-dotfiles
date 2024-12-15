@@ -9,7 +9,8 @@
   ...
 }:
 with lib;
-with lib.my; {
+with lib.my;
+{
   # NixOS configuration
   nix = {
     settings = {
@@ -28,7 +29,7 @@ with lib.my; {
       !include ${config.sops.templates."nix/access_tokens.conf".path}
     '';
     package = pkgs.nixVersions.latest;
-    nixPath = ["nixpkgs=${inputs.nixpkgs}"];
+    nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
   };
 
   nixpkgs.pkgs = pkgs;
@@ -91,67 +92,85 @@ with lib.my; {
 
   # Global packages
   environment = {
-    systemPackages = with pkgs; [neovim git bash];
-    variables = {
-      EDITOR = "nvim";
-    };
-    shells = with pkgs; [bash];
+    systemPackages = with pkgs; [
+      git
+      bash
+    ];
+    shells = with pkgs; [ bash ];
   };
 
   # Linux Kernel settings
   boot = {
-    supportedFilesystems = ["ntfs"];
+    supportedFilesystems = [ "ntfs" ];
 
-    initrd.availableKernelModules = ["ehci_pci" "ahci" "nvme" "xhci_pci" "usbhid" "usb_storage" "sd_mod"];
+    initrd.availableKernelModules = [
+      "ehci_pci"
+      "ahci"
+      "nvme"
+      "xhci_pci"
+      "usbhid"
+      "usb_storage"
+      "sd_mod"
+    ];
     loader.efi.canTouchEfiVariables = true;
 
     tmp.cleanOnBoot = true;
 
     plymouth = {
       enable = true;
-      themePackages = with pkgs; [nixos-blur-plymouth];
+      themePackages = with pkgs; [ nixos-blur-plymouth ];
       theme = "nixos-blur";
     };
   };
 
   # SOPS
-  sops = let
-    base = "nix/access-tokens";
-    secretNames = utils.recursiveReadSecretNames {inherit config base;};
-    secrets = utils.readSecrets {inherit config base;};
-  in {
-    templates = {
-      "nix/access_tokens.conf" = {
-        mode = "0440";
-        group = config.users.groups.keys.name;
-        content = ''
-          access-tokens = ${
-            lib.concatStringsSep " "
-            (
-              builtins.map
-              (entry: "${entry}=${utils.mkSecretPlaceholder config [base entry]}")
-              (builtins.attrNames secrets)
-            )
-          }
-        '';
+  sops =
+    let
+      base = "nix/access-tokens";
+      secretNames = utils.recursiveReadSecretNames { inherit config base; };
+      secrets = utils.readSecrets { inherit config base; };
+    in
+    {
+      templates = {
+        "nix/access_tokens.conf" = {
+          mode = "0440";
+          group = config.users.groups.keys.name;
+          content = ''
+            access-tokens = ${
+              lib.concatStringsSep " " (
+                builtins.map (
+                  entry:
+                  "${entry}=${
+                    utils.mkSecretPlaceholder config [
+                      base
+                      entry
+                    ]
+                  }"
+                ) (builtins.attrNames secrets)
+              )
+            }
+          '';
+        };
       };
+      secrets = {
+        "users/${username}/password".neededForUsers = true;
+      } // lib.listToAttrs (builtins.map (v: lib.nameValuePair v { }) secretNames);
     };
-    secrets =
-      {"users/${username}/password".neededForUsers = true;}
-      // lib.listToAttrs (builtins.map (v: lib.nameValuePair v {}) secretNames);
-  };
 
   # User settings
   users.users.${username} = {
     isNormalUser = true;
     hashedPasswordFile = config.sops.secrets."users/${username}/password".path;
     description = "Krzysztof Saczuk";
-    extraGroups = ["wheel" config.users.groups.keys.name];
+    extraGroups = [
+      "wheel"
+      config.users.groups.keys.name
+    ];
   };
 
   # Home-manager
   home-manager = {
-    extraSpecialArgs = {inherit pkgs lib;};
+    extraSpecialArgs = { inherit pkgs lib; };
     sharedModules = [
       inputs.nix-colors.homeManagerModule
       inputs.sops-nix.homeManagerModule
@@ -174,6 +193,25 @@ with lib.my; {
     services.xdg.enable = true;
     hardware.grub.enable = true;
     shell = {
+      neovim = {
+        enable = true;
+        lspPackages = with pkgs; [
+          # Lua
+          lua-language-server
+          stylua
+
+          # Nix
+          deadnix
+          statix
+          nixd
+          inputs.nixfmt.default
+        ];
+        treesitterGrammars = [
+          "lua"
+          "luap"
+          "nix"
+        ];
+      };
       fish = {
         enable = true;
         default = true;

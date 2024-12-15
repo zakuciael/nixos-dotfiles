@@ -1,0 +1,13 @@
+{
+  "lspconfig": {
+    "nixd": {
+      "nixd": {
+        "options": {
+          "nixos": {
+            "expr": "(builtins.getFlake (builtins.toString ./.)).nixosConfigurations.${builtins.replaceStrings [\"\n\"] [\"\"] (builtins.readFile \"/etc/hostname\")}.options"
+          }
+        }
+      }
+    }
+  }
+}

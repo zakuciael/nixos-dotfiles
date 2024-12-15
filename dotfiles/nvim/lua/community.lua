@@ -1,0 +1,11 @@
+---@type LazySpec
+return {
+  {
+    "AstroNvim/astrocommunity",
+    branch = "main"
+  },
+  { import = "astrocommunity.colorscheme.catppuccin" },
+  { import = "astrocommunity.pack.lua" },
+  { import = "astrocommunity.diagnostics.trouble-nvim" },
+  { import = "astrocommunity.utility.hover-nvim" },
+}

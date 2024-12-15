@@ -1,14 +1,27 @@
-{ config, lib, pkgs, inputs, username, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  inputs,
+  username,
+  ...
+}:
 with lib;
 with builtins;
 let
   cfg = config.modules.desktop.apps;
-  mkAutostartModules = programs:
-    builtins.listToAttrs (builtins.map (desktop: {
-      name = desktop;
-      value = { autostartPrograms = programs; };
-    }) (builtins.attrNames config.modules.desktop.wm));
-in {
+  mkAutostartModules =
+    programs:
+    builtins.listToAttrs (
+      builtins.map (desktop: {
+        name = desktop;
+        value = {
+          autostartPrograms = programs;
+        };
+      }) (builtins.attrNames config.modules.desktop.wm)
+    );
+in
+{
   options.modules.desktop.apps = {
     enable = mkEnableOption "general desktop applications";
   };
@@ -19,10 +32,6 @@ in {
     home-manager.users.${username} = {
       programs.fish.shellAliases.open = "${getBin pkgs.xdg-utils}/bin/xdg-open";
       home.packages = with pkgs; [
-        # Nix
-        nixd
-        inputs.nixfmt.default
-
         # Browser
         google-chrome
 

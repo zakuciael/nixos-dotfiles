@@ -6,9 +6,11 @@
   ...
 }:
 with lib;
-with lib.my; let
+with lib.my;
+let
   cfg = config.modules.shell.tools;
-in {
+in
+{
   options.modules.shell.tools = {
     enable = mkEnableOption "shell utility packages";
   };
@@ -25,6 +27,7 @@ in {
         jq # Command-line JSON processor
         tre-command # Tree command, improved.
         lazydocker # The lazier way to manage everything docker
+        lazygit # simple terminal UI for git commands
         sd # Intuitive find & replace CLI (sed alternative)
         ripgrep # ripgrep recursively searches directories for a regex pattern while respecting your gitignore
       ];
@@ -33,6 +36,7 @@ in {
         fish = {
           shellAliases = with pkgs; {
             lzd = "${getExe lazydocker}";
+            lg = "${getExe lazygit}";
             tree = "${getExe tre-command}";
 
             # On-demand tools

@@ -6,9 +6,11 @@
   username,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.modules.shell.fish;
-in {
+in
+{
   options.modules.shell.fish = {
     enable = mkEnableOption "fish shell";
     default = mkOption {
@@ -21,7 +23,7 @@ in {
 
   config = mkIf cfg.enable {
     users.users."${username}".shell = mkIf cfg.default pkgs.fish;
-    environment.shells = mkIf cfg.default (with pkgs; [fish]);
+    environment.shells = mkIf cfg.default (with pkgs; [ fish ]);
     programs.fish.enable = true;
 
     home-manager.users.${username} = {
@@ -38,7 +40,6 @@ in {
             re = "nh os switch -H ${hostname} && echo -e '\\033[32m>\\033[0m Done!'";
             nfu = "nix flake update";
             repl = "nix repl -f '<nixpkgs>'";
-            vim = "nvim";
           };
         };
       };
