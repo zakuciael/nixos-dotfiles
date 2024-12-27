@@ -8,10 +8,15 @@
   ...
 }:
 with lib.my;
-with lib.my.utils; let
+with lib.my.utils;
+let
   colorScheme = inputs.nix-colors.colorSchemes.catppuccin-mocha;
-in {
-  imports = [./hardware.nix ./networking.nix];
+in
+{
+  imports = [
+    ./hardware.nix
+    ./networking.nix
+  ];
 
   nix.settings = {
     max-jobs = 6;
@@ -33,18 +38,20 @@ in {
     inherit colorScheme;
 
     # Custom bookmarks
-    gtk.gtk3.bookmarks = let
-      homeDirectory = config.home-manager.users.${username}.home.homeDirectory;
-    in [
-      (utils.mkGtkBookmark {
-        name = "Development";
-        path = "${homeDirectory}/dev";
-      })
-      (utils.mkGtkBookmark {
-        name = "NixOS Config";
-        path = "${homeDirectory}/dev/config/nixos-dotfiles";
-      })
-    ];
+    gtk.gtk3.bookmarks =
+      let
+        homeDirectory = config.home-manager.users.${username}.home.homeDirectory;
+      in
+      [
+        (utils.mkGtkBookmark {
+          name = "Development";
+          path = "${homeDirectory}/dev";
+        })
+        (utils.mkGtkBookmark {
+          name = "NixOS Config";
+          path = "${homeDirectory}/dev/config/nixos-dotfiles";
+        })
+      ];
   };
 
   # Secret management configuration
@@ -74,7 +81,11 @@ in {
               y = 0;
             };
             rotate = "left";
-            workspaces = mkLayoutWorkspaces [4 5 6];
+            workspaces = mkLayoutWorkspaces [
+              4
+              5
+              6
+            ];
             wallpaper = dotfiles.wallpapers.pc."left.png".source;
           }
           {
@@ -89,7 +100,11 @@ in {
               x = 1080;
               y = 393;
             };
-            workspaces = mkLayoutWorkspaces [1 2 3];
+            workspaces = mkLayoutWorkspaces [
+              1
+              2
+              3
+            ];
             wallpaper = dotfiles.wallpapers.pc."main.png".source;
           }
           {
@@ -103,7 +118,11 @@ in {
               x = 3000;
               y = 440;
             };
-            workspaces = mkLayoutWorkspaces [7 8 9];
+            workspaces = mkLayoutWorkspaces [
+              7
+              8
+              9
+            ];
             wallpaper = dotfiles.wallpapers.pc."right.jpg".source;
           }
         ];
@@ -111,7 +130,6 @@ in {
       bluetooth.enable = true;
       printer.enable = true;
       sound.enable = true;
-      amdgpu.enable = true;
       docker.enable = true;
       yubikey.enable = true;
     };
@@ -141,7 +159,13 @@ in {
     dev = {
       tools.enable = true;
       kubernetes.enable = true;
-      ides = ["rust-rover" "webstorm" "idea-ultimate" "rider" "goland"];
+      ides = [
+        "rust-rover"
+        "webstorm"
+        "idea-ultimate"
+        "rider"
+        "goland"
+      ];
       vscode = {
         enable = true;
         server = true;

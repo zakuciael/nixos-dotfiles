@@ -228,15 +228,15 @@
     },
     "nixos-hardware": {
       "locked": {
-        "lastModified": 1733861262,
-        "narHash": "sha256-+jjPup/ByS0LEVIrBbt7FnGugJgLeG9oc+ivFASYn2U=",
-        "owner": "NixOS",
+        "lastModified": 1735285338,
+        "narHash": "sha256-Weyc+PPQEp0Z5J+PDM6kZBRF/gvJcpyGgoTulP63foI=",
+        "owner": "zakuciael",
         "repo": "nixos-hardware",
-        "rev": "cf737e2eba82b603f54f71b10cb8fd09d22ce3f5",
+        "rev": "64fe042afac1cd9b2eb04ef13bfa0d536a43ee24",
         "type": "github"
       },
       "original": {
-        "owner": "NixOS",
+        "owner": "zakuciael",
         "ref": "master",
         "repo": "nixos-hardware",
         "type": "github"
@@ -294,11 +294,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1733096185,
-        "narHash": "sha256-9oXag4v0Hy08jveDdD9rQgqXzyBYHIeDOrNzIZ3K7AE=",
+        "lastModified": 1735129135,
+        "narHash": "sha256-0f+pYuik+sM54MNW4OsGEW3Ifev51iSsWrVVH5nn7B4=",
         "owner": "zakuciael",
         "repo": "nostale-dev-env",
-        "rev": "09fd9b129bfc5565e7e8c7ec5d8d73d9cb1d5d36",
+        "rev": "5e349f5f356a616be8aa5f6aa8c7a240997c2db7",
         "type": "github"
       },
       "original": {
