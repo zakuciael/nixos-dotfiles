@@ -132,6 +132,10 @@ in
       sound.enable = true;
       docker.enable = true;
       yubikey.enable = true;
+      corectrl = {
+        enable = true;
+        overclock = true;
+      };
     };
     desktop = {
       apps.enable = true;
