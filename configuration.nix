@@ -23,6 +23,7 @@ with lib.my;
         "cache.thalheim.io-1:R7msbosLEZKrxk/lKxf9BTjOOH7Ax3H0Qj0/6wiHOgc="
         "ezkea.cachix.org-1:ioBmUbJTZIKsHmWWXPe1FSFbeVe+afhfgqgTSNd34eI="
       ];
+      trusted-users = [ "@wheel" ];
     };
     extraOptions = ''
       experimental-features = nix-command flakes pipe-operators
