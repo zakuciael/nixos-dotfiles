@@ -2,9 +2,16 @@
   config,
   lib,
   username,
+  desktop,
   ...
 }:
-with lib; {
+let
+  inherit (lib) getExe;
+  hmConfig = config.home-manager.users.${username};
+in
+{
+  modules.desktop.wm.${desktop}.terminalPackage = hmConfig.programs.alacritty.package;
+
   home-manager.users.${username} = {
     programs = {
       alacritty = {

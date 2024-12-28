@@ -7,35 +7,42 @@
   ...
 }:
 with lib;
-with lib.my; let
+with lib.my;
+let
   scriptPackages = scripts.mkScriptPackages config;
-  hmConfig = config.home-manager.users.${username};
 in
-  desktop.mkDesktopModule {
-    inherit config;
+desktop.mkDesktopModule {
+  inherit config;
 
-    name = "hyprland";
-    autostartPath = ".config/hypr/autostart.sh";
-    desktopApps = [
-      "alacritty"
-      "kitty"
-      "_1password"
-      "rofi"
-      "nh"
-      "waybar"
-      "gtk"
-      "qt"
-      "grimblast"
-      "discord"
-      "swaync"
-      "thunderbird"
-    ];
+  name = "hyprland";
+  autostartPath = ".config/hypr/autostart.sh";
+  desktopApps = [
+    # Terminal apps (uncomment the preffered one)
+    # "alacritty"
+    "kitty"
+    # "ghostty"
 
-    extraConfig = {
+    # Other apps
+    "_1password"
+    "rofi"
+    "nh"
+    "waybar"
+    "gtk"
+    "qt"
+    "grimblast"
+    "discord"
+    "swaync"
+    "thunderbird"
+  ];
+
+  extraConfig =
+    {
+      cfg,
       autostartScript,
       colorScheme,
       ...
-    }: {
+    }:
+    {
       programs.hyprland = {
         enable = true;
         xwayland.enable = true;
@@ -48,7 +55,7 @@ in
       services.displayManager.defaultSession = "hyprland";
 
       xdg.portal = {
-        extraPortals = with pkgs; [xdg-desktop-portal-gtk];
+        extraPortals = with pkgs; [ xdg-desktop-portal-gtk ];
         xdgOpenUsePortal = true;
       };
 
@@ -63,7 +70,7 @@ in
               autostartScript
             ];
             # Source external file for quick debug
-            source = ["$HOME/.config/hypr/debug.conf"];
+            source = [ "$HOME/.config/hypr/debug.conf" ];
 
             # Input settings
             input = {
@@ -78,7 +85,8 @@ in
               gaps_in = 6;
               gaps_out = 8;
               border_size = 3;
-              "col.active_border" = "rgba(${base0C}ff) rgba(${base0D}ff) rgba(${base0B}ff) rgba(${base0E}ff) 45deg";
+              "col.active_border" =
+                "rgba(${base0C}ff) rgba(${base0D}ff) rgba(${base0B}ff) rgba(${base0E}ff) 45deg";
               "col.inactive_border" = "rgba(${base00}cc) rgba(${base01}cc) 45deg";
               layout = "dwindle";
               resize_on_border = true;
@@ -150,7 +158,7 @@ in
             # Keybinds
             "$mod" = "SUPER";
             bind = [
-              "$mod, return, exec, ${getExe hmConfig.programs.kitty.package}"
+              "$mod, return, exec, ${getExe cfg.terminalPackage}"
               "$mod, W, killactive,"
               "$mod, F, togglefloating,"
               "$mod, M, fullscreen, 1"
@@ -182,25 +190,25 @@ in
 
             # TODO: Check which of those rules leave and which delete
             /*
-               windowrulev2 = [
-              # -- Fix odd behaviors in IntelliJ IDEs --
-              #! Fix focus issues when dialogs are opened or closed
-              "windowdance,class:^(jetbrains-.*)$,floating:1"
-              #! Fix splash screen showing in weird places and prevent annoying focus takeovers
-              "center,class:^(jetbrains-.*)$,title:^(splash)$,floating:1"
-              "nofocus,class:^(jetbrains-.*)$,title:^(splash)$,floating:1"
-              "noborder,class:^(jetbrains-.*)$,title:^(splash)$,floating:1"
+                 windowrulev2 = [
+                # -- Fix odd behaviors in IntelliJ IDEs --
+                #! Fix focus issues when dialogs are opened or closed
+                "windowdance,class:^(jetbrains-.*)$,floating:1"
+                #! Fix splash screen showing in weird places and prevent annoying focus takeovers
+                "center,class:^(jetbrains-.*)$,title:^(splash)$,floating:1"
+                "nofocus,class:^(jetbrains-.*)$,title:^(splash)$,floating:1"
+                "noborder,class:^(jetbrains-.*)$,title:^(splash)$,floating:1"
 
-              #! Center popups/find windows
-              "center,class:^(jetbrains-.*)$,title:^( )$,floating:1"
-              "stayfocused,class:^(jetbrains-.*)$,title:^( )$,floating:1"
-              "noborder,class:^(jetbrains-.*)$,title:^( )$,floating:1"
-              #! Disable window flicker when autocomplete or tooltips appear
-              "nofocus,class:^(jetbrains-.*)$,title:^(win.*)$,floating:1"
-            ];
+                #! Center popups/find windows
+                "center,class:^(jetbrains-.*)$,title:^( )$,floating:1"
+                "stayfocused,class:^(jetbrains-.*)$,title:^( )$,floating:1"
+                "noborder,class:^(jetbrains-.*)$,title:^( )$,floating:1"
+                #! Disable window flicker when autocomplete or tooltips appear
+                "nofocus,class:^(jetbrains-.*)$,title:^(win.*)$,floating:1"
+              ];
             */
           };
         };
       };
     };
-  }
+}

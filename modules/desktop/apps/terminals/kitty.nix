@@ -1,10 +1,15 @@
 {
   config,
   username,
+  desktop,
   ...
-}: let
+}:
+let
   hmConfig = config.home-manager.users.${username};
-in {
+in
+{
+  modules.desktop.wm.${desktop}.terminalPackage = hmConfig.programs.kitty.package;
+
   home-manager.users.${username} = {
     programs = {
       fish.shellAliases = {
