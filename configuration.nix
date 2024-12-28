@@ -162,6 +162,7 @@ with lib.my;
 
   # User settings
   users.users.${username} = {
+    uid = 1000;
     isNormalUser = true;
     hashedPasswordFile = config.sops.secrets."users/${username}/password".path;
     description = "Krzysztof Saczuk";

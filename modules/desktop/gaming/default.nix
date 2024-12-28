@@ -4,8 +4,17 @@
   pkgs,
   username,
   ...
-}: let
-  inherit (lib) mkOption mkEnableOption types optionalAttrs mkIf listToAttrs attrsToList;
+}:
+let
+  inherit (lib)
+    mkOption
+    mkEnableOption
+    types
+    optionalAttrs
+    mkIf
+    listToAttrs
+    attrsToList
+    ;
 
   cfg = config.modules.desktop.gaming;
   mkDiskOptions = path: {
@@ -20,14 +29,34 @@
       description = "Location of the mounted file system.";
     };
   };
-  mkFileSystemConfig = {
-    name,
-    value,
-  }: {
-    name = value.path;
-    value = {inherit (value) device;} // (optionalAttrs (name == "windows") {fsType = "ntfs";});
-  };
-in {
+  mkFileSystemConfig =
+    {
+      name,
+      value,
+    }:
+    {
+      name = value.path;
+      value =
+        {
+          inherit (value) device;
+        }
+        // (optionalAttrs (name == "windows") {
+          fsType = "ntfs";
+          options =
+            let
+              user = config.users.users.${username};
+              group = config.users.groups.${user.group};
+            in
+            [
+              "uid=${builtins.toString user.uid}"
+              "gid=${builtins.toString group.gid}"
+              "dmask=007"
+              "fmask=117"
+            ];
+        });
+    };
+in
+{
   options.modules.desktop.gaming = {
     enable = mkEnableOption "game configurations";
     disks = {
@@ -37,9 +66,9 @@ in {
   };
 
   config = mkIf (cfg.enable) {
-    users.users.${username}.extraGroups = ["gamemode"];
+    users.users.${username}.extraGroups = [ "gamemode" ];
     home-manager.users.${username} = {
-      home.packages = [pkgs.lutris-free];
+      home.packages = [ pkgs.lutris-free ];
     };
 
     programs = {
@@ -53,9 +82,8 @@ in {
 
     boot.kernelPackages = pkgs.linuxKernel.packages.linux_xanmod_stable;
 
-    fileSystems =
-      mkIf
-      (builtins.any ({value, ...}: value.device != null) (attrsToList cfg.disks))
-      (listToAttrs (builtins.map mkFileSystemConfig (attrsToList cfg.disks)));
+    fileSystems = mkIf (builtins.any ({ value, ... }: value.device != null) (attrsToList cfg.disks)) (
+      listToAttrs (builtins.map mkFileSystemConfig (attrsToList cfg.disks))
+    );
   };
 }
