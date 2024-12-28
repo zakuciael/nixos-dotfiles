@@ -19,8 +19,8 @@ desktop.mkDesktopModule {
   desktopApps = [
     # Terminal apps (uncomment the preffered one)
     # "alacritty"
-    "kitty"
-    # "ghostty"
+    # "kitty"
+    "ghostty"
 
     # Other apps
     "_1password"

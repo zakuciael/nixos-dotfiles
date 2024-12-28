@@ -18,10 +18,12 @@ with lib.my;
       substituters = [
         "https://cache.thalheim.io"
         "https://ezkea.cachix.org"
+        "https://ghostty.cachix.org"
       ];
       trusted-public-keys = [
         "cache.thalheim.io-1:R7msbosLEZKrxk/lKxf9BTjOOH7Ax3H0Qj0/6wiHOgc="
         "ezkea.cachix.org-1:ioBmUbJTZIKsHmWWXPe1FSFbeVe+afhfgqgTSNd34eI="
+        "ghostty.cachix.org-1:QB389yTa6gTyneehvqG58y0WnHjQOqgnA+wBnpWWxns="
       ];
       trusted-users = [ "@wheel" ];
     };
@@ -177,6 +179,7 @@ with lib.my;
       inputs.sops-nix.homeManagerModule
       inputs.catppuccin.homeManagerModule
       inputs.vscode-server.homeManagerModule
+      inputs.ghostty-hm.homeManagerModule
     ];
     useUserPackages = true;
     useGlobalPkgs = true;
