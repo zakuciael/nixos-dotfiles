@@ -50,9 +50,10 @@ let
             [
               "uid=${builtins.toString user.uid}"
               "gid=${builtins.toString group.gid}"
-              "dmask=007"
-              "fmask=117"
+              "dmask=022"
+              "fmask=133"
             ];
+
         });
     };
 in
