@@ -1,13 +1,13 @@
 {
   config,
-  lib,
   inputs,
   username,
   desktop,
   ...
 }:
 let
-  cfg = config.home-manager.users.${username}.programs.ghostty;
+  hmConfig = config.home-manager.users.${username};
+  cfg = hmConfig.programs.ghostty;
 in
 {
   modules.desktop.wm.${desktop}.terminalPackage = cfg.package;
@@ -37,7 +37,7 @@ in
           src = cfg.package;
           file = "share/bat/syntaxes/ghostty.sublime-syntax";
         };
-        config.map-syntax = [ "**/ghostty/config:Ghostty Config" ];
+        config.map-syntax = [ "${hmConfig.xdg.configHome}/ghostty/config:Ghostty Config" ];
       };
     };
   };
