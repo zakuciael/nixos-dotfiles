@@ -9,6 +9,17 @@ with lib;
 with lib.my;
 let
   cfg = config.modules.shell.tools;
+  terminfoScript = pkgs.writeShellApplication {
+    name = "copy-terminfo";
+    text = ''
+      if [ $# -eq 0 ]; then
+        echo "Usage: copy-terminfo <destination> [options]"
+      else
+        infocmp -x | ssh "$@" -- "tic -x - 1>&2 2>/dev/null"
+      fi
+    '';
+  };
+
 in
 {
   options.modules.shell.tools = {
@@ -20,6 +31,7 @@ in
 
     home-manager.users.${username} = {
       home.packages = with pkgs; [
+        terminfoScript # A bash script for coping the terminfo of the current terminal emulator
         duf # Disk Usage/Free Utility - a better 'df' alternative
         entr # Run arbitrary commands when files change
         exiftool # ExifTool meta information reader/writer
