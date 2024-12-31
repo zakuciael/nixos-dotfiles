@@ -336,15 +336,16 @@ def get_ide_versions() -> dict:
         "--impure",
         "--expr",
         """
-        let pkgs = import <nixpkgs> {};
-            lib = import <nixpkgs/lib>;
+        let flake = builtins.getFlake (builtins.toString ./../../..);
+            pkgs = flake.pkgs;
+            lib = flake.lib;
             unfilteredIdes = lib.attrsToList pkgs.jetbrains;
 
             toBuildNumberEntry = {name, value}: { inherit name; value = [value.buildNumber]; };
-            filterIde = {name, ...}: 
-                !(builtins.elem name ["plugins" "recurseForDerivations" "jcef" "jdk" "gateway"]) && 
-                !(lib.hasSuffix "community-src" name) && 
-                !(lib.hasSuffix "community-bin" name) && 
+            filterIde = {name, ...}:
+                !(builtins.elem name ["plugins" "recurseForDerivations" "jcef" "jdk" "gateway"]) &&
+                !(lib.hasSuffix "community-src" name) &&
+                !(lib.hasSuffix "community-bin" name) &&
                 !(lib.hasInfix "jcef" name);
         in lib.listToAttrs (builtins.map toBuildNumberEntry (builtins.filter filterIde unfilteredIdes))
         """
