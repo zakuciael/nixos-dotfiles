@@ -19,7 +19,6 @@ let
   xdg = config.home-manager.users.${username}.xdg;
 
   defaultPlugins = [
-    "jetbrains-ai-assistant"
     "extra-toolwindow-colorful-icons"
     "extra-icons"
     "direnv-integration"
