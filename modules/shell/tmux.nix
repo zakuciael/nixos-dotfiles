@@ -5,27 +5,33 @@
   username,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.modules.shell.tmux;
-in {
+in
+{
   options.modules.shell.tmux = {
     enable = mkEnableOption "Tmux shell multiplexer";
   };
 
   config = mkIf cfg.enable {
     home-manager.users.${username} = {
+      catppuccin.tmux = {
+        enable = true;
+        extraConfig = ''
+          set -g @catppuccin_window_default_text "#W"
+          set -g @catppuccin_window_current_text " #(echo '#{pane_current_path}' | rev | cut -d'/' -f-2 | rev)"
+        '';
+      };
+
       programs.tmux = {
         enable = true;
-        catppuccin = {
-          enable = true;
-          extraConfig = ''
-            set -g @catppuccin_window_default_text "#W"
-            set -g @catppuccin_window_current_text " #(echo '#{pane_current_path}' | rev | cut -d'/' -f-2 | rev)"
-          '';
-        };
         mouse = true;
         newSession = false;
-        plugins = with pkgs.tmuxPlugins; [sensible yank];
+        plugins = with pkgs.tmuxPlugins; [
+          sensible
+          yank
+        ];
         shell = "${pkgs.fish}/bin/fish";
         prefix = "C-Space";
         baseIndex = 1;

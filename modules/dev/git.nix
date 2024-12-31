@@ -4,9 +4,11 @@
   username,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.modules.dev.git;
-in {
+in
+{
   options.modules.dev.git = {
     enable = mkOption {
       type = types.bool;
@@ -22,6 +24,8 @@ in {
     };
 
     home-manager.users.${username} = {
+      catppuccin.delta.enable = true;
+
       programs = {
         gpg.enable = true;
 
@@ -29,7 +33,6 @@ in {
           enable = true;
           delta = {
             enable = true;
-            catppuccin.enable = true;
           };
           userName = "Krzysztof Saczuk";
           userEmail = "me@krzysztofsaczuk.pl";

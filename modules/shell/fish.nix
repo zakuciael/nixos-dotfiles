@@ -27,10 +27,11 @@ in
     programs.fish.enable = true;
 
     home-manager.users.${username} = {
+      catppuccin.fish.enable = true;
+
       programs = {
         fish = {
           enable = true;
-          catppuccin.enable = true;
           functions = {
             fish_greeting = ''
               ${pkgs.krabby}/bin/krabby random --no-title

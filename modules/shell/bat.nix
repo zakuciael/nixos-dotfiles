@@ -6,15 +6,19 @@
   ...
 }:
 with lib;
-with lib.my; let
+with lib.my;
+let
   cfg = config.modules.shell.bat;
-in {
+in
+{
   options.modules.shell.bat = {
     enable = mkEnableOption "bat shell integration";
   };
 
   config = mkIf (cfg.enable) {
     home-manager.users.${username} = {
+      catppuccin.bat.enable = true;
+
       programs = {
         fish = {
           interactiveShellInit = ''
@@ -35,8 +39,13 @@ in {
         };
         bat = {
           enable = true;
-          catppuccin.enable = true;
-          extraPackages = with pkgs.bat-extras; [batdiff batman batpipe batwatch prettybat];
+          extraPackages = with pkgs.bat-extras; [
+            batdiff
+            batman
+            batpipe
+            batwatch
+            prettybat
+          ];
         };
       };
     };

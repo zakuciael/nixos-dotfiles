@@ -5,18 +5,21 @@
   ...
 }:
 with lib;
-with lib.my; let
+with lib.my;
+let
   cfg = config.modules.shell.starship;
-in {
+in
+{
   options.modules.shell.starship = {
     enable = mkEnableOption "starship shell prompt";
   };
 
   config = mkIf (cfg.enable) {
     home-manager.users.${username} = {
+      catppuccin.starship.enable = true;
+
       programs.starship = {
         enable = true;
-        catppuccin.enable = true;
         settings = {
           add_newline = true;
 

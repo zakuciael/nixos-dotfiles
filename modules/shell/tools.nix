@@ -44,6 +44,12 @@ in
         ripgrep # ripgrep recursively searches directories for a regex pattern while respecting your gitignore
       ];
 
+      catppuccin = {
+        btop.enable = true;
+        fzf.enable = true;
+        cava.enable = true;
+      };
+
       programs = {
         fish = {
           shellAliases = with pkgs; {
@@ -66,18 +72,10 @@ in
             nix-prefetch = "nix run nixpkgs#nix-prefetch -- --option extra-experimental-features flakes";
           };
         };
-        btop = {
-          enable = true;
-          catppuccin.enable = true;
-        };
-        fzf = {
-          enable = true;
-          catppuccin.enable = true;
-        };
-        cava = {
-          enable = true;
-          catppuccin.enable = true;
-        };
+
+        btop.enable = true;
+        fzf.enable = true;
+        cava.enable = true;
       };
     };
   };
