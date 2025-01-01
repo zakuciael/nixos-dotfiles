@@ -201,20 +201,67 @@ with lib.my;
       neovim = {
         enable = true;
         lspPackages = with pkgs; [
+          # Common
+          prettierd
+
           # Lua
           lua-language-server
           stylua
+
+          # JSON
+          nodePackages.vscode-json-languageserver
+
+          # YAML
+          yaml-language-server
+          actionlint
 
           # Nix
           deadnix
           statix
           nixd
-          inputs.nixfmt.default
+          nixfmt-rfc-style
         ];
         treesitterGrammars = [
           "lua"
           "luap"
           "nix"
+          "yaml"
+          "bash"
+          "typescript"
+          "javascript"
+          "jq"
+          "css"
+          "json"
+          "jsonc"
+          "json5"
+          "just"
+          "dockerfile"
+          "editorconfig"
+          "gitignore"
+          "go"
+          "graphql"
+          "hcl"
+          "helm"
+          "hyprlang"
+          "html"
+          "ini"
+          "java"
+          "jsdoc"
+          "markdown"
+          "markdown_inline"
+          "make"
+          "nginx"
+          "proto"
+          "python"
+          "regex"
+          "rust"
+          "scss"
+          "sql"
+          "terraform"
+          "tmux"
+          "tsx"
+          "udev"
+          "vim"
         ];
       };
       fish = {

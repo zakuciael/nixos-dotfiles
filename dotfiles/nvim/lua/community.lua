@@ -8,4 +8,6 @@ return {
   { import = "astrocommunity.pack.lua" },
   { import = "astrocommunity.diagnostics.trouble-nvim" },
   { import = "astrocommunity.utility.hover-nvim" },
+  { import = "astrocommunity.pack.yaml" },
+  { import = "astrocommunity.pack.json" },
 }
