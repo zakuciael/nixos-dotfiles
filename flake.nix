@@ -43,10 +43,6 @@
       inputs.flake-utils.follows = "flake-utils";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nixfmt = {
-      url = "github:NixOS/nixfmt";
-      inputs.flake-utils.follows = "flake-utils";
-    };
     # TODO: Replace when nixpkgs and home-manager will fully support Ghostty
     ghostty = {
       url = "github:ghostty-org/ghostty";
@@ -98,7 +94,6 @@
         ghostty-hm = flakeInputs.ghostty-hm // {
           homeManagerModule = flakeInputs.ghostty-hm.homeModules.default;
         };
-        nixfmt = flakeInputs.nixfmt.packages.${system};
         ghostty = flakeInputs.ghostty.packages.${system};
       };
 
