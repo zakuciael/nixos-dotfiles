@@ -60,6 +60,8 @@ desktop.mkDesktopModule {
       };
 
       home-manager.users.${username} = {
+        home.packages = with pkgs; [ wl-clipboard ];
+
         wayland.windowManager.hyprland = {
           enable = true;
           xwayland.enable = true;
