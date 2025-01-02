@@ -16,7 +16,6 @@ in
     programs = {
       ghostty = {
         enable = true;
-        package = inputs.ghostty.default; # TODO: Remove after updating nixpkgs
         enableBashIntegration = true; # By default enable at least bash integration.
         enableFishIntegration = config.modules.shell.fish.enable;
 

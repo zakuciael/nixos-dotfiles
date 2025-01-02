@@ -9,7 +9,6 @@
     flake-compat.url = "github:edolstra/flake-compat";
     nix-colors.url = "github:misterio77/nix-colors";
     catppuccin.url = "github:catppuccin/nix";
-    # call-flake.url = "github:divnix/call-flake?rev=5828e083daac39efb098dc719502379f2bf2ed8a";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -43,13 +42,6 @@
       url = "github:nix-community/nixos-vscode-server";
       inputs.flake-utils.follows = "flake-utils";
       inputs.nixpkgs.follows = "nixpkgs";
-    };
-    # TODO: Replace after updating nixpkgs
-    ghostty = {
-      url = "github:ghostty-org/ghostty";
-      inputs.nixpkgs-unstable.follows = "nixpkgs";
-      inputs.nixpkgs-stable.follows = "nixpkgs";
-      inputs.flake-compat.follows = "flake-compat";
     };
   };
 
@@ -103,7 +95,6 @@
         vscode-server = flakeInputs.vscode-server // {
           homeManagerModule = flakeInputs.vscode-server.homeModules.default;
         };
-        ghostty = flakeInputs.ghostty.packages.${system};
       };
 
       lib = nixpkgs.lib.extend (
