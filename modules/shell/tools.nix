@@ -67,7 +67,6 @@ in
             cloc = "nix run nixpkgs#tokei";
             sloc = "nix run nixpkgs#tokei";
 
-            neofetch = "nix run nixpkgs#neofetch";
             onefetch = "nix run nixpkgs#onefetch";
             nix-prefetch = "nix run nixpkgs#nix-prefetch -- --option extra-experimental-features flakes";
           };
