@@ -62,7 +62,7 @@
         patches = [
           {
             url = "https://github.com/NixOS/nixpkgs/commit/0e3cc1632971746c4b28db40697471b2d30f1dc2.diff";
-            sha256 = "10j9lhvdlnhalckjk4ap1xvh1ckgbcv06f1vn4khbbq5j58vlnk7";
+            hash = "sha256-VxifU2EBrpGDoZ9D2IGEk+qGCZoUs0QxpyF/vOctjWE=";
           }
         ];
       };
