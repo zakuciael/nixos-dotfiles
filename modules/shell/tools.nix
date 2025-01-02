@@ -68,7 +68,8 @@ in
             sloc = "nix run nixpkgs#tokei";
 
             onefetch = "nix run nixpkgs#onefetch";
-            nix-prefetch = "nix run nixpkgs#nix-prefetch -- --option extra-experimental-features flakes";
+            nix-prefetch-github = "nix run nixpkgs#nix-prefetch-github -- --nix";
+            nix-prefetch-git = "nix run nixpkgs#nix-prefetch-git --";
           };
         };
 
