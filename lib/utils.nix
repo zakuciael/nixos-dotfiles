@@ -1,6 +1,7 @@
 {
   lib,
   pkgs,
+  inputs,
   username,
   ...
 }:
@@ -274,4 +275,79 @@ rec {
       inherit name destination;
       text = toRasi { } attrs;
     };
+
+  applyPatches =
+    {
+      pkgs,
+      name,
+      src,
+      patches,
+      lockFileEntries ? { },
+    }:
+    let
+      numOfPatches = lib.length patches;
+
+      patchedFlake =
+        let
+          call-flake = pkgs.fetchFromGitHub {
+            owner = "divnix";
+            repo = "call-flake";
+            rev = "5828e083daac39efb098dc719502379f2bf2ed8a";
+            hash = "sha256-pMGfOZkTHrpNz0roneqjWBajs3XFbI7neHn2oky7nqw=";
+          };
+          patched =
+            (pkgs.applyPatches {
+              inherit name src;
+              patches = map pkgs.fetchpatch2 patches;
+            }).overrideAttrs
+              (
+                _: prevAttrs: {
+                  outputs = [
+                    "out"
+                    "narHash"
+                  ];
+                  installPhase = lib.concatStringsSep "\n" [
+                    prevAttrs.installPhase
+                    ''
+                      ${lib.getExe pkgs.nix} \
+                        --extra-experimental-features nix-command \
+                        --offline \
+                        hash path ./ \
+                        > $narHash
+                    ''
+                  ];
+                }
+              );
+
+          lockFilePath = "${patched.outPath}/flake.lock";
+
+          lockFile = builtins.unsafeDiscardStringContext (
+            lib.generators.toJSON { } (
+              if lib.pathExists lockFilePath then
+                let
+                  original = lib.importJSON lockFilePath;
+                in
+                {
+                  inherit (original) root;
+                  nodes = original.nodes // lockFileEntries;
+                }
+              else
+                {
+                  nodes.root = { };
+                  root = "root";
+                }
+            )
+          );
+
+          flake = {
+            inherit (patched) outPath;
+            narHash = lib.fileContents patched.narHash;
+          };
+        in
+        (import "${call-flake}/call-flake.nix") lockFile flake "";
+    in
+    if numOfPatches == 0 then
+      lib.trace "applyPatches: skipping ${name}, no patches" src
+    else
+      lib.trace "applyPatches: creating ${name}, number of patches: ${toString numOfPatches}" patchedFlake;
 }

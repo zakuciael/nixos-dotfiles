@@ -9,6 +9,7 @@
     flake-compat.url = "github:edolstra/flake-compat";
     nix-colors.url = "github:misterio77/nix-colors";
     catppuccin.url = "github:catppuccin/nix";
+    # call-flake.url = "github:divnix/call-flake?rev=5828e083daac39efb098dc719502379f2bf2ed8a";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -62,7 +63,19 @@
       system = "x86_64-linux";
       username = "zakuciael";
 
-      pkgs = import inputs.nixpkgs {
+      nixpkgs-patched = lib.my.utils.applyPatches {
+        pkgs = nixpkgs.legacyPackages.${system};
+        name = "nixpkgs-patched-src";
+        src = nixpkgs;
+        patches = [
+          {
+            url = "https://patch-diff.githubusercontent.com/raw/NixOS/nixpkgs/pull/368966.diff";
+            sha256 = "10j9lhvdlnhalckjk4ap1xvh1ckgbcv06f1vn4khbbq5j58vlnk7";
+          }
+        ];
+      };
+
+      pkgs = import nixpkgs-patched {
         inherit system;
         config = {
           allowUnfree = true;

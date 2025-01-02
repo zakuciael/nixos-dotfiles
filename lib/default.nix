@@ -7,7 +7,14 @@
   ...
 }:
 let
-  utils = import ./utils.nix { inherit lib pkgs username; };
+  utils = import ./utils.nix {
+    inherit
+      lib
+      pkgs
+      inputs
+      username
+      ;
+  };
   mapper = import ./mapper.nix { inherit lib pkgs; };
   defs = import ./defs.nix { inherit lib; };
 
