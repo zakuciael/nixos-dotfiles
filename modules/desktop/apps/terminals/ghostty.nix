@@ -16,15 +16,17 @@ in
     programs = {
       ghostty = {
         enable = true;
-        package = inputs.ghostty.default; # TODO: Replace when nixpkgs will fully support Ghostty
-        shellIntegration.enable = true;
+        package = inputs.ghostty.default; # TODO: Remove after updating nixpkgs
+        enableBashIntegration = true; # By default enable at least bash integration.
+        enableFishIntegration = config.modules.shell.fish.enable;
+
         settings = {
           # Font settings
           font-size = 11;
           font-family = "JetBrains Mono";
 
           # Color theme
-          theme = "catppuccin-mocha"; # TODO: Replace when nixpkgs, home-manager and catppuccin/nix will fully support Ghostty
+          theme = "catppuccin-mocha"; # TODO: Replace when catppuccin/nix will add support for Ghostty
 
           # Other
           window-decoration = false;

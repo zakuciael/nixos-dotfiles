@@ -43,14 +43,13 @@
       inputs.flake-utils.follows = "flake-utils";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # TODO: Replace when nixpkgs and home-manager will fully support Ghostty
+    # TODO: Replace after updating nixpkgs
     ghostty = {
       url = "github:ghostty-org/ghostty";
       inputs.nixpkgs-unstable.follows = "nixpkgs";
       inputs.nixpkgs-stable.follows = "nixpkgs";
       inputs.flake-compat.follows = "flake-compat";
     };
-    ghostty-hm.url = "github:clo4/ghostty-hm-module";
   };
 
   outputs =
@@ -91,14 +90,11 @@
         vscode-server = flakeInputs.vscode-server // {
           homeManagerModule = flakeInputs.vscode-server.homeModules.default;
         };
-        ghostty-hm = flakeInputs.ghostty-hm // {
-          homeManagerModule = flakeInputs.ghostty-hm.homeModules.default;
-        };
         ghostty = flakeInputs.ghostty.packages.${system};
       };
 
       lib = nixpkgs.lib.extend (
-        self: super: {
+        _: _: {
           hm = home-manager.lib.hm;
           my = import ./lib {
             inherit

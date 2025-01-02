@@ -180,7 +180,6 @@ with lib.my;
       inputs.sops-nix.homeManagerModule
       inputs.catppuccin.homeManagerModule
       inputs.vscode-server.homeManagerModule
-      inputs.ghostty-hm.homeManagerModule
     ];
     useUserPackages = true;
     useGlobalPkgs = true;
