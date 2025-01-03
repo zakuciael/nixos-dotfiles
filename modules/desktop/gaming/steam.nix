@@ -3,18 +3,36 @@
   lib,
   pkgs,
   inputs,
+  username,
   ...
 }:
-with lib; let
+let
+  inherit (lib) mkIf mkEnableOption;
+  inherit (lib.hm) dag;
   cfg = config.modules.desktop.gaming.steam;
-in {
+  hmConfig = config.home-manager.users.${username};
+in
+{
   options.modules.desktop.gaming.steam = {
     enable = mkEnableOption "steam games";
   };
 
   config = mkIf (cfg.enable) {
+    home-manager.users.${username} = {
+      home.activation.createSteamDesktopLink = (
+        let
+          desktopEntriesDirectory = "${hmConfig.xdg.dataHome}/applications";
+          desktopDirectory = "${hmConfig.xdg.userDirs.desktop}";
+        in
+        dag.entryBefore [ "createXdgUserDirectories" ] ''
+          [[ -L "${desktopEntriesDirectory}" ]] || run mkdir -p $VERBOSE_ARG "${desktopEntriesDirectory}"
+          [[ -L "${desktopDirectory}" ]] || run ln -s $VERBOSE_ARG "${desktopEntriesDirectory}" "${desktopDirectory}"
+        ''
+      );
+    };
+
     environment = {
-      systemPackages = with pkgs; [mangohud];
+      systemPackages = with pkgs; [ mangohud ];
     };
 
     programs = {
@@ -29,7 +47,10 @@ in {
         dedicatedServer.openFirewall = true;
         localNetworkGameTransfers.openFirewall = true;
 
-        extraCompatPackages = [pkgs.proton-ge-bin inputs.nostale-dev-env.packages.proton-ge-nostale];
+        extraCompatPackages = [
+          pkgs.proton-ge-bin
+          inputs.nostale-dev-env.packages.proton-ge-nostale
+        ];
       };
     };
   };
