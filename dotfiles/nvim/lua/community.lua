@@ -10,4 +10,5 @@ return {
   { import = "astrocommunity.utility.hover-nvim" },
   { import = "astrocommunity.pack.yaml" },
   { import = "astrocommunity.pack.json" },
+  { import = "astrocommunity.pack.docker" },
 }

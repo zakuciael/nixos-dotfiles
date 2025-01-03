@@ -212,7 +212,12 @@ with lib.my;
 
           # YAML
           yaml-language-server
-          actionlint
+          docker-compose-language-service # docker-compose.yml
+          actionlint # .github/workflows/*.yml
+
+          # Dockerfile
+          dockerfile-language-server-nodejs
+          hadolint
 
           # Nix
           deadnix
