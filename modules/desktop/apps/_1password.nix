@@ -5,9 +5,22 @@
   username,
   desktop,
   ...
-}: let
-  inherit (lib) mkIf getExe listToAttrs nameValuePair attrByPath;
-  inherit (lib.my.utils) findLayoutConfig getLayoutMonitor recursiveReadSecretNames readSecrets mkSecretPlaceholder;
+}:
+let
+  inherit (lib)
+    mkIf
+    getExe
+    listToAttrs
+    nameValuePair
+    attrByPath
+    ;
+  inherit (lib.my.utils)
+    findLayoutConfig
+    getLayoutMonitor
+    recursiveReadSecretNames
+    readSecrets
+    mkSecretPlaceholder
+    ;
   inherit (lib.my.mapper) toTOML;
 
   hmConfig = config.home-manager.users.${username};
@@ -17,14 +30,15 @@
     cli = config.programs._1password.package;
   };
 
-  layout = findLayoutConfig config ({name, ...}: name == "main"); # Main monitor
+  layout = findLayoutConfig config ({ name, ... }: name == "main"); # Main monitor
   monitor = getLayoutMonitor layout "wayland";
   class = "1Password";
 
   base = "1password/ssh_agent";
-  secretNames = recursiveReadSecretNames {inherit config base;};
-  secrets = readSecrets {inherit config base;};
-in {
+  secretNames = recursiveReadSecretNames { inherit config base; };
+  secrets = readSecrets { inherit config base; };
+in
+{
   programs = {
     _1password = {
       enable = true;
@@ -32,7 +46,7 @@ in {
     };
     _1password-gui = {
       enable = true;
-      polkitPolicyOwners = [username];
+      polkitPolicyOwners = [ username ];
       package = pkgs._1password-gui-beta;
     };
 
@@ -52,19 +66,21 @@ in {
         owner = username;
         path = "${configDirectory}/1Password/ssh/agent.toml";
         file = toTOML "agent.toml" {
-          ssh-keys =
-            builtins.map
-            (
-              entry:
-                builtins.mapAttrs
-                (slot: _: mkSecretPlaceholder config [base entry slot])
-                (attrByPath [entry] {} secrets)
-            )
-            (builtins.attrNames secrets);
+          ssh-keys = builtins.map (
+            entry:
+            builtins.mapAttrs (
+              slot: _:
+              mkSecretPlaceholder config [
+                base
+                entry
+                slot
+              ]
+            ) (attrByPath [ entry ] { } secrets)
+          ) (builtins.attrNames secrets);
         };
       };
     };
-    secrets = listToAttrs (builtins.map (v: nameValuePair v {}) secretNames);
+    secrets = listToAttrs (builtins.map (v: nameValuePair v { }) secretNames);
   };
 
   home-manager.users.${username} = {
@@ -95,14 +111,9 @@ in {
         ];
 
         windowrulev2 = [
-          "float, class:(${class})"
           "center, class:(${class})"
-          "monitor ${monitor}, class:(${class})"
-          # "stayfocused,class:^(${class})$"
+          # "monitor ${monitor}, class:(${class})"
           "allowsinput on,class:^(${class})$"
-          "noblur,class:^(${class})$"
-          "noinitialfocus,class:^(${class})$"
-          "dimaround,class:^(${class})$"
         ];
       };
 
