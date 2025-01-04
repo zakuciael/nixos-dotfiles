@@ -69,7 +69,10 @@ in
   config = mkIf (cfg.enable) {
     users.users.${username}.extraGroups = [ "gamemode" ];
     home-manager.users.${username} = {
-      home.packages = [ pkgs.lutris-free ];
+      home.packages = [
+        pkgs.lutris-free
+        pkgs.bottles
+      ];
     };
 
     programs = {
