@@ -6,7 +6,7 @@ return {
         mappings = {
             n = {
                 -- Neotree: remember last source and make git the default
-                ["<Leader>e"] = { "<Cmd>Neotree toggle source=git_status<CR>", desc = "Toggle Explorer" },
+                ["<Leader>e"] = { "<Cmd>Neotree toggle source=last<CR>", desc = "Toggle Explorer" },
                 ["<Leader>o"] = {
                     function()
                         if vim.bo.filetype == "neo-tree" then
