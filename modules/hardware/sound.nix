@@ -6,36 +6,27 @@
   ...
 }:
 with lib;
-with lib.my; let
+with lib.my;
+let
   cfg = config.modules.hardware.sound;
-in {
+in
+{
   options.modules.hardware.sound = {
-    enable = mkEnableOption "sound driver";
-    driver = mkOption {
-      description = "Select sound driver";
-      example = "pulseaudio";
-      default = "pipewire";
-      type = types.str;
-    };
+    enable = mkEnableOption "Pipewire sound driver";
   };
 
   config = mkIf (cfg.enable) {
-    home-manager.users.${username}.home.packages = with pkgs; [pavucontrol];
+    home-manager.users.${username}.home.packages = with pkgs; [ pavucontrol ];
 
     security.rtkit.enable = true;
 
-    hardware.pulseaudio = rec {
-      enable = cfg.driver == "pulseaudio";
-      support32Bit = enable;
-    };
-
-    services.pipewire = let
-      pipewireEnable = cfg.driver == "pipewire";
-    in {
-      enable = pipewireEnable;
-      alsa.enable = pipewireEnable;
-      alsa.support32Bit = pipewireEnable;
-      pulse.enable = pipewireEnable;
+    services.pipewire = {
+      enable = true;
+      alsa = {
+        enable = true;
+        support32Bit = true;
+      };
+      pulse.enable = true;
     };
   };
 }
