@@ -15,8 +15,6 @@ let
     attrByPath
     ;
   inherit (lib.my.utils)
-    findLayoutConfig
-    getLayoutMonitor
     recursiveReadSecretNames
     readSecrets
     mkSecretPlaceholder
@@ -30,8 +28,6 @@ let
     cli = config.programs._1password.package;
   };
 
-  layout = findLayoutConfig config ({ name, ... }: name == "main"); # Main monitor
-  monitor = getLayoutMonitor layout "wayland";
   class = "1Password";
 
   base = "1password/ssh_agent";
@@ -108,6 +104,7 @@ in
         bind = [
           "Ctrl Shift, O, exec, ${getExe pkgs'.gui} --toggle"
           "Ctrl Shift, L, exec, ${getExe pkgs'.gui} --lock"
+          "Ctrl Shift, \, exec, ${getExe pkgs'.gui} --fill"
         ];
 
         windowrulev2 = [
@@ -117,16 +114,19 @@ in
         ];
       };
 
-      extraConfig = ''
-        bind = Ctrl Shift, P, exec, ${getExe pkgs'.gui} --quick-access
-        bind = Ctrl Shift, P, submap, 1pass
+      # Uncomment if needing quick-access
+      /*
+        extraConfig = ''
+          bind = Ctrl Shift, P, exec, ${getExe pkgs'.gui} --quick-access
+          bind = Ctrl Shift, P, submap, 1pass
 
-        submap = 1pass
-        bind = Ctrl Shift, P, closewindow, class:^(${class})$
-        bind = Ctrl Shift, P, submap, reset
+          submap = 1pass
+          bind = Ctrl Shift, P, closewindow, class:^(${class})$
+          bind = Ctrl Shift, P, submap, reset
 
-        submap = reset
-      '';
+          submap = reset
+        '';
+      */
     };
   };
 }
