@@ -55,19 +55,7 @@
       system = "x86_64-linux";
       username = "zakuciael";
 
-      nixpkgs-patched = lib.my.utils.applyPatches {
-        pkgs = nixpkgs.legacyPackages.${system};
-        name = "nixpkgs-patched-src";
-        src = nixpkgs;
-        patches = [
-          {
-            url = "https://github.com/NixOS/nixpkgs/commit/0e3cc1632971746c4b28db40697471b2d30f1dc2.diff";
-            hash = "sha256-VxifU2EBrpGDoZ9D2IGEk+qGCZoUs0QxpyF/vOctjWE=";
-          }
-        ];
-      };
-
-      pkgs = import nixpkgs-patched {
+      pkgs = import nixpkgs {
         inherit system;
         config = {
           allowUnfree = true;
