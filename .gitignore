@@ -1,0 +1,4 @@
+.direnv/*
+.idea/*
+**/age.key
+**/.decrypted~secrets.yaml
