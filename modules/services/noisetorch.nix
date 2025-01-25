@@ -31,7 +31,6 @@ in
           '';
           example = "alsa_input.usb-0c76_USB_PnP_Audio_Device-00.mono-fallback";
           default = null;
-          type = types.nullOr types.string;
           type = types.nullOr types.str;
         };
         unit = mkOption {
@@ -41,7 +40,6 @@ in
             Can be found by using "systemctl list-units --type=device" command.
           '';
           example = "sys-devices-pci0000:00-0000:00:01.3-0000:02:00.0-usb1-1\\x2d6-1\\x2d6:1.0-sound-card2.device";
-          type = types.string;
           type = types.str;
         };
       };
@@ -63,10 +61,10 @@ in
     systemd.user.services."noisetorch" = {
       description = "NoiseTorch microphone noise suppression";
       after = [
-        cfg.settings.device.unit
+        # cfg.settings.device.unit
         config.systemd.services.pipewire.name
       ];
-      requires = [ cfg.settings.device.unit ];
+      # requires = [ cfg.settings.device.unit ];
       wantedBy = [ "default.target" ];
       serviceConfig = {
         Type = "simple";
