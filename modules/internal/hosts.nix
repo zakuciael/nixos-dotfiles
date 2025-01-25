@@ -25,7 +25,6 @@ let
           inputs' = inputs' // {
             self = self';
           };
-
         };
       in
       inputs.nixpkgs.lib.nixosSystem {
