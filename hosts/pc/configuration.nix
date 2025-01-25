@@ -1,1 +1,6 @@
-{}
+{ inputs, ... }:
+{
+  imports = [
+    ./hardware.nix
+  ];
+}
