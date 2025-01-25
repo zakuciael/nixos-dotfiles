@@ -6,6 +6,7 @@
   ...
 }:
 let
+  inherit (lib.my.utils) recursiveMerge;
   inherit (lib)
     mkOption
     mkEnableOption
@@ -36,11 +37,15 @@ let
     }:
     {
       name = value.path;
-      value =
+      value = recursiveMerge [
         {
           inherit (value) device;
+          options = [
+            "x-gfs-show"
+            "x-gvfs-show"
+          ];
         }
-        // (optionalAttrs (name == "windows") {
+        (optionalAttrs (name == "windows") {
           fsType = "ntfs";
           options =
             let
@@ -54,7 +59,8 @@ let
               "fmask=133"
             ];
 
-        });
+        })
+      ];
     };
 in
 {
@@ -68,6 +74,7 @@ in
 
   config = mkIf (cfg.enable) {
     users.users.${username}.extraGroups = [ "gamemode" ];
+    environment.systemPackages = [ pkgs.gvfs ];
     home-manager.users.${username} = {
       home.packages = [
         pkgs.lutris-free
