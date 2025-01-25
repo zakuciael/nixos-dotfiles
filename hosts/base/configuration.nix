@@ -31,6 +31,7 @@
   # Nixpkgs config
   nixpkgs = {
     hostPlatform = system;
+    config.allowUnfree = true;
     overlays = [
       inputs.self.overlays.default
     ];
