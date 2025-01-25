@@ -14,6 +14,7 @@ return {
             opts.sources = require("astrocore").list_insert_unique(opts.sources, {
                 builtins.code_actions.statix,
                 builtins.diagnostics.deadnix,
+                builtins.diagnostics.statix,
                 builtins.formatting.nixfmt,
             })
         end,

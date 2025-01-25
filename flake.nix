@@ -43,6 +43,14 @@
       inputs.flake-utils.follows = "flake-utils";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    deadnix = {
+      url = "github:zakuciael/deadnix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    statix = {
+      url = "github:RobWalt/statix/";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -83,6 +91,8 @@
         vscode-server = flakeInputs.vscode-server // {
           homeManagerModule = flakeInputs.vscode-server.homeModules.default;
         };
+        deadnix = flakeInputs.deadnix.packages.${system};
+        statix = flakeInputs.statix.packages.${system};
       };
 
       lib = nixpkgs.lib.extend (

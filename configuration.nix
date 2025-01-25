@@ -220,8 +220,8 @@ with lib.my;
           hadolint
 
           # Nix
-          deadnix
-          statix
+          inputs.deadnix.default
+          inputs.statix.default
           nixd
           nixfmt-rfc-style
         ];
