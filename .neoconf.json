@@ -1,0 +1,22 @@
+{
+  "lspconfig": {
+    "nixd": {
+      "nixd": {
+        "nixpkgs": {
+          "expr": "import (builtins.getFlake (builtins.toString ./.)).inputs.nixpkgs {}"
+        },
+        "options": {
+          "nixos": {
+            "expr": "(builtins.getFlake (builtins.toString ./.)).nixosConfigurations.${builtins.replaceStrings [\"\n\"] [\"\"] (builtins.readFile \"/etc/hostname\")}.options"
+          },
+          "flake-parts-debug": {
+            "expr": "(builtins.getFlake (builtins.toString ./.)).debug.options"
+          },
+          "flake-parts-current-system": {
+            "expr": "(builtins.getFlake (builtins.toString ./.)).currentSystem.options"
+          }
+        }
+      }
+    }
+  }
+}
