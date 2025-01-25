@@ -92,19 +92,6 @@
     };
   };
 
-  # User settings
-  users.users = {
-    "zakuciael" = {
-      uid = 1000;
-      description = "Krzysztof Saczuk";
-      isNormalUser = true;
-      # TODO: Add hashedPasswordFile from secrets
-      extraGroups = [
-        "wheel" # Allow usage of `sudo` cmd
-      ];
-    };
-  };
-
   # System version
   system.stateVersion = "24.11";
 }

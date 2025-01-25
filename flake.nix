@@ -4,6 +4,10 @@
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-24.11";
     nixpkgs-unstable.url = "github:nixos/nixpkgs?ref=nixos-unstable";
     nixos-hardware.url = "github:zakuciael/nixos-hardware/master";
+    home-manager = {
+      url = "github:nix-community/home-manager?ref=release-24.11";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
       inputs.nixpkgs-lib.follows = "nixpkgs";
@@ -16,7 +20,7 @@
       debug = true;
       systems = [ "x86_64-linux" ];
       imports = [
-        ./modules/internal/hosts.nix # Exports all NixOS hosts located under `hosts/` directory.
+        ./modules/internal/hosts.nix # Exports all NixOS configurations located under `hosts/` directory.
         ./modules/internal/pkgs.nix # Exports all custom pkgs located under `pkgs/` directory.
         ./modules/internal/overlays.nix # Exports all overlays located under `overlays/` directory.
         ./modules/internal/modules.nix # Exports all modules located under `modules/` directory (Except internal ones).

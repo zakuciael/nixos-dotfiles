@@ -1,40 +1,51 @@
-# Generates NixOS systems using configuration found in the hosts/ directory.
 {
   self,
-  lib,
   inputs,
   withSystem,
   ...
 }:
 let
-  mkHost =
-    system: hostname:
+  mkHostConfiguration =
+    system: name:
     withSystem system (
       {
         self',
         inputs',
         ...
       }:
-      lib.nixosSystem {
+      let
         specialArgs = {
           inherit system;
-          inherit hostname;
+          hostname = name;
+          pkgs-unstable = inputs.nixpkgs-unstable.legacyPackages.${system}; # Adds `nixos-unstable` channel to module arguments
 
-          inputs' = inputs' // {
-            self = self';
-          };
           inputs = inputs // {
             inherit self;
           };
-          pkgs-unstable = inputs.nixpkgs-unstable.legacyPackages.${system}; # Adds `nixos-unstable` channel to module arguments
+          inputs' = inputs' // {
+            self = self';
+          };
+
         };
+      in
+      inputs.nixpkgs.lib.nixosSystem {
+        inherit specialArgs;
 
         modules = [
           # External modules
-          # TODO: Add external modules
+          inputs.home-manager.nixosModules.home-manager
 
-          # Host specific configuration
-          ./../../hosts/${hostname}/configuration.nix
+          # Home-Manager boilerplate configuration
+          {
+            home-manager = {
+              extraSpecialArgs = specialArgs;
+              useGlobalPkgs = true;
+              useUserPackages = true;
+            };
+          }
+
+          # Specific configuration
+          ./../../hosts/${name}/configuration.nix
 
           # Base configuration
           ./../../hosts/base/configuration.nix
@@ -45,7 +56,7 @@ let
 in
 {
   flake.nixosConfigurations = {
-    pc = mkHost "x86_64-linux" "pc";
-    laptop = mkHost "x86_64-linux" "laptop";
+    pc = mkHostConfiguration "x86_64-linux" "pc";
+    laptop = mkHostConfiguration "x86_64-linux" "laptop";
   };
 }
