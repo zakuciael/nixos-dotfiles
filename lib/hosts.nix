@@ -7,13 +7,20 @@
   scripts,
   ...
 }:
-with lib.my; {
-  mkHost = {name}:
+with lib.my;
+{
+  mkHost =
+    { name }:
     inputs.nixpkgs.lib.nixosSystem {
-      inherit (pkgs) system;
-
       specialArgs = {
-        inherit lib pkgs inputs username dotfiles scripts;
+        inherit
+          lib
+          pkgs
+          inputs
+          username
+          dotfiles
+          scripts
+          ;
         hostname = name;
       };
 
@@ -21,6 +28,7 @@ with lib.my; {
         [
           ./../configuration.nix
           ./../hosts/${name}/configuration.nix
+          "${inputs.nixpkgs}/nixos/modules/misc/nixpkgs/read-only.nix"
 
           inputs.home-manager.nixosModules.default
           inputs.sops-nix.nixosModules.default
@@ -29,8 +37,8 @@ with lib.my; {
           inputs.vscode-server.nixosModules.default
         ]
         ++ (utils.recursiveReadDir ./../modules {
-          ignoredDirs = ["apps"];
-          suffixes = ["nix"];
+          ignoredDirs = [ "apps" ];
+          suffixes = [ "nix" ];
         });
     };
 }
