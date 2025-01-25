@@ -1,13 +1,15 @@
 # Generates "overlays" flake output using configuration found in the overlays/ directory.
-{ lib, ... }:
+{ lib, inputs, ... }:
 let
   inherit (lib) fold filterAttrs;
 in
 rec {
   flake.overlays = {
-    swaynotificationcenter = import ./../../overlays/swaync.nix;
-    _1password-cli-beta = import ./../../overlays/_1password.nix;
-    httpie-desktop = import ./../../overlays/httpie-desktop.nix;
+    swaync-choose-output = import ./../../overlays/swaync-choose-output.nix;
+    mongodb-compass-keyring-fix = import ./../../overlays/mongodb-compass-keyring-fix.nix;
+    imhex-wayland-fix = import ./../../overlays/imhex-wayland-fix.nix;
+    _1password-cli-beta = import ./../../overlays/1password-cli-beta.nix;
+    discord-krisp-patch = import ./../../overlays/discord-krisp-patch;
 
     default =
       final: prev:
@@ -18,4 +20,16 @@ rec {
         |> fold (overlay: acc: acc // (overlay final prev)) { }
       );
   };
+
+  perSystem =
+    { system, ... }:
+    {
+      _module.args.pkgs = import inputs.nixpkgs {
+        inherit system;
+        config = {
+          allowUnfree = true;
+        };
+        overlays = [ flake.overlays.default ];
+      };
+    };
 }
