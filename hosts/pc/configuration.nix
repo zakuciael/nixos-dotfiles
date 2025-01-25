@@ -1,9 +1,7 @@
-{ inputs, ... }:
+{ ... }:
 {
   imports = [
     ./hardware.nix
-
-    inputs.self.nixosModules.docker
   ];
 
   # User settings
