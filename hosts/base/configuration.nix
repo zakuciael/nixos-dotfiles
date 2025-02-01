@@ -6,7 +6,10 @@
 }:
 {
   # Default modules to import
-  imports = [ ];
+  imports = [
+    ./hardware.nix
+    ./networking.nix
+  ];
 
   # Nix config
   nix = {

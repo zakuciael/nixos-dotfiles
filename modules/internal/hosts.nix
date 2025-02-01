@@ -48,7 +48,6 @@ let
 
           # Base configuration
           ./../../hosts/base/configuration.nix
-          ./../../hosts/base/networking.nix
         ];
       }
     );
