@@ -20,6 +20,10 @@ in
     kernelPackages = pkgs.linuxPackages_xanmod_stable;
   };
 
+  environment.systemPackages = [
+    pkgs.gvfs # Needed to display disks in GUI
+  ];
+
   fileSystems = {
     "/" = {
       device = "/dev/disk/by-partlabel/nixos";
@@ -32,5 +36,18 @@ in
     };
 
     "/media/storage".device = "/dev/md/storage";
+
+    # Game disks
+    "/media/games/linux" = {
+      device = "/dev/disk/by-partlabel/linux-games";
+      options = [ "x-gvfs-show" ];
+    };
+
+    # TODO: Steam had problem due to this disk not being owned by the current user... investigate.
+    "/media/games/windows" = {
+      device = "/dev/disk/by-partlabel/windows-games";
+      fsType = "ntfs";
+      options = [ "x-gvfs-show" ];
+    };
   };
 }
