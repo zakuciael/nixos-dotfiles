@@ -1,4 +1,4 @@
-{ inputs, ... }:
+{ pkgs, inputs, ... }:
 let
   inherit (inputs) nixos-hardware;
 in
@@ -14,8 +14,11 @@ in
   hardware.enableRedistributableFirmware = true;
   services.xserver.videoDrivers = [ "amdgpu" ];
 
-  boot.swraid.enable = true;
-  boot.supportedFilesystems = [ "ntfs" ];
+  boot = {
+    swraid.enable = true;
+    supportedFilesystems = [ "ntfs" ];
+    kernelPackages = pkgs.linuxPackages_xanmod_stable;
+  };
 
   fileSystems = {
     "/" = {
