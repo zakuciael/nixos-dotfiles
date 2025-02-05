@@ -16,8 +16,6 @@ in
     "${nixos-hardware}/common/gpu/amd"
   ];
 
-  nixpkgs.hostPlatform = mkDefault pkgs.system;
-
   # Additional settings for AMD GPU
   hardware.enableRedistributableFirmware = true;
   services.xserver.videoDrivers = [ "amdgpu" ];

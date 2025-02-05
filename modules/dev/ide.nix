@@ -22,7 +22,7 @@ let
     "extra-toolwindow-colorful-icons"
     "extra-icons"
     "direnv-integration"
-    "-env-files-support"
+    "-env-files"
     "-ignore"
     "nixidea"
     "ideolog"
