@@ -56,7 +56,7 @@ desktop.mkDesktopModule {
 
       xdg.portal = {
         extraPortals = with pkgs; [ xdg-desktop-portal-gtk ];
-        xdgOpenUsePortal = true;
+        xdgOpenUsePortal = false;
       };
 
       home-manager.users.${username} = {
