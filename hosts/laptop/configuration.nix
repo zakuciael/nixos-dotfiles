@@ -7,10 +7,15 @@
   ...
 }:
 with lib.my;
-with lib.my.utils; let
+with lib.my.utils;
+let
   colorScheme = inputs.nix-colors.colorSchemes.catppuccin-mocha;
-in {
-  imports = [./hardware.nix ./networking.nix];
+in
+{
+  imports = [
+    ./hardware.nix
+    ./networking.nix
+  ];
 
   nix.settings = {
     max-jobs = 4;
@@ -32,18 +37,20 @@ in {
     inherit colorScheme;
 
     # Custom bookmarks
-    gtk.gtk3.bookmarks = let
-      homeDirectory = config.home-manager.users.${username}.home.homeDirectory;
-    in [
-      (utils.mkGtkBookmark {
-        name = "Development";
-        path = "${homeDirectory}/dev";
-      })
-      (utils.mkGtkBookmark {
-        name = "NixOS Config";
-        path = "${homeDirectory}/dev/config/nixos-dotfiles";
-      })
-    ];
+    gtk.gtk3.bookmarks =
+      let
+        homeDirectory = config.home-manager.users.${username}.home.homeDirectory;
+      in
+      [
+        (utils.mkGtkBookmark {
+          name = "Development";
+          path = "${homeDirectory}/dev";
+        })
+        (utils.mkGtkBookmark {
+          name = "NixOS Config";
+          path = "${homeDirectory}/dev/config/nixos-dotfiles";
+        })
+      ];
   };
 
   # Secret management configuration
@@ -75,7 +82,17 @@ in {
             };
             mode = "1920x1080";
             scale = 1.2;
-            workspaces = mkLayoutWorkspaces [1 2 3 4 5 6 7 8 9];
+            workspaces = mkLayoutWorkspaces [
+              1
+              2
+              3
+              4
+              5
+              6
+              7
+              8
+              9
+            ];
             wallpaper = dotfiles.wallpapers.laptop."main.jpeg".source;
           }
         ];
@@ -96,7 +113,6 @@ in {
       polkit.enable = true;
       gnome-keyring.enable = true;
       wallpaper.enable = true;
-      syncthing.enable = true;
       ssh = {
         enable = true;
         server = {
@@ -111,7 +127,11 @@ in {
         server = true;
       };
       kubernetes.enable = true;
-      ides = ["idea-ultimate" "rust-rover" "goland"];
+      ides = [
+        "idea-ultimate"
+        "rust-rover"
+        "goland"
+      ];
       nostale = {
         enable = true;
         installPath = "/media/games/linux/Other/NosTale";
