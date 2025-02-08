@@ -2,3 +2,4 @@
 .idea/*
 hosts/**/age.key
 hosts/**/.decrypted~secrets.yaml
+.envrc
