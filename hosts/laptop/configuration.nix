@@ -113,15 +113,6 @@ in
       polkit.enable = true;
       gnome-keyring.enable = true;
       wallpaper.enable = true;
-      samba = {
-        enable = true;
-        shares = {
-          "/media/shares/Development" = {
-            url = "//51.83.129.177/Development";
-            secret = "development";
-          };
-        };
-      };
       ssh = {
         enable = true;
         server = {
