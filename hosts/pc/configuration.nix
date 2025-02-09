@@ -158,6 +158,15 @@ in
       gnome-keyring.enable = true;
       wallpaper.enable = true;
       ssh.enable = true;
+      samba = {
+        enable = true;
+        shares = {
+          "/media/shares/Development" = {
+            url = "//51.83.129.177/Development";
+            secret = "development";
+          };
+        };
+      };
       noisetorch = {
         enable = true;
         settings = {
