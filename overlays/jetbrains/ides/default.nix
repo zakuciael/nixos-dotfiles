@@ -36,6 +36,24 @@ in
               ln -s ${final.delve}/bin/dlv $out/goland/plugins/go-plugin/lib/dlv/linux/dlv
             '';
         });
+        rust-rover = prev.jetbrains.rust-rover.overrideAttrs (attrs: {
+          postFixup = ''
+            (
+                cd $out/rust-rover
+
+                # Copied over from clion (gdb seems to have a couple of patches)
+                ls -d $PWD/bin/gdb/linux/*/lib/python3.8/lib-dynload/* |
+                xargs patchelf \
+                  --replace-needed libssl.so.10 libssl.so \
+                  --replace-needed libcrypto.so.10 libcrypto.so
+
+                ls -d $PWD/bin/lldb/linux/*/lib/python3.8/lib-dynload/* |
+                xargs patchelf \
+                  --replace-needed libssl.so.10 libssl.so \
+                  --replace-needed libcrypto.so.10 libcrypto.so
+              )
+          '';
+        });
       };
     }
   )
