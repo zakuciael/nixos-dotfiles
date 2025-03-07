@@ -4,10 +4,16 @@
   pkgs,
   ...
 }:
-with lib;
-with lib.my; let
+let
+  inherit (lib)
+    mkIf
+    mkEnableOption
+    mkOption
+    types
+    ;
   cfg = config.modules.hardware.grub;
-in {
+in
+{
   options.modules.hardware.grub = {
     enable = mkEnableOption "GRUB2 as bootloader";
     extraEntries = mkOption {
@@ -38,17 +44,17 @@ in {
     };
   };
 
-  config = mkIf (cfg.enable) {
+  config = mkIf cfg.enable {
     boot.loader.grub = {
-      inherit (cfg) extraEntries;
+      inherit (cfg) extraEntries theme;
 
       enable = true;
       efiSupport = true;
       device = "nodev";
+      default = "saved";
       splashImage = "${cfg.theme}/splash_image.jpg";
       gfxmodeEfi = cfg.resolution;
       gfxmodeBios = cfg.resolution;
-      theme = cfg.theme;
     };
   };
 }
