@@ -6,11 +6,15 @@
 }:
 let
   inherit (lib)
+    optionalString
+    attrsToList
+    concatStringsSep
     mkIf
     mkEnableOption
     mkOption
     types
     ;
+  inherit (lib.my.utils) indentLines;
   cfg = config.modules.hardware.grub;
 in
 {
@@ -18,18 +22,37 @@ in
     enable = mkEnableOption "GRUB2 as bootloader";
     extraEntries = mkOption {
       description = "Adds extra menu entries to GRUB";
-      example = ''
-        menuentry "Windows" {
-          insmod part_gpt
-          insmod fat
-          insmod search_fs_uuid
-          insmod chain
-          search --fs-uuid --set=root $FS_UUID
-          chainloader /EFI/Microsoft/Boot/bootmgfw.efi
-        }
-      '';
-      default = "";
-      type = types.str;
+      example = {
+        "Windows" = {
+          class = "windows";
+          body = ''
+            insmod part_gpt
+            insmod fat
+            insmod search_fs_uuid
+            insmod chain
+            search --fs-uuid --set=root $FS_UUID
+            chainloader /EFI/Microsoft/Boot/bootmgfw.efi
+          '';
+        };
+      };
+      type =
+        with types;
+        attrsOf (submodule {
+          options = {
+            class = mkOption {
+              description = "Entry class name";
+              example = "windows";
+              default = null;
+              type = nullOr str;
+            };
+            body = mkOption {
+              description = "Entry body";
+              example = "";
+              type = str;
+            };
+          };
+        });
+      default = { };
     };
     resolution = mkOption {
       description = "Set the resolution to use in the GRUB menu";
@@ -46,7 +69,7 @@ in
 
   config = mkIf cfg.enable {
     boot.loader.grub = {
-      inherit (cfg) extraEntries theme;
+      inherit (cfg) theme;
 
       enable = true;
       efiSupport = true;
@@ -55,6 +78,18 @@ in
       splashImage = "${cfg.theme}/splash_image.jpg";
       gfxmodeEfi = cfg.resolution;
       gfxmodeBios = cfg.resolution;
+      extraEntries =
+        attrsToList cfg.extraEntries
+        |> builtins.map (
+          { name, value }:
+          ''
+            menuentry "${name}" ${optionalString (value.class != null) "--class ${value.class}"} {
+            ${optionalString (config.boot.loader.grub.default == "saved") "  savedefault"}
+            ${indentLines "  " value.body}
+            }
+          ''
+        )
+        |> concatStringsSep "\n";
     };
   };
 }
