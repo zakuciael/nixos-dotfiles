@@ -1,11 +1,19 @@
-{...}: {
+{ username, ... }:
+{
   config = {
-    services.udisks2 = {
-      enable = true;
-      mountOnMedia = false;
+    home-manager.users.${username} = {
+      services.udiskie = {
+        enable = true;
+        automount = true;
+      };
     };
 
-    services.devmon.enable = true;
-    services.gvfs.enable = true;
+    services = {
+      udisks2 = {
+        enable = true;
+        mountOnMedia = false;
+      };
+      gvfs.enable = true;
+    };
   };
 }
