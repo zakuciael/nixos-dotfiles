@@ -84,7 +84,7 @@
           packages = flakeInputs.nostale-dev-env.packages.${system};
         };
         catppuccin = flakeInputs.catppuccin // {
-          homeManagerModule = flakeInputs.catppuccin.homeManagerModules.catppuccin;
+          homeManagerModule = flakeInputs.catppuccin.homeModules.catppuccin;
           nixosModules = flakeInputs.catppuccin.nixosModules // {
             default = flakeInputs.catppuccin.nixosModules.catppuccin;
           };
