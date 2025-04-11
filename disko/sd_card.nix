@@ -13,12 +13,13 @@
         partitions = {
           shared = {
             size = "150G";
+            alignment = 1; # Set sector alignment to align to physical sectors.
             content = {
               type = "filesystem";
-              format = "exfat";
+              format = "ntfs";
               extraArgs = [
                 "-L"
-                "shared"
+                "Shared"
               ];
             };
           };
@@ -29,7 +30,7 @@
               format = "ext4";
               extraArgs = [
                 "-L"
-                "steamdeck"
+                "SteamDeck"
               ];
             };
           };
