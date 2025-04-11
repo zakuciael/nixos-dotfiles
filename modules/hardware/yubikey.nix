@@ -17,7 +17,7 @@ in
     enable = mkEnableOption "YubiKey support";
   };
 
-  config = mkIf (cfg.enable) {
+  config = mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
       yubikey-manager
       yubioath-flutter
@@ -112,8 +112,14 @@ in
       };
 
       services = {
-        login.u2fAuth = false;
-        sudo.u2fAuth = true;
+        login = {
+          u2fAuth = false;
+          yubicoAuth = false;
+        };
+        sudo = {
+          u2fAuth = true;
+          yubicoAuth = true;
+        };
       };
     };
   };
