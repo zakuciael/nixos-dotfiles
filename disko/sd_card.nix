@@ -20,6 +20,7 @@
               extraArgs = [
                 "-L"
                 "Shared"
+                "-Q" # Fast format
               ];
             };
           };
