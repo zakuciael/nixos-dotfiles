@@ -277,12 +277,5 @@ with lib.my;
   };
 
   # System
-  system = {
-    stateVersion = "24.05";
-    autoUpgrade = {
-      enable = true;
-      flake = "github:zakuciael/nixos-dotfiles#${hostname}";
-      dates = "daily";
-    };
-  };
+  system.stateVersion = "24.05";
 }
