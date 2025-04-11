@@ -97,6 +97,9 @@
         };
         deadnix = flakeInputs.deadnix.packages.${system};
         statix = flakeInputs.statix.packages.${system};
+        disko = flakeInputs.disko // {
+          packages = flakeInputs.disko.packages.${system};
+        };
       };
 
       lib = nixpkgs.lib.extend (
@@ -122,6 +125,13 @@
         builtins.readDir ./hosts |> builtins.mapAttrs (name: _: mkHost { inherit name; });
 
       devShells.${system}.default = pkgs.callPackage ./shell.nix { };
+
+      apps.${system} = {
+        disko = {
+          type = "app";
+          program = "${inputs.disko.packages.disko}/bin/disko";
+        };
+      };
 
       inherit pkgs inputs lib;
     };
