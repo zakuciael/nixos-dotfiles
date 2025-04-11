@@ -13,8 +13,6 @@ with lib;
     "${inputs.nixos-hardware.outPath}/common/pc/laptop/ssd"
   ];
 
-  boot.supportedFilesystems = [ "ntfs" ];
-
   fileSystems."/" = {
     device = "/dev/disk/by-uuid/df1bba7f-d325-41a0-95d8-35dfb05cb990";
     fsType = "ext4";
@@ -32,6 +30,7 @@ with lib;
   swapDevices = [ { device = "/dev/disk/by-uuid/760c0f81-0773-45f5-b853-08ef5eb92314"; } ];
 
   boot = {
+    supportedFilesystems = [ "ntfs" ];
     initrd.kernelModules = [ ];
     kernelPackages = mkDefault pkgs.linuxPackages_latest;
     # Kernel Panic on suspend fix, taken from ArchLinux wiki.
@@ -42,6 +41,7 @@ with lib;
     # Audio Mute LED
     extraModprobeConfig = ''
       options snd-hda-intel model=mute-led-gpio
+      blacklist ntfs3
     '';
   };
 

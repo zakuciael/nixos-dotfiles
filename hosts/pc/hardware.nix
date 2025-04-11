@@ -24,6 +24,9 @@ in
     kernelPackages = mkDefault pkgs.linuxPackages_latest;
     swraid.enable = true;
     supportedFilesystems = [ "ntfs" ];
+    extraModprobeConfig = ''
+      blacklist ntfs3
+    '';
   };
 
   fileSystems = {
