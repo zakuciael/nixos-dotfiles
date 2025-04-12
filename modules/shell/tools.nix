@@ -26,7 +26,7 @@ in
     enable = mkEnableOption "shell utility packages";
   };
 
-  config = mkIf (cfg.enable) {
+  config = mkIf cfg.enable {
     programs.nix-ld.enable = true;
 
     home-manager.users.${username} = {
@@ -42,6 +42,13 @@ in
         lazygit # simple terminal UI for git commands
         sd # Intuitive find & replace CLI (sed alternative)
         ripgrep # ripgrep recursively searches directories for a regex pattern while respecting your gitignore
+        dogdns # A command-line DNS client.
+        dua # View disk space usage and delete unwanted data, fast.
+        procs # A modern replacement for ps written in Rust
+        gping # Ping, but with a graph
+        tokei # Count your code, quickly.
+        nix-prefetch-github # Prefetch sources from github for nix build tool
+        nix-prefetch-git # Script used to obtain source hashes for fetchgit
       ];
 
       catppuccin = {
@@ -58,18 +65,17 @@ in
             tree = "${getExe tre-command}";
 
             # On-demand tools
-            dig = "nix run nixpkgs#dogdns"; # A command-line DNS client.
-            dua = "nix run nixpkgs#dua -- i"; # View disk space usage and delete unwanted data, fast.
-            procs = "nix run nixpkgs#procs"; # A modern replacement for ps written in Rust
-            gping = "nix run nixpkgs#gping"; # Ping, but with a graph
+            dig = "${getExe dogdns}";
+            dua = "${getExe dua} i";
+            procs = "${getExe procs}";
+            gping = "${getExe gping}";
 
-            tokei = "nix run nixpkgs#tokei"; # Count your code, quickly.
-            cloc = "nix run nixpkgs#tokei";
-            sloc = "nix run nixpkgs#tokei";
+            tokei = "${getExe tokei}";
+            cloc = "${getExe tokei}";
+            sloc = "${getExe tokei}";
 
-            onefetch = "nix run nixpkgs#onefetch";
-            nix-prefetch-github = "nix run nixpkgs#nix-prefetch-github -- --nix";
-            nix-prefetch-git = "nix run nixpkgs#nix-prefetch-git --";
+            nix-prefetch-github = "${nix-prefetch-github}/bin/nix-prefetch-github --nix";
+            nix-prefetch-git = "${nix-prefetch-git}/bin/nix-prefetch-git";
           };
         };
 
