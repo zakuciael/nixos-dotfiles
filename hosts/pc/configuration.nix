@@ -158,19 +158,6 @@ in
       gnome-keyring.enable = true;
       wallpaper.enable = true;
       ssh.enable = true;
-      samba = {
-        enable = true;
-        shares = {
-          "/media/shares/Dev\ Resources" = {
-            url = "//51.83.129.177/dev resources";
-            secret = "development";
-          };
-          "/media/shares/Dev\ Tools" = {
-            url = "//51.83.129.177/dev tools";
-            secret = "development";
-          };
-        };
-      };
       noisetorch = {
         enable = true;
         settings = {
