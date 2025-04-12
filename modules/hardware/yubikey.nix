@@ -104,22 +104,10 @@ in
         };
         control = "sufficient";
       };
-      yubico = {
-        enable = true;
-        debug = false;
-        mode = "challenge-response";
-        id = [ "30554265" ];
-      };
 
       services = {
-        login = {
-          u2fAuth = false;
-          yubicoAuth = false;
-        };
-        sudo = {
-          u2fAuth = true;
-          yubicoAuth = true;
-        };
+        login.u2fAuth = false;
+        sudo.u2fAuth = true;
       };
     };
   };
