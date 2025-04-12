@@ -26,7 +26,7 @@ in
     enable = mkEnableOption "general desktop applications";
   };
 
-  config = mkIf (cfg.enable) {
+  config = mkIf cfg.enable {
     programs.noisetorch.enable = true;
 
     home-manager.users.${username} = {
@@ -42,13 +42,16 @@ in
         # Music, Videos, Photos, etc.
         spotify
         eog
-        gnome-text-editor
         vlc
-        qalculate-gtk
+        gnome-text-editor
+        gnome-calculator
+        gnome-calendar
 
         # Other
+        czkawka
         font-manager
-        ytmdesktop
+        youtube-music
+        errands
       ];
     };
   };
