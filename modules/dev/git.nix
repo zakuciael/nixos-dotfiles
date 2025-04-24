@@ -44,7 +44,10 @@ in
             '';
           };
           extraConfig = {
-            core.editor = "nvim";
+            core = {
+              filemode = false;
+              editor = "nvim";
+            };
             init.defaultBranch = "main";
           };
         };
