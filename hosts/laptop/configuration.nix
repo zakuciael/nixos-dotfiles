@@ -1,5 +1,4 @@
 {
-  config,
   lib,
   inputs,
   username,
@@ -22,12 +21,6 @@ in
     cores = 2;
   };
 
-  environment = {
-    variables = {
-      FLAKE = "/home/${username}/dev/config/nixos-dotfiles";
-    };
-  };
-
   # Color theme configuration
   catppuccin.flavor = "mocha";
 
@@ -35,28 +28,14 @@ in
   home-manager.users."${username}" = {
     # nix-colors color scheme
     inherit colorScheme;
-
-    # Custom bookmarks
-    gtk.gtk3.bookmarks =
-      let
-        homeDirectory = config.home-manager.users.${username}.home.homeDirectory;
-      in
-      [
-        (utils.mkGtkBookmark {
-          name = "Development";
-          path = "${homeDirectory}/dev";
-        })
-        (utils.mkGtkBookmark {
-          name = "NixOS Config";
-          path = "${homeDirectory}/dev/config/nixos-dotfiles";
-        })
-      ];
   };
 
   # Secret management configuration
-  sops.age.keyFile = "/home/${username}/.config/sops/age/keys.txt";
-  sops.defaultSopsFile = ./secrets.yaml;
-  sops.defaultSopsFormat = "yaml";
+  sops = {
+    age.keyFile = "/home/${username}/.config/sops/age/keys.txt";
+    defaultSopsFile = ./secrets.yaml;
+    defaultSopsFormat = "yaml";
+  };
 
   users.users.${username} = {
     openssh.authorizedKeys.keys = [

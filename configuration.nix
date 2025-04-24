@@ -4,7 +4,6 @@
   pkgs,
   inputs,
   username,
-  hostname,
   scripts,
   ...
 }:
@@ -100,6 +99,9 @@ with lib.my;
       bash
     ];
     shells = with pkgs; [ bash ];
+    variables = {
+      FLAKE = "/run/media/${username}/Shared/Projects/nixos-dotfiles";
+    };
   };
 
   # Linux Kernel settings
@@ -183,11 +185,26 @@ with lib.my;
     ];
     useUserPackages = true;
     useGlobalPkgs = true;
-    users.${username}.home = {
-      inherit username;
-      stateVersion = "24.05";
-      homeDirectory = "/home/${username}";
-      packages = scripts.mkShellExports config;
+    users.${username} = {
+      home = {
+        inherit username;
+        stateVersion = "24.05";
+        homeDirectory = "/home/${username}";
+        packages = scripts.mkShellExports config;
+      };
+
+      # Custom bookmarks
+      gtk.gtk3.bookmarks = [
+        (utils.mkGtkBookmark {
+          name = "Projects";
+          path = "/run/media/${username}/Shared/Projects";
+        })
+        (utils.mkGtkBookmark {
+          name = "NixOS Config";
+          path = "/run/media/${username}/Shared/Projects/nixos-dotfiles";
+        })
+      ];
+
     };
   };
 
