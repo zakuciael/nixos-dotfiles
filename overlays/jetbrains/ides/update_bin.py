@@ -148,5 +148,5 @@ print(commitMessage)
 
 logging.info("#### Updating plugins ####")
 plugin_script = current_path.joinpath("../plugins/update_plugins.py").resolve()
-subprocess.call(plugin_script)
+subprocess.call(plugin_script, cwd=plugin_script.parent)
 
