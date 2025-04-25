@@ -54,4 +54,19 @@ with lib;
       enable32Bit = true;
     };
   };
+
+  modules.hardware.grub.extraEntries = {
+    Windows = {
+      class = "windows";
+      body = ''
+        insmod part_gpt
+        insmod fat
+        insmod search_fs_uuid
+        insmod chain
+        search --no-floppy --fs-uuid --set=root A878-849A
+        chainloader /efi/Microsoft/Boot/bootmgfw.efi
+      '';
+    };
+  };
+
 }
