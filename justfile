@@ -7,7 +7,7 @@
   overlays/jetbrains/ides/update_bin.py
 
 @apply:
-  nh os switch
+  nh os switch .
 
 @check:
   nix flake check
