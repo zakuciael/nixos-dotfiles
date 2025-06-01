@@ -100,7 +100,7 @@ with lib.my;
     ];
     shells = with pkgs; [ bash ];
     variables = {
-      FLAKE = "/run/media/${username}/Shared/Projects/nixos-dotfiles";
+      NH_FLAKE = "/run/media/${username}/Shared/Projects/nixos-dotfiles";
     };
   };
 
@@ -188,7 +188,7 @@ with lib.my;
     users.${username} = {
       home = {
         inherit username;
-        stateVersion = "24.05";
+        stateVersion = "25.11";
         homeDirectory = "/home/${username}";
         packages = scripts.mkShellExports config;
       };
@@ -294,5 +294,5 @@ with lib.my;
   };
 
   # System
-  system.stateVersion = "24.05";
+  system.stateVersion = "25.11";
 }
