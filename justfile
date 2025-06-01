@@ -5,6 +5,12 @@
 @update:
   nix flake update
   overlays/jetbrains/ides/update_bin.py
+  git add \
+    ./overlays/jetbrains/ides/versions.json \
+    ./overlays/jetbrains/plugins/plugins.json \
+    ./flake.lock
+  nix flake check
+  git commit -m "chore(deps): update \`flake.lock\` and JetBrains IDEs"
 
 @apply:
   nh os switch .
