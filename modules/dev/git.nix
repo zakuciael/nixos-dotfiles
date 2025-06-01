@@ -45,7 +45,7 @@ in
           };
           extraConfig = {
             core = {
-              filemode = false;
+              fileMode = false;
               editor = "nvim";
             };
             init.defaultBranch = "main";
