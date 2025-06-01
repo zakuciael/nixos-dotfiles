@@ -14,15 +14,14 @@ in
     overclock = mkEnableOption "overclocking";
   };
 
-  config = mkIf (cfg.enable) {
+  config = mkIf cfg.enable {
     users.users.${username}.extraGroups = [ "corectrl" ];
 
-    programs.corectrl = {
+    hardware.amdgpu.overdrive = optionalAttrs cfg.overclock {
       enable = true;
-      gpuOverclock = optionalAttrs (cfg.overclock) {
-        enable = true;
-        # ppfeaturemask = "";
-      };
+      # ppfeaturemask = "";
     };
+
+    programs.corectrl.enable = true;
   };
 }
