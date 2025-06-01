@@ -43,7 +43,9 @@ in
     _1password-gui = {
       enable = true;
       polkitPolicyOwners = [ username ];
-      package = pkgs._1password-gui-beta;
+      package = pkgs._1password-gui.override {
+        channel = "beta";
+      };
     };
 
     fish.interactiveShellInit = ''
