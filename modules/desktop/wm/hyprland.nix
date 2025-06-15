@@ -190,6 +190,17 @@ desktop.mkDesktopModule {
               "$mod, mouse:273, resizewindow"
             ];
 
+            windowrulev2 =
+              let
+                partizionExtId = "ldimfpkkjopddckaglpeakpaepclcljn";
+                partizionExtWindowClass = ''chrome-${partizionExtId}-Default'';
+              in
+              [
+                ''float, class:^(${partizionExtWindowClass})$''
+                ''center, class:^(${partizionExtWindowClass})$''
+                ''size 40% 40%, class:^(${partizionExtWindowClass})$''
+              ];
+
             # TODO: Check which of those rules leave and which delete
             /*
                  windowrulev2 = [
