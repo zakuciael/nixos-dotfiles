@@ -102,7 +102,11 @@ let
           mps
           (mkIDE phpstorm { })
           (mkIDE pycharm-professional { })
-          (mkIDE rider { })
+          (mkIDE rider {
+            ignorePlugins = [
+              "ideolog"
+            ];
+          })
           (mkIDE ruby-mine { })
           (mkIDE rust-rover {
             plugins = [
@@ -110,7 +114,6 @@ let
               "toml"
             ];
             ignorePlugins = [
-              "jetbrains-ai-assistant"
               "ideolog"
             ];
           })
