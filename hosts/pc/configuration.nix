@@ -112,7 +112,7 @@ in
       yubikey.enable = true;
       corectrl = {
         enable = true;
-        overclock = true;
+        overclock = false;
       };
     };
     desktop = {
