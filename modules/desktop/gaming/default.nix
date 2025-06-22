@@ -76,9 +76,11 @@ in
     users.users.${username}.extraGroups = [ "gamemode" ];
     environment.systemPackages = [ pkgs.gvfs ];
     home-manager.users.${username} = {
-      home.packages = [
-        pkgs.lutris-free
-        pkgs.bottles
+      home.packages = with pkgs; [
+        lutris
+        bottles
+        umu-launcher
+        protonup-qt
       ];
     };
 
