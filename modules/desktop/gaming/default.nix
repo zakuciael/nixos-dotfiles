@@ -72,7 +72,7 @@ in
     };
   };
 
-  config = mkIf (cfg.enable) {
+  config = mkIf cfg.enable {
     users.users.${username}.extraGroups = [ "gamemode" ];
     environment.systemPackages = [ pkgs.gvfs ];
     home-manager.users.${username} = {
@@ -81,6 +81,17 @@ in
         pkgs.bottles
       ];
     };
+
+    # Make system Esync-compatible
+    systemd.extraConfig = "DefaultLimitNOFILE=524288";
+    security.pam.loginLimits = [
+      {
+        domain = username;
+        type = "hard";
+        item = "nofile";
+        value = "524288";
+      }
+    ];
 
     programs = {
       gamemode = {
