@@ -33,6 +33,7 @@ desktop.mkDesktopModule {
     "discord"
     "swaync"
     "thunderbird"
+    "obs"
   ];
 
   extraConfig =
