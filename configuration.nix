@@ -97,6 +97,7 @@ with lib.my;
     systemPackages = with pkgs; [
       git
       bash
+      killall
     ];
     shells = with pkgs; [ bash ];
     variables = {
