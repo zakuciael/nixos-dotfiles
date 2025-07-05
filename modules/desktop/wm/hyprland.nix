@@ -16,6 +16,11 @@ desktop.mkDesktopModule {
 
   name = "hyprland";
   autostartPath = ".config/hypr/autostart.sh";
+  autostart = [
+    # Enable proxy for system tray icons inside wine
+    "${getBin pkgs.kdePackages.plasma-workspace}/bin/xembedsniproxy"
+  ];
+
   desktopApps = [
     # Terminal apps (uncomment the preffered one)
     # "alacritty"
