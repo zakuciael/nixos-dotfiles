@@ -3,11 +3,13 @@
   lib,
   pkgs,
   username,
+  desktop,
   ...
 }:
 let
   inherit (lib.my.utils) recursiveMerge;
   inherit (lib)
+    getBin
     mkOption
     mkEnableOption
     types
@@ -78,7 +80,7 @@ in
     home-manager.users.${username} = {
       home.packages = with pkgs; [
         lutris
-        bottles
+        (bottles.override { removeWarningPopup = true; })
         umu-launcher
         protonup-qt
       ];
