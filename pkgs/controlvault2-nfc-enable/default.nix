@@ -19,6 +19,8 @@ python3Packages.buildPythonApplication {
     pyusb
   ];
 
+  pyproject = true;
+
   build-system = with python3Packages; [
     setuptools
   ];
@@ -45,7 +47,7 @@ python3Packages.buildPythonApplication {
   meta = with lib; {
     description = "Enable NFC on Linux for pcscd on Dell E7470 (and others) with ControlVault2";
     license = licenses.bsd3;
-    maintainers = with maintainers; [zakuciael];
+    maintainers = with maintainers; [ zakuciael ];
     mainProgram = "controlvault2-nfc-enable";
     platforms = platforms.linux;
   };
