@@ -6,14 +6,16 @@
   ...
 }:
 with lib;
-with lib.my; let
+with lib.my;
+let
   cfg = config.modules.dev.tools;
-in {
+in
+{
   options.modules.dev.tools = {
     enable = mkEnableOption "development tools";
   };
 
-  config = mkIf (cfg.enable) {
+  config = mkIf cfg.enable {
     home-manager.users.${username} = {
       home.packages = with pkgs; [
         # Git
@@ -41,6 +43,9 @@ in {
 
         # Tracking
         wakatime
+
+        # Toolbox
+        devtoolbox
       ];
     };
   };
