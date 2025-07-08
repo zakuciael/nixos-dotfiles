@@ -106,8 +106,6 @@ in
       };
     };
 
-    boot.kernelPackages = pkgs.linuxKernel.packages.linux_xanmod_stable;
-
     fileSystems = mkIf (builtins.any ({ value, ... }: value.device != null) (attrsToList cfg.disks)) (
       listToAttrs (builtins.map mkFileSystemConfig (attrsToList cfg.disks))
     );
