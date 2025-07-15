@@ -42,7 +42,7 @@ in
         # Music, Videos, Photos, etc.
         spotify
         eog
-        vlc
+        vlc-wayland
         gnome-text-editor
         gnome-calculator
         gnome-calendar
