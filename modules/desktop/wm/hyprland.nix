@@ -52,21 +52,23 @@ desktop.mkDesktopModule {
       programs.hyprland = {
         enable = true;
         xwayland.enable = true;
+        withUWSM = true;
       };
 
       # Make chrome and electron apps run native on wayland
       environment.sessionVariables.NIXOS_OZONE_WL = "1";
 
       # Set default session to non-systemd hyprland
-      services.displayManager.defaultSession = "hyprland";
-
-      xdg.portal = {
-        extraPortals = with pkgs; [ xdg-desktop-portal-gtk ];
-        xdgOpenUsePortal = false;
-      };
+      services.displayManager.defaultSession = "hyprland-uwsm";
 
       home-manager.users.${username} = {
         home.packages = with pkgs; [ wl-clipboard ];
+
+        xdg.portal = {
+          enable = true;
+          extraPortals = with pkgs; [ xdg-desktop-portal-gtk ];
+          xdgOpenUsePortal = false;
+        };
 
         wayland.windowManager.hyprland = {
           enable = true;
