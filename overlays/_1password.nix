@@ -1,7 +1,21 @@
 { lib, ... }:
 with lib;
 singleton (
-  _: prev: {
+  final: prev: {
+    _1password-gui-beta =
+      (prev._1password-gui.override {
+        channel = "beta";
+      }).overrideAttrs
+        {
+          preFixup = ''
+            makeShellWrapper $out/share/1password/1password $out/bin/1password \
+              "''${gappsWrapperArgs[@]}" \
+              --suffix PATH : ${makeBinPath (with final; [ xdg-utils ])} \
+              --prefix LD_LIBRARY_PATH : ${makeLibraryPath (with final; [ udev ])} \
+              --add-flags "\''${NIXOS_OZONE_WL:+--ozone-platform-hint=auto}"
+          '';
+        };
+
     _1password-cli-beta = prev._1password-cli.overrideAttrs (
       let
         inherit (prev) stdenv fetchurl fetchzip;
