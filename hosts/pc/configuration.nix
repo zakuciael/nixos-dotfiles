@@ -152,10 +152,9 @@ in
       kubernetes.enable = true;
       ides = [
         "rust-rover"
-        "webstorm"
         "idea-ultimate"
         "rider"
-        "goland"
+        "clion"
       ];
       vscode = {
         enable = true;
