@@ -27,10 +27,10 @@
     "dataspell": {
       "update-channel": "DataSpell RELEASE",
       "url-template": "https://download.jetbrains.com/python/dataspell-{version}.tar.gz",
-      "version": "2025.1.2",
-      "sha256": "812fc12812ec7188f92ab2ce4b5ffa8d8610e571878c6df158ba0a48a42e8343",
-      "url": "https://download.jetbrains.com/python/dataspell-2025.1.2.tar.gz",
-      "build_number": "251.26927.75"
+      "version": "2025.1.2.1",
+      "sha256": "1759516154a989ad1bcbc0e0cc29eb7b50c5c96b910c1a8926ae87ea5aa07ea6",
+      "url": "https://download.jetbrains.com/python/dataspell-2025.1.2.1.tar.gz",
+      "build_number": "251.26927.91"
     },
     "gateway": {
       "update-channel": "Gateway RELEASE",
@@ -166,10 +166,10 @@
     "dataspell": {
       "update-channel": "DataSpell RELEASE",
       "url-template": "https://download.jetbrains.com/python/dataspell-{version}-aarch64.tar.gz",
-      "version": "2025.1.2",
-      "sha256": "425b8216eabf84f35e049c5443ec0d178a883c71e60efb5a9b314467ea408b98",
-      "url": "https://download.jetbrains.com/python/dataspell-2025.1.2-aarch64.tar.gz",
-      "build_number": "251.26927.75"
+      "version": "2025.1.2.1",
+      "sha256": "a982a7e8d5b1c293b68983be792a60a885567e9af825e0fce4b2a4b6ac30c9ae",
+      "url": "https://download.jetbrains.com/python/dataspell-2025.1.2.1-aarch64.tar.gz",
+      "build_number": "251.26927.91"
     },
     "gateway": {
       "update-channel": "Gateway RELEASE",
@@ -305,10 +305,10 @@
     "dataspell": {
       "update-channel": "DataSpell RELEASE",
       "url-template": "https://download.jetbrains.com/python/dataspell-{version}.dmg",
-      "version": "2025.1.2",
-      "sha256": "cea1082a3c61a034c201ce1fb3b1e1de16d82725a318ca860f0604e6253138dc",
-      "url": "https://download.jetbrains.com/python/dataspell-2025.1.2.dmg",
-      "build_number": "251.26927.75"
+      "version": "2025.1.2.1",
+      "sha256": "21915425a004b9148ab5fb634ab919d328a692847f3229bcd060fc46c2b91e76",
+      "url": "https://download.jetbrains.com/python/dataspell-2025.1.2.1.dmg",
+      "build_number": "251.26927.91"
     },
     "gateway": {
       "update-channel": "Gateway RELEASE",
@@ -444,10 +444,10 @@
     "dataspell": {
       "update-channel": "DataSpell RELEASE",
       "url-template": "https://download.jetbrains.com/python/dataspell-{version}-aarch64.dmg",
-      "version": "2025.1.2",
-      "sha256": "972e6281794201bb693450ca0941e13840848851799cfba965e02757764d105d",
-      "url": "https://download.jetbrains.com/python/dataspell-2025.1.2-aarch64.dmg",
-      "build_number": "251.26927.75"
+      "version": "2025.1.2.1",
+      "sha256": "97588c238523b2c492a322a0751173f908f31eb27e0d38f81dd51f670690a9a5",
+      "url": "https://download.jetbrains.com/python/dataspell-2025.1.2.1-aarch64.dmg",
+      "build_number": "251.26927.91"
     },
     "gateway": {
       "update-channel": "Gateway RELEASE",

@@ -7,123 +7,70 @@
 }:
 let
   inherit (lib)
-    optionalString
-    optionalAttrs
-    concatStringsSep
     mkOption
     mkIf
     types
+    optional
+    optionals
     ;
-
+  inherit (lib.asserts) assertMsg;
   cfg = config.modules.dev.ides;
   xdg = config.home-manager.users.${username}.xdg;
 
-  defaultPlugins = [
-    "extra-toolwindow-colorful-icons"
-    "extra-icons"
-    "direnv-integration"
-    "-env-files"
-    "-ignore"
-    "nixidea"
-    "ideolog"
-    "just"
-    "wakatime"
-    "gittoolbox"
-    "conventional-commit"
-    "github-actions-manager"
-    "discord-rich-presence"
-    "grazie-pro"
-  ];
-
-  mkIDE =
-    pkg:
+  mkIdeConfig =
+    ide:
     {
-      plugins ? [ ],
-      ignorePlugins ? [ ],
-      enableNativeWayland ? true,
-      extraVmopts ? null,
-      extraProperties ? null,
+      wayland ? true,
+      vmopts ? null,
+      extra_properties ? null,
     }:
+    assert assertMsg (builtins.isBool wayland) "wayland is not of type 'boo'";
+    assert assertMsg (
+      vmopts == null || (builtins.isList vmopts) && (vmopts |> builtins.all (val: builtins.isString val))
+    ) "vmopts is not of type 'list of strings'";
+    assert assertMsg (
+      extra_properties == null || builtins.isAttrs extra_properties
+    ) "extra_properties is not of type 'attrs'";
     let
-      filteredPlugins = builtins.filter (plugin: !builtins.elem plugin ignorePlugins) (
-        defaultPlugins ++ plugins
-      );
+      fixed_vmopts =
+        (optional wayland "-Dawt.toolkit.name=WLToolkit") ++ (optionals (vmopts != null) vmopts);
     in
-    pkgs.jetbrains.plugins.addPlugins (pkg.override (
-      rec {
-        inherit extraProperties;
-        config_path = "${xdg.configHome}/JetBrains/${pkg.pname}";
-        caches_path = "${xdg.cacheHome}/JetBrains/${pkg.pname}";
-        plugins_path = "${xdg.dataHome}/JetBrains/${pkg.pname}";
-        logs_path = "${caches_path}/logs";
-      }
-      // optionalAttrs (enableNativeWayland || extraVmopts != null) {
-        vmopts =
-          (optionalString enableNativeWayland "-Dawt.toolkit.name=WLToolkit ")
-          + (optionalString (extraVmopts != null) (concatStringsSep " " extraVmopts));
-      }
-    )) filteredPlugins;
+    ide.override rec {
+      inherit extra_properties;
+      vmopts = if fixed_vmopts != [ ] then fixed_vmopts else null;
+      config_path = "${xdg.configHome}/JetBrains/${ide.pname}";
+      caches_path = "${xdg.cacheHome}/JetBrains/${ide.pname}";
+      plugins_path = "${xdg.dataHome}/JetBrains/${ide.pname}";
+      logs_path = "${caches_path}/logs";
+    };
 
-  availableIdes = builtins.listToAttrs (
-    builtins.map
-      (value: {
-        name = value.baseName or value.pname;
-        inherit value;
+  ides =
+    with pkgs.jetbrains;
+    [
+      (mkIdeConfig clion {
+        vmopts = [ "-Didea.suppressed.plugins.set.selector=radler" ];
       })
-      (
-        with pkgs.jetbrains;
-        [
-          (mkIDE clion {
-            extraVmopts = [ "-Didea.suppressed.plugins.set.selector=radler" ];
-          })
-          datagrip
-          dataspell
-          gateway
-          (mkIDE goland {
-            enableNativeWayland = false;
-            plugins = [
-              "protocol-buffers"
-              "ini"
-              "toml"
-            ];
-          })
-          (mkIDE idea-ultimate {
-            plugins = [
-              "makefile-language"
-              "terraform-and-hcl"
-              "kubernetes"
-              "ini"
-              "toml"
-              "python"
-              "python-community-edition"
-              "php"
-              "go-template"
-              "go"
-            ];
-          })
-          mps
-          (mkIDE phpstorm { })
-          (mkIDE pycharm-professional { })
-          (mkIDE rider {
-            ignorePlugins = [
-              "ideolog"
-            ];
-          })
-          (mkIDE ruby-mine { })
-          (mkIDE rust-rover {
-            plugins = [
-              "protocol-buffers"
-              "toml"
-            ];
-            ignorePlugins = [
-              "ideolog"
-            ];
-          })
-          (mkIDE webstorm { })
-        ]
-      )
-  );
-  installedIDEs = builtins.map (name: availableIdes.${name}) cfg;
+      (mkIdeConfig datagrip { })
+      (mkIdeConfig dataspell { })
+      (mkIdeConfig gateway { })
+      (mkIdeConfig goland {
+        wayland = false;
+      })
+      (mkIdeConfig idea-ultimate { })
+      (mkIdeConfig mps { })
+      (mkIdeConfig phpstorm { })
+      (mkIdeConfig pycharm-professional { })
+      (mkIdeConfig rider { })
+      (mkIdeConfig ruby-mine { })
+      (mkIdeConfig rust-rover { })
+      (mkIdeConfig webstorm { })
+    ]
+    |> builtins.map (ide: {
+      name = ide.baseName or ide.pname;
+      value = ide;
+    })
+    |> builtins.listToAttrs;
+  installed_ides = cfg |> builtins.map (name: ides."${name}");
 in
 {
   options.modules.dev.ides = mkOption {
@@ -133,22 +80,22 @@ in
       "webstorm"
     ];
     default = [ ];
-    type = with types; listOf (enum (builtins.attrNames availableIdes));
+    type = ides |> builtins.attrNames |> types.enum |> types.listOf;
   };
 
   config = mkIf (cfg != [ ]) {
     home-manager.users.${username} = {
       home = {
-        packages = installedIDEs;
+        packages = installed_ides;
 
-        file = builtins.listToAttrs (
-          builtins.map (ide: {
+        # Make symlinks for rofi-jetbrains plugin
+        file =
+          installed_ides
+          |> builtins.map (ide: {
             name = ".local/share/JetBrains/apps/${ide.pname}";
-            value = {
-              source = "${ide}/${ide.meta.mainProgram}";
-            };
-          }) installedIDEs
-        );
+            value.source = "${ide}/${ide.meta.mainProgram}";
+          })
+          |> builtins.listToAttrs;
       };
     };
   };
