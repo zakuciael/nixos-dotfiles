@@ -48,7 +48,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     statix = {
-      url = "github:RobWalt/statix/";
+      url = "github:zakuciael/statix/support-pipe-operator";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     disko = {
