@@ -4,23 +4,26 @@
   pkgs,
   inputs,
   username,
+  desktop,
   ...
 }:
-with lib; let
+with lib;
+let
   inherit (lib.my.mapper) toRasi;
-in {
+in
+{
   home-manager.users.${username} = {
     programs.rofi = {
       enable = true;
       package = pkgs.rofi-wayland;
-      plugins = [inputs.rofi-jetbrains.rofi-jetbrains-next];
+      plugins = [ inputs.rofi-jetbrains.rofi-jetbrains-next ];
     };
 
-    xdg.configFile."rofi/config.rasi".text = toRasi {} {
+    xdg.configFile."rofi/config.rasi".text = toRasi { } {
       configuration = {
         # Basic config
         font = "JetBrains Mono 10";
-        terminal = "${getExe config.home-manager.users.${username}.programs.alacritty.package}";
+        terminal = "${getExe config.modules.desktop.wm.${desktop}.terminalPackage}";
         show-icons = true;
         icon-theme = "WhiteSur-dark";
 
