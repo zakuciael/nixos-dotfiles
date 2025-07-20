@@ -73,7 +73,9 @@ let
       (
         with pkgs.jetbrains;
         [
-          (mkIDE clion { })
+          (mkIDE clion {
+            extraVmopts = [ "-Didea.suppressed.plugins.set.selector=radler" ];
+          })
           datagrip
           dataspell
           gateway
