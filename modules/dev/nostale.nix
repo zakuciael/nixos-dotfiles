@@ -5,10 +5,23 @@
   username,
   ...
 }:
-with lib;
-with lib.my; let
+let
+  inherit (lib)
+    mkEnableOption
+    mkOption
+    mkIf
+    types
+    ;
+  inherit (inputs.nostale-dev-env.packages)
+    DevTaleGUI
+    proton
+    nos-downloader
+    nostale-dev
+    ;
+  inherit (inputs.onex-explorer.packages) onex-explorer;
   cfg = config.modules.dev.nostale;
-in {
+in
+{
   options.modules.dev.nostale = {
     enable = mkEnableOption "NosTale Dev Env";
     installPath = mkOption {
@@ -18,13 +31,13 @@ in {
     };
   };
 
-  config = mkIf (cfg.enable) {
+  config = mkIf cfg.enable {
     home-manager.users.${username} = {
-      home.packages = with inputs.nostale-dev-env.packages; [
-        # FIXME: One of those can't be built
+      home.packages = [
         DevTaleGUI
         proton
         nos-downloader
+        onex-explorer
         (nostale-dev.override {
           nostale-path = cfg.installPath;
         })

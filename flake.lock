@@ -373,6 +373,29 @@
         "type": "github"
       }
     },
+    "onex-explorer": {
+      "inputs": {
+        "flake-parts": [
+          "flake-parts"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1752959425,
+        "narHash": "sha256-c+eUy2GiS0AeApB+mGWEGL3EucCaqdYw+WiSSPtfZ50=",
+        "owner": "zakuciael",
+        "repo": "OnexExplorer",
+        "rev": "a4be326e7ab380ef48d62f45b9a6944ef2019fc0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "zakuciael",
+        "repo": "OnexExplorer",
+        "type": "github"
+      }
+    },
     "rofi-jetbrains": {
       "inputs": {
         "crane": "crane",
@@ -414,6 +437,7 @@
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs_2",
         "nostale-dev-env": "nostale-dev-env",
+        "onex-explorer": "onex-explorer",
         "rofi-jetbrains": "rofi-jetbrains",
         "sops-nix": "sops-nix",
         "statix": "statix",

@@ -55,6 +55,11 @@
       url = "github:nix-community/disko/latest";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    onex-explorer = {
+      url = "github:zakuciael/OnexExplorer";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-parts.follows = "flake-parts";
+    };
   };
 
   outputs =
@@ -74,7 +79,7 @@
           permittedInsecurePackages = [ ];
         };
 
-        overlays = lib.my.overlays.pkgs ++ lib.singleton (inputs.aagl.overlays.default);
+        overlays = lib.my.overlays.pkgs ++ lib.singleton inputs.aagl.overlays.default;
       };
 
       inputs = flakeInputs // {
@@ -99,6 +104,9 @@
         statix = flakeInputs.statix.packages.${system};
         disko = flakeInputs.disko // {
           packages = flakeInputs.disko.packages.${system};
+        };
+        onex-explorer = flakeInputs.onex-explorer // {
+          packages = flakeInputs.onex-explorer.packages.${system};
         };
       };
 
