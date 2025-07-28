@@ -82,13 +82,20 @@ singleton (
           if !prev.jetbrains ? "${name}" then
             throw "JetBrains IDE with name ${name} is not in nixpkgs"
           else
-            prev.jetbrains."${name}".overrideAttrs {
+            prev.jetbrains."${name}".overrideAttrs (attrs: {
               inherit (products."${name}") version;
               buildNumber = products."${name}".build_number;
               src = fetchurl {
                 inherit (products."${name}") url sha256;
               };
-            };
+              buildInputs =
+                attrs.buildInputs
+                ++ (with final; [
+                  libGL
+                  fontconfig
+                  xorg.libX11
+                ]);
+            });
 
         inherit (ide) meta;
         root_dir =
