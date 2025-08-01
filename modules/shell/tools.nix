@@ -49,6 +49,11 @@ in
         tokei # Count your code, quickly.
         nix-prefetch-github # Prefetch sources from github for nix build tool
         nix-prefetch-git # Script used to obtain source hashes for fetchgit
+        unrar # Utility for RAR archives
+        unzip # Extraction utility for archives compressed in .zip format
+        p7zip # Command line version of 7-Zip for Linux
+        motrix # A full-featured download manager
+        marktext # Simple and elegant markdown editor
       ];
 
       catppuccin = {
