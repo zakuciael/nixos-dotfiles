@@ -31,9 +31,10 @@ in
         mongodb-tools
         mongodb-compass
 
-        # HTTPie
+        # HTTP Clients
         httpie
         httpie-desktop
+        bruno
 
         # Benchmarking
         hyperfine
