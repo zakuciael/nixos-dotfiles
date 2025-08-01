@@ -25,13 +25,13 @@
     };
     rofi-jetbrains = {
       url = "github:zakuciael/rofi-jetbrains/v2.1.0";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-parts.follows = "flake-parts";
+      # inputs.nixpkgs.follows = "nixpkgs";
+      # inputs.flake-parts.follows = "flake-parts";
     };
     nostale-dev-env = {
       url = "github:zakuciael/nostale-dev-env";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-parts.follows = "flake-parts";
+      # inputs.nixpkgs.follows = "nixpkgs";
+      # inputs.flake-parts.follows = "flake-parts";
     };
     aagl = {
       url = "github:ezKEa/aagl-gtk-on-nix";
