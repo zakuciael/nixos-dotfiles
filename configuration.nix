@@ -18,16 +18,21 @@ with lib.my;
         "https://cache.thalheim.io"
         "https://ezkea.cachix.org"
         "https://ghostty.cachix.org"
+        "https://rofi-jetbrains.cachix.org"
+        "https://nostale-dev-env.cachix.org"
       ];
       trusted-public-keys = [
         "cache.thalheim.io-1:R7msbosLEZKrxk/lKxf9BTjOOH7Ax3H0Qj0/6wiHOgc="
         "ezkea.cachix.org-1:ioBmUbJTZIKsHmWWXPe1FSFbeVe+afhfgqgTSNd34eI="
         "ghostty.cachix.org-1:QB389yTa6gTyneehvqG58y0WnHjQOqgnA+wBnpWWxns="
+        "rofi-jetbrains.cachix.org-1:jCHjg5XBg0A17G5/n1QBD39fxbg++URiJCvEuC5cnCs="
+        "nostale-dev-env.cachix.org-1:GpvnWVSQOMUnSg7b+ZA5e9jumoysd2e22DIIWTbOJJE="
       ];
       trusted-users = [ "@wheel" ];
     };
     extraOptions = ''
       experimental-features = nix-command flakes pipe-operators
+      netrc-file = ${config.sops.templates."nix/netrc".path}
       !include ${config.sops.templates."nix/access_tokens.conf".path}
     '';
     package = pkgs.nixVersions.latest;
@@ -132,19 +137,27 @@ with lib.my;
   # SOPS
   sops =
     let
-      base = "nix/access-tokens";
-      secretNames = utils.recursiveReadSecretNames { inherit config base; };
-      secrets = utils.readSecrets { inherit config base; };
+      secretNames = utils.recursiveReadSecretNames {
+        inherit config;
+        base = "nix";
+      };
     in
     {
       templates = {
-        "nix/access_tokens.conf" = {
-          mode = "0440";
-          group = config.users.groups.keys.name;
-          content = ''
-            access-tokens = ${
-              lib.concatStringsSep " " (
-                builtins.map (
+        "nix/access_tokens.conf" =
+          let
+            base = "nix/access-tokens";
+            secrets = utils.readSecrets {
+              inherit config base;
+            };
+          in
+          {
+            mode = "0440";
+            group = config.users.groups.keys.name;
+            content = ''
+              access-tokens = ${
+                builtins.attrNames secrets
+                |> builtins.map (
                   entry:
                   "${entry}=${
                     utils.mkSecretPlaceholder config [
@@ -152,15 +165,54 @@ with lib.my;
                       entry
                     ]
                   }"
-                ) (builtins.attrNames secrets)
+                )
+                |> lib.concatStringsSep " "
+              }
+            '';
+          };
+        "nix/netrc" =
+          let
+            base = "nix/netrc";
+            secrets = utils.readSecrets {
+              inherit config base;
+            };
+          in
+          {
+            mode = "0440";
+            group = config.users.groups.keys.name;
+            path = "/etc/nix/netrc";
+            content =
+              builtins.attrNames secrets
+              |> builtins.map (
+                machine:
+                [ "machine ${machine}" ]
+                ++ (lib.optional (lib.hasAttrByPath [ machine "login" ] secrets)
+                  "    login: ${
+                        utils.mkSecretPlaceholder config [
+                          base
+                          machine
+                          "login"
+                        ]
+                      }"
+                )
+                ++ (lib.optional (lib.hasAttrByPath [ machine "password" ] secrets)
+                  "    password: ${
+                        utils.mkSecretPlaceholder config [
+                          base
+                          machine
+                          "password"
+                        ]
+                      }"
+                )
+                |> lib.concatStringsSep "\n"
               )
-            }
-          '';
-        };
+              |> lib.concatStringsSep "\n";
+          };
       };
       secrets = {
         "users/${username}/password".neededForUsers = true;
-      } // lib.listToAttrs (builtins.map (v: lib.nameValuePair v { }) secretNames);
+      }
+      // lib.listToAttrs (builtins.map (v: lib.nameValuePair v { }) secretNames);
     };
 
   # User settings
