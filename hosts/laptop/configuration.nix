@@ -107,9 +107,11 @@ in
       };
       kubernetes.enable = true;
       ides = [
-        "idea-ultimate"
         "rust-rover"
-        "goland"
+        "idea-ultimate"
+        "rider"
+        "clion"
+        "datagrip"
       ];
       nostale = {
         enable = true;

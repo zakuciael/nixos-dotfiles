@@ -155,6 +155,7 @@ in
         "idea-ultimate"
         "rider"
         "clion"
+        "datagrip"
       ];
       vscode = {
         enable = true;
