@@ -242,10 +242,7 @@ rec {
       sortedAttrs = topoSort (toDag attrs);
       sortedAttrsStr = builtins.toJSON sortedAttrs;
       newAttrs =
-        if sortedAttrs ? result then
-          sortedAttrs.result
-        else
-          abort "Unable to sort, dependency cycle detected: ${sortedAttrsStr}";
+        sortedAttrs.result or (abort "Unable to sort, dependency cycle detected: ${sortedAttrsStr}");
     in
     newAttrs;
 
@@ -260,25 +257,36 @@ rec {
       imports ? [ ],
       theme ? { },
       configuration ? { },
+      plugins ? [ ],
     }:
     let
       configFile = pkgs.writeTextFile {
         name = "config.rasi";
         text = ''
           /* Configuration */
-          ${optionalString (configuration != { }) (toRasi { } { configuration = configuration; })}
+          ${optionalString (configuration != { }) (toRasi { } { inherit configuration; })}
           /* Imports */
           ${optionalString (imports != [ ]) (toRasi { } { "@import" = mkMultiEntry imports; })}
           /* Theme */
           ${optionalString (theme != { }) (toRasi { } theme)}
         '';
       };
+      rofiPkg = config.home-manager.users.${username}.programs.rofi.finalPackage;
+      rofiFinalPkg =
+        if builtins.hasAttr "override" rofiPkg && plugins != [ ] then
+          rofiPkg.override (old: {
+            plugins = old.plugins or [ ] ++ plugins;
+          })
+        else
+          rofiPkg;
     in
     pkgs.writeShellApplication {
       inherit name meta text;
+
       runtimeInputs = [
-        config.home-manager.users.${username}.programs.rofi.finalPackage
-      ] ++ runtimeInputs;
+        rofiFinalPkg
+      ]
+      ++ runtimeInputs;
       runtimeEnv = runtimeEnv // {
         ROFI_CONFIG_FILE = configFile;
       };

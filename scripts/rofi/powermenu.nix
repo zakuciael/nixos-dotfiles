@@ -6,60 +6,82 @@
   ...
 }:
 with lib;
-with lib.hm.dag; let
-  inherit (lib.my.utils) mkLiteral mkMultiEntry writeRofiScript writeRasiFile sortAttrs indentLines;
+with lib.hm.dag;
+let
+  inherit (lib.my.utils)
+    mkLiteral
+    mkMultiEntry
+    writeRofiScript
+    writeRasiFile
+    sortAttrs
+    indentLines
+    ;
   inherit (pkgs) writeShellApplication;
 
   # Utils
-  toIconString = attrs:
+  toIconString =
+    attrs:
     concatStringsSep "\n" (
-      builtins.map
-      (value: let
-        data = value.data;
-      in
-        if isAttrs data
-        then (data.icon)
-        else data)
-      (sortAttrs attrs)
+      builtins.map (
+        value:
+        let
+          inherit (value) data;
+        in
+        if isAttrs data then data.icon else data
+      ) (sortAttrs attrs)
     );
 
-  mkPowermenuSwitchStatement = {indent ? ""}: attrs:
-    concatStringsSep "\n" (builtins.map ({data, ...}: mkPowermenuSwitchCase {inherit indent;} data) (sortAttrs attrs));
+  mkPowermenuSwitchStatement =
+    {
+      indent ? "",
+    }:
+    attrs:
+    concatStringsSep "\n" (
+      builtins.map ({ data, ... }: mkPowermenuSwitchCase { inherit indent; } data) (sortAttrs attrs)
+    );
 
-  mkPowermenuConfirmAction = {indent ? ""}: data: (
-    indentLines indent (
-      if data.confirm
-      then ''
-        if rofi-powermenu-confirm; then
-        ${indentLines indent data.action}
-        else
-          exit 0
-        fi''
-      else data.action
-    )
-  );
+  mkPowermenuConfirmAction =
+    {
+      indent ? "",
+    }:
+    data:
+    (indentLines indent (
+      if data.confirm then
+        ''
+          if rofi-powermenu-confirm; then
+          ${indentLines indent data.action}
+          else
+            exit 0
+          fi''
+      else
+        data.action
+    ));
 
-  mkPowermenuSwitchCase = {indent ? ""}: data:
+  mkPowermenuSwitchCase =
+    {
+      indent ? "",
+    }:
+    data:
     indentLines indent ''
       "${data.icon}")
-      ${mkPowermenuConfirmAction {inherit indent;} data}
+      ${mkPowermenuConfirmAction { inherit indent; } data}
         ;;'';
 
   # Confirm settings
   confirmIcons = {
     yes = entryAnywhere "";
-    no = entryAfter ["yes"] "";
+    no = entryAfter [ "yes" ] "";
   };
 
   # Powermenu settings
   powermenuSettings = {
     lock = entryAnywhere {
       icon = "";
-      runtimeInputs = [];
+      runtimeInputs = [ ];
       action = "echo lock";
       confirm = false;
     };
-    suspend = entryAfter ["lock"] {
+    suspend = entryAfter [ "lock" ] {
       icon = "";
       runtimeInputs = with pkgs; [
         mpc-cli
@@ -71,21 +93,21 @@ with lib.hm.dag; let
         systemctl suspend'';
       confirm = true;
     };
-    logout = entryAfter ["suspend"] {
+    logout = entryAfter [ "suspend" ] {
       icon = "";
       action = "hyprctl dispatch exit";
-      runtimeInputs = [config.home-manager.users.${username}.wayland.windowManager.hyprland.package];
+      runtimeInputs = [ config.home-manager.users.${username}.wayland.windowManager.hyprland.package ];
       confirm = true;
     };
-    reboot = entryAfter ["logout"] {
+    reboot = entryAfter [ "logout" ] {
       icon = "";
-      runtimeInputs = [];
+      runtimeInputs = [ ];
       action = "systemctl reboot";
       confirm = true;
     };
-    shutdown = entryAfter ["reboot"] {
+    shutdown = entryAfter [ "reboot" ] {
       icon = "";
-      runtimeInputs = [];
+      runtimeInputs = [ ];
       action = "systemctl poweroff";
       confirm = true;
     };
@@ -98,9 +120,11 @@ with lib.hm.dag; let
         show-icons = false;
       };
 
-      "@import" = entryAfter ["configuration"] (mkMultiEntry [(import ./assets/theme.nix {inherit lib pkgs;})]);
+      "@import" = entryAfter [ "configuration" ] (mkMultiEntry [
+        (import ./common/theme.nix { inherit lib pkgs; })
+      ]);
 
-      "*" = entryAfter ["@import"] {
+      "*" = entryAfter [ "@import" ] {
         enabled = true;
         margin = mkLiteral "0px";
         padding = mkLiteral "0px";
@@ -114,7 +138,7 @@ with lib.hm.dag; let
       };
 
       # Main window
-      window = entryAfter ["*"] {
+      window = entryAfter [ "*" ] {
         transparency = "real";
         location = mkLiteral "center";
         anchor = mkLiteral "center";
@@ -124,20 +148,23 @@ with lib.hm.dag; let
       };
 
       # Mainbox
-      mainbox = entryAfter ["window"] {
+      mainbox = entryAfter [ "window" ] {
         spacing = mkLiteral "15px";
-        children = ["message" "listview"];
+        children = [
+          "message"
+          "listview"
+        ];
       };
 
       # Message
-      message = entryAfter ["mainbox"] {
+      message = entryAfter [ "mainbox" ] {
         margin = mkLiteral "0px 100px";
         padding = mkLiteral "15px";
         border-radius = mkLiteral "15px";
 
         background-color = mkLiteral "@background-alt";
       };
-      textbox = entryAfter ["message"] {
+      textbox = entryAfter [ "message" ] {
         vertical-align = mkLiteral "0.5";
         horizontal-align = mkLiteral "0.5";
 
@@ -146,23 +173,23 @@ with lib.hm.dag; let
       };
 
       # Listview
-      listview = entryAfter ["textbox"] {
+      listview = entryAfter [ "textbox" ] {
         lines = 1;
         scrollbar = false;
         spacing = mkLiteral "15px";
       };
-      element = entryAfter ["listview"] {
+      element = entryAfter [ "listview" ] {
         padding = mkLiteral "45px 10px";
         border-radius = mkLiteral "20px";
 
         cursor = mkLiteral "pointer";
         background-color = mkLiteral "@background-alt";
       };
-      "element selected.normal" = entryAfter ["element"] {
+      "element selected.normal" = entryAfter [ "element" ] {
         background-color = mkLiteral "var(selected)";
         text-color = mkLiteral "var(background)";
       };
-      element-text = entryAfter ["element selected.normal"] {
+      element-text = entryAfter [ "element selected.normal" ] {
         font = "icomoon-feather bold 32";
         vertical-align = mkLiteral "0.5";
         horizontal-align = mkLiteral "0.5";
@@ -191,12 +218,12 @@ with lib.hm.dag; let
         exit 1
       fi
     '';
-    imports = [commonTheme];
+    imports = [ commonTheme ];
     theme = {
       window = entryAnywhere {
         width = mkLiteral "350px";
       };
-      listview = entryAfter ["window"] {
+      listview = entryAfter [ "window" ] {
         columns = 2;
       };
     };
@@ -204,7 +231,7 @@ with lib.hm.dag; let
   powermenuChoiceScript = writeRofiScript {
     inherit config;
     name = "rofi-powermenu-choice";
-    runtimeInputs = with pkgs; [toybox];
+    runtimeInputs = with pkgs; [ toybox ];
     text = ''
       UPTIME="$(uptime -p | sed -e 's/up //g' | sed -e 's/,  load average:.*//g')"
 
@@ -214,25 +241,28 @@ with lib.hm.dag; let
         -mesg "Uptime: $UPTIME" \
         -dmenu
     '';
-    imports = [commonTheme];
+    imports = [ commonTheme ];
     theme = {
       window = entryAnywhere {
         width = mkLiteral "800px";
       };
-      listview = entryAfter ["window"] {
+      listview = entryAfter [ "window" ] {
         columns = 5;
       };
     };
   };
-in {
+in
+{
   package = writeShellApplication {
     name = "rofi-powermenu";
-    runtimeInputs =
-      [powermenuConfirmScript powermenuChoiceScript]
-      ++ (concatLists (mapAttrsToList (_: v: v.data.runtimeInputs) powermenuSettings));
+    runtimeInputs = [
+      powermenuConfirmScript
+      powermenuChoiceScript
+    ]
+    ++ (concatLists (mapAttrsToList (_: v: v.data.runtimeInputs) powermenuSettings));
     text = ''
       case "$(rofi-powermenu-choice)" in
-      ${mkPowermenuSwitchStatement {indent = "  ";} powermenuSettings}
+      ${mkPowermenuSwitchStatement { indent = "  "; } powermenuSettings}
       esac
     '';
   };
