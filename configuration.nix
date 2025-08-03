@@ -18,15 +18,15 @@ with lib.my;
         "https://cache.thalheim.io"
         "https://ezkea.cachix.org"
         "https://ghostty.cachix.org"
-        "https://rofi-jetbrains.cachix.org"
-        "https://nostale-dev-env.cachix.org"
+        "https://attic.zakku.eu/rofi-jetbrains"
+        "https://attic.zakku.eu/nostale-dev-env"
       ];
       trusted-public-keys = [
         "cache.thalheim.io-1:R7msbosLEZKrxk/lKxf9BTjOOH7Ax3H0Qj0/6wiHOgc="
         "ezkea.cachix.org-1:ioBmUbJTZIKsHmWWXPe1FSFbeVe+afhfgqgTSNd34eI="
         "ghostty.cachix.org-1:QB389yTa6gTyneehvqG58y0WnHjQOqgnA+wBnpWWxns="
-        "rofi-jetbrains.cachix.org-1:jCHjg5XBg0A17G5/n1QBD39fxbg++URiJCvEuC5cnCs="
-        "nostale-dev-env.cachix.org-1:GpvnWVSQOMUnSg7b+ZA5e9jumoysd2e22DIIWTbOJJE="
+        "rofi-jetbrains:grO4wlkucWElNgkCaFREHgbsrn9jeoHZqyqEMRtcgxI="
+        "nostale-dev-env:ppvIiWL1k+xB8hIYFbWh0QceKpc/H8JX5MmJQFveMzE="
       ];
       trusted-users = [ "@wheel" ];
     };
@@ -172,7 +172,7 @@ with lib.my;
           };
         "nix/netrc" =
           let
-            base = "nix/netrc";
+            base = "nix/cache_auth";
             secrets = utils.readSecrets {
               inherit config base;
             };
@@ -184,29 +184,42 @@ with lib.my;
             content =
               builtins.attrNames secrets
               |> builtins.map (
-                machine:
-                [ "machine ${machine}" ]
-                ++ (lib.optional (lib.hasAttrByPath [ machine "login" ] secrets)
-                  "    login: ${
-                        utils.mkSecretPlaceholder config [
-                          base
-                          machine
-                          "login"
-                        ]
-                      }"
-                )
-                ++ (lib.optional (lib.hasAttrByPath [ machine "password" ] secrets)
-                  "    password: ${
-                        utils.mkSecretPlaceholder config [
-                          base
-                          machine
-                          "password"
-                        ]
-                      }"
-                )
-                |> lib.concatStringsSep "\n"
+                key:
+                "machine ${key} password ${
+                  utils.mkSecretPlaceholder config [
+                    base
+                    key
+                  ]
+                }"
               )
               |> lib.concatStringsSep "\n";
+
+            # content =
+            #   builtins.attrNames secrets
+            #   |> builtins.map (
+            #     machine:
+            #     [ "machine ${machine}" ]
+            #     ++ (lib.optional (lib.hasAttrByPath [ machine "login" ] secrets)
+            #       "    login: ${
+            #             utils.mkSecretPlaceholder config [
+            #               base
+            #               machine
+            #               "login"
+            #             ]
+            #           }"
+            #     )
+            #     ++ (lib.optional (lib.hasAttrByPath [ machine "password" ] secrets)
+            #       "    password: ${
+            #             utils.mkSecretPlaceholder config [
+            #               base
+            #               machine
+            #               "password"
+            #             ]
+            #           }"
+            #     )
+            #     |> lib.concatStringsSep "\n"
+            #   )
+            #   |> lib.concatStringsSep "\n";
           };
       };
       secrets = {

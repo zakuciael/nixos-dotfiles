@@ -468,11 +468,11 @@
         "nixpkgs": "nixpkgs_4"
       },
       "locked": {
-        "lastModified": 1754060444,
-        "narHash": "sha256-9Nq4krgsXynXyiFThKqyrO5tRIi2SQvA6OQgX/d/f1U=",
+        "lastModified": 1754222944,
+        "narHash": "sha256-1ajRQ0r5Ef0sE6MvbO0XSyQO9bF28y/pJK+C4EMkvW8=",
         "owner": "zakuciael",
         "repo": "nostale-dev-env",
-        "rev": "166f55325be3e5c00027b1c71d10e6f0803ecf53",
+        "rev": "70e93ea61712e216c822e54c6c3a9df6b42a8402",
         "type": "github"
       },
       "original": {
