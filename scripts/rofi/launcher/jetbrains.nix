@@ -35,6 +35,7 @@ in
         "cpp:CL"
       ];
       jetbrains-install-dir = "~/.local/share/JetBrains/apps/";
+      jetbrains-use-clion-devshell = true;
     };
   };
 }

@@ -24,7 +24,7 @@
       inputs.nixpkgs-stable.follows = "nixpkgs";
     };
     rofi-jetbrains = {
-      url = "github:zakuciael/rofi-jetbrains/v2.1.0";
+      url = "github:zakuciael/rofi-jetbrains";
       # inputs.nixpkgs.follows = "nixpkgs";
       # inputs.flake-parts.follows = "flake-parts";
     };
