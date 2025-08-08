@@ -494,11 +494,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1752959425,
-        "narHash": "sha256-c+eUy2GiS0AeApB+mGWEGL3EucCaqdYw+WiSSPtfZ50=",
+        "lastModified": 1754643436,
+        "narHash": "sha256-aIG1ElRqf+b5ggBT7k6byGmF72VflZN27q17KVymrH8=",
         "owner": "zakuciael",
         "repo": "OnexExplorer",
-        "rev": "a4be326e7ab380ef48d62f45b9a6944ef2019fc0",
+        "rev": "663d8c7bce4596d0189adf71907ecdb5923e6c0c",
         "type": "github"
       },
       "original": {
