@@ -6,20 +6,28 @@
   ...
 }:
 with lib;
-with lib.my; let
+with lib.my;
+let
   cfg = config.modules.services.gnome-keyring;
-  displayManagers = ["sddm" "gdm" "lightdm"];
-in {
+  displayManagers = [
+    "sddm"
+    "gdm"
+  ];
+in
+{
   options.modules.services.gnome-keyring = {
     enable = mkEnableOption "GNOME keyring";
   };
 
-  config = mkIf (cfg.enable) {
-    security.pam.services = builtins.listToAttrs (builtins.map (name: {
+  config = mkIf cfg.enable {
+    security.pam.services = builtins.listToAttrs (
+      builtins.map (name: {
         inherit name;
-        value = {enableGnomeKeyring = config.services.xserver.displayManager.${name}.enable;};
-      })
-      displayManagers);
+        value = {
+          enableGnomeKeyring = config.services.displayManager.${name}.enable;
+        };
+      }) displayManagers
+    );
     services.gnome.gnome-keyring.enable = true;
 
     home-manager.users.${username}.systemd.user = {
@@ -34,7 +42,7 @@ in {
           Restart = "on-failure";
         };
         Install = {
-          WantedBy = ["graphical-session.target"];
+          WantedBy = [ "graphical-session.target" ];
         };
       };
     };
