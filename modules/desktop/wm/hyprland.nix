@@ -209,26 +209,6 @@ desktop.mkDesktopModule {
                 ''center, class:^(${partizionExtWindowClass})$''
                 ''size 40% 40%, class:^(${partizionExtWindowClass})$''
               ];
-
-            # TODO: Check which of those rules leave and which delete
-            /*
-                 windowrulev2 = [
-                # -- Fix odd behaviors in IntelliJ IDEs --
-                #! Fix focus issues when dialogs are opened or closed
-                "windowdance,class:^(jetbrains-.*)$,floating:1"
-                #! Fix splash screen showing in weird places and prevent annoying focus takeovers
-                "center,class:^(jetbrains-.*)$,title:^(splash)$,floating:1"
-                "nofocus,class:^(jetbrains-.*)$,title:^(splash)$,floating:1"
-                "noborder,class:^(jetbrains-.*)$,title:^(splash)$,floating:1"
-
-                #! Center popups/find windows
-                "center,class:^(jetbrains-.*)$,title:^( )$,floating:1"
-                "stayfocused,class:^(jetbrains-.*)$,title:^( )$,floating:1"
-                "noborder,class:^(jetbrains-.*)$,title:^( )$,floating:1"
-                #! Disable window flicker when autocomplete or tooltips appear
-                "nofocus,class:^(jetbrains-.*)$,title:^(win.*)$,floating:1"
-              ];
-            */
           };
         };
       };
