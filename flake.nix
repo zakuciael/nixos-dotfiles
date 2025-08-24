@@ -24,7 +24,7 @@
       inputs.nixpkgs-stable.follows = "nixpkgs";
     };
     rofi-jetbrains = {
-      url = "github:zakuciael/rofi-jetbrains";
+      url = "github:zakuciael/rofi-jetbrains?ref=feat/direnv-support";
       # inputs.nixpkgs.follows = "nixpkgs";
       # inputs.flake-parts.follows = "flake-parts";
     };

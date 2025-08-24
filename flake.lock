@@ -494,11 +494,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1754643436,
-        "narHash": "sha256-aIG1ElRqf+b5ggBT7k6byGmF72VflZN27q17KVymrH8=",
+        "lastModified": 1754838119,
+        "narHash": "sha256-vQHySl1/cRXugU7yoPihLLxL0hxCaqWxrRo6H0A6lnQ=",
         "owner": "zakuciael",
         "repo": "OnexExplorer",
-        "rev": "663d8c7bce4596d0189adf71907ecdb5923e6c0c",
+        "rev": "b0bd59a67719419039d14e6e5c14583fccd282f8",
         "type": "github"
       },
       "original": {
@@ -515,15 +515,16 @@
         "nixpkgs": "nixpkgs_5"
       },
       "locked": {
-        "lastModified": 1754559788,
-        "narHash": "sha256-I+nZO7pl8akBv0N4VhO2hZH5jyJ19LiB+0nZk0DIuyE=",
+        "lastModified": 1754826542,
+        "narHash": "sha256-B+l51chplZVYGjV89+sLtffS/1gFQW7AoK4R8XkLFKk=",
         "owner": "zakuciael",
         "repo": "rofi-jetbrains",
-        "rev": "2550ae756fec2b8135c79b34830e00042ffde38c",
+        "rev": "be83035e62d3a2f87c2d193fb9dc99bd00d99b62",
         "type": "github"
       },
       "original": {
         "owner": "zakuciael",
+        "ref": "feat/direnv-support",
         "repo": "rofi-jetbrains",
         "type": "github"
       }
