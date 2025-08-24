@@ -47,9 +47,7 @@ let
   ides =
     with pkgs.jetbrains;
     [
-      (mkIdeConfig clion {
-        vmopts = [ "-Didea.suppressed.plugins.set.selector=radler" ];
-      })
+      (mkIdeConfig clion { })
       (mkIdeConfig datagrip { })
       (mkIdeConfig dataspell { })
       (mkIdeConfig gateway { })
