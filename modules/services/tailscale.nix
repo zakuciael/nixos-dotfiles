@@ -18,8 +18,12 @@ in
     tailscale = {
       enable = true;
       authKeyFile = config.sops.secrets."tailscale/auth_key".path;
+      extraSetFlags = [ "--accept-routes" ];
+      useRoutingFeatures = "both";
     };
   };
+
+  networking.interfaces."tailscale0".useDHCP = false;
 
   systemd.services.tailscaled-cert = {
     description = "Automatic TLS certificate renewal";
