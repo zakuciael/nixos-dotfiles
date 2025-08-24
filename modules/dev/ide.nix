@@ -51,9 +51,7 @@ let
       (mkIdeConfig datagrip { })
       (mkIdeConfig dataspell { })
       (mkIdeConfig gateway { })
-      (mkIdeConfig goland {
-        wayland = false;
-      })
+      (mkIdeConfig goland { })
       (mkIdeConfig idea-ultimate { })
       (mkIdeConfig mps { })
       (mkIdeConfig phpstorm { })
