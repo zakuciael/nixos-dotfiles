@@ -50,10 +50,10 @@ in
           {
             name = "left";
             monitor = {
-              xorg = "DisplayPort-1";
-              wayland = "DP-2";
+              xorg = "HDMI-A-0";
+              wayland = "HDMI-A-1";
             };
-            mode = "1920x1080";
+            mode = "1920x1080@60.00Hz";
             pos = {
               x = 0;
               y = 0;
@@ -73,11 +73,12 @@ in
               wayland = "DP-1";
             };
             primary = true;
-            mode = "1920x1080";
+            mode = "2560x1440@179.95Hz";
             pos = {
               x = 1080;
               y = 393;
             };
+            hdr = true;
             workspaces = mkLayoutWorkspaces [
               1
               2
@@ -88,14 +89,15 @@ in
           {
             name = "right";
             monitor = {
-              xorg = "HDMI-A-0";
-              wayland = "HDMI-A-1";
+              xorg = "DisplayPort-1";
+              wayland = "DP-2";
             };
-            mode = "1920x1080";
+            mode = "1920x1080@60.00Hz";
             pos = {
-              x = 3000;
+              x = 3640;
               y = 440;
             };
+            rotate = "right";
             workspaces = mkLayoutWorkspaces [
               7
               8
@@ -118,7 +120,10 @@ in
     desktop = {
       apps.enable = true;
       sddm.enable = true;
-      wm.hyprland.enable = true;
+      wm.hyprland = {
+        enable = true;
+        hdr.enable = true;
+      };
       gaming = {
         enable = true;
         steam.enable = true;
@@ -156,6 +161,7 @@ in
         "rider"
         "clion"
         "datagrip"
+        "goland"
       ];
       vscode = {
         enable = true;
