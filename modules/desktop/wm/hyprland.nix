@@ -41,6 +41,10 @@ desktop.mkDesktopModule {
     "obs"
   ];
 
+  extraOptions = {
+    hdr.enable = mkEnableOption "experimental HDR support";
+  };
+
   extraConfig =
     {
       cfg,
@@ -108,6 +112,17 @@ desktop.mkDesktopModule {
               disable_hyprland_logo = true;
               disable_splash_rendering = true;
               enable_anr_dialog = false;
+            };
+
+            # Render settings
+            render = optionalAttrs cfg.hdr.enable {
+              cm_fs_passthrough = 2;
+              cm_auto_hdr = 1;
+            };
+
+            # Experimental settings
+            experimental = {
+              xx_color_management_v4 = cfg.hdr.enable;
             };
 
             # Decoration settings
