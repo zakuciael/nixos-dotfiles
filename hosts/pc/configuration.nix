@@ -78,7 +78,6 @@ in
               x = 1080;
               y = 393;
             };
-            hdr = true;
             workspaces = mkLayoutWorkspaces [
               1
               2
