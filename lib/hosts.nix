@@ -24,22 +24,22 @@ with lib.my;
         hostname = name;
       };
 
-      modules =
-        [
-          ./../configuration.nix
-          ./../hosts/${name}/configuration.nix
-          "${inputs.nixpkgs}/nixos/modules/misc/nixpkgs/read-only.nix"
+      modules = [
+        ./../configuration.nix
+        ./../hosts/${name}/configuration.nix
+        "${inputs.nixpkgs}/nixos/modules/misc/nixpkgs/read-only.nix"
 
-          inputs.home-manager.nixosModules.default
-          inputs.sops-nix.nixosModules.default
-          inputs.catppuccin.nixosModules.default
-          inputs.aagl.nixosModules.default
-          inputs.vscode-server.nixosModules.default
-          inputs.disko.nixosModules.disko
-        ]
-        ++ (utils.recursiveReadDir ./../modules {
-          ignoredDirs = [ "apps" ];
-          suffixes = [ "nix" ];
-        });
+        inputs.home-manager.nixosModules.default
+        inputs.sops-nix.nixosModules.default
+        inputs.catppuccin.nixosModules.default
+        inputs.aagl.nixosModules.default
+        inputs.vscode-server.nixosModules.default
+        inputs.disko.nixosModules.disko
+        inputs.determinate.nixosModules.default
+      ]
+      ++ (utils.recursiveReadDir ./../modules {
+        ignoredDirs = [ "apps" ];
+        suffixes = [ "nix" ];
+      });
     };
 }
