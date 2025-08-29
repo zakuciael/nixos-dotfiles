@@ -309,6 +309,10 @@ with lib.my;
           inputs.statix.default
           nixd
           nixfmt-rfc-style
+
+          # SOPS
+          sops
+          age
         ];
         treesitterGrammars = [
           "lua"
