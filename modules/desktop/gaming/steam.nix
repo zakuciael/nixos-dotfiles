@@ -17,9 +17,9 @@ in
     enable = mkEnableOption "steam games";
   };
 
-  config = mkIf (cfg.enable) {
+  config = mkIf cfg.enable {
     home-manager.users.${username} = {
-      home.activation.createSteamDesktopLink = (
+      home.activation.createSteamDesktopLink =
         let
           desktopEntriesDirectory = "${hmConfig.xdg.dataHome}/applications";
           desktopDirectory = "${hmConfig.xdg.userDirs.desktop}";
@@ -27,8 +27,7 @@ in
         dag.entryBefore [ "createXdgUserDirectories" ] ''
           [[ -L "${desktopEntriesDirectory}" ]] || run mkdir -p $VERBOSE_ARG "${desktopEntriesDirectory}"
           [[ -L "${desktopDirectory}" ]] || run ln -s $VERBOSE_ARG "${desktopEntriesDirectory}" "${desktopDirectory}"
-        ''
-      );
+        '';
     };
 
     environment = {
@@ -49,6 +48,7 @@ in
 
         extraCompatPackages = [
           pkgs.proton-ge-bin
+          pkgs.steamtinkerlaunch
           inputs.nostale-dev-env.packages.proton-ge-nostale
         ];
       };
