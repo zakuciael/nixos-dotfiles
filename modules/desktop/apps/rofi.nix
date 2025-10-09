@@ -14,7 +14,7 @@ in
   home-manager.users.${username} = {
     programs.rofi = {
       enable = true;
-      package = pkgs.rofi-wayland;
+      package = pkgs.rofi;
     };
 
     xdg.configFile."rofi/config.rasi".text = toRasi { } {
