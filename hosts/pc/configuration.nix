@@ -140,16 +140,16 @@ in
       gnome-keyring.enable = true;
       wallpaper.enable = true;
       ssh.enable = true;
-      noisetorch = {
-        enable = true;
-        settings = {
-          device = {
-            id = "alsa_input.usb-Elgato_Systems_Elgato_Wave_3_BS26M1A01013-00.mono-fallback";
-            unit = "sys-devices-pci0000:00-0000:00:08.1-0000:2f:00.3-usb3-3\\x2d4-3\\x2d4:1.0-sound-card0-controlC0.device";
-          };
-          threshold = 55;
-        };
-      };
+      # noisetorch = {
+      #   enable = true;
+      #   settings = {
+      #     device = {
+      #       id = "alsa_input.usb-Elgato_Systems_Elgato_Wave_3_BS26M1A01013-00.mono-fallback";
+      #       unit = "sys-devices-pci0000:00-0000:00:08.1-0000:2f:00.3-usb3-3\\x2d4-3\\x2d4:1.0-sound-card0-controlC0.device";
+      #     };
+      #     threshold = 55;
+      #   };
+      # };
     };
     dev = {
       tools.enable = true;
