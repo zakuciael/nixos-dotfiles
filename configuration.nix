@@ -196,33 +196,6 @@ with lib.my;
                 }"
               )
               |> lib.concatStringsSep "\n";
-
-            # content =
-            #   builtins.attrNames secrets
-            #   |> builtins.map (
-            #     machine:
-            #     [ "machine ${machine}" ]
-            #     ++ (lib.optional (lib.hasAttrByPath [ machine "login" ] secrets)
-            #       "    login: ${
-            #             utils.mkSecretPlaceholder config [
-            #               base
-            #               machine
-            #               "login"
-            #             ]
-            #           }"
-            #     )
-            #     ++ (lib.optional (lib.hasAttrByPath [ machine "password" ] secrets)
-            #       "    password: ${
-            #             utils.mkSecretPlaceholder config [
-            #               base
-            #               machine
-            #               "password"
-            #             ]
-            #           }"
-            #     )
-            #     |> lib.concatStringsSep "\n"
-            #   )
-            #   |> lib.concatStringsSep "\n";
           };
       };
       secrets = {
