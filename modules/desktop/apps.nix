@@ -27,8 +27,6 @@ in
   };
 
   config = mkIf cfg.enable {
-    programs.noisetorch.enable = true;
-
     home-manager.users.${username} = {
       programs.fish.shellAliases.open = "${getBin pkgs.xdg-utils}/bin/xdg-open";
       home.packages = with pkgs; [
