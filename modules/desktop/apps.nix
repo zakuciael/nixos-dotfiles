@@ -35,7 +35,7 @@ in
 
         # Files
         nemo
-        libsForQt5.ark
+        kdePackages.ark
 
         # Music, Videos, Photos, etc.
         spotify
