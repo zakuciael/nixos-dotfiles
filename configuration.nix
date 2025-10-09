@@ -46,7 +46,7 @@ with lib.my;
 
   # System time
   time.timeZone = "Europe/Warsaw";
-  time.hardwareClockInLocalTime = true;
+  time.hardwareClockInLocalTime = false;
 
   # System locale
   i18n = {
