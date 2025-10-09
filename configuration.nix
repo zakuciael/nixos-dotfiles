@@ -253,7 +253,10 @@ with lib.my;
   # Internal modules
   modules = {
     dev.git.enable = true;
-    services.xdg.enable = true;
+    services = {
+      xdg.enable = true;
+      thumbnail.enable = true;
+    };
     hardware.grub.enable = true;
     shell = {
       neovim = {
