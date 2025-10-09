@@ -1,44 +1,53 @@
 {
+  lib,
   config,
   pkgs,
   username,
   ...
 }:
 let
+  inherit (lib) mkEnableOption mkIf;
   tailscale = config.services.tailscale.package;
+  cfg = config.modules.services.tailscale;
 in
 {
-  sops.secrets."tailscale/auth_key" = { };
-
-  services = {
-    resolved = {
-      enable = true;
-      dnssec = "false";
-    };
-    tailscale = {
-      enable = true;
-      authKeyFile = config.sops.secrets."tailscale/auth_key".path;
-      extraSetFlags = [ "--accept-routes" ];
-      useRoutingFeatures = "both";
-    };
+  options.modules.services.tailscale = {
+    enable = mkEnableOption "tailscale vpn";
   };
 
-  networking.interfaces."tailscale0".useDHCP = false;
+  config = mkIf cfg.enable {
 
-  systemd.services.tailscaled-cert = {
-    description = "Automatic TLS certificate renewal";
-    after = [ "tailscaled.service" ];
-    requires = [ "tailscaled.service" ];
-    wantedBy = [ "multi-user.target" ];
+    sops.secrets."tailscale/auth_key" = { };
 
-    serviceConfig.Type = "oneshot";
+    services = {
+      resolved = {
+        enable = true;
+        dnssec = "false";
+      };
+      tailscale = {
+        enable = true;
+        authKeyFile = config.sops.secrets."tailscale/auth_key".path;
+        useRoutingFeatures = "both";
+      };
+    };
 
-    script = ''
-      ${tailscale}/bin/tailscale cert "$(${tailscale}/bin/tailscale status --json | ${pkgs.jq}/bin/jq '.Self.DNSName | .[:-1]' -r)"
-    '';
-  };
+    networking.interfaces."tailscale0".useDHCP = false;
 
-  home-manager.users.${username} = {
-    services.trayscale.enable = true;
+    systemd.services.tailscaled-cert = {
+      description = "Automatic TLS certificate renewal";
+      after = [ "tailscaled.service" ];
+      requires = [ "tailscaled.service" ];
+      wantedBy = [ "multi-user.target" ];
+
+      serviceConfig.Type = "oneshot";
+
+      script = ''
+        ${tailscale}/bin/tailscale cert "$(${tailscale}/bin/tailscale status --json | ${pkgs.jq}/bin/jq '.Self.DNSName | .[:-1]' -r)"
+      '';
+    };
+
+    home-manager.users.${username} = {
+      services.trayscale.enable = true;
+    };
   };
 }
