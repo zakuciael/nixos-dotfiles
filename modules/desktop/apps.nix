@@ -50,6 +50,7 @@ in
         font-manager
         youtube-music
         errands
+        xclicker
       ];
     };
   };
