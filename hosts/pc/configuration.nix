@@ -51,10 +51,10 @@ in
           {
             name = "left";
             monitor = {
-              xorg = "HDMI-A-0";
+              xorg = "HDMI-A-1";
               wayland = "HDMI-A-1";
             };
-            mode = "1920x1080@60.00Hz";
+            mode = "1920x1080";
             pos = {
               x = 0;
               y = 0;
@@ -70,14 +70,14 @@ in
           {
             name = "main";
             monitor = {
-              xorg = "DisplayPort-0";
+              xorg = "DP-1";
               wayland = "DP-1";
             };
             primary = true;
-            mode = "2560x1440@179.95Hz";
+            mode = "2560x1440";
             pos = {
               x = 1080;
-              y = 393;
+              y = 180;
             };
             workspaces = mkLayoutWorkspaces [
               1
@@ -89,13 +89,13 @@ in
           {
             name = "right";
             monitor = {
-              xorg = "DisplayPort-1";
+              xorg = "DP-2";
               wayland = "DP-2";
             };
-            mode = "1920x1080@60.00Hz";
+            mode = "1920x1080";
             pos = {
               x = 3640;
-              y = 440;
+              y = 0;
             };
             rotate = "right";
             workspaces = mkLayoutWorkspaces [
