@@ -40,7 +40,8 @@ in
         # Music, Videos, Photos, etc.
         spotify
         eog
-        vlc-wayland
+        vlc
+        mpv
         gnome-text-editor
         gnome-calculator
         gnome-calendar
