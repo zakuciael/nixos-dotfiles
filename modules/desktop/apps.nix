@@ -31,7 +31,9 @@ in
       programs.fish.shellAliases.open = "${getBin pkgs.xdg-utils}/bin/xdg-open";
       home.packages = with pkgs; [
         # Browser
-        google-chrome
+        (google-chrome.override {
+          commandLineArgs = "--disable-features=WaylandWpColorManagerV1"; # FIXME: Remove when new version of Hyprland is merged to nixpkgs
+        })
 
         # Files
         nemo
