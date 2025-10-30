@@ -141,6 +141,7 @@ in
       gnome-keyring.enable = true;
       wallpaper.enable = true;
       ssh.enable = true;
+      input-remapper.enable = true;
       # noisetorch = {
       #   enable = true;
       #   settings = {
