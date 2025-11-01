@@ -40,7 +40,6 @@ in
         kdePackages.ark
 
         # Music, Videos, Photos, etc.
-        spotify
         eog
         vlc
         mpv
