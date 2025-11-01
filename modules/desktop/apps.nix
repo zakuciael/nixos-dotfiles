@@ -53,6 +53,7 @@ in
         youtube-music
         errands
         xclicker
+        fluent-reader
       ];
     };
   };
