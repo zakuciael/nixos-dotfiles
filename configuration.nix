@@ -278,7 +278,7 @@ with lib.my;
           actionlint # .github/workflows/*.yml
 
           # Dockerfile
-          dockerfile-language-server-nodejs
+          dockerfile-language-server
           hadolint
 
           # Nix
