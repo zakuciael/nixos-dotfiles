@@ -37,6 +37,7 @@ with lib.my;
     extraOptions = ''
       experimental-features = nix-command flakes pipe-operators
       netrc-file = ${config.sops.templates."nix/netrc".path}
+      lazy-trees = true
       !include ${config.sops.templates."nix/access_tokens.conf".path}
     '';
     nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
