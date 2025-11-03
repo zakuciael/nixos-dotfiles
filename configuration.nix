@@ -21,7 +21,6 @@ with lib.my;
         "https://attic.zakku.eu/rofi-jetbrains"
         "https://attic.zakku.eu/nostale-dev-env"
         "https://attic.zakku.eu/system"
-        "https://install.determinate.systems"
       ];
       trusted-public-keys = [
         "cache.thalheim.io-1:R7msbosLEZKrxk/lKxf9BTjOOH7Ax3H0Qj0/6wiHOgc="
@@ -30,16 +29,15 @@ with lib.my;
         "rofi-jetbrains:grO4wlkucWElNgkCaFREHgbsrn9jeoHZqyqEMRtcgxI="
         "nostale-dev-env:ppvIiWL1k+xB8hIYFbWh0QceKpc/H8JX5MmJQFveMzE="
         "system:3zQYNe2TDLsBhgQobQLmcnJrc0k5XdkXqvyVz5xyS+o="
-        "cache.flakehub.com-3:hJuILl5sVK4iKm86JzgdXW12Y2Hwd5G07qKtHTOcDCM="
       ];
       trusted-users = [ "@wheel" ];
     };
     extraOptions = ''
       experimental-features = nix-command flakes pipe-operators
       netrc-file = ${config.sops.templates."nix/netrc".path}
-      lazy-trees = true
       !include ${config.sops.templates."nix/access_tokens.conf".path}
     '';
+    package = pkgs.nixVersions.latest;
     nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
   };
 
