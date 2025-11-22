@@ -57,7 +57,7 @@ in
             mode = "1920x1080";
             pos = {
               x = 0;
-              y = 0;
+              y = 60;
             };
             rotate = "left";
             workspaces = mkLayoutWorkspaces [
@@ -77,7 +77,7 @@ in
             mode = "2560x1440";
             pos = {
               x = 1080;
-              y = 180;
+              y = 150;
             };
             workspaces = mkLayoutWorkspaces [
               1
@@ -95,9 +95,8 @@ in
             mode = "1920x1080";
             pos = {
               x = 3640;
-              y = 0;
+              y = 380;
             };
-            rotate = "right";
             workspaces = mkLayoutWorkspaces [
               7
               8

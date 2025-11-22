@@ -5,13 +5,16 @@
   ...
 }:
 with lib;
-with lib.my; let
+with lib.my;
+let
   cfg = config.modules.services.wallpaper;
-in {
+in
+{
   options.modules.services.wallpaper = {
     enable = mkEnableOption "wallpaper config";
     settings = mkOption {
       description = "Per-monitor wallpaper settings";
+      default = [ ];
       example = [
         {
           monitor = {
@@ -21,10 +24,11 @@ in {
           wallpaper = "$HOME/Pictures/Wallpapers/anime_cat_girl.png";
         }
       ];
-      type = with types;
+      type =
+        with types;
         listOf (submodule {
           options = {
-            monitor = defs.monitor;
+            inherit (defs) monitor;
             wallpaper = mkOption {
               description = "Path to the wallpaper.";
               example = "$HOME/Pictures/Wallpapers/tropical_storm_dante.png";
@@ -45,7 +49,7 @@ in {
           preload = builtins.map (x: ''${x.wallpaper}'') cfg.settings;
           wallpaper = builtins.map (x: ''${x.monitor.wayland},${x.wallpaper}'') cfg.settings;
         };
-        importantPrefixes = ["$"];
+        importantPrefixes = [ "$" ];
       };
     };
   };
