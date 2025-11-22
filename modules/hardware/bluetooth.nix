@@ -6,19 +6,26 @@
   ...
 }:
 with lib;
-with lib.my; let
+with lib.my;
+let
   cfg = config.modules.hardware.bluetooth;
-in {
+in
+{
   options.modules.hardware.bluetooth = {
     enable = mkEnableOption "support for Bluetooth";
   };
 
-  config = mkIf (cfg.enable) {
-    home-manager.users.${username}.home.packages = with pkgs; [overskride];
+  config = mkIf cfg.enable {
+    home-manager.users.${username}.home.packages = with pkgs; [ overskride ];
 
     hardware.bluetooth = {
       enable = true;
       powerOnBoot = true;
+      settings = {
+        "General" = {
+          Experimental = "true";
+        };
+      };
     };
   };
 }

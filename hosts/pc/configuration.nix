@@ -111,6 +111,7 @@ in
       sound.enable = true;
       docker.enable = true;
       yubikey.enable = true;
+      peripherals.enable = true;
       corectrl = {
         enable = true;
         overclock = false;
