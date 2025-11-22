@@ -43,7 +43,7 @@ in
         filezilla
 
         # Tracking
-        wakatime
+        wakatime-cli
 
         # Toolbox
         devtoolbox

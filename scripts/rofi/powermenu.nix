@@ -84,7 +84,7 @@ let
     suspend = entryAfter [ "lock" ] {
       icon = "";
       runtimeInputs = with pkgs; [
-        mpc-cli
+        mpc
         alsa-utils
       ];
       action = ''

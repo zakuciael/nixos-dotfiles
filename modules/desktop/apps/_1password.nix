@@ -81,15 +81,15 @@ in
 
   home-manager.users.${username} = {
     programs = {
-      git = mkIf (config.modules.dev.git.enable) {
+      git = mkIf config.modules.dev.git.enable {
         signing = {
           signByDefault = true;
           key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEcrcFZPwdfoZb0ZP3SUr/ZgN6Hycpk57Ky1UMmPbAg8";
         };
 
-        extraConfig = {
-          gpg.format = "ssh";
-          gpg.ssh.program = "${pkgs'.gui}/bin/op-ssh-sign";
+        settings.gpg = {
+          format = "ssh";
+          ssh.program = "${pkgs'.gui}/bin/op-ssh-sign";
         };
       };
 
@@ -99,7 +99,7 @@ in
       };
     };
 
-    wayland.windowManager.hyprland = mkIf (config.modules.desktop.wm.hyprland.enable) {
+    wayland.windowManager.hyprland = mkIf config.modules.desktop.wm.hyprland.enable {
       settings = {
         bind = [
           "Ctrl Shift, O, exec, ${getExe pkgs'.gui} --toggle"

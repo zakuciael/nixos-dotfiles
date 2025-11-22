@@ -71,7 +71,6 @@ with lib.my;
   fonts = {
     packages = with pkgs; [
       noto-fonts
-      noto-fonts-extra
       noto-fonts-color-emoji
       noto-fonts-cjk-sans
       noto-fonts-cjk-serif
