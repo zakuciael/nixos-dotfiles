@@ -254,6 +254,7 @@ with lib.my;
     services = {
       xdg.enable = true;
       thumbnail.enable = true;
+      upower.enable = true;
     };
     hardware.grub.enable = true;
     shell = {
