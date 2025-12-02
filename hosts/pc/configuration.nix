@@ -107,6 +107,7 @@ in
         ];
       };
       bluetooth.enable = true;
+      graphic-tablet.enable = true;
       printer.enable = true;
       sound.enable = true;
       docker.enable = true;
