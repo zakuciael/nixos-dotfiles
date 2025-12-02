@@ -222,6 +222,7 @@ with lib.my;
       inputs.sops-nix.homeManagerModule
       inputs.catppuccin.homeManagerModule
       inputs.vscode-server.homeManagerModule
+      inputs.zen-browser.homeModules.beta
     ];
     useUserPackages = true;
     useGlobalPkgs = true;

@@ -39,6 +39,7 @@ desktop.mkDesktopModule {
     "swaync"
     "thunderbird"
     "obs"
+    "zen-browser"
   ];
 
   extraOptions = {
