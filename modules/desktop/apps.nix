@@ -54,6 +54,7 @@ in
         errands
         xclicker
         fluent-reader
+        xournalpp
       ];
     };
   };
