@@ -1,5 +1,28 @@
 {
   "nodes": {
+    "_1pass-shell-plugins": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "systems": [
+          "systems"
+        ]
+      },
+      "locked": {
+        "lastModified": 1756860511,
+        "narHash": "sha256-AA8vN5YMXcCznWfaH/2AgtRNpZPG4wvbLTT79u0b+LU=",
+        "owner": "1Password",
+        "repo": "shell-plugins",
+        "rev": "49810df8fe11221250a890191185c6e59aea8d1e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "1Password",
+        "repo": "shell-plugins",
+        "type": "github"
+      }
+    },
     "aagl": {
       "inputs": {
         "flake-compat": [
@@ -383,6 +406,7 @@
     },
     "root": {
       "inputs": {
+        "_1pass-shell-plugins": "_1pass-shell-plugins",
         "aagl": "aagl",
         "catppuccin": "catppuccin",
         "deadnix": "deadnix",
@@ -478,11 +502,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1753008141,
-        "narHash": "sha256-UPE5WAsYmuGoCfCe6dL8zty28+NNdfYa2DsDB7hU/C4=",
+        "lastModified": 1764698559,
+        "narHash": "sha256-P0dddN9ABceUw3SnQUBQ55aCXjDpRpVfoFxyR3+orIY=",
         "owner": "zakuciael",
         "repo": "statix",
-        "rev": "96516dbd1d49c1f0d886c1299096f6afc3d8206c",
+        "rev": "7a4851f4f29df863a2b562bdda71da99b9de14eb",
         "type": "github"
       },
       "original": {

@@ -94,6 +94,13 @@
         home-manager.follows = "home-manager";
       };
     };
+    _1pass-shell-plugins = {
+      url = "github:1Password/shell-plugins";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        systems.follows = "systems";
+      };
+    };
   };
 
   outputs =

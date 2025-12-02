@@ -223,6 +223,7 @@ with lib.my;
       inputs.catppuccin.homeManagerModule
       inputs.vscode-server.homeManagerModule
       inputs.zen-browser.homeModules.beta
+      inputs._1pass-shell-plugins.hmModules.default
     ];
     useUserPackages = true;
     useGlobalPkgs = true;

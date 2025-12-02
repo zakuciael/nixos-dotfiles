@@ -45,10 +45,6 @@ in
       polkitPolicyOwners = [ username ];
       package = pkgs._1password-gui-beta;
     };
-
-    fish.interactiveShellInit = ''
-      source ${configDirectory}/op/plugins.sh
-    '';
   };
 
   modules.desktop.wm.${desktop}.autostartPrograms = [
@@ -96,6 +92,14 @@ in
       ssh = {
         enable = true;
         extraConfig = "IdentityAgent ~/.1password/agent.sock";
+      };
+
+      _1password-shell-plugins = {
+        enable = true;
+        package = pkgs'.cli;
+        plugins = with pkgs; [
+          gh
+        ];
       };
     };
 
