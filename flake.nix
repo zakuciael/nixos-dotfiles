@@ -4,11 +4,29 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixos-hardware.url = "github:zakuciael/nixos-hardware/master";
-    flake-utils.url = "github:numtide/flake-utils";
-    flake-parts.url = "github:hercules-ci/flake-parts";
     flake-compat.url = "github:edolstra/flake-compat";
-    nix-colors.url = "github:misterio77/nix-colors";
-    catppuccin.url = "github:catppuccin/nix";
+    systems.url = "github:nix-systems/default";
+    nixpkgs-lib.follows = "nixpkgs";
+    fenix = {
+      url = "github:nix-community/fenix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nix-colors = {
+      url = "github:misterio77/nix-colors";
+      inputs.nixpkgs-lib.follows = "nixpkgs-lib";
+    };
+    flake-parts = {
+      url = "github:hercules-ci/flake-parts";
+      inputs.nixpkgs-lib.follows = "nixpkgs-lib";
+    };
+    catppuccin = {
+      url = "github:catppuccin/nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    flake-utils = {
+      url = "github:numtide/flake-utils";
+      inputs.systems.follows = "systems";
+    };
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -25,13 +43,16 @@
     };
     rofi-jetbrains = {
       url = "github:zakuciael/rofi-jetbrains?ref=feat/direnv-support";
-      # inputs.nixpkgs.follows = "nixpkgs";
-      # inputs.flake-parts.follows = "flake-parts";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        flake-parts.follows = "flake-parts";
+        fenix.follows = "fenix";
+      };
     };
     nostale-dev-env = {
       url = "github:zakuciael/nostale-dev-env";
-      # inputs.nixpkgs.follows = "nixpkgs";
-      # inputs.flake-parts.follows = "flake-parts";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-parts.follows = "flake-parts";
     };
     aagl = {
       url = "github:ezKEa/aagl-gtk-on-nix";
@@ -45,11 +66,17 @@
     };
     deadnix = {
       url = "github:zakuciael/deadnix";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        utils.follows = "flake-utils";
+      };
     };
     statix = {
       url = "github:zakuciael/statix/support-pipe-operator";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        fenix.follows = "fenix";
+      };
     };
     disko = {
       url = "github:nix-community/disko/latest";
