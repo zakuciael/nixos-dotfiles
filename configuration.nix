@@ -250,7 +250,13 @@ with lib.my;
 
   # Internal modules
   modules = {
-    dev.git.enable = true;
+    dev = {
+      git.enable = true;
+      zed = {
+        enable = true;
+        mutable = true;
+      };
+    };
     services = {
       xdg.enable = true;
       thumbnail.enable = true;
