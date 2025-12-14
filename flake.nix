@@ -65,14 +65,15 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     deadnix = {
-      url = "github:zakuciael/deadnix";
+      url = "github:astro/deadnix";
       inputs = {
         nixpkgs.follows = "nixpkgs";
         utils.follows = "flake-utils";
       };
     };
     statix = {
-      url = "github:zakuciael/statix/support-pipe-operator";
+      # url = "github:zakuciael/statix/support-pipe-operator";
+      url = "github:oppiliappan/statix";
       inputs = {
         nixpkgs.follows = "nixpkgs";
         fenix.follows = "fenix";
