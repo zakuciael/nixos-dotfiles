@@ -56,7 +56,7 @@
       "url": "https://download.jetbrains.com/idea/ideaIC-2025.2.5.tar.gz",
       "build_number": "252.28238.7"
     },
-    "idea-ultimate": {
+    "idea": {
       "update-channel": "IntelliJ IDEA RELEASE",
       "url-template": "https://download.jetbrains.com/idea/ideaIU-{version}.tar.gz",
       "version": "2025.3",
@@ -89,12 +89,12 @@
       "url": "https://download.jetbrains.com/python/pycharm-community-2025.2.4.tar.gz",
       "build_number": "252.27397.106"
     },
-    "pycharm-professional": {
+    "pycharm": {
       "update-channel": "PyCharm RELEASE",
-      "url-template": "https://download.jetbrains.com/python/pycharm-professional-{version}.tar.gz",
+      "url-template": "https://download.jetbrains.com/python/pycharm-{version}.tar.gz",
       "version": "2025.3",
       "sha256": "a410c9c5834ede16373325ea21b850e309557db5d9dcca3674caf92ea7c5bf05",
-      "url": "https://download.jetbrains.com/python/pycharm-professional-2025.3.tar.gz",
+      "url": "https://download.jetbrains.com/python/pycharm-2025.3.tar.gz",
       "build_number": "253.28294.336"
     },
     "rider": {
@@ -195,7 +195,7 @@
       "url": "https://download.jetbrains.com/idea/ideaIC-2025.2.5-aarch64.tar.gz",
       "build_number": "252.28238.7"
     },
-    "idea-ultimate": {
+    "idea": {
       "update-channel": "IntelliJ IDEA RELEASE",
       "url-template": "https://download.jetbrains.com/idea/ideaIU-{version}-aarch64.tar.gz",
       "version": "2025.3",
@@ -228,12 +228,12 @@
       "url": "https://download.jetbrains.com/python/pycharm-community-2025.2.4-aarch64.tar.gz",
       "build_number": "252.27397.106"
     },
-    "pycharm-professional": {
+    "pycharm": {
       "update-channel": "PyCharm RELEASE",
-      "url-template": "https://download.jetbrains.com/python/pycharm-professional-{version}-aarch64.tar.gz",
+      "url-template": "https://download.jetbrains.com/python/pycharm-{version}-aarch64.tar.gz",
       "version": "2025.3",
       "sha256": "97f00b722caba564eaf4eda35bb3344a92f3bd76e798ea58e65f45efa4054e14",
-      "url": "https://download.jetbrains.com/python/pycharm-professional-2025.3-aarch64.tar.gz",
+      "url": "https://download.jetbrains.com/python/pycharm-2025.3-aarch64.tar.gz",
       "build_number": "253.28294.336"
     },
     "rider": {
@@ -334,7 +334,7 @@
       "url": "https://download.jetbrains.com/idea/ideaIC-2025.2.5.dmg",
       "build_number": "252.28238.7"
     },
-    "idea-ultimate": {
+    "idea": {
       "update-channel": "IntelliJ IDEA RELEASE",
       "url-template": "https://download.jetbrains.com/idea/ideaIU-{version}.dmg",
       "version": "2025.3",
@@ -367,12 +367,12 @@
       "url": "https://download.jetbrains.com/python/pycharm-community-2025.2.4.dmg",
       "build_number": "252.27397.106"
     },
-    "pycharm-professional": {
+    "pycharm": {
       "update-channel": "PyCharm RELEASE",
-      "url-template": "https://download.jetbrains.com/python/pycharm-professional-{version}.dmg",
+      "url-template": "https://download.jetbrains.com/python/pycharm-{version}.dmg",
       "version": "2025.3",
       "sha256": "e40a427311880bda6cf805c85426216bf45a6c1a6e7e91e3a5254c0baf4f68c7",
-      "url": "https://download.jetbrains.com/python/pycharm-professional-2025.3.dmg",
+      "url": "https://download.jetbrains.com/python/pycharm-2025.3.dmg",
       "build_number": "253.28294.336"
     },
     "rider": {
@@ -473,7 +473,7 @@
       "url": "https://download.jetbrains.com/idea/ideaIC-2025.2.5-aarch64.dmg",
       "build_number": "252.28238.7"
     },
-    "idea-ultimate": {
+    "idea": {
       "update-channel": "IntelliJ IDEA RELEASE",
       "url-template": "https://download.jetbrains.com/idea/ideaIU-{version}-aarch64.dmg",
       "version": "2025.3",
@@ -506,12 +506,12 @@
       "url": "https://download.jetbrains.com/python/pycharm-community-2025.2.4-aarch64.dmg",
       "build_number": "252.27397.106"
     },
-    "pycharm-professional": {
+    "pycharm": {
       "update-channel": "PyCharm RELEASE",
-      "url-template": "https://download.jetbrains.com/python/pycharm-professional-{version}-aarch64.dmg",
+      "url-template": "https://download.jetbrains.com/python/pycharm-{version}-aarch64.dmg",
       "version": "2025.3",
       "sha256": "aa6770f7b336aa9afe43f946d5f34627c1679bdc990e52c09e4d8098d54ab785",
-      "url": "https://download.jetbrains.com/python/pycharm-professional-2025.3-aarch64.dmg",
+      "url": "https://download.jetbrains.com/python/pycharm-2025.3-aarch64.dmg",
       "build_number": "253.28294.336"
     },
     "rider": {

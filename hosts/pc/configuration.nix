@@ -159,7 +159,7 @@ in
       kubernetes.enable = true;
       ides = [
         "rust-rover"
-        "idea-ultimate"
+        "idea"
         "rider"
         "clion"
         "datagrip"
