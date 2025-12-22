@@ -266,6 +266,8 @@ with lib.my;
     };
     hardware.grub.enable = true;
     shell = {
+      nix.enable = true;
+      television.enable = true;
       neovim = {
         enable = true;
         lspPackages = with pkgs; [

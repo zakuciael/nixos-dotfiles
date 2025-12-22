@@ -36,6 +36,7 @@ with lib.my;
         inputs.vscode-server.nixosModules.default
         inputs.disko.nixosModules.disko
         inputs._1pass-shell-plugins.nixosModules.default
+        inputs.nix-index-database.nixosModules.default
       ]
       ++ (utils.recursiveReadDir ./../modules {
         ignoredDirs = [ "apps" ];
