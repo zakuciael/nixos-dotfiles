@@ -468,11 +468,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1754826542,
-        "narHash": "sha256-B+l51chplZVYGjV89+sLtffS/1gFQW7AoK4R8XkLFKk=",
+        "lastModified": 1766495693,
+        "narHash": "sha256-RdXa8tq9ZGt15v5LavOxhjQCNah3Yw4WiWBlVtNGI1g=",
         "owner": "zakuciael",
         "repo": "rofi-jetbrains",
-        "rev": "be83035e62d3a2f87c2d193fb9dc99bd00d99b62",
+        "rev": "5d28b5dba4e9767aa234ae165d8f681a0944a4ab",
         "type": "github"
       },
       "original": {
