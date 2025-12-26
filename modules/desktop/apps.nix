@@ -55,6 +55,7 @@ in
         xclicker
         fluent-reader
         xournalpp
+        figma-linux
       ];
     };
   };
