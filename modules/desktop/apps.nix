@@ -27,6 +27,9 @@ in
   };
 
   config = mkIf cfg.enable {
+    # Special case, since GParted doesn't work well when installed as user package.
+    environment.systemPackages = with pkgs; [ gparted ];
+
     home-manager.users.${username} = {
       programs.fish.shellAliases.open = "${getBin pkgs.xdg-utils}/bin/xdg-open";
       home.packages = with pkgs; [
