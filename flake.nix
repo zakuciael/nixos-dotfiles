@@ -131,6 +131,7 @@
         inherit system;
         config = {
           allowUnfree = true;
+          allowUnsupportedSystem = true;
           permittedInsecurePackages = [ ];
         };
 

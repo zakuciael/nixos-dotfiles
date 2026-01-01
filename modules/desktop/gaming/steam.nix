@@ -44,7 +44,10 @@ in
     };
 
     environment = {
-      systemPackages = with pkgs; [ mangohud ];
+      systemPackages = with pkgs; [
+        mangohud
+        pkgsCross.mingw32.wine-discord-ipc-bridge
+      ];
     };
 
     programs = {
