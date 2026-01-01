@@ -110,6 +110,11 @@
       url = "github:3timeslazy/nix-search-tv";
       inputs.flake-utils.follows = "flake-utils";
     };
+    steam-presence = {
+      url = "github:JustTemmie/steam-presence";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+    };
   };
 
   outputs =

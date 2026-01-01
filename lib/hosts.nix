@@ -37,6 +37,7 @@ with lib.my;
         inputs.disko.nixosModules.disko
         inputs._1pass-shell-plugins.nixosModules.default
         inputs.nix-index-database.nixosModules.default
+        inputs.steam-presence.nixosModules.steam-presence
       ]
       ++ (utils.recursiveReadDir ./../modules {
         ignoredDirs = [ "apps" ];

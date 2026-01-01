@@ -508,6 +508,7 @@
         "rofi-jetbrains": "rofi-jetbrains",
         "sops-nix": "sops-nix",
         "statix": "statix",
+        "steam-presence": "steam-presence",
         "systems": "systems_2",
         "vscode-server": "vscode-server",
         "zen-browser": "zen-browser"
@@ -591,6 +592,29 @@
       "original": {
         "owner": "oppiliappan",
         "repo": "statix",
+        "type": "github"
+      }
+    },
+    "steam-presence": {
+      "inputs": {
+        "flake-utils": [
+          "flake-utils"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1764674587,
+        "narHash": "sha256-acQiLP/b8yEX0fP/TmG1UdpkYzFA3Jdy8wUMOiPR/yA=",
+        "owner": "JustTemmie",
+        "repo": "steam-presence",
+        "rev": "c70155dffe9448fe98874c79900646e2e3a85a36",
+        "type": "github"
+      },
+      "original": {
+        "owner": "JustTemmie",
+        "repo": "steam-presence",
         "type": "github"
       }
     },
