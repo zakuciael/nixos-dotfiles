@@ -108,6 +108,22 @@ in
       };
     };
 
+    services.udev = {
+      extraRules = ''
+        # Disable DS4 touchpad acting as mouse
+
+        # USB
+        ATTRS{name}=="Sony Interactive Entertainment Wireless Controller Touchpad", ENV{LIBINPUT_IGNORE_DEVICE}="1"
+        # Bluetooth
+        ATTRS{name}=="Wireless Controller Touchpad", ENV{LIBINPUT_IGNORE_DEVICE}="1"
+      '';
+      packages = with pkgs; [
+        game-devices-udev-rules
+      ];
+    };
+
+    hardware.uinput.enable = true;
+
     fileSystems = mkIf (builtins.any ({ value, ... }: value.device != null) (attrsToList cfg.disks)) (
       listToAttrs (builtins.map mkFileSystemConfig (attrsToList cfg.disks))
     );
