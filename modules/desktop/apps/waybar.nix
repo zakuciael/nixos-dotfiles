@@ -139,14 +139,14 @@ in
             };
           };
           "upower#keyboard" = {
-            native-path = "/org/bluez/hci0/dev_D0_01_1B_5C_9F_C4";
+            native-path = "/org/bluez/hci0/dev_E9_20_B7_50_6C_FD";
             format = "󰌌 {percentage}";
             tooltip = false;
             show-icon = false;
             hide-if-empty = true;
           };
           "upower#mouse" = {
-            native-path = "/org/bluez/hci0/dev_EF_9B_87_CC_57_EC";
+            native-path = "/org/bluez/hci0/dev_D9_64_28_E9_95_FF";
             format = "󰍽 {percentage}";
             tooltip = false;
             show-icon = false;
