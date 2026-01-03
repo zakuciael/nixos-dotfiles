@@ -1,0 +1,144 @@
+{ lib, ... }:
+lib.singleton (
+  final: _:
+  let
+    inherit (final)
+      fetchFromGitHub
+      buildDotnetModule
+      dotnetCorePackages
+      coreutils
+      makeDesktopItem
+      nix-update-script
+      versionCheckHook
+      nixosTests
+      ;
+  in
+  {
+    # Need to copy-paste the source for building the opentabletdriver pkg
+    # because for some reason when using overrideAttrs it can't find new NuGet dependencies
+    opentabletdriver = buildDotnetModule (finalAttrs: {
+      pname = "OpenTabletDriver";
+      version = "0.6.7";
+
+      src = fetchFromGitHub {
+        owner = "OpenTabletDriver";
+        repo = "OpenTabletDriver";
+        rev = "e3739573012de804848a9b6d035d88e3c84fb3fc";
+        hash = "sha256-qX0DGg8cnk8xPD5oNhgIPxvPTxkR+WdJDeg1Q4pASnU=";
+      };
+
+      dotnet-sdk = dotnetCorePackages.sdk_8_0;
+
+      projectFile = [
+        "OpenTabletDriver.Console"
+        "OpenTabletDriver.Daemon"
+        "OpenTabletDriver.UX.Gtk"
+      ];
+
+      nugetDeps = ./deps.json;
+
+      executables = [
+        "OpenTabletDriver.Console"
+        "OpenTabletDriver.Daemon"
+        "OpenTabletDriver.UX.Gtk"
+      ];
+
+      nativeBuildInputs = with final; [
+        copyDesktopItems
+        wrapGAppsHook3
+        udevCheckHook
+        # Dependency of generate-rules.sh
+        jq
+      ];
+
+      runtimeDeps = with final; [
+        gtk3
+        libappindicator
+        libevdev
+        libnotify
+        xorg.libX11
+        xorg.libXrandr
+        udev
+      ];
+
+      buildInputs = finalAttrs.runtimeDeps;
+
+      OTD_CONFIGURATIONS = "${finalAttrs.src}/OpenTabletDriver.Configurations/Configurations";
+
+      doCheck = true;
+      testProjectFile = "OpenTabletDriver.Tests/OpenTabletDriver.Tests.csproj";
+
+      disabledTests = [
+        # Require networking & unused in Linux build
+        "OpenTabletDriver.Tests.UpdaterTests.CheckForUpdates_Returns_Update_When_Available"
+        "OpenTabletDriver.Tests.UpdaterTests.Install_Throws_UpdateAlreadyInstalledException_When_AlreadyInstalled"
+        "OpenTabletDriver.Tests.UpdaterTests.Install_DoesNotThrow_UpdateAlreadyInstalledException_When_PreviousInstallFailed"
+        "OpenTabletDriver.Tests.UpdaterTests.Install_Throws_UpdateInProgressException_When_AnotherUpdate_Is_InProgress"
+        "OpenTabletDriver.Tests.UpdaterTests.Install_Moves_UpdatedBinaries_To_BinDirectory"
+        "OpenTabletDriver.Tests.UpdaterTests.Install_Moves_Only_ToBeUpdated_Binaries"
+        "OpenTabletDriver.Tests.UpdaterTests.Install_Copies_AppDataFiles"
+        # Depends on processor load
+        "OpenTabletDriver.Tests.TimerTests.TimerAccuracy"
+      ];
+
+      preBuild = ''
+        patchShebangs generate-rules.sh
+        substituteInPlace generate-rules.sh \
+          --replace-fail '/usr/bin/env rm' '${lib.getExe' coreutils "rm"}'
+      '';
+
+      postFixup = ''
+        # Give a more "*nix" name to the binaries
+        mv $out/bin/OpenTabletDriver.Console $out/bin/otd
+        mv $out/bin/OpenTabletDriver.Daemon $out/bin/otd-daemon
+        mv $out/bin/OpenTabletDriver.UX.Gtk $out/bin/otd-gui
+
+        install -Dm644 $src/OpenTabletDriver.UX/Assets/otd.png -t $out/share/pixmaps
+
+        # Generate udev rules from source
+        mkdir -p $out/lib/udev/rules.d
+        ./generate-rules.sh > $out/lib/udev/rules.d/70-opentabletdriver.rules
+      '';
+
+      desktopItems = [
+        (makeDesktopItem {
+          desktopName = "OpenTabletDriver";
+          name = "OpenTabletDriver";
+          exec = "otd-gui";
+          icon = "otd";
+          comment = "Open source, cross-platform, user-mode tablet driver";
+          categories = [ "Utility" ];
+        })
+      ];
+
+      doInstallCheck = true;
+      nativeInstallCheckInputs = [
+        versionCheckHook
+      ];
+      versionCheckProgram = "${placeholder "out"}/bin/otd-daemon";
+
+      passthru = {
+        updateScript = nix-update-script { };
+        tests = {
+          otd-runs = nixosTests.opentabletdriver;
+        };
+      };
+
+      meta = {
+        # changelog = "https://github.com/OpenTabletDriver/OpenTabletDriver/releases/tag/v${finalAttrs.version}";
+        description = "Open source, cross-platform, user-mode tablet driver";
+        homepage = "https://github.com/OpenTabletDriver/OpenTabletDriver";
+        license = lib.licenses.lgpl3Plus;
+        mainProgram = "otd";
+        maintainers = with lib.maintainers; [
+          gepbird
+          thiagokokada
+        ];
+        platforms = [
+          "x86_64-linux"
+          "aarch64-linux"
+        ];
+      };
+    });
+  }
+)
