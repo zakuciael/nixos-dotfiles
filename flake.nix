@@ -3,6 +3,8 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/*";
+
     nixos-hardware.url = "github:zakuciael/nixos-hardware/master";
     flake-compat.url = "github:edolstra/flake-compat";
     systems.url = "github:nix-systems/default";
@@ -72,12 +74,8 @@
       };
     };
     statix = {
-      # url = "github:zakuciael/statix/support-pipe-operator";
       url = "github:oppiliappan/statix";
-      inputs = {
-        nixpkgs.follows = "nixpkgs";
-        fenix.follows = "fenix";
-      };
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     disko = {
       url = "github:nix-community/disko/latest";
