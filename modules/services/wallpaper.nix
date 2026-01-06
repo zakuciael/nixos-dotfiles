@@ -46,8 +46,13 @@ in
         settings = {
           ipc = false;
           splash = false;
-          preload = builtins.map (x: ''${x.wallpaper}'') cfg.settings;
-          wallpaper = builtins.map (x: ''${x.monitor.wayland},${x.wallpaper}'') cfg.settings;
+
+          wallpaper =
+            cfg.settings
+            |> map (v: {
+              monitor = v.monitor.wayland;
+              path = "${v.wallpaper}";
+            });
         };
         importantPrefixes = [ "$" ];
       };
