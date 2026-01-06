@@ -12,6 +12,11 @@
     fenix = {
       url = "github:nix-community/fenix";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.rust-analyzer-src.follows = "";
+    };
+    rust-overlay = {
+      url = "github:oxalica/rust-overlay";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-colors = {
       url = "github:misterio77/nix-colors";
@@ -60,6 +65,7 @@
       url = "github:ezKEa/aagl-gtk-on-nix";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-compat.follows = "flake-compat";
+      inputs.rust-overlay.follows = "rust-overlay";
     };
     vscode-server = {
       url = "github:nix-community/nixos-vscode-server";
@@ -106,6 +112,7 @@
     };
     nix-search-tv = {
       url = "github:3timeslazy/nix-search-tv";
+      inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "flake-utils";
     };
     steam-presence = {
@@ -113,6 +120,12 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "flake-utils";
     };
+    # zed-extensions = {
+    #   url = "github:DuskSystems/nix-zed-extensions";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    #   inputs.nixpkgs-unstable.follows = "nixpkgs";
+    #   inputs.rust-overlay.follows = "rust-overlay";
+    # };
   };
 
   outputs =
@@ -133,7 +146,10 @@
           permittedInsecurePackages = [ ];
         };
 
-        overlays = lib.my.overlays.pkgs ++ lib.singleton inputs.aagl.overlays.default;
+        overlays = lib.my.overlays.pkgs ++ [
+          inputs.aagl.overlays.default
+          # inputs.zed-extensions.overlays.default
+        ];
       };
 
       inputs = flakeInputs // {
