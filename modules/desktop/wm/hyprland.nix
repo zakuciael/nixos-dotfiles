@@ -60,6 +60,26 @@ desktop.mkDesktopModule {
         withUWSM = true;
       };
 
+      # Dirty hack around https://github.com/NixOS/nixpkgs/pull/474174
+      programs.uwsm.waylandCompositors = mkForce { };
+      services.displayManager.sessionPackages = [
+        (pkgs.writeTextFile rec {
+          name = "hyprland-uwsm";
+          text = ''
+            [Desktop Entry]
+            Name=Hyprland (UWSM)
+            Comment=Hyprland compositor managed by UWSM
+            Exec=${lib.getExe config.programs.uwsm.package} start -F -- ${config.programs.hyprland.package}/share/wayland-sessions/hyprland.desktop
+            DesktopNames=Hyprland
+            Type=Application
+          '';
+          destination = "/share/wayland-sessions/${name}.desktop";
+          derivationArgs = {
+            passthru.providedSessions = [ "${name}" ];
+          };
+        })
+      ];
+
       # Make chrome and electron apps run native on wayland
       environment.sessionVariables.NIXOS_OZONE_WL = "1";
 
@@ -78,6 +98,9 @@ desktop.mkDesktopModule {
         wayland.windowManager.hyprland = {
           enable = true;
           xwayland.enable = true;
+
+          # Conflicts with `programs.hyprland.withUWSM`
+          systemd.enable = false;
 
           settings = {
             # Autostart script
