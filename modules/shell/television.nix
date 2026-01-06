@@ -21,7 +21,7 @@ in
 
       programs.television = {
         enable = true;
-        enableFishIntegration = config.modules.shell.fish.enable;
+        enableFishIntegration = false;
         channels = {
           files = {
             metadata = {
