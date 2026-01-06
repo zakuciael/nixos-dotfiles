@@ -13,7 +13,7 @@ let
   xdg = config.home-manager.users.${username}.xdg;
   neovimPkg = config.home-manager.users.${username}.programs.neovim.finalPackage;
 
-  normalizedGrammars = (
+  normalizedGrammars =
     lib.mapAttrs'
       (name: value: {
         name = lib.removePrefix "tree-sitter-" name;
@@ -23,8 +23,7 @@ let
         lib.filterAttrs (
           name: _: lib.hasPrefix "tree-sitter-" name
         ) pkgs.vimPlugins.nvim-treesitter.builtGrammars
-      )
-  );
+      );
 in
 {
   options.modules.shell.neovim = {
@@ -62,7 +61,7 @@ in
     };
   };
 
-  config = mkIf (cfg.enable) {
+  config = mkIf cfg.enable {
     home-manager.users.${username} = {
       xdg = {
         dataFile = {
@@ -72,7 +71,7 @@ in
         configFile."nvim/lua".source = dotfiles.nvim.lua.source;
       };
 
-      home.activation.nvim = hm.dag.entryAfter ["writeBoundary"] (
+      home.activation.nvim = hm.dag.entryAfter [ "writeBoundary" ] (
         let
           treesitterRev = cfg.treesitterGrammars.rev;
           nvimConfig = "${xdg.configHome}/nvim";
@@ -89,7 +88,8 @@ in
             echo "lazy-lock.json file doesn't exist... creating it."
             run ${getExe neovimPkg} --headless "+Lazy! update" +qa
           fi
-        '');
+        ''
+      );
 
       programs.neovim = {
         enable = true;
@@ -101,7 +101,12 @@ in
         vimAlias = true;
         viAlias = true;
 
-        extraPackages = cfg.lspPackages ++ (with pkgs; [git gcc]);
+        extraPackages =
+          cfg.lspPackages
+          ++ (with pkgs; [
+            git
+            gcc
+          ]);
         extraLuaConfig = lib.fileContents dotfiles.nvim."init.lua".source;
       };
     };
