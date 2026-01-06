@@ -121,11 +121,6 @@ desktop.mkDesktopModule {
               cm_auto_hdr = 1;
             };
 
-            # Experimental settings
-            experimental = {
-              xx_color_management_v4 = cfg.hdr.enable;
-            };
-
             # Decoration settings
             decoration = {
               rounding = 10;
@@ -174,12 +169,12 @@ desktop.mkDesktopModule {
 
             # Layer rules
             layerrule = [
-              "blur, swaync-control-center"
-              "blur, swaync-notification-window"
-              "ignorezero, swaync-control-center"
-              "ignorezero, swaync-notification-window"
-              "ignorealpha 0.5, swaync-control-center"
-              "ignorealpha 0.5, swaync-notification-window"
+              "blur on, match:namespace swaync-control-center"
+              "blur on, match:namespace swaync-notification-window"
+              "ignore_alpha 0, match:namespace swaync-control-center"
+              "ignore_alpha 0, match:namespace swaync-notification-window"
+              "ignore_alpha 0.5, match:namespace swaync-control-center"
+              "ignore_alpha 0.5, match:namespace swaync-notification-window"
             ];
 
             # Keybinds
@@ -214,17 +209,6 @@ desktop.mkDesktopModule {
               "$mod, mouse:272, movewindow"
               "$mod, mouse:273, resizewindow"
             ];
-
-            windowrulev2 =
-              let
-                partizionExtId = "ldimfpkkjopddckaglpeakpaepclcljn";
-                partizionExtWindowClass = ''chrome-${partizionExtId}-Default'';
-              in
-              [
-                ''float, class:^(${partizionExtWindowClass})$''
-                ''center, class:^(${partizionExtWindowClass})$''
-                ''size 40% 40%, class:^(${partizionExtWindowClass})$''
-              ];
           };
         };
       };

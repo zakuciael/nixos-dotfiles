@@ -28,8 +28,6 @@ let
     cli = config.programs._1password.package;
   };
 
-  class = "1Password";
-
   base = "1password/ssh_agent";
   secretNames = recursiveReadSecretNames { inherit config base; };
   secrets = readSecrets { inherit config base; };
@@ -111,10 +109,14 @@ in
           "Ctrl Shift, \, exec, ${getExe pkgs'.gui} --fill"
         ];
 
-        windowrulev2 = [
-          "center, class:(${class})"
-          # "monitor ${monitor}, class:(${class})"
-          "allowsinput on,class:^(${class})$"
+        windowrule = [
+          {
+            name = "1Password";
+            center = true;
+            allows_input = true;
+            # inherit monitor;
+            "match:class" = "1Password";
+          }
         ];
       };
 
