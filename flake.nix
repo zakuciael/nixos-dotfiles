@@ -120,12 +120,14 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "flake-utils";
     };
-    # zed-extensions = {
-    #   url = "github:DuskSystems/nix-zed-extensions";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    #   inputs.nixpkgs-unstable.follows = "nixpkgs";
-    #   inputs.rust-overlay.follows = "rust-overlay";
-    # };
+    zed-extensions = {
+      url = "github:DuskSystems/nix-zed-extensions";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        nixpkgs-unstable.follows = "nixpkgs";
+        rust-overlay.follows = "rust-overlay";
+      };
+    };
   };
 
   outputs =
@@ -148,7 +150,7 @@
 
         overlays = lib.my.overlays.pkgs ++ [
           inputs.aagl.overlays.default
-          # inputs.zed-extensions.overlays.default
+          inputs.zed-extensions.overlays.default
         ];
       };
 

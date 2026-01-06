@@ -686,6 +686,7 @@
         "steam-presence": "steam-presence",
         "systems": "systems_2",
         "vscode-server": "vscode-server",
+        "zed-extensions": "zed-extensions",
         "zen-browser": "zen-browser"
       }
     },
@@ -829,6 +830,32 @@
       "original": {
         "owner": "nix-community",
         "repo": "nixos-vscode-server",
+        "type": "github"
+      }
+    },
+    "zed-extensions": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "nixpkgs-unstable": [
+          "nixpkgs"
+        ],
+        "rust-overlay": [
+          "rust-overlay"
+        ]
+      },
+      "locked": {
+        "lastModified": 1767584424,
+        "narHash": "sha256-T70ydm7vnFZx+F5anDcoUjgySdzrjWjDEjqVgnOfObY=",
+        "owner": "DuskSystems",
+        "repo": "nix-zed-extensions",
+        "rev": "5d7ead337393ce2a2f8ddfedcbbe8e21df0cc64e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "DuskSystems",
+        "repo": "nix-zed-extensions",
         "type": "github"
       }
     },

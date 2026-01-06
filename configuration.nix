@@ -209,8 +209,7 @@ with lib.my;
       };
       secrets = {
         "users/${username}/password".neededForUsers = true;
-      }
-      // lib.listToAttrs (builtins.map (v: lib.nameValuePair v { }) secretNames);
+      } // lib.listToAttrs (builtins.map (v: lib.nameValuePair v { }) secretNames);
     };
 
   # User settings
@@ -235,6 +234,7 @@ with lib.my;
       inputs.vscode-server.homeManagerModule
       inputs.zen-browser.homeModules.beta
       inputs._1pass-shell-plugins.hmModules.default
+      inputs.zed-extensions.homeManagerModules.default
     ];
     useUserPackages = true;
     useGlobalPkgs = true;
@@ -267,7 +267,7 @@ with lib.my;
       git.enable = true;
       zed = {
         enable = true;
-        mutable = true;
+        mutable = false;
       };
     };
     services = {
