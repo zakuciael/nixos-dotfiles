@@ -42,7 +42,7 @@ in
         lazygit # simple terminal UI for git commands
         sd # Intuitive find & replace CLI (sed alternative)
         ripgrep # ripgrep recursively searches directories for a regex pattern while respecting your gitignore
-        dogdns # A command-line DNS client.
+        doggo # A command-line DNS client.
         dua # View disk space usage and delete unwanted data, fast.
         procs # A modern replacement for ps written in Rust
         gping # Ping, but with a graph
@@ -70,7 +70,7 @@ in
             tree = "${getExe tre-command}";
 
             # On-demand tools
-            dig = "${getExe dogdns}";
+            dig = "${getExe doggo}";
             dua = "${getExe dua} i";
             procs = "${getExe procs}";
             gping = "${getExe gping}";

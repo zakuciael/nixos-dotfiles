@@ -53,7 +53,7 @@ in
         # Other
         czkawka
         font-manager
-        youtube-music
+        pear-desktop # YouTube Music
         errands
         xclicker
         fluent-reader
