@@ -125,6 +125,13 @@ in
               };
             };
           };
+          discord_presence = {
+            initialization_options = {
+              state = "Working on {folder_and_file}";
+              details = "In {workspace}";
+              git_integration = true;
+            };
+          };
         };
 
       };
