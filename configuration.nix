@@ -265,10 +265,7 @@ with lib.my;
   modules = {
     dev = {
       git.enable = true;
-      zed = {
-        enable = true;
-        mutable = false;
-      };
+      zed.enable = true;
     };
     services = {
       xdg.enable = true;

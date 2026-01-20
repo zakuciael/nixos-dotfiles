@@ -6,8 +6,12 @@
 }:
 let
   inherit (lib.types) bool;
-  inherit (lib.modules) mkIf;
-  inherit (lib.options) mkEnableOption mkOption;
+  inherit (lib)
+    mkEnableOption
+    mkOption
+    mkIf
+    getExe
+    ;
   cfg = config.modules.dev.zed;
 in
 {
@@ -18,22 +22,20 @@ in
       description = "This allows remotely connecting to this system from a distant Zed client.";
       default = false;
     };
-    mutable = mkOption {
-      type = bool;
-      description = "Whether the configuration files can be updated by Zed.";
-      default = false;
-    };
   };
 
   config = mkIf cfg.enable {
-    home-manager.users.${username}.programs.zed-editor = {
-      enable = true;
-      installRemoteServer = cfg.remote-server;
+    home-manager.users.${username}.programs = {
+      fish.shellAliases.zed = "${getExe
+        config.home-manager.users.${username}.programs.zed-editor.package
+      }";
+      zed-editor = {
+        enable = true;
+        installRemoteServer = cfg.remote-server;
 
-      mutableUserDebug = cfg.mutable;
-      mutableUserKeymaps = cfg.mutable;
-      mutableUserSettings = cfg.mutable;
-      mutableUserTasks = cfg.mutable;
+        mutableUserSettings = false;
+        mutableUserKeymaps = false;
+      };
     };
   };
 }
