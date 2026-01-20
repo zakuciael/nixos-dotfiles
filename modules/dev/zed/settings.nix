@@ -96,6 +96,7 @@ in
             language_servers = [
               "nixd"
               "!nil"
+              "!codebook"
               "..."
             ];
             formatter = {
