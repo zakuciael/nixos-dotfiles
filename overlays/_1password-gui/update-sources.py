@@ -1,5 +1,8 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i python3 -p python3 sequoia-sq
+
+# Rev: a39ac67aeb8fb17b35d82cd075bd0461177cf73f
+
 import json
 import os
 import shutil
