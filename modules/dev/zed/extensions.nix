@@ -26,7 +26,7 @@ in
               owner = "zakuciael";
               repo = "zed-nix-extension";
               rev = "main";
-              hash = "sha256-wbZ9b6zPGyG9ZVhkcLf7PQgsg5SQ9ZUVCm+8WiDSnUw=";
+              hash = "sha256-wwwTIOC1MFirUx1lU8NH+BqcJWuFv8HO9A29WPpBtN0=";
             };
           })
           wakatime
