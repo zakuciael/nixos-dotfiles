@@ -90,10 +90,10 @@ in
             inherit monitor;
           }
           {
-            name = "Genshin Impact";
-            "match:title" = "^(Genshin Impact)$";
-            float = true;
-            center = true;
+            name = "Genshin Impact Fullscreen";
+            "match:class" = "^(genshinimpact.exe)$";
+            fullscreen = true;
+            immediate = true;
             inherit monitor;
           }
         ];
