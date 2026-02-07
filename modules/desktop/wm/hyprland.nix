@@ -133,6 +133,7 @@ desktop.mkDesktopModule {
 
             # Misc settings
             misc = {
+              vrr = 2;
               disable_hyprland_logo = true;
               disable_splash_rendering = true;
               enable_anr_dialog = false;
