@@ -28,6 +28,8 @@ in
               rev = "main";
               hash = "sha256-wwwTIOC1MFirUx1lU8NH+BqcJWuFv8HO9A29WPpBtN0=";
             };
+
+            cargoHash = "";
           })
           wakatime
           discord-presence

@@ -88,8 +88,12 @@ singleton (
               src = fetchurl {
                 inherit (products."${name}") url sha256;
               };
+
               buildInputs =
                 attrs.buildInputs
+                ++ (lib.optionals (name == "rust-rover") [
+                  final.openssl_1_1
+                ])
                 ++ (with final; [
                   libGL
                   fontconfig

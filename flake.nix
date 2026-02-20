@@ -145,7 +145,9 @@
         config = {
           allowUnfree = true;
           allowUnsupportedSystem = true;
-          permittedInsecurePackages = [ ];
+          permittedInsecurePackages = [
+            "openssl-1.1.1w"
+          ];
         };
 
         overlays = lib.my.overlays.pkgs ++ [
