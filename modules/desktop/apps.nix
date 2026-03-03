@@ -32,6 +32,38 @@ in
 
     home-manager.users.${username} = {
       programs.fish.shellAliases.open = "${getBin pkgs.xdg-utils}/bin/xdg-open";
+
+      # Default apps
+      xdg.mimeApps = {
+        enable = true;
+        defaultApplications = {
+          "text/html" = "google-chrome.desktop";
+          "x-scheme-handler/http" = "google-chrome.desktop";
+          "x-scheme-handler/https" = "google-chrome.desktop";
+          "x-scheme-handler/about" = "google-chrome.desktop";
+          "x-scheme-handler/unknown" = "google-chrome.desktop";
+
+          "image/png" = "org.gnome.eog.desktop";
+          "image/jpeg" = "org.gnome.eog.desktop";
+          "image/webp" = "org.gnome.eog.desktop;";
+
+          "text/markdown" = "org.gnome.TextEditor.desktop";
+          "text/x-log" = "org.gnome.TextEditor.desktop";
+          "application/json" = "org.gnome.TextEditor.desktop";
+          "text/plain" = "org.gnome.TextEditor.desktop";
+        };
+        associations.added = {
+          "image/png" = "org.gnome.eog.desktop";
+          "image/jpeg" = "org.gnome.eog.desktop";
+          "image/webp" = "org.gnome.eog.desktop;";
+
+          "text/markdown" = "org.gnome.TextEditor.desktop";
+          "text/x-log" = "org.gnome.TextEditor.desktop";
+          "application/json" = "org.gnome.TextEditor.desktop";
+          "text/plain" = "org.gnome.TextEditor.desktop";
+        };
+      };
+
       home.packages = with pkgs; [
         # Browser
         (google-chrome.override {
