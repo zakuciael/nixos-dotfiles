@@ -91,6 +91,7 @@ in
         xournalpp
         figma-linux
         gitbutler
+        gitkraken
       ];
     };
   };
