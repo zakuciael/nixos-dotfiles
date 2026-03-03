@@ -40,6 +40,7 @@ desktop.mkDesktopModule {
     "thunderbird"
     "obs"
     "zen-browser"
+    "nemo"
   ];
 
   extraOptions = {

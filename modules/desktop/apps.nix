@@ -71,7 +71,6 @@ in
         })
 
         # Files
-        nemo
         kdePackages.ark
 
         # Music, Videos, Photos, etc.
