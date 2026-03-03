@@ -110,5 +110,16 @@ in
         sudo.u2fAuth = true;
       };
     };
+
+    # FIXME: Remove when merged: https://github.com/NixOS/nixpkgs/pull/486044
+    systemd.services."polkit-agent-helper@".serviceConfig = {
+      StandardError = "journal";
+      ProtectHome = lib.mkForce "read-only";
+      PrivateDevices = lib.mkForce false;
+      DeviceAllow = [
+        "/dev/urandom r"
+        "char-hidraw rw"
+      ];
+    };
   };
 }
