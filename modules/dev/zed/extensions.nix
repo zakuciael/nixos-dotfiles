@@ -21,16 +21,7 @@ in
         enable = true;
 
         packages = with pkgs.zed-extensions; [
-          (nix.overrideAttrs {
-            src = pkgs.fetchFromGitHub {
-              owner = "zakuciael";
-              repo = "zed-nix-extension";
-              rev = "main";
-              hash = "sha256-wwwTIOC1MFirUx1lU8NH+BqcJWuFv8HO9A29WPpBtN0=";
-            };
-
-            cargoHash = "";
-          })
+          nix
           wakatime
           discord-presence
           catppuccin
