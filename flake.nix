@@ -44,9 +44,8 @@
       inputs.flake-utils.follows = "flake-utils";
     };
     sops-nix = {
-      url = "github:Mic92/sops-nix?rev=59d6988329626132eaf107761643f55eb979eef1";
+      url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.nixpkgs-stable.follows = "nixpkgs";
     };
     rofi-jetbrains = {
       url = "github:zakuciael/rofi-jetbrains?ref=feat/direnv-support";
