@@ -2,6 +2,7 @@
   mkShell,
   sops,
   age,
+  age-plugin-yubikey,
   nixfmt-rfc-style,
   nixd,
   ...
@@ -11,6 +12,7 @@ mkShell {
   nativeBuildInputs = [
     sops
     age
+    age-plugin-yubikey
     nixfmt-rfc-style
     nixd
   ];
