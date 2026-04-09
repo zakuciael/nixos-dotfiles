@@ -158,6 +158,7 @@ in
     dev = {
       tools.enable = true;
       kubernetes.enable = true;
+      browser.enable = true;
       ides = [
         "rust-rover"
         "idea"
