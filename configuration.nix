@@ -288,7 +288,7 @@ with lib.my;
           stylua
 
           # JSON
-          nodePackages.vscode-json-languageserver
+          vscode-json-languageserver
 
           # YAML
           yaml-language-server
