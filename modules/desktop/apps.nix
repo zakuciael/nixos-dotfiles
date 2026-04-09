@@ -27,8 +27,14 @@ in
   };
 
   config = mkIf cfg.enable {
-    # Special case, since GParted doesn't work well when installed as user package.
-    environment.systemPackages = with pkgs; [ gparted ];
+    # Special cases that need to be added to the system pkgs in order to work.
+    environment.systemPackages = with pkgs; [
+      # GParted doesn't work well when installed as user package.
+      gparted
+
+      # Needs to be added as system pkg in order to register the `spice` URL protocol
+      virt-viewer
+    ];
 
     home-manager.users.${username} = {
       programs.fish.shellAliases.open = "${getBin pkgs.xdg-utils}/bin/xdg-open";
