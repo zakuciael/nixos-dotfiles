@@ -6,22 +6,24 @@
   ...
 }:
 with lib;
-with lib.my; let
+with lib.my;
+let
   cfg = config.modules.services.xdg;
   homeDirectory = config.home-manager.users.${username}.home.homeDirectory;
   userDirs = config.home-manager.users.${username}.xdg.userDirs;
-in {
+in
+{
   options.modules.services.xdg = {
     enable = mkEnableOption "XDG user dirs";
   };
 
   config = mkIf (cfg.enable) {
-    environment.systemPackages = [pkgs.xdg-user-dirs];
+    environment.systemPackages = [ pkgs.xdg-user-dirs ];
 
     systemd.user.services."xdg-user-dirs-update" = {
       description = "Update XDG user dir configuration";
-      documentation = ["man:xdg-user-dirs-update(1)"];
-      wantedBy = ["default.target"];
+      documentation = [ "man:xdg-user-dirs-update(1)" ];
+      wantedBy = [ "default.target" ];
       script = "${pkgs.xdg-user-dirs}/bin/xdg-user-dirs-update";
       serviceConfig = {
         Type = "oneshot";
@@ -50,8 +52,9 @@ in {
       xdg.userDirs = {
         enable = true;
         createDirectories = true;
+        setSessionVariables = true; # TODO: Check if we need set it to `true`.
         extraConfig = {
-          XDG_SCREENSHOTS_DIR = "${homeDirectory}/Pictures/Screenshots/";
+          SCREENSHOTS = "${homeDirectory}/Pictures/Screenshots/";
         };
       };
     };
