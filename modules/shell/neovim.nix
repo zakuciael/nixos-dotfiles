@@ -44,7 +44,7 @@ in
         coercedTo (listOf (enum (builtins.attrNames normalizedGrammars))) (
           grammars:
           let
-            symlinks = lib.mapAttrsToList (name: grammar: ''ln -s ${grammar}/parser $out/${name}.so'') (
+            symlinks = lib.mapAttrsToList (name: grammar: "ln -s ${grammar}/parser $out/${name}.so") (
               filterAttrs (name: _: builtins.elem name grammars) normalizedGrammars
             );
           in
@@ -95,6 +95,7 @@ in
         enable = true;
         defaultEditor = true;
 
+        withRuby = true;
         withNodeJs = true;
         withPython3 = true;
 
@@ -107,7 +108,7 @@ in
             git
             gcc
           ]);
-        extraLuaConfig = lib.fileContents dotfiles.nvim."init.lua".source;
+        initLua = lib.fileContents dotfiles.nvim."init.lua".source;
       };
     };
   };
