@@ -123,7 +123,6 @@
       url = "github:DuskSystems/nix-zed-extensions";
       inputs = {
         nixpkgs.follows = "nixpkgs";
-        nixpkgs-unstable.follows = "nixpkgs";
         rust-overlay.follows = "rust-overlay";
       };
     };
