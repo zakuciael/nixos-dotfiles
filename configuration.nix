@@ -303,7 +303,7 @@ with lib.my;
           inputs.deadnix.default
           inputs.statix.default
           nixd
-          nixfmt-rfc-style
+          nixfmt
 
           # SOPS
           sops

@@ -3,7 +3,7 @@
   sops,
   age,
   age-plugin-yubikey,
-  nixfmt-rfc-style,
+  nixfmt,
   nixd,
   ...
 }:
@@ -13,7 +13,7 @@ mkShell {
     sops
     age
     age-plugin-yubikey
-    nixfmt-rfc-style
+    nixfmt
     nixd
   ];
 }
