@@ -2,12 +2,13 @@
   pkgs,
   username,
   ...
-}: {
+}:
+{
   programs.dconf.enable = true;
 
   home-manager.users.${username} = rec {
     home = {
-      packages = with pkgs; [dconf-editor];
+      packages = with pkgs; [ dconf-editor ];
 
       sessionVariables = {
         XCURSOR_PATH = "${gtk.cursorTheme.package}/share/icons";
@@ -27,7 +28,7 @@
         package = pkgs.whitesur-icon-theme.override {
           boldPanelIcons = true;
           alternativeIcons = true;
-          themeVariants = ["default"];
+          themeVariants = [ "default" ];
         };
       };
       cursorTheme = {
@@ -36,16 +37,21 @@
         size = 24;
       };
 
-      gtk4.extraConfig = {
-        "gtk-application-prefer-dark-theme" = true;
+      gtk4 = {
+        inherit (gtk) theme;
+        extraConfig = {
+          "gtk-application-prefer-dark-theme" = true;
+        };
       };
       gtk3.extraConfig = gtk.gtk4.extraConfig;
     };
 
     xdg.configFile = {
       "gtk-4.0/gtk.css".source = "${gtk.theme.package}/share/themes/${gtk.theme.name}/gtk-4.0/gtk.css";
-      "gtk-4.0/gtk-dark.css".source = "${gtk.theme.package}/share/themes/${gtk.theme.name}/gtk-4.0/gtk-dark.css";
-      "gtk-4.0/gtk.gresource".source = "${gtk.theme.package}/share/themes/${gtk.theme.name}/gtk-4.0/gtk.gresource";
+      "gtk-4.0/gtk-dark.css".source =
+        "${gtk.theme.package}/share/themes/${gtk.theme.name}/gtk-4.0/gtk-dark.css";
+      "gtk-4.0/gtk.gresource".source =
+        "${gtk.theme.package}/share/themes/${gtk.theme.name}/gtk-4.0/gtk.gresource";
     };
   };
 }
