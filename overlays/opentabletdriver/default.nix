@@ -56,8 +56,8 @@ lib.singleton (
         libappindicator
         libevdev
         libnotify
-        xorg.libX11
-        xorg.libXrandr
+        libx11
+        libxrandr
         udev
       ];
 

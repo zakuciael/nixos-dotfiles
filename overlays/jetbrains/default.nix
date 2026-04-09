@@ -97,7 +97,7 @@ singleton (
                 ++ (with final; [
                   libGL
                   fontconfig
-                  xorg.libX11
+                  libx11
                 ]);
             });
 
