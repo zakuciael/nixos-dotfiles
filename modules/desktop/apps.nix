@@ -96,8 +96,6 @@ in
         fluent-reader
         xournalpp
         figma-linux
-        gitbutler
-        gitkraken
       ];
     };
   };
