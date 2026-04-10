@@ -53,7 +53,6 @@ in
         unzip # Extraction utility for archives compressed in .zip format
         p7zip # Command line version of 7-Zip for Linux
         motrix # A full-featured download manager
-        marktext # Simple and elegant markdown editor
       ];
 
       catppuccin = {
