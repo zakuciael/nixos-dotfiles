@@ -11,6 +11,7 @@ let
   inherit (lib.my.utils) findLayoutConfig findLayoutWorkspace;
   pkg = pkgs.discord-canary.override {
     withOpenASAR = true;
+    withKrisp = true;
   };
   leftLayout = findLayoutConfig config ({ name, ... }: name == "left"); # Try and find left monitor
   # Left monitor or main if not found
