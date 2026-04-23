@@ -47,7 +47,7 @@ in
     hardware = {
       grub = {
         enable = true;
-        resolution = "1920x1080";
+        resolution = "2560x1600";
         theme = inputs.distro-grub-themes.nixos-grub-theme;
       };
       layout = {
@@ -56,11 +56,11 @@ in
           {
             name = "main";
             monitor = {
-              xorg = "eDP1";
-              wayland = "eDP-1";
+              xorg = "eDP2";
+              wayland = "eDP-2";
             };
-            mode = "1920x1080";
-            scale = 1.2;
+            mode = "2560x1600";
+            scale = 1.60;
             workspaces = mkLayoutWorkspaces [
               1
               2
@@ -72,21 +72,26 @@ in
               8
               9
             ];
-            wallpaper = dotfiles.wallpapers.laptop."main.jpeg".source;
+            wallpaper = dotfiles.wallpapers.laptop."main.jpg".source;
           }
         ];
       };
-      printer.enable = true;
       bluetooth.enable = true;
+      graphic-tablet.enable = true;
+      printer.enable = true;
       sound.enable = true;
       docker.enable = true;
       yubikey.enable = true;
-      nfc.enable = true;
     };
     desktop = {
       apps.enable = true;
       sddm.enable = true;
       wm.hyprland.enable = true;
+      gaming = {
+        enable = true;
+        steam.enable = true;
+        mihoyo.enable = true;
+      };
     };
     services = {
       polkit.enable = true;
@@ -101,21 +106,19 @@ in
     };
     dev = {
       tools.enable = true;
-      vscode = {
-        enable = true;
-        server = true;
-      };
       kubernetes.enable = true;
+      browser.enable = true;
       ides = [
         "rust-rover"
         "idea"
         "rider"
         "clion"
         "datagrip"
+        "goland"
       ];
-      nostale = {
+      vscode = {
         enable = true;
-        installPath = "/media/games/linux/Other/NosTale";
+        server = true;
       };
     };
     shell = {
