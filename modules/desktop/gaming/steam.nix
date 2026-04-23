@@ -83,7 +83,6 @@ in
         extraCompatPackages = [
           pkgs.proton-ge-bin
           pkgs.steamtinkerlaunch
-          inputs.nostale-dev-env.packages.proton-ge-nostale
         ];
       };
     };
