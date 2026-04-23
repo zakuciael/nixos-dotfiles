@@ -1,5 +1,6 @@
 {
   config,
+  pkgs,
   lib,
   ...
 }:
@@ -14,11 +15,13 @@ in
   };
 
   config = mkIf cfg.enable {
-    services.xserver.enable = true;
     services.displayManager = {
       sddm = {
         enable = true;
-        wayland.enable = true;
+        wayland = {
+          enable = true;
+          compositor = "kwin";
+        };
         autoNumlock = true;
       };
     };
