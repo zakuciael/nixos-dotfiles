@@ -5,7 +5,7 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/*";
 
-    nixos-hardware.url = "github:zakuciael/nixos-hardware/master";
+    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     flake-compat.url = "github:edolstra/flake-compat";
     systems.url = "github:nix-systems/default";
     nixpkgs-lib.follows = "nixpkgs";
