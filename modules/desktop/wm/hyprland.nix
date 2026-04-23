@@ -222,8 +222,6 @@ desktop.mkDesktopModule {
             ];
 
             bindl = with pkgs; [
-              ", XF86AudioRaiseVolume, exec, ${wireplumber}/bin/wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+"
-              ", XF86AudioLowerVolume, exec, ${wireplumber}/bin/wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"
               ", XF86AudioMute, exec, ${wireplumber}/bin/wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
               ", XF86AudioMicMute, exec, ${wireplumber}/bin/wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"
               ", XF86AudioPlay, exec, ${getExe playerctl} play-pause"
@@ -231,6 +229,14 @@ desktop.mkDesktopModule {
               ", XF86AudioPrev, exec, ${getExe playerctl} previous"
               ", XF86audiostop, exec, ${getExe playerctl} stop"
             ];
+
+            binde = with pkgs; [
+              ", XF86AudioRaiseVolume, exec, ${wireplumber}/bin/wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+"
+              ", XF86AudioLowerVolume, exec, ${wireplumber}/bin/wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"
+              ", XF86MonBrightnessUp, exec, ${getExe brightnessctl} -q set 5%+"
+              ", XF86MonBrightnessDown, exec, ${getExe brightnessctl} -q set 5%-"
+            ];
+
             bindm = [
               "$mod, mouse:272, movewindow"
               "$mod, mouse:273, resizewindow"
