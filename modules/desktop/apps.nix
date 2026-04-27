@@ -96,6 +96,7 @@ in
         fluent-reader
         xournalpp
         figma-linux
+        nvtopPackages.amd # htop but for GPU
       ];
     };
   };
