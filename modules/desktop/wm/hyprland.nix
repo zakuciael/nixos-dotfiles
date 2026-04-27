@@ -145,6 +145,7 @@ desktop.mkDesktopModule {
             # XWayland settings
             xwayland = {
               force_zero_scaling = true;
+              create_abstract_socket = true;
             };
 
             ecosystem = {
