@@ -142,6 +142,10 @@ desktop.mkDesktopModule {
               enable_anr_dialog = false;
             };
 
+            # XWayland settings
+            xwayland = {
+              force_zero_scaling = true;
+            };
             # Render settings
             render = optionalAttrs cfg.hdr.enable {
               cm_fs_passthrough = 2;
