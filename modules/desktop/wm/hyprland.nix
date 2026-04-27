@@ -146,6 +146,12 @@ desktop.mkDesktopModule {
             xwayland = {
               force_zero_scaling = true;
             };
+
+            ecosystem = {
+              no_update_news = true;
+              no_donation_nag = true;
+            };
+
             # Render settings
             render = optionalAttrs cfg.hdr.enable {
               cm_fs_passthrough = 2;
