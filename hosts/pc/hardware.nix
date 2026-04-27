@@ -6,14 +6,16 @@
 }:
 let
   inherit (lib) mkDefault;
-  nixos-hardware = inputs.nixos-hardware.outPath;
+  nixos-hardware = inputs.nixos-hardware.nixosModules;
 in
 {
   imports = [
-    "${nixos-hardware}/msi/b550-gaming-plus"
-    "${nixos-hardware}/common/cpu/amd/zenpower.nix"
-    "${nixos-hardware}/common/cpu/amd/pstate.nix"
-    "${nixos-hardware}/common/gpu/amd"
+    nixos-hardware.common-cpu-amd
+    nixos-hardware.common-cpu-amd-zenpower
+    nixos-hardware.common-cpu-amd-pstate
+    nixos-hardware.common-pc-ssd
+    nixos-hardware.common-pc
+    nixos-hardware.common-gpu-amd
   ];
 
   # Additional settings for AMD GPU
@@ -21,6 +23,7 @@ in
   services.xserver.videoDrivers = [ "amdgpu" ];
 
   boot = {
+    kernelModules = [ "nct6683" ];
     kernelPackages = mkDefault pkgs.linuxPackages_latest;
     swraid.enable = true;
     supportedFilesystems = [ "ntfs" ];
