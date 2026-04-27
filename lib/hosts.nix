@@ -27,12 +27,16 @@ with lib.my;
       modules = [
         ./../configuration.nix
         ./../hosts/${name}/configuration.nix
-        "${inputs.nixpkgs}/nixos/modules/misc/nixpkgs/read-only.nix"
+        inputs.nixpkgs.nixosModules.readOnlyPkgs
 
         inputs.home-manager.nixosModules.default
         inputs.sops-nix.nixosModules.default
         inputs.catppuccin.nixosModules.default
-        inputs.aagl.nixosModules.default
+
+        {
+          # Importing a full module results in errors due to read-only `nixpkgs.overlays` option.
+          inherit (inputs.aagl.nixosModules.default) imports;
+        }
         inputs.vscode-server.nixosModules.default
         inputs.disko.nixosModules.disko
         inputs._1pass-shell-plugins.nixosModules.default
