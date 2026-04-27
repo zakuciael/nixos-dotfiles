@@ -41,6 +41,7 @@ desktop.mkDesktopModule {
     "obs"
     "zen-browser"
     "nemo"
+    "nmgui"
   ];
 
   extraOptions = {
