@@ -45,6 +45,7 @@ in
 
     "/media/storage" = {
       device = "/dev/md/storage";
+      fsType = "auto";
     };
   };
 

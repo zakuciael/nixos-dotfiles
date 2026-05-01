@@ -42,6 +42,7 @@ let
       value = recursiveMerge [
         {
           inherit (value) device;
+          fsType = "auto";
           options = [
             "x-gfs-show"
             "x-gvfs-show"
