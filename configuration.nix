@@ -356,7 +356,8 @@ with lib.my;
         enable = true;
         default = true;
       };
-      neofetch.enable = true;
+      # TODO: Switch to `fastfetch`
+      # neofetch.enable = true;
     };
   };
 
