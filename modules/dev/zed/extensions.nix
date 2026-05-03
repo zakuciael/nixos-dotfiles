@@ -6,16 +6,20 @@
   ...
 }:
 let
-  inherit (lib) mkIf nameValuePair genAttrs';
+  inherit (lib) mkIf removePrefix listToAttrs;
   cfg = config.modules.dev.zed;
 in
 {
   config = mkIf cfg.enable {
     home-manager.users.${username}.programs = rec {
       zed-editor.userSettings = {
-        auto_update_extensions = genAttrs' zed-editor-extensions.packages (
-          { name, ... }: nameValuePair name false
-        );
+        auto_update_extensions =
+          zed-editor-extensions.packages
+          |> map (drv: {
+            name = removePrefix "zed-extension-" drv.pname;
+            value = false;
+          })
+          |> listToAttrs;
       };
       zed-editor-extensions = {
         enable = true;
