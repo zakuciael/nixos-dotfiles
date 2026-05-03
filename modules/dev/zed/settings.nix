@@ -73,7 +73,6 @@ in
         # UI
         toolbar.breadcrumbs = true;
         inlay_hints.enabled = true;
-        git_panel.sort_by_path = false;
         colorize_brackets = true;
         use_system_prompts = false;
         use_system_path_prompts = false;
@@ -87,6 +86,16 @@ in
           "**/secrets.yml"
         ];
         terminal.dock = "bottom";
+        debugger.dock = "bottom";
+        collaboration_panel.dock = "bottom";
+        outline_panel.dock = "left";
+        project_panel.dock = "left";
+        git_panel = {
+          dock = "left";
+          tree_view = true;
+          sort_by_path = false;
+        };
+
         when_closing_with_no_tabs = "close_window";
         confirm_quit = false;
 
