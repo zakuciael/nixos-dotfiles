@@ -27,21 +27,36 @@ desktop.mkDesktopModule {
     # "kitty"
     "ghostty"
 
-    # Other apps
+    # File explorer
+    "nemo"
+
+    # Password manager
     "_1password"
+
+    # Application launchers
     "rofi"
-    "nh"
+    "vicinae"
+
+    # Status bar
     "waybar"
+
+    # Themes
     "gtk"
     "qt"
+
+    # Tools
+    "nh"
     "grimblast"
-    "discord"
-    "swaync"
-    "thunderbird"
-    "obs"
-    "zen-browser"
-    "nemo"
     "nmgui"
+
+    # Notification center
+    "swaync"
+
+    # Apps
+    "obs"
+    "discord"
+    "thunderbird"
+    "zen-browser"
   ];
 
   extraOptions = {
@@ -227,7 +242,6 @@ desktop.mkDesktopModule {
               "$mod, UP, movefocus, u"
               "$mod, DOWN, movefocus, d"
               "$mod, KP_Subtract, exec, ${getExe scriptPackages.elgato-mic-fix}"
-              "SHIFT CTRL, space, exec, ${getExe scriptPackages.rofi-launcher} drun"
               "SHIFT CTRL, R, exec, ${getExe scriptPackages.rofi-launcher-jetbrains}"
               "SHIFT CTRL, E, exec, ${getExe pkgs.nemo}"
               "SHIFT CTRL, Q, exec, ${getExe scriptPackages.rofi-powermenu}"

@@ -126,6 +126,14 @@
         rust-overlay.follows = "rust-overlay";
       };
     };
+    vicinae = {
+      url = "github:vicinaehq/vicinae/v0.20.15";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    vicinae-extensions = {
+      url = "github:vicinaehq/extensions";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -182,6 +190,12 @@
         };
         nix-search-tv = flakeInputs.nix-search-tv // {
           packages = flakeInputs.nix-search-tv.packages.${system};
+        };
+        vicinae = flakeInputs.vicinae // {
+          packages = flakeInputs.vicinae.packages.${system};
+        };
+        vicinae-extensions = flakeInputs.vicinae-extensions // {
+          packages = flakeInputs.vicinae-extensions.packages.${system};
         };
       };
 
