@@ -38,6 +38,7 @@ in
           name = "Discord";
           workspace = "${workspace.name} silent";
           no_initial_focus = true;
+          suppress_event = "activate activatefocus";
           "match:class" = "^(discord)$";
         }
       ];
