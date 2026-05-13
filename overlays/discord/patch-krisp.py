@@ -1,18 +1,19 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i python3 -p "python3.withPackages (ps: [ ps.lief ])"
+#!nix-shell -i python3 -p "python3.withPackages (ps: [ ps.lief ps.capstone ])"
 """
 Patch discord_krisp.node to bypass its signature verification
 
-Krisp checks its own code signature on load. Since Nix modifies the binary
-(e.g. patchelf), the signature no longer matches and the module refuses to
-start. We patch the verification function to always return true
+Krisp checks its own code signature on load. Since Nix modifies the binary (e.g.
+patchelf), the signature no longer matches and the module refuses to start. We
+patch the verification function to always return true
 
 ELF (Linux)
 -----------
 The check lives in discord::util::IsSignedByDiscord(). It MD5-hashes the file
-and compares the result with SSE2. We find it by scanning .text for a unique
-byte sequence (pmovmskb + cmp $0xffff), walk backward to the function entry,
-and overwrite it with "mov eax, 1; ret"
+and compares the result with SSE2. Discord ships stripped ELFs, but .eh_frame
+(DWARF unwind info) still gives us every function's start address. We scan .text
+for the unique MD5-compare byte sequence (pmovmskb + cmp $0xffff), find the
+function whose range contains it, and overwrite the entry with "mov eax, 1; ret"
 
   # before:                                    # after:
   #   pmovmskb %xmm0, %eax  ; 66 0f d7 c0      #   mov $0x1, %eax  ; b8 01 00 00 00
@@ -21,10 +22,10 @@ and overwrite it with "mov eax, 1; ret"
 
 Mach-O (macOS, fat binary: x86_64 + arm64)
 ------------------------------------------
-On macOS the check uses Apple's Security framework. We find the
-_SecStaticCodeCreateWithPath import stub, then walk callers upward. Each hop
-follows the single unique caller of the current target. When the chain fans
-out (0 or 2+ callers), we've found the right function to patch
+On macOS the check uses Apple's Security framework. We anchor on the
+_SecStaticCodeCreateWithPath import stub, disassemble __text once with capstone,
+and build a ``branch target -> containing function`` index. We hop up through
+unique callers until the chain fans out (0 or 2+ callers)
 
   # the call chain (from nm + c++filt, addresses vary per build):
   #   _SecStaticCodeCreateWithPath   [stub]
@@ -42,127 +43,230 @@ Useful commands for poking at a binary yourself:
   objdump -d --start-address=0x4754c0 --stop-address=0x475580 discord_krisp.node
 """
 
-import array
 import mmap
 import sys
 from bisect import bisect_right
+from dataclasses import dataclass
+from typing import Iterator, TypeVar
 
+import capstone
 import lief
 
+T = TypeVar("T")
 
-def _first(gen, err):
+
+def _first(gen: Iterator[T], err: str) -> T:
     """Return first item from gen, or raise SystemExit with err."""
     if (result := next(gen, None)) is None:
         raise SystemExit(err)
     return result
 
 
-def _apply_patch(mm, off, patch, label):
-    state = "already patched" if mm[off : off + len(patch)] == patch else "patched -> return true"
+@dataclass(frozen=True)
+class Arch:
+    """Per-CPU disassembler settings and the "return true" patch bytes."""
+
+    name: str
+    cs_args: tuple
+    return_true: bytes
+
+
+_X86_64 = lief.MachO.Header.CPU_TYPE.X86_64
+_ARM64 = lief.MachO.Header.CPU_TYPE.ARM64
+
+ARCHS: dict = {
+    _X86_64: Arch(
+        name="x86_64",
+        cs_args=(capstone.CS_ARCH_X86, capstone.CS_MODE_64),
+        return_true=b"\xb8\x01\x00\x00\x00\xc3",  # mov eax, 1; ret
+    ),
+    _ARM64: Arch(
+        name="arm64",
+        cs_args=(capstone.CS_ARCH_ARM64, capstone.CS_MODE_LITTLE_ENDIAN),
+        return_true=b"\x20\x00\x80\x52\xc0\x03\x5f\xd6",  # mov w0, #1; ret
+    ),
+}
+
+# Direct-branch mnemonics we follow when building the caller index. We skip
+# conditional branches (b.eq, jne, cbz, ...) since those encode intra-function
+# control flow rather than call edges
+DIRECT_BRANCHES = frozenset({"b", "bl", "call", "jmp"})
+
+# MD5-hash comparison idiom inside IsSignedByDiscord (ELF path):
+#   pmovmskb %xmm0,%eax ; cmp $0xffff,%eax
+ELF_SIG = b"\x66\x0f\xd7\xc0\x3d\xff\xff\x00\x00"
+
+# Apple Security framework import used as the Mach-O call-chain anchor
+ANCHOR_IMPORT = "_SecStaticCodeCreateWithPath"
+
+
+@dataclass(frozen=True)
+class FunctionStarts:
+    """Sorted function starts with a helper for address-to-function lookup."""
+
+    addrs: tuple[int, ...]
+
+    @classmethod
+    def from_lief(
+        cls,
+        binary,
+        start: int | None = None,
+        end: int | None = None,
+    ) -> "FunctionStarts":
+        addrs = tuple(
+            sorted(
+                f.address
+                for f in binary.functions
+                if (start is None or start <= f.address)
+                and (end is None or f.address < end)
+            )
+        )
+        if not addrs:
+            raise SystemExit("Error: no function starts found")
+        return cls(addrs)
+
+    def containing(self, addr: int) -> int | None:
+        idx = bisect_right(self.addrs, addr) - 1
+        if idx < 0:
+            return None
+        return self.addrs[idx]
+
+    def require_containing(self, addr: int) -> int:
+        if (fn := self.containing(addr)) is None:
+            raise SystemExit(f"Error: no function contains address 0x{addr:x}")
+        return fn
+
+
+def _apply_patch(mm: mmap.mmap, off: int, patch: bytes, label: str) -> None:
+    state = (
+        "already patched"
+        if mm[off : off + len(patch)] == patch
+        else "patched -> return true"
+    )
     mm[off : off + len(patch)] = patch
     print(f"[krisp-patcher] {label}: {state}")
 
 
-MAX_FUNC_SCAN = 512
-MIN_FUNC_SZ = 32  # minimum expected bytes before signature
-FUNC_ALIGN = 16
+def _build_xrefs(
+    data: bytes,
+    text_vm: int,
+    arch: Arch,
+    functions: FunctionStarts,
+) -> dict[int, set[int]]:
+    """Disassemble ``data`` (the __text section) once and index direct-branch
+    targets by the function containing the branch
 
-ARM64_BL, ARM64_B = 0b100101, 0b000101  # branch-with-link, unconditional branch
-ARM64_INSN_SZ = 4
-ARM64_OP_SHIFT, IMM26_MASK, IMM26_SIGN_BIT, IMM26_NEG = 26, (1 << 26) - 1, 25, 1 << 26
-X86_CALL, X86_JMP, X86_BRANCH_SZ = 0xE8, 0xE9, 5  # near call/jmp + rel32
-
-FUNC_BOUNDARY = frozenset({0x90, 0xCC, 0xC3})  # nop, int3, ret
-# MD5 hash comparison idiom: pmovmskb %xmm0,%eax + cmp $0xffff,%eax
-ELF_SIG = b"\x66\x0f\xd7\xc0\x3d\xff\xff\x00\x00"
-
-X86_RETURN_TRUE = b"\xb8\x01\x00\x00\x00\xc3"  # mov eax,1; ret
-ARM64_RETURN_TRUE = b"\x20\x00\x80\x52\xc0\x03\x5f\xd6"  # movz w0,#1; ret
-
-_ARM64 = lief.MachO.Header.CPU_TYPE.ARM64
-RETURN_TRUE = {
-    lief.MachO.Header.CPU_TYPE.X86_64: (X86_RETURN_TRUE, "x86_64"),
-    _ARM64: (ARM64_RETURN_TRUE, "arm64"),
-}
-
-ANCHOR_IMPORT = "_SecStaticCodeCreateWithPath"
-
-
-def _unique_caller(mm, fstart, text_sz, text_vm, target, cputype, func_entries):
-    """Return the single function calling target, or None if not unique."""
-    if cputype == _ARM64:
-        funcs = {func_entries[bisect_right(func_entries, text_vm + i * ARM64_INSN_SZ) - 1]
-                 for i, insn in enumerate(array.array("I", mm[fstart : fstart + text_sz]))
-                 if (insn >> ARM64_OP_SHIFT) in (ARM64_BL, ARM64_B)
-                 and text_vm + i * ARM64_INSN_SZ + ((insn & IMM26_MASK) - ((insn >> IMM26_SIGN_BIT & 1) * IMM26_NEG)) * ARM64_INSN_SZ == target}
-    else:
-        funcs = {func_entries[bisect_right(func_entries, text_vm + (off - fstart)) - 1]
-                 for off in range(fstart, fstart + text_sz - X86_BRANCH_SZ)
-                 if mm[off] in (X86_CALL, X86_JMP)
-                 and text_vm + (off - fstart) + X86_BRANCH_SZ + int.from_bytes(mm[off + 1 : off + 5], "little", signed=True) == target}
-    return funcs.pop() if len(funcs) == 1 else None
+    Returns ``{target_vaddr: {start addresses of calling functions}}``. The
+    containing function for a branch comes from ``functions``.
+    """
+    md = capstone.Cs(*arch.cs_args)
+    md.detail = True
+    # __text contains jump tables and other data interleaved with code on x86
+    # (ARM64 is fixed-width so the sweep stays aligned regardless). Without
+    # skipdata, capstone's linear sweep stops at the first undecodable byte,
+    # often within a few KB. Skipdata resyncs one byte at a time
+    md.skipdata = True
+    xrefs: dict[int, set[int]] = {}
+    for insn in md.disasm(data, text_vm):
+        if insn.mnemonic not in DIRECT_BRANCHES:
+            continue
+        op = insn.operands[0] if insn.operands else None
+        if op is None or op.type != capstone.CS_OP_IMM:
+            continue
+        if (fn := functions.containing(insn.address)) is None:
+            continue
+        xrefs.setdefault(op.imm, set()).add(fn)
+    return xrefs
 
 
-def patch_elf(mm, path):
-    text = lief.ELF.parse(path).get_section(".text")
+def _unique_match(
+    mm: mmap.mmap, needle: bytes, start: int, end: int, label: str
+) -> int:
+    idx = mm.find(needle, start, end)
+    if idx == -1 or mm.find(needle, idx + 1, end) != -1:
+        raise SystemExit(f"Error: expected exactly 1 {label} match")
+    return idx
+
+
+def _macho_import_stub(binary, section, name: str) -> int:
+    """Return the vaddr of an imported symbol's lazy-bind stub."""
+    stub_size = section.reserved2
+    n_stubs = section.size // stub_size if stub_size else 0
+    indirect = list(binary.dynamic_symbol_command.indirect_symbols)
+    return _first(
+        (
+            section.virtual_address + i * stub_size
+            for i in range(n_stubs)
+            if section.reserved1 + i < len(indirect)
+            and name in indirect[section.reserved1 + i].name
+        ),
+        f"Error: {name} stub not found",
+    )
+
+
+def _walk_unique_callers(
+    xrefs: dict[int, set[int]],
+    target: int,
+    label: str,
+) -> int:
+    """Follow the single-caller chain and return the last unique caller."""
+    hop, previous = 0, target
+    while len(callers := xrefs.get(target, ())) == 1:
+        previous, target, hop = target, next(iter(callers)), hop + 1
+        print(f"[krisp-patcher] {label}: hop {hop} -> 0x{target:x}")
+    if hop < 2:
+        raise SystemExit("Error: call chain too short (expected >= 2 hops)")
+    return previous
+
+
+def patch_elf(mm: mmap.mmap, path: str) -> None:
+    binary = lief.ELF.parse(path)
+    text = binary.get_section(".text")
     if text is None:
         raise SystemExit("Error: .text not found")
     text_off, text_sz = text.file_offset, text.size
+    # Offset between file offset and vaddr within .text (constant across the section)
+    text_delta = text.virtual_address - text_off
 
-    if (idx := mm.find(ELF_SIG, text_off, text_off + text_sz)) == -1 \
-            or mm.find(ELF_SIG, idx + 1, text_off + text_sz) != -1:
-        raise SystemExit("Error: expected exactly 1 signature match in .text")
+    idx = _unique_match(mm, ELF_SIG, text_off, text_off + text_sz, "signature")
 
-    func = _first(
-        (a for a in range((idx - MIN_FUNC_SZ) & -FUNC_ALIGN, max(idx - MAX_FUNC_SCAN, text_off), -FUNC_ALIGN)
-         if mm[a - 1] in FUNC_BOUNDARY and mm[a] not in FUNC_BOUNDARY),
-        "Error: could not locate function entry",
-    )
+    # binary.functions is populated from .eh_frame unwind info, which is
+    # present even in stripped binaries. Bisect picks the containing function
+    functions = FunctionStarts.from_lief(binary)
+    func_vaddr = functions.require_containing(idx + text_delta)
+    func_off = func_vaddr - text_delta
 
-    print(f"[krisp-patcher] ELF: signature at 0x{idx:x}, function at 0x{func:x}")
-    _apply_patch(mm, func, X86_RETURN_TRUE, "ELF")
+    print(f"[krisp-patcher] ELF: signature at 0x{idx:x}, function at 0x{func_off:x}")
+    _apply_patch(mm, func_off, ARCHS[_X86_64].return_true, "ELF")
 
 
-def patch_macho_slice(mm, binary):
-    """Trace from _SecStaticCodeCreateWithPath up the call chain and patch."""
-    cputype = binary.header.cpu_type
+def patch_macho_slice(mm: mmap.mmap, binary: "lief.MachO.Binary") -> None:
+    """Trace _SecStaticCodeCreateWithPath up the call chain and patch the
+    last uniquely-reachable function."""
+    arch = ARCHS[binary.header.cpu_type]
     base = binary.fat_offset
 
     text = binary.get_section("__text")
     text_vm, text_sz, text_off = text.virtual_address, text.size, text.offset
+    fstart = base + text_off
 
     stubs = binary.get_section("__stubs")
-    stub_esz = stubs.reserved2
-    n_stubs = stubs.size // stub_esz if stub_esz else 0
 
-    # find anchor stub via indirect symbol table
-    indirect = list(binary.dynamic_symbol_command.indirect_symbols)
-    target = _first(
-        (stubs.virtual_address + i * stub_esz
-         for i in range(n_stubs)
-         if stubs.reserved1 + i < len(indirect)
-         and ANCHOR_IMPORT in indirect[stubs.reserved1 + i].name),
-        "Error: _SecStaticCodeCreateWithPath stub not found",
-    )
+    target = _macho_import_stub(binary, stubs, ANCHOR_IMPORT)
 
-    # build sorted function entry table (reused across hops)
-    func_entries = sorted(s.value for s in binary.symbols
-                          if text_vm <= s.value < text_vm + text_sz)
+    # Sorted function starts; bisect maps any __text address to its function.
+    # binary.functions merges symbols + __unwind_info so it covers stripped
+    # functions too
+    functions = FunctionStarts.from_lief(binary, text_vm, text_vm + text_sz)
 
-    # hop up the call chain; patch the last function before the chain fans out
-    # (fan-out = the caller has 0 or 2+ callers itself, so we can't trace further)
-    patch, arch = RETURN_TRUE[cputype]
-    fstart, hop, prev = base + text_off, 0, target
-    while (caller := _unique_caller(mm, fstart, text_sz, text_vm, target, cputype, func_entries)) is not None:
-        prev, target, hop = target, caller, hop + 1
-        print(f"[krisp-patcher] Mach-O {arch}: hop {hop} -> 0x{target:x}")
-    if hop < 2:
-        raise SystemExit("Error: call chain too short (expected >= 2 hops)")
+    # One disassembly pass; each hop up the chain is an O(1) dict lookup
+    xrefs = _build_xrefs(bytes(mm[fstart : fstart + text_sz]), text_vm, arch, functions)
 
-    _apply_patch(mm, fstart + (prev - text_vm), patch, arch)
+    patch_addr = _walk_unique_callers(xrefs, target, f"Mach-O {arch.name}")
+    _apply_patch(mm, fstart + (patch_addr - text_vm), arch.return_true, arch.name)
 
 
-def main():
+def main() -> None:
     if len(sys.argv) < 2:
         raise SystemExit(f"Usage: {sys.argv[0]} <discord_krisp.node>")
     path = sys.argv[1]

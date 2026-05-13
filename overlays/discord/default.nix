@@ -78,6 +78,13 @@ lib.singleton (
       homepage = "https://discordapp.com/";
       license = lib.licenses.unfree;
       mainProgram = "discord";
+      maintainers = with lib.maintainers; [
+        artturin
+        FlameFlag
+        infinidoge
+        jopejoe1
+        Scrumplex
+      ];
       platforms = [
         "x86_64-linux"
         "x86_64-darwin"
@@ -95,25 +102,26 @@ lib.singleton (
       args = (variants.${stdenv.hostPlatform.system} or variants.default).${pname};
       platformName = if stdenv.hostPlatform.isDarwin then "osx" else "linux";
       source = sources."${platformName}-${args.branch}";
+      krispSource =
+        if sources ? "${platformName}-${args.branch}-krisp" then
+          sources."${platformName}-${args.branch}-krisp"
+        else if source ? modules && source.modules ? discord_krisp then
+          source.modules.discord_krisp
+        else
+          null;
     in
     callPackage package (
       args
       // {
-        inherit pname;
-        inherit (source) version;
-
-        src = fetchurl {
-          inherit (source) url hash;
-        };
-
+        inherit pname source;
         meta = meta // {
           mainProgram = args.binaryName;
         };
       }
-      // lib.optionalAttrs (sources ? "${platformName}-${args.branch}-krisp") {
+      // lib.optionalAttrs (krispSource != null) {
         krispSrc = fetchurl {
-          inherit (sources."${platformName}-${args.branch}-krisp") url;
-          hash = sources."${platformName}-${args.branch}-krisp".hash or lib.fakeHash;
+          inherit (krispSource) url;
+          hash = krispSource.hash or lib.fakeHash;
         };
       }
     )

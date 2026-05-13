@@ -1,13 +1,13 @@
 {
   pname,
-  version,
-  src,
+  source,
   meta,
   stdenv,
   binaryName,
   desktopName,
   self,
   lib,
+  fetchurl,
   undmg,
   makeWrapper,
   writeScript,
@@ -24,7 +24,7 @@
   moonlight,
   commandLineArgs ? "",
   krispSrc ? null,
-  withKrisp ? withVencord || withEquicord || withMoonlight,
+  withKrisp ? withOpenASAR || withVencord || withEquicord || withMoonlight,
   unzip,
   darwin,
 }:
@@ -36,6 +36,9 @@ let
     withMoonlight
   ];
   enabledDiscordModsCount = builtins.length (lib.filter (x: x) discordMods);
+
+  inherit (source) version;
+  src = fetchurl { inherit (source) url hash; };
 
   disableBreakingUpdates =
     runCommand "disable-breaking-updates.py"
@@ -56,7 +59,10 @@ let
       {
         nativeBuildInputs = [
           unzip
-          (python3.withPackages (ps: [ ps.lief ]))
+          (python3.withPackages (ps: [
+            ps.lief
+            ps.capstone
+          ]))
         ];
       }
       ''
@@ -71,7 +77,7 @@ let
   deployKrisp = lib.optionalAttrs (krispSrc != null && withKrisp) (
     runCommand "deploy-krisp.py"
       {
-        pythonInterpreter = "${python3.interpreter}";
+        pythonInterpreter = "${python3.withPackages (ps: [ ps.watchdog ])}/bin/python3";
         krispPath = "${patchedKrisp}";
         discordVersion = version;
         configDirName = lib.toLower binaryName;
@@ -146,6 +152,7 @@ stdenv.mkDerivation {
   passthru = {
     # make it possible to run disableBreakingUpdates standalone
     inherit disableBreakingUpdates;
+    inherit source;
     updateScript = ./update.py;
 
     tests = {

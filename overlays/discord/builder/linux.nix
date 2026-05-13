@@ -1,12 +1,12 @@
 {
   pname,
-  version,
-  src,
+  source,
   meta,
   binaryName,
   desktopName,
   self,
   autoPatchelfHook,
+  fetchurl,
   makeDesktopItem,
   lib,
   stdenv,
@@ -44,17 +44,17 @@
   libxrender,
   libxtst,
   libxcb,
+  libxkbcommon,
   libxshmfence,
   libgbm,
-  libgcc,
-  libGL,
   nspr,
   nss,
   pango,
   systemdLibs,
   libappindicator-gtk3,
   libdbusmenu,
-  writeScript,
+  brotli,
+  writeShellScript,
   pipewire,
   python3,
   runCommand,
@@ -78,7 +78,7 @@
   disableUpdates ? true,
   commandLineArgs ? "",
   krispSrc ? null,
-  withKrisp ? withVencord || withEquicord || withMoonlight,
+  withKrisp ? withOpenASAR || withVencord || withEquicord || withMoonlight,
   unzip,
 }:
 
@@ -90,83 +90,37 @@ let
   ];
   enabledDiscordModsCount = builtins.length (lib.filter (x: x) discordMods);
 
-  disableBreakingUpdates =
-    runCommand "disable-breaking-updates.py"
-      {
-        pythonInterpreter = "${python3.interpreter}";
-        configDirName = lib.toLower binaryName;
-        meta.mainProgram = "disable-breaking-updates.py";
-      }
-      ''
-        mkdir -p $out/bin
-        cp ${../disable-breaking-updates.py} $out/bin/disable-breaking-updates.py
-        substituteAllInPlace $out/bin/disable-breaking-updates.py
-        chmod +x $out/bin/disable-breaking-updates.py
-      '';
+  # Starting with discord-development 0.0.235, the linux tarball ships only a
+  # small `updater_bootstrap` ELF that downloads the real app at first launch
+  #
+  # That binary always fetches the latest version from Discord's CDN with no way
+  # to pin, making the build impure and the nix version a lie
+  #
+  # Instead we fetch the app directly from the distributions API at build time:
+  # https://updates.discord.com/distributions/app/manifests/latest?channel=...
+  # The host + module distros are brotli-compressed tars on Discord's CDN at
+  # predictable URLs with SHA256 hashes in the manifest
+  isDistro = source.kind == "distro";
 
-  patchedKrisp = lib.optionalAttrs (krispSrc != null && withKrisp) (
-    runCommand "discord-krisp-patched"
-      {
-        nativeBuildInputs = [
-          unzip
-          (python3.withPackages (ps: [ ps.lief ]))
-        ];
-      }
-      ''
-        mkdir -p "$out"
-        unzip ${krispSrc} -d "$out"
-        python3 ${../patch-krisp.py} "$out/discord_krisp.node"
-      ''
+  inherit (source) version;
+
+  src =
+    if isDistro then
+      fetchurl { inherit (source.distro) url hash; }
+    else
+      fetchurl { inherit (source) url hash; };
+
+  moduleSrcs = lib.optionalAttrs isDistro (
+    lib.mapAttrs (_: mod: fetchurl { inherit (mod) url hash; }) source.modules
   );
 
-  deployKrisp = lib.optionalAttrs (krispSrc != null && withKrisp) (
-    runCommand "deploy-krisp.py"
-      {
-        pythonInterpreter = "${python3.interpreter}";
-        krispPath = "${patchedKrisp}";
-        discordVersion = version;
-        configDirName = lib.toLower binaryName;
-        meta.mainProgram = "deploy-krisp.py";
-      }
-      ''
-        mkdir -p "$out/bin"
-        cp ${../deploy-krisp.py} "$out/bin/deploy-krisp.py"
-        substituteAllInPlace "$out/bin/deploy-krisp.py"
-        chmod +x "$out/bin/deploy-krisp.py"
-      ''
-  );
+  moduleVersions = lib.optionalAttrs isDistro (lib.mapAttrs (_: mod: mod.version) source.modules);
 
-in
-assert lib.assertMsg (
-  enabledDiscordModsCount <= 1
-) "discord: Only one of Vencord, Equicord or Moonlight can be enabled at the same time";
-stdenv.mkDerivation (finalAttrs: {
-  inherit
-    pname
-    version
-    src
-    meta
-    ;
-
-  nativeBuildInputs = [
-    alsa-lib
-    autoPatchelfHook
-    cups
-    libdrm
-    libuuid
-    libxdamage
-    libx11
-    libxscrnsaver
-    libxtst
-    libxcb
-    libxshmfence
-    libgbm
-    nss
-    wrapGAppsHook3
-    makeShellWrapper
-  ];
-
-  dontWrapGApps = true;
+  stagedModuleSrcs =
+    if krispSrc != null && withKrisp then
+      lib.removeAttrs moduleSrcs [ "discord_krisp" ]
+    else
+      moduleSrcs;
 
   libPath = lib.makeLibraryPath (
     [
@@ -205,28 +159,181 @@ stdenv.mkDerivation (finalAttrs: {
       libxrender
       libxtst
       nspr
+      # nss is intentionally NOT in libPath: it would leak via LD_LIBRARY_PATH
+      # to xdg-open and break Firefox children when versions diverge (#514859,
+      # PR #186603)
       libxcb
+      libxkbcommon
       pango
       pipewire
       libxscrnsaver
       libappindicator-gtk3
       libdbusmenu
       wayland
-      libgcc
-      libGL.out
     ]
     ++ lib.optionals withTTS [ speechd-minimal ]
   );
+
+  # Symlink native modules from the nix store into the user config dir
+  # where Discord's JS moduleUpdater expects them.
+  stageModules = writeShellScript "discord-stage-modules" ''
+    store_modules="$1"
+    modules_dir="''${XDG_CONFIG_HOME:-$HOME/.config}/${lib.toLower binaryName}/${version}/modules"
+    if [ ! -f "$modules_dir/installed.json" ]; then
+      mkdir -p "$modules_dir"
+      for m in ${lib.concatStringsSep " " (lib.attrNames stagedModuleSrcs)}; do
+        ln -sfn "$store_modules/$m" "$modules_dir/$m"
+      done
+      echo '${builtins.toJSON (lib.mapAttrs (_: mod: { installedVersion = mod; }) moduleVersions)}' \
+        > "$modules_dir/installed.json"
+    fi
+  '';
+
+  disableBreakingUpdates =
+    runCommand "disable-breaking-updates.py"
+      {
+        pythonInterpreter = "${python3.interpreter}";
+        configDirName = lib.toLower binaryName;
+        meta.mainProgram = "disable-breaking-updates.py";
+      }
+      ''
+        mkdir -p $out/bin
+        cp ${../disable-breaking-updates.py} $out/bin/disable-breaking-updates.py
+        substituteAllInPlace $out/bin/disable-breaking-updates.py
+        chmod +x $out/bin/disable-breaking-updates.py
+      '';
+
+  patchedKrisp = lib.optionalAttrs (krispSrc != null && withKrisp) (
+    runCommand "discord-krisp-patched"
+      {
+        nativeBuildInputs = lib.optionals isDistro [ brotli ] ++ [
+          unzip
+          (python3.withPackages (ps: [
+            ps.lief
+            ps.capstone
+          ]))
+        ];
+      }
+      ''
+        mkdir -p "$out"
+        ${
+          if isDistro then
+            ''brotli -d < ${krispSrc} | tar xf - --strip-components=1 -C "$out"''
+          else
+            ''unzip ${krispSrc} -d "$out"''
+        }
+        python3 ${../patch-krisp.py} "$out/discord_krisp.node"
+      ''
+  );
+
+  deployKrisp = lib.optionalAttrs (krispSrc != null && withKrisp) (
+    runCommand "deploy-krisp.py"
+      {
+        pythonInterpreter = "${python3.withPackages (ps: [ ps.watchdog ])}/bin/python3";
+        krispPath = "${patchedKrisp}";
+        discordVersion = version;
+        configDirName = lib.toLower binaryName;
+        meta.mainProgram = "deploy-krisp.py";
+      }
+      ''
+        mkdir -p "$out/bin"
+        cp ${../deploy-krisp.py} "$out/bin/deploy-krisp.py"
+        substituteAllInPlace "$out/bin/deploy-krisp.py"
+        chmod +x "$out/bin/deploy-krisp.py"
+      ''
+  );
+in
+assert lib.assertMsg (
+  enabledDiscordModsCount <= 1
+) "discord: Only one of Vencord, Equicord or Moonlight can be enabled at the same time";
+stdenv.mkDerivation (finalAttrs: {
+  inherit
+    pname
+    version
+    src
+    meta
+    ;
+
+  nativeBuildInputs = [
+    autoPatchelfHook
+    cups
+    libdrm
+    libuuid
+    libxdamage
+    libx11
+    libxscrnsaver
+    libxtst
+    libxcb
+    libxshmfence
+    wrapGAppsHook3
+    makeShellWrapper
+  ]
+  ++ lib.optionals isDistro [ brotli ];
+
+  dontWrapGApps = true;
+
+  buildInputs = [
+    alsa-lib
+    libgbm
+    nspr
+    nss
+  ]
+  # The new distro layout ships prebuilt `.node` modules:
+  # discord_dispatch is linked against openssl 1.1, discord_voice against libpulseaudio.
+  # Ignore the missing dependency on insecure openssl_1_1: discord_dispatch is
+  # effectively unused in practice.
+  ++ lib.optionals isDistro [ libpulseaudio ];
+
+  strictDeps = true;
+
+  dontUnpack = isDistro;
+
+  inherit libPath;
+
+  autoPatchelfIgnoreMissingDeps = lib.optionals isDistro [
+    "libssl.so.1.1"
+    "libcrypto.so.1.1"
+  ];
 
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out/{bin,opt/${binaryName},share/icons/hicolor/256x256/apps}
-    mv * $out/opt/${binaryName}
+  ''
+  + (
+    if isDistro then
+      ''
+        # Distro layout (currently discord-ptb, discord-canary and discord-development):
+        #
+        # The host distro is a brotli-compressed tar with all files under a `files/`
+        # prefix (the channel binary, libffmpeg.so, resources/, etc). Module distros
+        # follow the same format with module contents under `files/`
+        #
+        # The module directory layout must match what Discord's node runtime
+        # expects: modules/<name>/ (the moduleUpdater extracts zips into
+        # path.join(moduleInstallPath, moduleName) see processUnzipQueue)
 
-    chmod +x $out/opt/${binaryName}/${binaryName}
-    patchelf --set-interpreter ${stdenv.cc.bintools.dynamicLinker} \
-        $out/opt/${binaryName}/${binaryName}
+        brotli -d < $src | tar xf - --strip-components=1 -C $out/opt/${binaryName}
+        chmod +x $out/opt/${binaryName}/${binaryName}
+
+        # Extract native modules
+        ${lib.concatStringsSep "\n" (
+          lib.mapAttrsToList (name: src: ''
+            mkdir -p $out/opt/${binaryName}/modules/${name}
+            brotli -d < ${src} | tar xf - --strip-components=1 -C $out/opt/${binaryName}/modules/${name}
+          '') stagedModuleSrcs
+        )}
+
+      ''
+    else
+      ''
+        # Tarball layout (stable): the tarball unpacks into a
+        # directory containing the channel binary directly
+        mv * $out/opt/${binaryName}
+        chmod +x $out/opt/${binaryName}/${binaryName}
+      ''
+  )
+  + ''
 
     wrapProgramShell $out/opt/${binaryName}/${binaryName} \
         "''${gappsWrapperArgs[@]}" \
@@ -239,6 +346,7 @@ stdenv.mkDerivation (finalAttrs: {
         --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
         --prefix LD_LIBRARY_PATH : ${finalAttrs.libPath}:$out/opt/${binaryName} \
         ${lib.strings.optionalString disableUpdates "--run ${lib.getExe disableBreakingUpdates}"} \
+        ${lib.strings.optionalString isDistro ''--run "${stageModules} $out/opt/${binaryName}/modules"''} \
         ${
           lib.strings.optionalString (krispSrc != null && withKrisp) "--run ${lib.getExe deployKrisp}"
         } \
@@ -295,6 +403,8 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     # make it possible to run disableBreakingUpdates standalone
     inherit disableBreakingUpdates;
+    # Exposed so reviewers can inspect which distro modules are pinned
+    inherit source moduleVersions;
     updateScript = ./update.py;
 
     tests = {
