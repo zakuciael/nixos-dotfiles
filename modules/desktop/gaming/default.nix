@@ -7,7 +7,8 @@
   ...
 }:
 let
-  inherit (lib.my.utils) recursiveMerge;
+  inherit (lib.my.utils) findLayoutConfig recursiveMerge;
+
   inherit (lib)
     getBin
     mkOption
@@ -20,6 +21,8 @@ let
     ;
 
   cfg = config.modules.desktop.gaming;
+  layout = findLayoutConfig config ({ name, ... }: name == "main");
+
   mkDiskOptions = path: {
     device = mkOption {
       type = types.nullOr types.str;
@@ -84,7 +87,28 @@ in
         (bottles.override { removeWarningPopup = true; })
         umu-launcher
         protonup-qt
+        r2modman
       ];
+
+      wayland.windowManager.hyprland.settings.windowrule =
+        lib.optionals config.modules.desktop.wm.hyprland.enable
+          [
+            {
+              name = "Map Steam Games to Content Type";
+              "match:class" = "^(steam_app_.*)$";
+
+              content = "game";
+            }
+
+            {
+              name = "Default Rules for Games";
+              "match:content" = "game";
+
+              fullscreen_state = "2 2";
+              suppress_event = "fullscreen maximize";
+              monitor = "${layout.monitor.wayland}";
+            }
+          ];
     };
 
     # Make system Esync-compatible
