@@ -9,8 +9,9 @@
 let
   inherit (lib) getExe mkIf;
   inherit (lib.my.utils) findLayoutConfig findLayoutWorkspace;
-  pkg = pkgs.discord-canary.override {
-    withOpenASAR = true;
+  pkg = pkgs.discord.override {
+    # TODO: Re-enable when this issue is resolved: https://github.com/NixOS/nixpkgs/issues/515106
+    # withOpenASAR = true;
     withKrisp = true;
   };
   leftLayout = findLayoutConfig config ({ name, ... }: name == "left"); # Try and find left monitor
