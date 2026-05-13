@@ -16,6 +16,7 @@ in
     ./networking.nix
   ];
 
+  # TODO: Might tweak it sine upgrade
   nix.settings = {
     max-jobs = 4;
     cores = 2;
@@ -85,7 +86,10 @@ in
     };
     desktop = {
       apps.enable = true;
-      sddm.enable = true;
+      sddm = {
+        enable = true;
+        compositor = "kwin";
+      };
       wm.hyprland.enable = true;
       gaming = {
         enable = true;
