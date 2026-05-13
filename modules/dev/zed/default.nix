@@ -30,6 +30,8 @@ in
     home-manager.users.${username} = {
       home = {
         shellAliases.zed = getExe zedPackage;
+
+        file.".local/zed.app/bin/zed".source = getExe zedPackage;
       };
 
       programs = {
