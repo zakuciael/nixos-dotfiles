@@ -19,24 +19,23 @@ in
     home-manager.users.${username} = {
       catppuccin.bat.enable = true;
 
-      programs = {
-        fish = {
-          interactiveShellInit = ''
-            # Configure batpipe
-            set -x LESSOPEN "|${pkgs.bat-extras.batpipe}/bin/.batpipe-wrapped %s";
-            set -e LESSCLOSE;
+      home.shellAliases = with pkgs.bat-extras; {
+        cat = "${getExe config.home-manager.users.${username}.programs.bat.package}";
+        watch = "${getExe batwatch}";
+        rcat = "command ${getBin pkgs.toybox}/bin/cat";
+        man = "${getExe batman}";
+      };
 
-            # The following will enable colors when using batpipe with less:
-            set -x LESS "$LESS -R";
-            set -x BATPIPE "color";
-          '';
-          shellAliases = with pkgs.bat-extras; {
-            cat = "${getExe config.home-manager.users.${username}.programs.bat.package}";
-            watch = "${getExe batwatch}";
-            rcat = "command ${getBin pkgs.toybox}/bin/cat";
-            man = "${getExe batman}";
-          };
-        };
+      programs = {
+        fish.interactiveShellInit = ''
+          # Configure batpipe
+          set -x LESSOPEN "|${pkgs.bat-extras.batpipe}/bin/.batpipe-wrapped %s";
+          set -e LESSCLOSE;
+
+          # The following will enable colors when using batpipe with less:
+          set -x LESS "$LESS -R";
+          set -x BATPIPE "color";
+        '';
         bat = {
           enable = true;
           extraPackages = with pkgs.bat-extras; [

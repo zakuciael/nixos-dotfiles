@@ -37,7 +37,7 @@ in
     ];
 
     home-manager.users.${username} = {
-      programs.fish.shellAliases.open = "${getBin pkgs.xdg-utils}/bin/xdg-open";
+      home.shellAliases.open = "${getBin pkgs.xdg-utils}/bin/xdg-open";
 
       # Default apps
       xdg.mimeApps = {

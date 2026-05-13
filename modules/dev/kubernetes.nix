@@ -17,25 +17,24 @@ in
 
   config = mkIf (cfg.enable) {
     home-manager.users.${username} = {
-      home.packages = with pkgs; [
-        kubectl
-        kubectx
-        kustomize
-        kubernetes-helm
-        kubectl-tree
-      ];
-
-      catppuccin.k9s.enable = true;
-      programs = {
-        k9s = {
-          enable = true;
-        };
-        fish.shellAliases = with pkgs; {
+      home = {
+        shellAliases = with pkgs; {
           k = "${getBin kubectl}/bin/kubectl";
           kc = "${getBin kubectx}/bin/kubectx";
           kn = "${getBin kubectx}/bin/kubens";
         };
+
+        packages = with pkgs; [
+          kubectl
+          kubectx
+          kustomize
+          kubernetes-helm
+          kubectl-tree
+        ];
       };
+
+      catppuccin.k9s.enable = true;
+      programs.k9s.enable = true;
     };
   };
 }

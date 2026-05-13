@@ -29,6 +29,12 @@ in
     home-manager.users.${username} = {
       catppuccin.fish.enable = true;
 
+      home.shellAliases = {
+        re = "nh os switch -H ${hostname} && echo -e '\\033[32m>\\033[0m Done!'";
+        nfu = "nix flake update";
+        repl = "nix repl -f '<nixpkgs>'";
+      };
+
       programs = {
         fish = {
           enable = true;
@@ -36,11 +42,6 @@ in
             fish_greeting = ''
               ${pkgs.krabby}/bin/krabby random --no-title
             '';
-          };
-          shellAliases = {
-            re = "nh os switch -H ${hostname} && echo -e '\\033[32m>\\033[0m Done!'";
-            nfu = "nix flake update";
-            repl = "nix repl -f '<nixpkgs>'";
           };
         };
       };

@@ -12,6 +12,8 @@ let
     mkIf
     getExe
     ;
+
+  zedPackage = config.home-manager.users.${username}.programs.zed-editor.package;
   cfg = config.modules.dev.zed;
 in
 {
@@ -25,16 +27,19 @@ in
   };
 
   config = mkIf cfg.enable {
-    home-manager.users.${username}.programs = {
-      fish.shellAliases.zed = "${getExe
-        config.home-manager.users.${username}.programs.zed-editor.package
-      }";
-      zed-editor = {
-        enable = true;
-        installRemoteServer = cfg.remote-server;
+    home-manager.users.${username} = {
+      home = {
+        shellAliases.zed = getExe zedPackage;
+      };
 
-        mutableUserSettings = false;
-        mutableUserKeymaps = false;
+      programs = {
+        zed-editor = {
+          enable = true;
+          installRemoteServer = cfg.remote-server;
+
+          mutableUserSettings = false;
+          mutableUserKeymaps = false;
+        };
       };
     };
   };
