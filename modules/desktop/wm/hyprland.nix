@@ -27,18 +27,12 @@ desktop.mkDesktopModule {
     # "kitty"
     "ghostty"
 
-    # File explorer
-    "nemo"
-
     # Password manager
     "_1password"
 
     # Application launchers
     "rofi"
     "vicinae"
-
-    # Status bar
-    "waybar"
 
     # Themes
     "gtk"
@@ -49,8 +43,11 @@ desktop.mkDesktopModule {
     "grimblast"
     "nmgui"
 
-    # Notification center
+    # System components
+    "hyprlock"
     "swaync"
+    "nemo"
+    "waybar"
 
     # Apps
     "obs"
