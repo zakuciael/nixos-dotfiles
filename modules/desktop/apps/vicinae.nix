@@ -9,6 +9,8 @@
 let
   inherit (lib) getExe;
 
+  chromeExtensionId = "kcmipingpfbohfjckomimmahknoddnke";
+
   mkExtension =
     name: cfg:
     inputs.vicinae.packages.mkVicinaeExtension (
@@ -53,6 +55,16 @@ in
           no_anim = "on";
           "match:namespace" = "vicinae";
         }
+      ];
+    };
+
+    xdg.configFile."google-chrome/NativeMessagingHosts/com.vicinae.vicinae.json".text = lib.toJSON {
+      name = "com.vicinae.vicinae";
+      description = "IPC Native Messaging Host";
+      path = "${inputs.vicinae.packages.default}/libexec/vicinae/vicinae-browser-link";
+      type = "stdio";
+      allowed_origins = [
+        "chrome-extension://${chromeExtensionId}/"
       ];
     };
 
