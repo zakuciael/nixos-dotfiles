@@ -120,7 +120,7 @@ in
         allLayouts
         |> map (layout: {
           monitor = layout.monitor.wayland;
-          path = toString layout.wallpaper;
+          path = "${layout.wallpaper}";
           blur_passes = 2;
           contrast = 1;
           brightness = 0.6;
