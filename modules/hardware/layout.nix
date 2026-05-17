@@ -4,9 +4,26 @@
   username,
   ...
 }:
-with lib;
-with lib.my;
 let
+  inherit (lib)
+    mkIf
+    mkOption
+    types
+    mkEnableOption
+    mapAttrsToList
+    recursiveUpdate
+    singleton
+    optionalString
+    assertMsg
+    flatten
+    concatStringsSep
+    concatLines
+    concatMapStrings
+    reverseList
+    defaultTo
+    ;
+  inherit (lib.my) mapper defs;
+
   cfg = config.modules.hardware.layout;
 
   monitorRotations = {
@@ -188,23 +205,20 @@ in
     home-manager.users.${username} = {
       # Hyprland monitor, workspace and binds configuration
       wayland.windowManager.hyprland.settings = mkIf config.programs.hyprland.enable {
-        monitor =
-          if cfg.layout == [ ] then
-            [ ",preferred,auto,1" ]
-          else
-            builtins.map (
-              layout:
-              let
-                monitor = layout.monitor.wayland;
-                mode = if (layout.mode != null) then layout.mode else "preferred";
-                pos = if (layout.pos != null) then "${toString layout.pos.x}x${toString layout.pos.y}" else "auto"; # TODO: Check if `auto-right` can be used
-                scale = if (layout.scale != null) then (toString layout.scale) else "1";
-                transform =
-                  optionalString (layout.rotate != null)
-                    ",transform,${monitorRotations.${layout.rotate}}";
-              in
-              ''${monitor},${mode},${pos},${scale}${transform}''
-            ) cfg.layout;
+        monitorv2 =
+          cfg.layout
+          |> map (layout: {
+            output = layout.monitor.wayland;
+            mode = layout.mode |> defaultTo "preferred";
+            position =
+              if layout.pos != null then "${toString layout.pos.x}x${toString layout.pos.y}" else "auto"; # TODO: Check if `auto-right` can be used
+            scale = layout.scale |> defaultTo 1;
+            transform = if layout.rotate != null then monitorRotations.${layout.rotate} else 0;
+          });
+
+        # TODO: Check if this can be achieved using the `monitorv2` syntax
+        monitor = if cfg.layout == [ ] then [ ",preferred,auto,1" ] else [ ];
+
         workspace =
           let
             disallowedExtraConfigs = [
@@ -212,7 +226,7 @@ in
               "monitor"
             ];
             workspaceDefs = flatten (
-              builtins.map (
+              map (
                 layout:
                 (mapAttrsToList (name: value: {
                   inherit name;
@@ -222,7 +236,7 @@ in
                     (
                       let
                         hasDisallowedExtraArgs = builtins.all (key: !(value.extraConfig ? "${key}")) disallowedExtraConfigs;
-                        usedDisallowedExtraArgs = builtins.map (x: ''"${x}"'') (
+                        usedDisallowedExtraArgs = map (x: ''"${x}"'') (
                           builtins.filter (key: value.extraConfig ? "${key}") disallowedExtraConfigs
                         );
                       in
@@ -238,12 +252,12 @@ in
               rules:
               concatStringsSep "," (mapAttrsToList (name: value: "${name}:${mapper.toString value}") rules);
           in
-          builtins.map (config: ''${config.name},${mkRules config.rules}'') workspaceDefs;
+          map (config: "${config.name},${mkRules config.rules}") workspaceDefs;
 
         bind =
           let
             keybindDefs = lib.flatten (
-              builtins.map (
+              map (
                 layout:
                 lib.mapAttrsToList (workspace: value: {
                   inherit workspace;
@@ -253,11 +267,11 @@ in
             );
           in
           lib.flatten (
-            builtins.map (
+            map (
               config:
-              builtins.map (key: [
-                ''$mod, ${key}, workspace, ${config.workspace}''
-                ''$mod SHIFT, ${key}, movetoworkspace, ${config.workspace}''
+              map (key: [
+                "$mod, ${key}, workspace, ${config.workspace}"
+                "$mod SHIFT, ${key}, movetoworkspace, ${config.workspace}"
               ]) config.keybinds
             ) keybindDefs
           );
@@ -265,21 +279,21 @@ in
     };
 
     # Configure per-monitor wallpapers
-    modules.services.wallpaper.settings = builtins.map (layout: {
+    modules.services.wallpaper.settings = map (layout: {
       inherit (layout) monitor wallpaper;
     }) (builtins.filter (layout: layout.wallpaper != null) cfg.layout);
 
     # Xorg monitor layout
     services.xserver = mkIf (config.services.xserver.enable && cfg.layout != [ ]) (
       let
-        heads = builtins.map (layout: {
+        heads = map (layout: {
           inherit (layout) name;
           inherit layout;
         }) cfg.layout;
       in
       {
         deviceSection = concatLines (
-          (builtins.map (x: ''Option "monitor-${x.layout.monitor.xorg}" "${x.name}"'') heads)
+          (map (x: ''Option "monitor-${x.layout.monitor.xorg}" "${x.name}"'') heads)
           ++ [ ''Option "DRI" "3"'' ]
         );
         extraConfig =
