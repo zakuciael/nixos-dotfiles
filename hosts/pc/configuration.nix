@@ -74,7 +74,8 @@ in
               wayland = "DP-1";
             };
             primary = true;
-            mode = "2560x1440";
+            vrr = 1;
+            mode = "2560x1440@180";
             pos = {
               x = 1080;
               y = 150;
