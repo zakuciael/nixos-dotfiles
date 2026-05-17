@@ -92,6 +92,16 @@ in
               default = null;
               type = nullOr str;
             };
+            vrr = mkOption {
+              description = "";
+              example = "1";
+              default = 0;
+              type = enum [
+                0
+                1
+                2
+              ];
+            };
             pos = mkOption {
               description = "Monitor position.";
               example = {
@@ -214,6 +224,7 @@ in
               if layout.pos != null then "${toString layout.pos.x}x${toString layout.pos.y}" else "auto"; # TODO: Check if `auto-right` can be used
             scale = layout.scale |> defaultTo 1;
             transform = if layout.rotate != null then monitorRotations.${layout.rotate} else 0;
+            inherit (layout) vrr;
           });
 
         # TODO: Check if this can be achieved using the `monitorv2` syntax
