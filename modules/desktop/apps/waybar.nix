@@ -2,7 +2,7 @@
   lib,
   pkgs,
   username,
-  desktop,
+  # desktop,
   colorScheme,
   ...
 }:
@@ -11,15 +11,11 @@ let
   package = pkgs.waybar;
 in
 {
-  # TODO: Add priority for waybar, so it starts before any other app
-  modules.desktop.wm.${desktop}.autostartPrograms = [
-    "${package}/bin/waybar"
-  ];
-
   home-manager.users.${username} = {
     programs.waybar = {
       inherit package;
       enable = true;
+      systemd.enable = true;
 
       settings = [
         {
