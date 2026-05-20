@@ -1,8 +1,8 @@
-// Screen size
-screen.w = Window.GetWidth();
-screen.h = Window.GetHeight();
-screen.half.w = Window.GetWidth() / 2;
-screen.half.h = Window.GetHeight() / 2;
+// Screen size - FIX: Query absolute Display Index 0 boundaries
+screen.w = Window.GetWidth(0);
+screen.h = Window.GetHeight(0);
+screen.half.w = Window.GetWidth(0) / 2;
+screen.half.h = Window.GetHeight(0) / 2;
 
 // Question prompt
 question = null;
@@ -27,9 +27,9 @@ for (i = 0; i < 151; i++)
   flyingman_image[i] = Image("progress-" + i + ".png");
 flyingman_sprite = Sprite();
 
-# set image position
-flyingman_sprite.SetX(Window.GetX() + (Window.GetWidth() / 2 - flyingman_image[0].GetWidth() / 2)); # Place images in the center
-flyingman_sprite.SetY(Window.GetY() + (Window.GetHeight() / 2 - flyingman_image[0].GetHeight() / 2));
+# set image position - FIX: Explicitly pin X/Y positioning to Display Index 0 offsets
+flyingman_sprite.SetX(Window.GetX(0) + (Window.GetWidth(0) / 2 - flyingman_image[0].GetWidth() / 2));
+flyingman_sprite.SetY(Window.GetY(0) + (Window.GetHeight(0) / 2 - flyingman_image[0].GetHeight() / 2));
 
 progress = 0;
 
@@ -38,7 +38,7 @@ fun refresh_callback ()
     flyingman_sprite.SetImage(flyingman_image[Math.Int(progress / 2) % 151]);
     progress++;
   }
-  
+
 Plymouth.SetRefreshFunction (refresh_callback);
 
 //------------------------------------- Password prompt -------------------------------
@@ -51,13 +51,13 @@ fun DisplayQuestionCallback(prompt, entry) {
 
     question.image = Image.Text(prompt, 1, 1, 1);
     question.sprite = Sprite(question.image);
-    question.sprite.SetX(screen.half.w - question.image.GetWidth() / 2);
-    question.sprite.SetY(screen.h - 4 * question.image.GetHeight());
+    question.sprite.SetX(Window.GetX(0) + screen.half.w - question.image.GetWidth() / 2);
+    question.sprite.SetY(Window.GetY(0) + screen.h - 4 * question.image.GetHeight());
 
     answer.image = Image.Text(entry, 1, 1, 1);
     answer.sprite = Sprite(answer.image);
-    answer.sprite.SetX(screen.half.w - answer.image.GetWidth() / 2);
-    answer.sprite.SetY(screen.h - 2 * answer.image.GetHeight());
+    answer.sprite.SetX(Window.GetX(0) + screen.half.w - answer.image.GetWidth() / 2);
+    answer.sprite.SetY(Window.GetY(0) + screen.h - 2 * answer.image.GetHeight());
 }
 Plymouth.SetDisplayQuestionFunction(DisplayQuestionCallback);
 
@@ -65,19 +65,19 @@ Plymouth.SetDisplayQuestionFunction(DisplayQuestionCallback);
 fun DisplayPasswordCallback(nil, bulletCount) {
     state.status = "pause";
     totalWidth = bulletCount * bullet.image.GetWidth();
-    startPos = screen.half.w - totalWidth / 2;
+    startPos = Window.GetX(0) + screen.half.w - totalWidth / 2;
 
     prompt.image = Image.Text("Enter Password", 1, 1, 1);
     prompt.sprite = Sprite(prompt.image);
-    prompt.sprite.SetX(screen.half.w - prompt.image.GetWidth() / 2);
-    prompt.sprite.SetY(screen.h - 4 * prompt.image.GetHeight());
+    prompt.sprite.SetX(Window.GetX(0) + screen.half.w - prompt.image.GetWidth() / 2);
+    prompt.sprite.SetY(Window.GetY(0) + screen.h - 4 * prompt.image.GetHeight());
 
     // Clear all bullets (user might hit backspace)
     bullets = null;
     for (i = 0; i < bulletCount; i++) {
         bullets[i].sprite = Sprite(bullet.image);
         bullets[i].sprite.SetX(startPos + i * bullet.image.GetWidth());
-        bullets[i].sprite.SetY(screen.h - 2 * bullet.image.GetHeight());
+        bullets[i].sprite.SetY(Window.GetY(0) + screen.h - 2 * bullet.image.GetHeight());
     }
 }
 Plymouth.SetDisplayPasswordFunction(DisplayPasswordCallback);
@@ -97,7 +97,7 @@ Plymouth.SetDisplayNormalFunction(DisplayNormalCallback);
 fun MessageCallback(text) {
     message.image = Image.Text(text, 1, 1, 1);
     message.sprite = Sprite(message.image);
-    message.sprite.SetPosition(screen.half.w - message.image.GetWidth() / 2, message.image.GetHeight());
+    message.sprite.SetPosition(Window.GetX(0) + screen.half.w - message.image.GetWidth() / 2, Window.GetY(0) + message.image.GetHeight());
 }
 Plymouth.SetMessageFunction(MessageCallback);
 
