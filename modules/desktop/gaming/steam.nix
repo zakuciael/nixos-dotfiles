@@ -2,15 +2,16 @@
   config,
   lib,
   pkgs,
-  inputs,
   username,
   ...
 }:
 let
-  inherit (lib) mkIf mkEnableOption;
+  inherit (lib) getExe mkIf mkEnableOption;
   inherit (lib.hm) dag;
+
   cfg = config.modules.desktop.gaming.steam;
   hmConfig = config.home-manager.users.${username};
+  steamPkg = config.programs.steam.package;
 in
 {
   options.modules.desktop.gaming.steam = {
@@ -83,7 +84,32 @@ in
         extraCompatPackages = [
           pkgs.proton-ge-bin
           pkgs.steamtinkerlaunch
+      };
+    };
+
+    systemd.user.services."steam-autostart" = {
+      description = "Launch Steam at startup";
+      script = "${getExe steamPkg} -nochatui -nofriendsui -silent %U";
+
+      after = [
+        "graphical-session.target"
+        "tray.target"
+      ];
+      requires = [ "graphical-session.target" ];
+      wants = [ "tray.target" ];
+      wantedBy = [ "graphical-session.target" ];
+
+      unitConfig.ConditionEnvironment = "WAYLAND_DISPLAY";
+
+      serviceConfig = {
+        Restart = "on-failure";
+        RestartSec = 5;
+        PassEnvironment = [
+          "DISPLAY"
+          "WAYLAND_DISPLAY"
+          "XAUTHORITY"
         ];
+        ExecStartPre = "${pkgs.coreutils}/bin/sleep 3"; # Make sure tray is visible
       };
     };
   };
