@@ -3,7 +3,6 @@
   lib,
   pkgs,
   username,
-  desktop,
   ...
 }:
 let
@@ -33,22 +32,6 @@ let
   secrets = readSecrets { inherit config base; };
 in
 {
-  programs = {
-    _1password = {
-      enable = true;
-      package = pkgs._1password-cli;
-    };
-    _1password-gui = {
-      enable = true;
-      polkitPolicyOwners = [ username ];
-      package = pkgs._1password-gui-beta;
-    };
-  };
-
-  modules.desktop.wm.${desktop}.autostartPrograms = [
-    "${getExe pkgs'.gui}"
-  ];
-
   sops = {
     templates = {
       "1password/agent.toml" = {
@@ -56,7 +39,7 @@ in
         owner = username;
         path = "${configDirectory}/1Password/ssh/agent.toml";
         file = toTOML "agent.toml" {
-          ssh-keys = builtins.map (
+          ssh-keys = map (
             entry:
             builtins.mapAttrs (
               slot: _:
@@ -70,7 +53,46 @@ in
         };
       };
     };
-    secrets = listToAttrs (builtins.map (v: nameValuePair v { }) secretNames);
+    secrets = listToAttrs (map (v: nameValuePair v { }) secretNames);
+  };
+
+  programs = {
+    _1password = {
+      enable = true;
+      package = pkgs._1password-cli;
+    };
+    _1password-gui = {
+      enable = true;
+      polkitPolicyOwners = [ username ];
+      package = pkgs._1password-gui-beta;
+    };
+  };
+
+  # Autostart service
+  systemd.user.services."_1password-autostart" = {
+    description = "Launch 1Password at startup";
+    script = "${getExe pkgs'.gui} --silent";
+
+    after = [
+      "graphical-session.target"
+      "tray.target"
+    ];
+    requires = [ "graphical-session.target" ];
+    wants = [ "tray.target" ];
+    wantedBy = [ "graphical-session.target" ];
+
+    unitConfig.ConditionEnvironment = "WAYLAND_DISPLAY";
+
+    serviceConfig = {
+      Restart = "on-failure";
+      RestartSec = 5;
+      PassEnvironment = [
+        "DISPLAY"
+        "WAYLAND_DISPLAY"
+        "XAUTHORITY"
+      ];
+      ExecStartPre = "${pkgs.coreutils}/bin/sleep 3"; # Make sure tray is visible
+    };
   };
 
   home-manager.users.${username} = {
