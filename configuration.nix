@@ -141,12 +141,6 @@ with lib.my;
     loader.efi.canTouchEfiVariables = true;
 
     tmp.cleanOnBoot = true;
-
-    plymouth = {
-      enable = true;
-      themePackages = with pkgs; [ nixos-blur-plymouth ];
-      theme = "nixos-blur";
-    };
   };
 
   # SOPS
@@ -172,7 +166,7 @@ with lib.my;
             content = ''
               access-tokens = ${
                 builtins.attrNames secrets
-                |> builtins.map (
+                |> map (
                   entry:
                   "${entry}=${
                     utils.mkSecretPlaceholder config [
@@ -197,7 +191,7 @@ with lib.my;
             group = config.users.groups.keys.name;
             content =
               builtins.attrNames secrets
-              |> builtins.map (
+              |> map (
                 key:
                 "machine ${key} password ${
                   utils.mkSecretPlaceholder config [
@@ -212,7 +206,7 @@ with lib.my;
       secrets = {
         "users/${username}/password".neededForUsers = true;
       }
-      // lib.listToAttrs (builtins.map (v: lib.nameValuePair v { }) secretNames);
+      // lib.listToAttrs (map (v: lib.nameValuePair v { }) secretNames);
     };
 
   # User settings
@@ -275,7 +269,10 @@ with lib.my;
       thumbnail.enable = true;
       upower.enable = true;
     };
-    hardware.grub.enable = true;
+    hardware = {
+      grub.enable = true;
+      plymouth.enable = true;
+    };
     shell = {
       nix.enable = true;
       television.enable = true;
