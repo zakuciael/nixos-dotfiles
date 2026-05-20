@@ -14,8 +14,12 @@ let
     mkOption
     types
     ;
-  inherit (lib.my.utils) indentLines;
+  inherit (lib.my.utils) indentLines findLayoutConfig;
+
   cfg = config.modules.hardware.grub;
+  layout = findLayoutConfig config ({ name, ... }: name == "main");
+
+  resolution = builtins.elemAt (lib.splitString "@" (layout.mode or "1920x1080")) 0;
 in
 {
   options.modules.hardware.grub = {
@@ -54,12 +58,6 @@ in
         });
       default = { };
     };
-    resolution = mkOption {
-      description = "Set the resolution to use in the GRUB menu";
-      example = "1920x1080";
-      type = types.str;
-      default = "auto";
-    };
     theme = mkOption {
       description = "Set GRUB theme";
       example = pkgs.nixos-grub2-theme;
@@ -76,11 +74,16 @@ in
       device = "nodev";
       default = "saved";
       splashImage = "${cfg.theme}/splash_image.jpg";
-      gfxmodeEfi = cfg.resolution;
-      gfxmodeBios = cfg.resolution;
+
+      gfxmodeEfi = "${resolution}x32,auto";
+      gfxpayloadEfi = "keep";
+
+      gfxmodeBios = "${resolution}x32,auto";
+      gfxpayloadBios = "keep";
+
       extraEntries =
         attrsToList cfg.extraEntries
-        |> builtins.map (
+        |> map (
           { name, value }:
           ''
             menuentry "${name}" ${optionalString (value.class != null) "--class ${value.class}"} {
