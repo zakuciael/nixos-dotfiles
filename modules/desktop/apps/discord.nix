@@ -3,7 +3,6 @@
   lib,
   pkgs,
   username,
-  desktop,
   ...
 }:
 let
@@ -26,9 +25,32 @@ let
       findLayoutWorkspace layout ({ last, ... }: last);
 in
 {
-  modules.desktop.wm.${desktop}.autostartPrograms = [
-    "${getExe pkg}"
-  ];
+  # Autostart service
+  systemd.user.services."discord-autostart" = {
+    description = "Launch Discord at startup";
+    script = "${getExe pkg}";
+
+    after = [
+      "graphical-session.target"
+      "tray.target"
+    ];
+    requires = [ "graphical-session.target" ];
+    wants = [ "tray.target" ];
+    wantedBy = [ "graphical-session.target" ];
+
+    unitConfig.ConditionEnvironment = "WAYLAND_DISPLAY";
+
+    serviceConfig = {
+      Restart = "on-failure";
+      RestartSec = 5;
+      PassEnvironment = [
+        "DISPLAY"
+        "WAYLAND_DISPLAY"
+        "XAUTHORITY"
+      ];
+      ExecStartPre = "${pkgs.coreutils}/bin/sleep 3"; # Make sure tray is visible
+    };
+  };
 
   home-manager.users.${username} = {
     home.packages = [ pkg ];
