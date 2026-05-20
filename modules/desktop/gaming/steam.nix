@@ -47,6 +47,8 @@ in
     environment = {
       systemPackages = with pkgs; [
         mangohud
+        gamescope-wsi # For HDR support in gamescope
+        protonup-qt
         pkgsCross.mingw32.wine-discord-ipc-bridge
       ];
     };
@@ -54,6 +56,13 @@ in
     programs = {
       gamescope.enable = true;
       gamemode.enable = true;
+
+      # Support for games distributed as AppImages
+      appimage = {
+        enable = true;
+        binfmt = true;
+      };
+
       steam = {
         enable = true;
         protontricks.enable = true;
@@ -81,9 +90,10 @@ in
           };
         };
 
-        extraCompatPackages = [
-          pkgs.proton-ge-bin
-          pkgs.steamtinkerlaunch
+        extraCompatPackages = with pkgs; [
+          proton-ge-bin
+          steamtinkerlaunch
+        ];
       };
     };
 

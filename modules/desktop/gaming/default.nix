@@ -86,7 +86,6 @@ in
         lutris
         (bottles.override { removeWarningPopup = true; })
         umu-launcher
-        protonup-qt
         r2modman
       ];
 
