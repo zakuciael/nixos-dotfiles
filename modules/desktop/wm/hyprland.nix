@@ -231,6 +231,7 @@ desktop.mkDesktopModule {
             "$mod" = "SUPER";
             bind = [
               "$mod, return, exec, ${getExe cfg.terminalPackage}"
+              "$mod, L, exec, ${getExe' pkgs.systemd "loginctl"} lock-session"
               "$mod, W, killactive,"
               "$mod, F, togglefloating,"
               "$mod, M, fullscreen, 1"
