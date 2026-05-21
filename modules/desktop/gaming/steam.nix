@@ -7,11 +7,16 @@
 }:
 let
   inherit (lib) getExe mkIf mkEnableOption;
+  inherit (lib.my.utils) findLayoutConfig getLayoutMonitor;
   inherit (lib.hm) dag;
 
   cfg = config.modules.desktop.gaming.steam;
   hmConfig = config.home-manager.users.${username};
   steamPkg = config.programs.steam.package;
+
+  layout = findLayoutConfig config ({ name, ... }: name == "main"); # Main monitor
+  monitor = getLayoutMonitor layout "wayland";
+
 in
 {
   options.modules.desktop.gaming.steam = {
@@ -42,6 +47,22 @@ in
           [[ -L "${desktopEntriesDirectory}" ]] || run mkdir -p $VERBOSE_ARG "${desktopEntriesDirectory}"
           [[ -L "${desktopDirectory}" ]] || run ln -s $VERBOSE_ARG "${desktopEntriesDirectory}" "${desktopDirectory}"
         '';
+
+      wayland.windowManager.hyprland.settings.windowrule =
+        lib.optionals config.modules.desktop.wm.hyprland.enable
+          [
+            {
+              name = "Steam Notifications Fix";
+              "match:class" = "^(steam)$";
+              "match:title" = "^(notificationtoasts)";
+
+              inherit monitor;
+              float = true;
+              no_focus = true;
+              no_initial_focus = true;
+              move = "100%-w-8 100%-h-8";
+            }
+          ];
     };
 
     environment = {
