@@ -5,9 +5,10 @@
   username,
   ...
 }:
-with lib;
-with lib.hm.dag;
 let
+  inherit (lib) concatStringsSep getExe' mapAttrsToList;
+  inherit (builtins) isAttrs concatLists;
+  inherit (lib.hm.dag) entryAnywhere entryAfter;
   inherit (lib.my.utils)
     mkLiteral
     mkMultiEntry
@@ -21,31 +22,27 @@ let
   # Utils
   toIconString =
     attrs:
-    concatStringsSep "\n" (
-      builtins.map (
-        value:
-        let
-          inherit (value) data;
-        in
-        if isAttrs data then data.icon else data
-      ) (sortAttrs attrs)
-    );
+    attrs
+    |> sortAttrs
+    |> map ({ data, ... }: if isAttrs data then data.icon else data)
+    |> concatStringsSep "\n";
 
   mkPowermenuSwitchStatement =
     {
       indent ? "",
     }:
     attrs:
-    concatStringsSep "\n" (
-      builtins.map ({ data, ... }: mkPowermenuSwitchCase { inherit indent; } data) (sortAttrs attrs)
-    );
+    attrs
+    |> sortAttrs
+    |> map ({ data, ... }: mkPowermenuSwitchCase { inherit indent; } data)
+    |> concatStringsSep "\n";
 
   mkPowermenuConfirmAction =
     {
       indent ? "",
     }:
     data:
-    (indentLines indent (
+    (
       if data.confirm then
         ''
           if rofi-powermenu-confirm; then
@@ -55,7 +52,8 @@ let
           fi''
       else
         data.action
-    ));
+    )
+    |> indentLines indent;
 
   mkPowermenuSwitchCase =
     {
@@ -78,7 +76,7 @@ let
     lock = entryAnywhere {
       icon = "";
       runtimeInputs = [ ];
-      action = "echo lock";
+      action = "${getExe' pkgs.systemd "loginctl"} lock-session";
       confirm = false;
     };
     suspend = entryAfter [ "lock" ] {
@@ -120,9 +118,12 @@ let
         show-icons = false;
       };
 
-      "@import" = entryAfter [ "configuration" ] (mkMultiEntry [
-        (import ./common/theme.nix { inherit lib pkgs; })
-      ]);
+      "@import" =
+        [
+          (import ./common/theme.nix { inherit lib pkgs; })
+        ]
+        |> mkMultiEntry
+        |> entryAfter [ "configuration" ];
 
       "*" = entryAfter [ "@import" ] {
         enabled = true;
@@ -259,7 +260,7 @@ in
       powermenuConfirmScript
       powermenuChoiceScript
     ]
-    ++ (concatLists (mapAttrsToList (_: v: v.data.runtimeInputs) powermenuSettings));
+    ++ (powermenuSettings |> mapAttrsToList (_: { data, ... }: data.runtimeInputs) |> concatLists);
     text = ''
       case "$(rofi-powermenu-choice)" in
       ${mkPowermenuSwitchStatement { indent = "  "; } powermenuSettings}
