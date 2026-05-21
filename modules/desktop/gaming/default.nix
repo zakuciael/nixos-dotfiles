@@ -3,25 +3,24 @@
   lib,
   pkgs,
   username,
-  desktop,
   ...
 }:
 let
-  inherit (lib.my.utils) findLayoutConfig recursiveMerge;
+  inherit (lib.my.utils) findLayoutConfig getLayoutMonitor recursiveMerge;
 
   inherit (lib)
-    getBin
     mkOption
     mkEnableOption
     types
     optionalAttrs
     mkIf
-    listToAttrs
-    attrsToList
+    mapAttrs'
+    filterAttrs
     ;
 
   cfg = config.modules.desktop.gaming;
   layout = findLayoutConfig config ({ name, ... }: name == "main");
+  monitor = getLayoutMonitor layout "wayland";
 
   mkDiskOptions = path: {
     device = mkOption {
@@ -35,39 +34,34 @@ let
       description = "Location of the mounted file system.";
     };
   };
-  mkFileSystemConfig =
-    {
-      name,
-      value,
-    }:
-    {
-      name = value.path;
-      value = recursiveMerge [
-        {
-          inherit (value) device;
-          fsType = "auto";
-          options = [
-            "x-gfs-show"
-            "x-gvfs-show"
+  mkFileSystemConfig = name: disk: {
+    name = disk.path;
+    value = recursiveMerge [
+      {
+        inherit (disk) device;
+        fsType = "auto";
+        options = [
+          "x-gfs-show"
+          "x-gvfs-show"
+        ];
+      }
+      (optionalAttrs (name == "windows") {
+        fsType = "ntfs";
+        options =
+          let
+            user = config.users.users.${username};
+            group = config.users.groups.${user.group};
+          in
+          [
+            "uid=${toString user.uid}"
+            "gid=${toString group.gid}"
+            "dmask=022"
+            "fmask=133"
           ];
-        }
-        (optionalAttrs (name == "windows") {
-          fsType = "ntfs";
-          options =
-            let
-              user = config.users.users.${username};
-              group = config.users.groups.${user.group};
-            in
-            [
-              "uid=${builtins.toString user.uid}"
-              "gid=${builtins.toString group.gid}"
-              "dmask=022"
-              "fmask=133"
-            ];
 
-        })
-      ];
-    };
+      })
+    ];
+  };
 in
 {
   options.modules.desktop.gaming = {
@@ -105,7 +99,7 @@ in
 
               fullscreen_state = "2 2";
               suppress_event = "fullscreen maximize";
-              monitor = "${layout.monitor.wayland}";
+              inherit monitor;
             }
           ];
     };
@@ -148,8 +142,7 @@ in
 
     hardware.uinput.enable = true;
 
-    fileSystems = mkIf (builtins.any ({ value, ... }: value.device != null) (attrsToList cfg.disks)) (
-      listToAttrs (builtins.map mkFileSystemConfig (attrsToList cfg.disks))
-    );
+    fileSystems =
+      cfg.disks |> filterAttrs (_: disk: disk.device != null) |> mapAttrs' mkFileSystemConfig;
   };
 }
