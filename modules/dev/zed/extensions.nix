@@ -25,6 +25,8 @@ in
         enable = true;
 
         packages = with pkgs.zed-extensions; [
+          pkgs.zed-sops
+
           nix
           wakatime
           discord-presence
