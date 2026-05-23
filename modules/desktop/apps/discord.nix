@@ -26,9 +26,12 @@ let
 in
 {
   # Autostart service
-  systemd.user.services."discord-autostart" = {
-    description = "Launch Discord at startup";
-    script = "${getExe pkg}";
+  systemd.user.services."discord" = {
+    description = "Launch Discord";
+    script = ''
+      export PATH="${pkgs.xdg-utils}/bin:$PATH"
+      ${getExe pkg}
+    '';
 
     after = [
       "graphical-session.target"
@@ -43,11 +46,6 @@ in
     serviceConfig = {
       Restart = "on-failure";
       RestartSec = 5;
-      PassEnvironment = [
-        "DISPLAY"
-        "WAYLAND_DISPLAY"
-        "XAUTHORITY"
-      ];
       ExecStartPre = "${pkgs.coreutils}/bin/sleep 3"; # Make sure tray is visible
     };
   };

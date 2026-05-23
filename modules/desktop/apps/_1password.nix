@@ -69,8 +69,8 @@ in
   };
 
   # Autostart service
-  systemd.user.services."_1password-autostart" = {
-    description = "Launch 1Password at startup";
+  systemd.user.services."1password" = {
+    description = "Launch 1Password";
     script = "${getExe pkgs'.gui} --silent";
 
     after = [
@@ -86,11 +86,6 @@ in
     serviceConfig = {
       Restart = "on-failure";
       RestartSec = 5;
-      PassEnvironment = [
-        "DISPLAY"
-        "WAYLAND_DISPLAY"
-        "XAUTHORITY"
-      ];
       ExecStartPre = "${pkgs.coreutils}/bin/sleep 3"; # Make sure tray is visible
     };
   };

@@ -118,8 +118,8 @@ in
       };
     };
 
-    systemd.user.services."steam-autostart" = {
-      description = "Launch Steam at startup";
+    systemd.user.services."steam" = {
+      description = "Launch Steam";
       script = "${getExe steamPkg} -nochatui -nofriendsui -silent %U";
 
       after = [
@@ -135,11 +135,6 @@ in
       serviceConfig = {
         Restart = "on-failure";
         RestartSec = 5;
-        PassEnvironment = [
-          "DISPLAY"
-          "WAYLAND_DISPLAY"
-          "XAUTHORITY"
-        ];
         ExecStartPre = "${pkgs.coreutils}/bin/sleep 3"; # Make sure tray is visible
       };
     };
