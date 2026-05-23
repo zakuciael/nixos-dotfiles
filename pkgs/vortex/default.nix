@@ -1,51 +1,36 @@
 {
   lib,
   stdenv,
-  stdenvNoCC,
   fetchFromGitHub,
-  fetchYarnDeps,
-  fixup-yarn-lock,
-  runCommand,
+  fetchurl,
   makeWrapper,
   makeDesktopItem,
   copyDesktopItems,
   writeShellScript,
-  electron,
+  electron_39,
   nodejs_22, # npm_config_nodedir — node-gyp ABI must match electron's Node 22
-  nodejs_24,
-  yarn,
+  pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   python3,
   pkg-config,
-  dotnet-sdk_9,
-  dotnetCorePackages,
+  jq,
   libsecret,
   autoPatchelfHook,
-  jq,
-  clang,
+  fontconfig,
+  lz4,
   zlib,
 }:
 let
-  nugetDeps = dotnetCorePackages.mkNugetDeps {
-    name = "vortex-fomod";
-    sourceFile = ./nuget-deps.json;
-  };
+  # Override pnpm to run under Node 22 so the engines.node=22 check passes in
+  # both fetchPnpmDeps (FOD) and the main build without disabling engine-strict.
+  pnpm = pnpm_10.override { nodejs = nodejs_22; };
 
   nativeAddons = import ./native-addons.nix { inherit lib; };
-  fomod = import ./fomod.nix { inherit lib dotnet-sdk_9; };
+  duckdb = import ./duckdb.nix { inherit fetchurl; };
 
-  # Native AOT handles FOMOD without .NET runtime — probe always succeeds
+  # Native AOT handles FOMOD without a .NET runtime — probe always succeeds.
   dotnetprobeStub = writeShellScript "dotnetprobe" "exit 0";
-
-  # Shared yarn install flags (used for root, extensions, app, and FOMOD deps)
-  yarnFlags = lib.concatStringsSep " " [
-    "--force"
-    "--ignore-engines"
-    "--ignore-platform"
-    "--ignore-scripts"
-    "--no-progress"
-    "--non-interactive"
-    "--offline"
-  ];
 
   # Glob patterns for cross-platform native modules to strip from output
   stripPatterns = [
@@ -65,8 +50,6 @@ let
 
   runScript = writeShellScript "run-vortex" ''
     # Only pass --download when a parameter %u is provided (nxm:// links from browser).
-    # This matches Windows behaviour, which includes --download on all protocol handler calls,
-    # but does not on non-handler calls (e.g., when starting from the start menu).
     if [ -n "$1" ]; then
       exec vortex --download "$@"
     else
@@ -76,35 +59,31 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vortex";
-  version = "1.16.3";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "Nexus-Mods";
     repo = "Vortex";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-yeZgmfvHjhpXmZm6/Gvw/X9pVVvYaQ7p1dIiwRTy2As=";
+    hash = "sha256-B/B7glpHkVP5sk3vHUaLNsICYZ3eAYw+VZt42VlGwAI=";
     fetchSubmodules = true;
   };
 
-  mergedYarnLock = import ./yarn-lock.nix {
-    inherit runCommand fixup-yarn-lock;
-    inherit (finalAttrs) src;
-    nodejs = nodejs_24;
-  };
-
-  yarnOfflineCache = fetchYarnDeps {
-    yarnLock = finalAttrs.mergedYarnLock;
-    hash = "sha256-PtJo301oFAKtgh61WRJglXIhT6l0QGSFaSvPUw1V6LM=";
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs) pname version src;
+    pnpm = pnpm;
+    fetcherVersion = 3;
+    hash = "sha256-WNXhNOmFC/+DS4cXztm5ybgfO3KPyzFPywxksoeSE6I=";
   };
 
   nativeBuildInputs = [
-    nodejs_24
-    yarn
-    fixup-yarn-lock
-    python3
+    nodejs_22
+    pnpm
+    pnpmConfigHook
+    jq
+    # node-gyp 9.x (used by some addons) needs distutils, removed in Python 3.12+
+    (python3.withPackages (ps: [ ps.setuptools ]))
     pkg-config
-    dotnet-sdk_9
-    clang
     autoPatchelfHook
     copyDesktopItems
     makeWrapper
@@ -113,7 +92,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libsecret
     (lib.getLib stdenv.cc.cc)
-    nugetDeps
+    fontconfig
+    lz4
     zlib
   ];
 
@@ -121,34 +101,56 @@ stdenv.mkDerivation (finalAttrs: {
   autoPatchelfIgnoreMissingDeps = [ "libc.musl-x86_64.so.1" ];
 
   postPatch = ''
-    # The resolutions field causes yarn to do fresh NpmResolver lookups in
-    # offline mode which fails. The lockfile already has correct versions.
-    ${lib.getExe jq} 'del(.resolutions["**/dir-compare/minimatch"])' package.json > package.json.tmp
-    mv package.json.tmp package.json
+    # Patch package.json with jq so each change targets a key by name rather
+    # than an exact string value — safe across version bumps.
+    tmp=$(mktemp)
+    ${lib.getExe jq} '
+      # Remove the packageManager field so pnpm does not try to bootstrap
+      # itself via corepack (which would attempt a network fetch).
+      del(.packageManager) |
 
-    # BuildSubprojects.js runs yarn install then build in each extension dir.
-    # Skip the install step since we pre-install everything in configurePhase.
-    substituteInPlace BuildSubprojects.js \
-      --replace-fail \
-        'npm("install", instArgs, { cwd: project.path }, feedback).then(() =>' \
-        'Promise.resolve().then(() =>'
+      # Remove the preinstall hook ("npx only-allow pnpm") — npx would reach
+      # the network to download the tool.
+      del(.scripts.preinstall) |
 
-    # Make individual extension build failures non-fatal. Some extensions
-    # (e.g. modtype-umm) reference generated code missing from the release tarball.
-    substituteInPlace BuildSubprojects.js \
-      --replace-fail \
-        'failed = true;' \
-        '/* failed = true; */'
+      # Strip the leading typecheck step from the dist script.  The shared/
+      # paths build steps that follow are sufficient prerequisites; running
+      # tsc validation is not needed for packaging.
+      .scripts.dist |= (
+        split(" && ") |
+        map(select(startswith("pnpm run typecheck") | not)) |
+        join(" && ")
+      ) |
+
+      # Remove two network-dependent steps from dist:assets:
+      #   - tsx invocation: tsx is not in the workspace deps; npx would try to
+      #     download it.  The DuckDB extension is pre-populated in
+      #     configurePhase so the download is moot anyway.
+      #   - dependency-report.mjs: calls `pnpm licenses list` which needs
+      #     integrity.json files absent from the extracted offline store.
+      #     Non-critical for packaging — modules.json is stubbed to [] below.
+      .scripts["dist:assets"] |= (
+        split(" && ") |
+        map(select(
+          (startswith("npx tsx scripts/download-duckdb-extensions") | not) and
+          (startswith("node ./scripts/dependency-report.mjs") | not)
+        )) |
+        join(" && ")
+      )
+    ' package.json > "$tmp" && mv "$tmp" package.json
+
+    # Remove use-node-version — pnpm would download Node from nodejs.org.
+    # npm_config_nodedir in env already points node-gyp at local Electron headers,
+    # so disturl is also redundant and can stay in .npmrc without harm.
+    sed -i '/^use-node-version=/d' .npmrc
   '';
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     VORTEX_SKIP_SUBMODULES = "1";
     VORTEX_SKIP_PREINSTALL = "1";
-    DOTNET_CLI_TELEMETRY_OPTOUT = "1";
-    DOTNET_NOLOGO = "1";
-    DOTNET_SKIP_FIRST_TIME_EXPERIENCE = "1";
     npm_config_nodedir = "${nodejs_22}";
+    VORTEX_VERSION = finalAttrs.version;
   };
 
   configurePhase = ''
@@ -156,96 +158,71 @@ stdenv.mkDerivation (finalAttrs: {
 
     export HOME=$(mktemp -d)
 
-    # The dotnet-sdk setup hook places full package content in
-    # $NUGET_FALLBACK_PACKAGES but MSBuild resolves .targets from $NUGET_PACKAGES.
-    if [ -n "''${NUGET_FALLBACK_PACKAGES:-}" ] && [ -d "$NUGET_FALLBACK_PACKAGES" ]; then
-      for pkg in "$NUGET_FALLBACK_PACKAGES"/*/; do
-        pkgname=$(basename "$pkg")
-        [ -d "$NUGET_PACKAGES/$pkgname" ] || cp -r "$pkg" "$NUGET_PACKAGES/$pkgname"
-      done
-      chmod -R u+w "$NUGET_PACKAGES"
-    fi
+    ${duckdb.configureScript}
 
-    # Patch ILC binary for NixOS (hardcoded /lib64 interpreter won't work)
-    for ilc in "$NUGET_PACKAGES"/runtime.linux-x64.microsoft.dotnet.ilcompiler/*/tools/ilc; do
-      if [ -f "$ilc" ] && ! patchelf --print-interpreter "$ilc" 2>/dev/null | grep -q /nix/store; then
-        echo "Patching ILC binary: $ilc"
-        patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$ilc"
-        patchelf --set-rpath "$(patchelf --print-rpath "$ilc"):${
-          lib.makeLibraryPath [
-            stdenv.cc.cc
-            zlib
-          ]
-        }" "$ilc"
-      fi
-    done
-
-    # Copy offline cache to writable location
-    cp -r "$yarnOfflineCache" "$HOME/offline"
-    chmod -R u+w "$HOME/offline"
-
-    yarn config --offline set ignore-engines true
-    yarn config --offline set yarn-offline-mirror "$HOME/offline"
-
-    find . -name yarn.lock -exec fixup-yarn-lock {} \;
-
-    # --- Root dependencies ---
-    yarn install --frozen-lockfile --production=false ${yarnFlags}
-    patchShebangs node_modules
-
-    # --- Native addons (--ignore-scripts skipped their install hooks) ---
-    ${nativeAddons.buildScript}
-
-    # --- Extension dependencies ---
-    for lockfile in extensions/*/yarn.lock; do
-      dir=$(dirname "$lockfile")
-      echo "Installing deps in $dir"
-      pushd "$dir"
-      yarn install ${yarnFlags} || true
-      patchShebangs node_modules 2>/dev/null || true
-      popd
-    done
-
-    # --- FOMOD TypeScript dependencies ---
-    ${fomod.installDeps}
-
-    # --- App dependencies ---
-    pushd app
-    yarn install --frozen-lockfile --production=false ${yarnFlags}
-    patchShebangs node_modules
-    ${nativeAddons.copyToAppScript}
-    popd
-
+    # pnpmConfigHook fires here: it extracts the offline store, sets store-dir,
+    # and runs `pnpm install --offline --ignore-scripts --frozen-lockfile`.
     runHook postConfigure
+
+    # Build native addons after pnpm has installed everything
+    # (--ignore-scripts skipped their install hooks)
+    ${nativeAddons.buildScript}
   '';
 
   preBuild = ''
     # Prepare electron dist for electron-builder
-    cp -r ${electron.dist} electron-dist
+    cp -r ${electron_39.dist} electron-dist
     chmod -R u+w electron-dist
-
-    # --- FOMOD builds ---
-    ${fomod.buildIPC}
-    ${fomod.buildNativeAOT}
-    ${fomod.syncDists}
   '';
 
   buildPhase = ''
     runHook preBuild
 
-    yarn --offline build
-    # Some extensions may fail (e.g. modtype-umm references generated code
-    # missing from the release tarball). Non-fatal.
-    yarn --offline subprojects_app || true
-    yarn --offline _assets_app
-    yarn --offline build_dist
+    # Build shared prereqs first (typecheck script would do this, but we skip typecheck)
+    pnpm -F @vortex/shared run build
+    pnpm -F @vortex/paths run build
 
-    yarn electron-builder \
-      --config electron-builder-config.json \
+    # Dist all workspace packages, extensions, and assets
+    pnpm --filter "@vortex/*" -r run dist
+    # Some extensions may fail (e.g. collections references generated API code that
+    # isn't available in the release tarball). Non-fatal — same pattern as v1.
+    pnpm run dist:extensions || true
+    pnpm run dist:assets
+
+    # dependency-report.mjs (disabled above) normally generates assets/modules.json
+    # before InstallAssets.mjs copies it to dist. Write the stub directly to dist so
+    # electron-builder packages it into app.asar.
+    echo '[]' > src/main/dist/assets/modules.json
+
+    # Create dist/package.json (resolves catalog: entries and workspace: paths to real paths).
+    node src/main/prepare-dist-package.mjs
+
+    # pnpm deploy reads the existing workspace lockfile to resolve exact versions — it does
+    # NOT need registry metadata (avoids ERR_PNPM_NO_OFFLINE_META from a fresh install).
+    # Pass node-linker=hoisted so ALL transitive deps are flattened into the top-level
+    # node_modules/. Without this pnpm uses its isolated linker (default) and only direct
+    # deps get a top-level symlink; transitive deps (e.g. @babel/runtime required by
+    # i18next) stay only in node_modules/.pnpm/ and are not found by require() at runtime.
+    # inject-workspace-packages is passed here (not in .npmrc) to avoid a config/lockfile
+    # mismatch that would require patching pnpm-lock.yaml.
+    deploy_dir=$(mktemp -d)
+    pnpm deploy --filter @vortex/main --prod "$deploy_dir" --ignore-scripts \
+      --config.node-linker=hoisted --config.shamefully-hoist=true \
+      --config.inject-workspace-packages=true
+    mv "$deploy_dir/node_modules" src/main/dist/node_modules
+
+    # Copy compiled native addon build/ dirs into dist node_modules
+    ${nativeAddons.copyToDistScript}
+
+    # Run electron-builder from src/main where its config lives
+    pushd src/main
+    pnpm electron-builder \
+      --config ./electron-builder.config.json \
       --publish never \
       --linux dir \
-      -c.electronDist=electron-dist \
-      -c.electronVersion=${electron.version}
+      -c.electronDist=../../electron-dist \
+      -c.electronVersion=${electron_39.version}
+    popd
 
     runHook postBuild
   '';
@@ -256,13 +233,16 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/opt/vortex
     cp -r dist/linux*-unpacked/resources $out/opt/vortex/
 
-    install -Dm755 ${dotnetprobeStub} \
-      $out/opt/vortex/resources/app.asar.unpacked/assets/dotnetprobe
-
     install -Dm644 assets/images/vortex.png \
       $out/share/icons/hicolor/256x256/apps/vortex.png
 
-    makeWrapper ${electron}/bin/electron $out/bin/vortex \
+    # Install dotnetprobe stub — Native AOT FOMOD doesn't need a .NET runtime
+    # at runtime, so the probe always succeeds. Installed directly to
+    # app.asar.unpacked so execFile() can find it outside the asar archive.
+    install -Dm755 ${dotnetprobeStub} \
+      $out/opt/vortex/resources/app.asar.unpacked/assets/dotnetprobe
+
+    makeWrapper ${electron_39}/bin/electron $out/bin/vortex \
       --add-flags $out/opt/vortex/resources/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --set GTK_USE_PORTAL 0 \
@@ -277,9 +257,14 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  # See duckdb.nix for why dontAutoPatchelf is needed.
+  dontAutoPatchelf = true;
+
+  postFixup = duckdb.postFixupScript;
+
   desktopItems = [
     (makeDesktopItem {
-      name = "vortex";
+      name = "com.nexusmods.vortex";
       desktopName = "Vortex";
       comment = "Mod manager from Nexus Mods";
       exec = "${runScript} %u";

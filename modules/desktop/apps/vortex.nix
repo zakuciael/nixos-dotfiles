@@ -13,7 +13,7 @@ in
     home.packages = [ pkgs.vortex ];
 
     xdg.mimeApps.defaultApplications = {
-      "x-scheme-handler/nxm" = [ "vortex.desktop" ];
+      "x-scheme-handler/nxm" = [ "com.nexusmods.vortex.desktop" ];
     };
   };
 }
