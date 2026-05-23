@@ -332,6 +332,7 @@ in
             alt-5 = "debug_panel::ToggleFocus";
             alt-6 = "diagnostics::Deploy";
             alt-7 = "outline_panel::ToggleFocus";
+            alt-8 = "agent::ToggleFocus";
             alt-9 = "git_panel::ToggleFocus";
             alt-left = "pane::ActivatePreviousItem";
             alt-right = "pane::ActivateNextItem";
@@ -359,6 +360,7 @@ in
             alt-5 = "debug_panel::ToggleFocus";
             alt-6 = "diagnostics::Deploy";
             alt-7 = "outline_panel::ToggleFocus";
+            alt-8 = "agent::ToggleFocus";
             alt-9 = "git_panel::ToggleFocus";
             alt-f8 = "debugger::EvaluateSelectedText";
             alt-f9 = "debugger::RunToCursor";
@@ -408,6 +410,12 @@ in
           };
         }
         {
+          context = "AgentPanel";
+          bindings = {
+            alt-8 = "workspace::CloseActiveDock";
+          };
+        }
+        {
           context = "Terminal";
           bindings = {
             ctrl-c = [
@@ -451,6 +459,14 @@ in
               "enter"
             ];
             ctrl-shift-a = "editor::SelectAll";
+            ctrl-o = [
+              "terminal::SendKeystroke"
+              "ctrl-o"
+            ];
+            ctrl-b = [
+              "terminal::SendKeystroke"
+              "ctrl-b"
+            ];
           };
         }
         {
@@ -573,6 +589,44 @@ in
             escape = "menu::Cancel";
             enter = "editor::Newline";
             ctrl-enter = "menu::Confirm";
+          };
+        }
+        {
+          context = "AgentPanel > Markdown";
+          bindings = {
+            copy = "markdown::CopyAsMarkdown";
+            ctrl-insert = "markdown::CopyAsMarkdown";
+            ctrl-c = "markdown::CopyAsMarkdown";
+          };
+        }
+        {
+          context = "AgentFeedbackMessageEditor > Editor";
+          bindings = {
+            escape = "menu::Cancel";
+            enter = "menu::Confirm";
+            alt-enter = "editor::Newline";
+          };
+        }
+        {
+          context = "AcpThread > ModeSelector";
+          bindings = {
+            ctrl-enter = "menu::Confirm";
+          };
+        }
+        {
+          context = "AcpThread > Editor && !use_modifier_to_send";
+          use_key_equivalents = true;
+          bindings = {
+            enter = "agent::Chat";
+            shift-enter = "editor::Newline";
+          };
+        }
+        {
+          context = "AcpThread > Editor && use_modifier_to_send";
+          use_key_equivalents = true;
+          bindings = {
+            ctrl-enter = "agent::Chat";
+            enter = "editor::Newline";
           };
         }
       ];

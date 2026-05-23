@@ -36,7 +36,35 @@ in
         theme = "Catppuccin Mocha (Blue Blur+)";
 
         # AI
-        disable_ai = true;
+        disable_ai = false;
+        show_edit_predictions = false;
+        agent_servers.claude-acp.type = "registry";
+
+        agent = {
+          show_merge_conflict_indicator = true;
+          show_turn_stats = true;
+          message_editor_min_lines = 4;
+          use_modifier_to_send = false;
+          cancel_generation_on_terminal_stop = true;
+          thinking_display = "auto";
+          expand_terminal_card = true;
+          enable_feedback = true;
+          single_file_review = false;
+          expand_edit_card = true;
+          play_sound_when_agent_done = "when_hidden";
+          notify_when_agent_waiting = "primary_screen";
+          new_thread_location = "new_worktree";
+          default_model = {
+            provider = "anthropic";
+            model = "claude-sonnet-4-6-latest";
+            enable_thinking = true;
+            effort = "high";
+          };
+          dock = "right";
+          sidebar_side = "right";
+          favorite_models = [ ];
+          model_parameters = [ ];
+        };
 
         # Keymaps
         base_keymap = "None";
