@@ -46,6 +46,7 @@ desktop.mkDesktopModule {
     # System components
     "hyprlock"
     "hypridle"
+    "hypremoji"
     "swaync"
     "nemo"
     "waybar"
