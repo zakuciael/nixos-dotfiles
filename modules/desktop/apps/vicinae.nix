@@ -92,7 +92,7 @@ in
         font = {
           normal = {
             size = 11;
-            family = "JetBrains Mono";
+            family = "JetBrainsMono Nerd Font Propo";
           };
         };
 

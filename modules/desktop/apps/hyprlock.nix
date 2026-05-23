@@ -158,7 +158,7 @@ in
           text = ''cmd[update:1000] echo "$(${getExe' pkgs.busybox "date"} +"%A, %B %d")"'';
           color = "rgba(209, 207, 207, 0.75)";
           font_size = 22;
-          font_family = "JetBrains Mono";
+          font_family = "JetBrainsMono Nerd Font Propo";
           position = "0, 300";
           halign = "center";
           valign = "center";
@@ -170,7 +170,7 @@ in
           text = ''cmd[update:1000] echo "$(${getExe' pkgs.busybox "date"} +"%-H:%M")"'';
           color = "rgba(209, 207, 207, 0.75)";
           font_size = 95;
-          font_family = "JetBrains Mono ExtraBold";
+          font_family = "JetBrainsMono Nerd Font Propo ExtraBold";
           position = "0, 200";
           halign = "center";
           valign = "center";

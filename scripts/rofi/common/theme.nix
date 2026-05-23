@@ -11,7 +11,7 @@ in
     text = toRasi {} {
       "*" = {
         # Font
-        font = "JetBrains Mono 10";
+        font = "JetBrainsMono Nerd Font Propo 10";
 
         # Color Scheme
         background = mkLiteral "#1E2127FF";

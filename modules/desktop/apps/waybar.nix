@@ -170,7 +170,7 @@ in
         ''
           * {
             font-size: 14px;
-            font-family: JetBrains Mono, sans-serif;
+            font-family: JetBrainsMono Nerd Font Propo, sans-serif;
             font-weight: bold;
           }
 

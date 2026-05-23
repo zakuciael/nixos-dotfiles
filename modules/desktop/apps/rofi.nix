@@ -20,7 +20,7 @@ in
     xdg.configFile."rofi/config.rasi".text = toRasi { } {
       configuration = {
         # Basic config
-        font = "JetBrains Mono 10";
+        font = "JetBrainsMono Nerd Font Propo 10";
         terminal = "${getExe config.modules.desktop.wm.${desktop}.terminalPackage}";
         show-icons = true;
         icon-theme = "WhiteSur-dark";

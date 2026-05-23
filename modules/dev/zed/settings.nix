@@ -8,11 +8,7 @@ let
   inherit (lib.modules) mkIf;
   cfg = config.modules.dev.zed;
 
-  font_family = "JetBrains Mono";
-  font_fallbacks = [
-    "icomoon-feather"
-    "Symbols Nerd Font Mono"
-  ];
+  font_family = "JetBrainsMono Nerd Font Propo";
   font_size = 14.0;
 in
 {
@@ -22,13 +18,15 @@ in
         # Font
         ui_font_size = font_size;
         ui_font_family = font_family;
-        ui_font_fallbacks = font_fallbacks;
+        ui_font_fallbacks = [ "Noto Emoji" ];
         buffer_font_size = font_size;
         buffer_font_family = font_family;
-        buffer_font_fallbacks = font_fallbacks;
-        buffer_line_height = "comfortable";
+        buffer_font_fallbacks = [ "Noto Emoji" ];
+        line_height = "standard";
         terminal = {
-          inherit font_size font_family font_fallbacks;
+          font_family = "JetBrainsMono Nerd Font Mono";
+          font_fallbacks = [ "Noto Emoji" ];
+          inherit font_size;
         };
 
         # Themes

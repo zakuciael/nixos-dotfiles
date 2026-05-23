@@ -67,20 +67,20 @@ let
 
   # Confirm settings
   confirmIcons = {
-    yes = entryAnywhere "";
-    no = entryAfter [ "yes" ] "";
+    yes = entryAnywhere "";
+    no = entryAfter [ "yes" ] "";
   };
 
   # Powermenu settings
   powermenuSettings = {
     lock = entryAnywhere {
-      icon = "";
+      icon = "";
       runtimeInputs = [ ];
       action = "${getExe' pkgs.systemd "loginctl"} lock-session";
       confirm = false;
     };
     suspend = entryAfter [ "lock" ] {
-      icon = "";
+      icon = "";
       runtimeInputs = with pkgs; [
         mpc
         alsa-utils
@@ -92,19 +92,19 @@ let
       confirm = true;
     };
     logout = entryAfter [ "suspend" ] {
-      icon = "";
+      icon = "";
       action = "hyprctl dispatch exit";
       runtimeInputs = [ config.home-manager.users.${username}.wayland.windowManager.hyprland.package ];
       confirm = true;
     };
     reboot = entryAfter [ "logout" ] {
-      icon = "";
+      icon = "";
       runtimeInputs = [ ];
       action = "systemctl reboot";
       confirm = true;
     };
     shutdown = entryAfter [ "reboot" ] {
-      icon = "";
+      icon = "";
       runtimeInputs = [ ];
       action = "systemctl poweroff";
       confirm = true;
@@ -180,7 +180,7 @@ let
         spacing = mkLiteral "15px";
       };
       element = entryAfter [ "listview" ] {
-        padding = mkLiteral "45px 10px";
+        padding = mkLiteral "45px";
         border-radius = mkLiteral "20px";
 
         cursor = mkLiteral "pointer";
@@ -191,7 +191,7 @@ let
         text-color = mkLiteral "var(background)";
       };
       element-text = entryAfter [ "element selected.normal" ] {
-        font = "icomoon-feather bold 32";
+        font = "JetBrainsMono Nerd Font Propo 36";
         vertical-align = mkLiteral "0.5";
         horizontal-align = mkLiteral "0.5";
 

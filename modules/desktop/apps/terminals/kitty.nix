@@ -19,7 +19,7 @@ in
       enable = true;
       catppuccin.enable = true;
       font = {
-        name = "JetBrains Mono";
+        name = "JetBrainsMono Nerd Font Mono";
         size = 11;
       };
       settings = {

@@ -24,7 +24,7 @@ in
         settings = {
           # Font settings
           font-size = 11;
-          font-family = "JetBrains Mono";
+          font-family = "JetBrainsMono Nerd Font Mono";
 
           # Other
           window-decoration = false;

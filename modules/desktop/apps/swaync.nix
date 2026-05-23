@@ -54,7 +54,7 @@ in {
 
           all: unset;
           font-size: 14px;
-          font-family: "JetBrains Mono Nerd Font 10";
+          font-family: "JetBrainsMono Nerd Font Propo";
           transition: 200ms;
         }
 
