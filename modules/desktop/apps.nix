@@ -99,6 +99,11 @@ in
         nvtopPackages.amd # htop but for GPU
 
         mission-center # GUI for monitoring resources usage
+
+        # AI Stuff
+        claude-code
+        opencode
+        skills
       ];
     };
   };
