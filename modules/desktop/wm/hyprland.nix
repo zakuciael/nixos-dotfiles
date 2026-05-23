@@ -56,6 +56,7 @@ desktop.mkDesktopModule {
     "discord"
     "thunderbird"
     "zen-browser"
+    "vortex"
   ];
 
   extraOptions = {
