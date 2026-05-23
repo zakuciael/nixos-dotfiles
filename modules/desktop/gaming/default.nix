@@ -89,16 +89,12 @@ in
             {
               name = "Map Steam Games to Content Type";
               "match:class" = "^(steam_app_.*)$";
-
               content = "game";
             }
 
             {
               name = "Default Rules for Games";
               "match:content" = "game";
-
-              fullscreen_state = "2 2";
-              suppress_event = "fullscreen maximize";
               inherit monitor;
             }
           ];
