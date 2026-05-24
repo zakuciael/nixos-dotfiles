@@ -226,7 +226,7 @@ with lib.my;
     users.${username} = {
       home = {
         inherit username;
-        stateVersion = "25.11";
+        stateVersion = "26.05";
         homeDirectory = "/home/${username}";
         packages = scripts.mkShellExports config;
       };
@@ -348,5 +348,5 @@ with lib.my;
   };
 
   # System
-  system.stateVersion = "25.11";
+  system.stateVersion = "26.05";
 }

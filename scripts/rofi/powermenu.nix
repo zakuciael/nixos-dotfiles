@@ -93,8 +93,8 @@ let
     };
     logout = entryAfter [ "suspend" ] {
       icon = "";
-      action = "hyprctl dispatch exit";
-      runtimeInputs = [ config.home-manager.users.${username}.wayland.windowManager.hyprland.package ];
+      runtimeInputs = [ ];
+      action = "${getExe' pkgs.systemd "loginctl"} terminate-user \"$USER\"";
       confirm = true;
     };
     reboot = entryAfter [ "logout" ] {

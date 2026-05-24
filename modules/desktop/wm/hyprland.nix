@@ -115,6 +115,7 @@ desktop.mkDesktopModule {
         wayland.windowManager.hyprland = {
           enable = true;
           xwayland.enable = true;
+          configType = "hyprlang";
 
           # Conflicts with `programs.hyprland.withUWSM`
           systemd.enable = false;
@@ -169,7 +170,6 @@ desktop.mkDesktopModule {
 
             # Render settings
             render = optionalAttrs cfg.hdr.enable {
-              cm_fs_passthrough = 2;
               cm_auto_hdr = 1;
             };
 
@@ -210,10 +210,7 @@ desktop.mkDesktopModule {
             };
 
             # Layout settings
-            dwindle = {
-              pseudotile = true;
-              preserve_split = true;
-            };
+            dwindle.preserve_split = true;
 
             master = {
               new_status = "master";
