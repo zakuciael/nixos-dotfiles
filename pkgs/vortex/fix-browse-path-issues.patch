@@ -1,0 +1,77 @@
+--- a/src/renderer/src/extensions/gamemode_management/index.ts
++++ b/src/renderer/src/extensions/gamemode_management/index.ts
+@@ -181,9 +181,32 @@
+   }).then(() => undefined);
+ }
+ 
++// Resolves each path component of relPath against basePath case-insensitively.
++// On case-sensitive Linux filesystems (ext4, btrfs), requiredFiles declared by a game
++// extension may have different casing from what is on disk under Wine/Proton.
++// Upstream issue: https://github.com/Nexus-Mods/Vortex/issues/20439
++async function statCaseInsensitive(basePath: string, relPath: string): Promise<void> {
++  const components = relPath.split(/[/\\]/);
++  let current = basePath;
++  for (const component of components) {
++    if (!component) continue;
++    const entries = await fsExtra.readdir(current);
++    const match = entries.find(e => e.toLowerCase() === component.toLowerCase());
++    if (match === undefined) {
++      const err: NodeJS.ErrnoException = new Error(
++        `ENOENT: no such file or directory, stat '${path.join(current, component)}'`,
++      );
++      err.code = 'ENOENT';
++      throw err;
++    }
++    current = path.join(current, match);
++  }
++  await fsExtra.stat(current);
++}
++
+ function verifyGamePath(game: IGame, gamePath: string): PromiseBB<void> {
+   return PromiseBB.map(game.requiredFiles || [], (file) =>
+-    PromiseBB.resolve(fsExtra.stat(path.join(gamePath, file))),
++    PromiseBB.resolve(statCaseInsensitive(gamePath, file)),
+   )
+     .then(() => undefined)
+     .catch((err) => {
+@@ -232,7 +255,7 @@
+   api: IExtensionApi,
+   correctedGamePath: string,
+ ): PromiseBB<{ store: string; corrected: string }> {
+-  const gameStores = getGameStores();
++  const gameStores = getGameStores().filter((s) => s != null);
+   return GameStoreHelper.identifyStore(correctedGamePath).then((storeId) => {
+     const detectedStore = gameStores.find((store) => store.id === storeId);
+     return api
+@@ -318,6 +341,7 @@
+ 
+     pathPromise.then((result) => {
+       if (result !== undefined) {
++        log('debug', 'browseGameLocation: path selected', { gameId, result });
+         findGamePath(game, result, 0, searchDepth(game.requiredFiles || []))
+           .then((corrected: string) => manualGameStoreSelection(api, corrected))
+           .then(({ corrected, store }) => {
+@@ -390,7 +414,13 @@
+             }
+             resolve();
+           })
+-          .catch(() => {
++          .catch((err) => {
++            log('debug', 'browseGameLocation: failed', {
++              gameId,
++              errCode: err?.code,
++              errName: err?.constructor?.name,
++              errMsg: err?.message,
++            });
+             api.store.dispatch(
+               showDialog(
+                 "error",
+@@ -499,7 +529,7 @@
+       return PromiseBB.resolve();
+     }
+     return PromiseBB.map(requiredFiles, (file) =>
+-      fsExtra.stat(path.join(discovered[gameId].path, file)),
++      statCaseInsensitive(discovered[gameId].path, file),
+     )
+       .then(() => undefined)
+       .catch((err) => {

@@ -100,6 +100,23 @@ stdenv.mkDerivation (finalAttrs: {
   # Musl-linked prebuilds ship in the asar but can't be satisfied on glibc
   autoPatchelfIgnoreMissingDeps = [ "libc.musl-x86_64.so.1" ];
 
+  patches = [
+    # Two fixes for broken game-path validation on Linux:
+    #
+    # 1. Case-insensitive stat (statCaseInsensitive): on case-sensitive Linux
+    #    filesystems (ext4, btrfs) the requiredFiles declared by a game extension
+    #    may differ in casing from what Wine/Proton actually wrote to disk, causing
+    #    verifyGamePath to reject a valid game path with ENOENT.
+    #    Upstream: https://github.com/Nexus-Mods/Vortex/issues/20439
+    #
+    # 2. Filter nulls from getGameStores(): EpicGamesLauncher.ts returns `undefined`
+    #    on non-Windows platforms and that value propagates into getGameStores().
+    #    manualGameStoreSelection iterated the result and accessed .id on the
+    #    undefined entry, throwing a TypeError that caused the whole path-browse
+    #    flow to silently fail. The fix adds a `.filter(s => s != null)` guard.
+    ./fix-browse-path-issues.patch
+  ];
+
   postPatch = ''
     # Patch package.json with jq so each change targets a key by name rather
     # than an exact string value — safe across version bumps.
