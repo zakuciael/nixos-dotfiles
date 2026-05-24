@@ -115,6 +115,18 @@ stdenv.mkDerivation (finalAttrs: {
     #    undefined entry, throwing a TypeError that caused the whole path-browse
     #    flow to silently fail. The fix adds a `.filter(s => s != null)` guard.
     ./fix-browse-path-issues.patch
+
+    # Fix "Unsupported operating system" when changing staging / download directories
+    # on Linux.
+    #
+    # testPathTransfer() in transferPath.ts gates the entire function behind
+    # `if (process.platform !== "win32") return reject(new UnsupportedOperatingSystem())`.
+    # The Windows-specific part is only the winapi.GetVolumePathName call needed to
+    # resolve a volume root for diskusage.check().  On Linux, diskusage.check() accepts
+    # any path and queries the filesystem at that path directly, so we can use the
+    # destination path itself as the root.  The isOnSameVolume() helper already uses
+    # stat().dev which is cross-platform.
+    ./fix-test-path-transfer.patch
   ];
 
   postPatch = ''

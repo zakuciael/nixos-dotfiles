@@ -1,0 +1,41 @@
+--- a/src/renderer/src/util/transferPath.ts
++++ b/src/renderer/src/util/transferPath.ts
+@@ -38,19 +38,22 @@ const MIN_DISK_SPACE_OFFSET = 512 * 1024 * 1024;
+ export function testPathTransfer(source: string, destination: string): PromiseBB<void> {
+-  if (process.platform !== "win32") {
+-    return PromiseBB.reject(new UnsupportedOperatingSystem());
+-  }
+-
+   let destinationRoot: string;
+-  try {
+-    destinationRoot = winapi.GetVolumePathName(destination);
+-  } catch (err) {
+-    if (isErrorWithSystemCode(err)) {
+-      if (err.systemCode === 2) {
+-        return PromiseBB.reject(new NotFound(destination));
+-      }
+-    }
+-
+-    return PromiseBB.reject(err);
+-  }
+-
++  if (process.platform === "win32") {
++    // GetVolumePathName resolves the volume root (e.g. "C:\\") so that
++    // diskusage.check() receives a valid volume path on Windows.
++    try {
++      destinationRoot = winapi.GetVolumePathName(destination);
++    } catch (err) {
++      if (isErrorWithSystemCode(err)) {
++        if (err.systemCode === 2) {
++          return PromiseBB.reject(new NotFound(destination));
++        }
++      }
++      return PromiseBB.reject(err);
++    }
++  } else {
++    // On Linux/macOS, diskusage.check() accepts any path and reports the
++    // free space on whichever filesystem contains that path.
++    destinationRoot = destination;
++  }
++
+   const isOnSameVolume = (): PromiseBB<boolean> => {
