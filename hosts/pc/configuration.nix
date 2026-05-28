@@ -118,7 +118,10 @@ in
     };
     desktop = {
       apps.enable = true;
-      sddm.enable = true;
+      sddm = {
+        enable = true;
+        compositor = "kwin";
+      };
       wm.hyprland = {
         enable = true;
         hdr.enable = true;
