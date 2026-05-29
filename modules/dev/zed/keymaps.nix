@@ -416,6 +416,12 @@ in
           };
         }
         {
+          context = "Pane > Terminal";
+          bindings = {
+            alt-f12 = "workspace::CloseActiveDock";
+          };
+        }
+        {
           context = "Terminal";
           bindings = {
             ctrl-c = [
@@ -425,7 +431,6 @@ in
             ctrl-shift-c = "terminal::Copy";
             ctrl-shift-v = "terminal::Paste";
             ctrl-shift-t = "workspace::NewTerminal";
-            alt-f12 = "workspace::CloseActiveDock";
             up = [
               "terminal::SendKeystroke"
               "up"
