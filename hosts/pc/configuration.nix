@@ -115,6 +115,7 @@ in
         enable = true;
         overclock = false;
       };
+      openrgb.enable = true;
     };
     desktop = {
       apps.enable = true;
