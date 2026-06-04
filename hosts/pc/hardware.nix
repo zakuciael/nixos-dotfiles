@@ -32,7 +32,17 @@ in
   ];
 
   boot = {
-    kernelModules = [ "nct6683" ];
+    # Kernel module for motherboard's Nuvoton NCT6687D-R chipset
+    kernelModules = [ "nct6687" ];
+    extraModulePackages = with config.boot.kernelPackages; [
+      nct6687d
+    ];
+
+    # Avoid kernel module conflicts
+    extraModprobeConfig = ''
+      blacklist nct6683
+    '';
+
     kernelPackages = mkDefault pkgs.linuxPackages_latest;
     swraid.enable = true;
     supportedFilesystems = [ "ntfs" ];
