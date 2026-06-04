@@ -43,12 +43,14 @@ in
       blacklist nct6683
     '';
 
+    # Set Linux kernal to `latest` version
     kernelPackages = mkDefault pkgs.linuxPackages_latest;
+
+    # Enable software RAID
     swraid.enable = true;
+
+    # Enable support for NTFS drives
     supportedFilesystems = [ "ntfs" ];
-    extraModprobeConfig = ''
-      blacklist ntfs3
-    '';
   };
 
   fileSystems = {

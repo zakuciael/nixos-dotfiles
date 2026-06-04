@@ -46,7 +46,7 @@ let
         ];
       }
       (optionalAttrs (name == "windows") {
-        fsType = "ntfs";
+        fsType = "ntfs3";
         options =
           let
             user = config.users.users.${username};
