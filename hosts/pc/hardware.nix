@@ -1,4 +1,5 @@
 {
+  config,
   lib,
   pkgs,
   inputs,
@@ -21,6 +22,14 @@ in
   # Additional settings for AMD GPU
   hardware.enableRedistributableFirmware = true;
   services.xserver.videoDrivers = [ "amdgpu" ];
+  # GPU feature flags (https://github.com/torvalds/linux/blob/d0b3b7b22dfa1f4b515fd3a295b3fd958f9e81af/drivers/gpu/drm/amd/include/amd_shared.h#L185):
+  # - PP_OVERDRIVE_MASK (0x4000) - "OverDrive" functionality, which allows you to manually overclock or undervolt your AMD graphics card.
+  boot.kernelParams = [ "amdgpu.ppfeaturemask=0xfff7ffff" ];
+  hardware.graphics.extraPackages = with pkgs; [
+    vulkan-loader
+    vulkan-validation-layers
+    vulkan-extension-layer
+  ];
 
   boot = {
     kernelModules = [ "nct6683" ];
