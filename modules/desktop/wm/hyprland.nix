@@ -54,6 +54,9 @@ desktop.mkDesktopModule {
     # Apple stuff
     "librepods"
 
+    # VPN
+    "netbird"
+
     # Apps
     "obs"
     "discord"
