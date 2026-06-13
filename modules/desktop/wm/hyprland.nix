@@ -51,6 +51,9 @@ desktop.mkDesktopModule {
     "nemo"
     "waybar"
 
+    # Apple stuff
+    "librepods"
+
     # Apps
     "obs"
     "discord"
