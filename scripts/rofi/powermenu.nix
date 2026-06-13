@@ -6,7 +6,7 @@
   ...
 }:
 let
-  inherit (lib) concatStringsSep getExe' mapAttrsToList;
+  inherit (lib) concatStringsSep getExe mapAttrsToList;
   inherit (builtins) isAttrs concatLists;
   inherit (lib.hm.dag) entryAnywhere entryAfter;
   inherit (lib.my.utils)
@@ -71,42 +71,69 @@ let
     no = entryAfter [ "yes" ] "";
   };
 
+  closeAppsScript = writeShellApplication {
+    name = "hyprland-close-apps.sh";
+    runtimeInputs = with pkgs; [
+      hyprland
+      toybox
+      jq
+    ];
+    bashOptions = [ ];
+    text = ''
+      hyprctl clients -j | \
+        jq -r ".[].address" | \
+        while read -r addr; do
+          hyprctl dispatch closewindow "address:$addr"
+        done
+
+      hyprctl dispatch workspace 1
+    '';
+  };
+
   # Powermenu settings
   powermenuSettings = {
     lock = entryAnywhere {
       icon = "";
       runtimeInputs = [ ];
-      action = "${getExe' pkgs.systemd "loginctl"} lock-session";
+      action = "loginctl lock-session";
       confirm = false;
     };
     suspend = entryAfter [ "lock" ] {
       icon = "";
-      runtimeInputs = with pkgs; [
-        mpc
-        alsa-utils
-      ];
-      action = ''
-        mpc -q pause
-        amixer set Master mute
-        systemctl suspend'';
+      runtimeInputs = [ ];
+      action = "systemctl suspend";
       confirm = true;
     };
     logout = entryAfter [ "suspend" ] {
       icon = "";
-      runtimeInputs = [ ];
-      action = "${getExe' pkgs.systemd "loginctl"} terminate-user \"$USER\"";
+      runtimeInputs = [ pkgs.libnotify ];
+      action = ''
+        notify-send "Not supported!" "This option will brick the system upon re-login, so it's left unimplemented for now."
+      '';
       confirm = true;
     };
     reboot = entryAfter [ "logout" ] {
       icon = "";
       runtimeInputs = [ ];
-      action = "systemctl reboot";
+      action = ''
+        # Schedule the reboot to happen after closing windows (detached from terminal)
+        nohup bash -c "sleep 2 && systemctl reboot --no-wall" >/dev/null 2>&1 &
+
+        exec ${getExe closeAppsScript}
+        sleep 1 # Allow apps like Chrome to shutdown correctly
+      '';
       confirm = true;
     };
     shutdown = entryAfter [ "reboot" ] {
       icon = "";
       runtimeInputs = [ ];
-      action = "systemctl poweroff";
+      action = ''
+        # Schedule the shutdown to happen after closing windows (detached from terminal)
+        nohup bash -c "sleep 2 && systemctl poweroff --no-wall" >/dev/null 2>&1 &
+
+        exec ${getExe closeAppsScript}
+        sleep 1 # Allow apps like Chrome to shutdown correctly
+      '';
       confirm = true;
     };
   };
@@ -257,6 +284,7 @@ in
   package = writeShellApplication {
     name = "rofi-powermenu";
     runtimeInputs = [
+      pkgs.bash
       powermenuConfirmScript
       powermenuChoiceScript
     ]
