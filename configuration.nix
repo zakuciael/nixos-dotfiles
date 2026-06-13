@@ -86,6 +86,7 @@ with lib.my;
       noto-fonts-monochrome-emoji
       noto-fonts-emoji-blob-bin
       nerd-fonts.jetbrains-mono
+      nerd-fonts.dejavu-sans-mono
     ];
     fontconfig.enable = true;
   };
