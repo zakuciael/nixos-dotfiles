@@ -96,6 +96,7 @@ in
               name = "Default Rules for Games";
               "match:content" = "game";
               inherit monitor;
+              idle_inhibit = "fullscreen";
             }
           ];
     };
