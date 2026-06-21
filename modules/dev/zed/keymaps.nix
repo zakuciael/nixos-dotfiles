@@ -333,7 +333,7 @@ in
             alt-6 = "diagnostics::Deploy";
             alt-7 = "outline_panel::ToggleFocus";
             alt-8 = "agent::ToggleFocus";
-            alt-9 = "git_panel::ToggleFocus";
+            alt-9 = "git_graph::Open";
             alt-left = "pane::ActivatePreviousItem";
             alt-right = "pane::ActivateNextItem";
           };
@@ -341,7 +341,7 @@ in
         {
           context = "Workspace";
           bindings = {
-            ctrl-k = "git_panel::ToggleFocus";
+            ctrl-k = "git::ExpandCommitEditor";
             ctrl-s = "workspace::SaveAll";
             "shift shift" = "command_palette::Toggle";
             ctrl-shift-f = "pane::DeploySearch";
@@ -361,7 +361,7 @@ in
             alt-6 = "diagnostics::Deploy";
             alt-7 = "outline_panel::ToggleFocus";
             alt-8 = "agent::ToggleFocus";
-            alt-9 = "git_panel::ToggleFocus";
+            alt-9 = "git_graph::Open";
             alt-f8 = "debugger::EvaluateSelectedText";
             alt-f9 = "debugger::RunToCursor";
             shift-alt-8 = "debugger::EvaluateSelectedText";
@@ -380,7 +380,12 @@ in
           context = "GitPanel";
           bindings = {
             alt-0 = "workspace::CloseActiveDock";
-            alt-9 = "workspace::CloseActiveDock";
+          };
+        }
+        {
+          context = "GitGraph";
+          bindings = {
+            alt-9 = "pane::CloseActiveItem";
           };
         }
         {
@@ -634,6 +639,31 @@ in
             enter = "editor::Newline";
           };
         }
+        {
+          context = "GitCommit > Editor && mode == auto_height";
+          bindings = {
+            escape = "menu::Cancel";
+            enter = "editor::Newline";
+            ctrl-enter = "git::Commit";
+            ctrl-shift-enter = "git::Amend";
+            alt-l = "git::GenerateCommitMessage";
+          };
+        }
+        {
+          context = "GitPanel > Editor";
+          bindings = {
+            ctrl-enter = "git::Commit";
+            ctrl-shift-enter = "git::Amend";
+          };
+        }
+        # FIXME: Action not found, maybe Zed needs an update?
+        # {
+        #   context = "GitPanel";
+        #   bindings = {
+        #     ctrl-1 = "git_panel::ActivateChangesTab";
+        #     ctrl-2 = "git_panel::ActivateHistoryTab";
+        #   };
+        # }
       ];
     };
   };
