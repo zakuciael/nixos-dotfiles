@@ -16,6 +16,7 @@ let
     mkIf
     mapAttrs'
     filterAttrs
+    getExe
     ;
 
   cfg = config.modules.desktop.gaming;
@@ -73,7 +74,6 @@ in
   };
 
   config = mkIf cfg.enable {
-    users.users.${username}.extraGroups = [ "gamemode" ];
     environment.systemPackages = [ pkgs.gvfs ];
     home-manager.users.${username} = {
       home.packages = with pkgs; [
@@ -114,9 +114,21 @@ in
       }
     ];
 
+    users.users.${username}.extraGroups = [ "gamemode" ];
     programs = {
       gamemode = {
         enable = true;
+        enableRenice = true;
+        settings = {
+          general = {
+            softrealtime = "auto";
+            renice = 10;
+          };
+          custom = {
+            start = "${getExe pkgs.libnotify} -a 'Gamemode' 'Optimizations activated'";
+            end = "${getExe pkgs.libnotify} -a 'Gamemode' 'Optimizations deactivated'";
+          };
+        };
       };
       gamescope = {
         enable = true;
