@@ -47,6 +47,13 @@ in
 
         # Toolbox
         devtoolbox
+
+        # Nix
+        nixd
+        nixfmt
+        statix
+        deadnix
+        devenv
       ];
     };
   };
