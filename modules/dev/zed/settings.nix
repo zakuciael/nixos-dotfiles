@@ -130,6 +130,8 @@ in
           Nix = {
             language_servers = [
               "nixd"
+              "statix" # Currently only supported on my fork
+              "deadnix" # Currently only supported on my fork
               "!nil"
               "!codebook"
               "..."

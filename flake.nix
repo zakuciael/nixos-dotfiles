@@ -126,6 +126,14 @@
         rust-overlay.follows = "rust-overlay";
       };
     };
+    zed-nix-extension = {
+      url = "github:zakuciael/zed-nix-extension/feat/support-linters";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        flake-parts.follows = "flake-parts";
+        zed-extensions.follows = "zed-extensions";
+      };
+    };
     vicinae = {
       url = "github:vicinaehq/vicinae/v0.20.15";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -196,6 +204,9 @@
         };
         vicinae-extensions = flakeInputs.vicinae-extensions // {
           packages = flakeInputs.vicinae-extensions.packages.${system};
+        };
+        zed-nix-extension = flakeInputs.zed-nix-extension // {
+          packages = flakeInputs.zed-nix-extension.packages.${system};
         };
       };
 

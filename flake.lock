@@ -705,6 +705,7 @@
         "vicinae-extensions": "vicinae-extensions",
         "vscode-server": "vscode-server",
         "zed-extensions": "zed-extensions",
+        "zed-nix-extension": "zed-nix-extension",
         "zen-browser": "zen-browser"
       }
     },
@@ -967,6 +968,33 @@
       "original": {
         "owner": "DuskSystems",
         "repo": "nix-zed-extensions",
+        "type": "github"
+      }
+    },
+    "zed-nix-extension": {
+      "inputs": {
+        "flake-parts": [
+          "flake-parts"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "zed-extensions": [
+          "zed-extensions"
+        ]
+      },
+      "locked": {
+        "lastModified": 1781728495,
+        "narHash": "sha256-IgB6YvdoL1LsZ94ZVMCNUiMAhrRq74A4vaBg/qDvAK0=",
+        "owner": "zakuciael",
+        "repo": "zed-nix-extension",
+        "rev": "bfa42b916c89518e73783bd13d0782573f12845c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "zakuciael",
+        "ref": "feat/support-linters",
+        "repo": "zed-nix-extension",
         "type": "github"
       }
     },
