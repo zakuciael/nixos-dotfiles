@@ -17,10 +17,6 @@ with lib.my;
       substituters = [
         "https://cache.thalheim.io"
         "https://ezkea.cachix.org"
-        "https://ghostty.cachix.org"
-        # "https://attic.zakku.eu/rofi-jetbrains"
-        # "https://attic.zakku.eu/nostale-dev-env"
-        # "https://attic.zakku.eu/system"
         "https://install.determinate.systems"
         "https://vicinae.cachix.org"
         "https://catppuccin.cachix.org"
@@ -29,10 +25,6 @@ with lib.my;
       trusted-public-keys = [
         "cache.thalheim.io-1:R7msbosLEZKrxk/lKxf9BTjOOH7Ax3H0Qj0/6wiHOgc="
         "ezkea.cachix.org-1:ioBmUbJTZIKsHmWWXPe1FSFbeVe+afhfgqgTSNd34eI="
-        "ghostty.cachix.org-1:QB389yTa6gTyneehvqG58y0WnHjQOqgnA+wBnpWWxns="
-        # "rofi-jetbrains:grO4wlkucWElNgkCaFREHgbsrn9jeoHZqyqEMRtcgxI="
-        # "nostale-dev-env:ppvIiWL1k+xB8hIYFbWh0QceKpc/H8JX5MmJQFveMzE="
-        # "system:3zQYNe2TDLsBhgQobQLmcnJrc0k5XdkXqvyVz5xyS+o="
         "cache.flakehub.com-3:hJuILl5sVK4iKm86JzgdXW12Y2Hwd5G07qKtHTOcDCM="
         "vicinae.cachix.org-1:1kDrfienkGHPYbkpNj1mWTr7Fm1+zcenzgTizIcI3oc="
         "catppuccin.cachix.org-1:noG/4HkbhJb+lUAdKrph6LaozJvAeEEZj4N732IysmU="
