@@ -75,9 +75,6 @@ in
     };
 
     programs = {
-      gamescope.enable = true;
-      gamemode.enable = true;
-
       # Support for games distributed as AppImages
       appimage = {
         enable = true;
@@ -109,6 +106,35 @@ in
             };
             useSteamStoreFallback = true;
           };
+        };
+
+        package = pkgs.steam.override {
+          extraEnv = {
+            MANGOHUD = "1";
+            MANGOHUD_CONFIG = "read_cfg,no_display";
+            GAMEMODERUN = "1";
+            AMD_VULKAN_ICD = "RADV";
+            WINEDLLOVERRIDES = "dxgi=n,b";
+          };
+
+          extraPkgs =
+            p:
+            (lib.optionals config.programs.gamemode.enable [ p.gamemode ])
+            ++ (lib.optionals config.programs.gamescope.enable (
+              with p;
+              [
+                libXcursor
+                libXi
+                libXinerama
+                libXScrnSaver
+                libpng
+                libpulseaudio
+                libvorbis
+                stdenv.cc.cc.lib # Provides libstdc++.so.6
+                libkrb5
+                keyutils
+              ]
+            ));
         };
 
         extraCompatPackages = with pkgs; [
