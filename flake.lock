@@ -87,11 +87,11 @@
     },
     "crane": {
       "locked": {
-        "lastModified": 1753316655,
-        "narHash": "sha256-tzWa2kmTEN69OEMhxFy+J2oWSvZP5QhEgXp3TROOzl0=",
+        "lastModified": 1781825982,
+        "narHash": "sha256-SlXKwIRIhrOSAcTjCB3ftPLzJWZStQIPS7J1FlZPnKk=",
         "owner": "ipetkov",
         "repo": "crane",
-        "rev": "f35a3372d070c9e9ccb63ba7ce347f0634ddf3d2",
+        "rev": "469fd08d0bcf6926321fa973c6777fbc87785dd7",
         "type": "github"
       },
       "original": {
@@ -420,6 +420,35 @@
         "type": "github"
       }
     },
+    "irminsul": {
+      "inputs": {
+        "crane": [
+          "crane"
+        ],
+        "fenix": [
+          "fenix"
+        ],
+        "flake-parts": [
+          "flake-parts"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1782065067,
+        "narHash": "sha256-0bmSibcdqvgpedq9m87/U1azM5JgMW33vYgtP3F5GZo=",
+        "owner": "zakuciael",
+        "repo": "irminsul",
+        "rev": "1bfc97c4cbd7f61be5cfe82dfeef6447a0731a0c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "zakuciael",
+        "repo": "irminsul",
+        "type": "github"
+      }
+    },
     "nix": {
       "inputs": {
         "flake-parts": "flake-parts",
@@ -645,7 +674,9 @@
     },
     "rofi-jetbrains": {
       "inputs": {
-        "crane": "crane",
+        "crane": [
+          "crane"
+        ],
         "fenix": [
           "fenix"
         ],
@@ -676,6 +707,7 @@
         "_1pass-shell-plugins": "_1pass-shell-plugins",
         "aagl": "aagl",
         "catppuccin": "catppuccin",
+        "crane": "crane",
         "deadnix": "deadnix",
         "determinate": "determinate",
         "disko": "disko",
@@ -685,6 +717,7 @@
         "flake-parts": "flake-parts_2",
         "flake-utils": "flake-utils",
         "home-manager": "home-manager",
+        "irminsul": "irminsul",
         "nix-colors": "nix-colors",
         "nix-index-database": "nix-index-database",
         "nix-search-tv": "nix-search-tv",

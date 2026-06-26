@@ -43,6 +43,7 @@ with lib.my;
         inputs.nix-index-database.nixosModules.default
         inputs.steam-presence.nixosModules.steam-presence
         inputs.determinate.nixosModules.default
+        inputs.irminsul.nixosModules.default
       ]
       ++ (utils.recursiveReadDir ./../modules {
         ignoredDirs = [ "apps" ];

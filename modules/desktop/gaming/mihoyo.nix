@@ -100,9 +100,12 @@ in
       };
     };
 
-    programs.anime-game-launcher = {
-      enable = true;
-      package = inputs.aagl.packages.anime-game-launcher;
+    programs = {
+      irminsul.enable = true;
+      anime-game-launcher = {
+        enable = true;
+        package = inputs.aagl.packages.anime-game-launcher;
+      };
     };
   };
 }

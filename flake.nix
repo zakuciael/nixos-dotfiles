@@ -8,6 +8,7 @@
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     flake-compat.url = "github:edolstra/flake-compat";
     systems.url = "github:nix-systems/default";
+    crane.url = "github:ipetkov/crane";
     nixpkgs-lib.follows = "nixpkgs";
     fenix = {
       url = "github:nix-community/fenix";
@@ -53,6 +54,7 @@
         nixpkgs.follows = "nixpkgs";
         flake-parts.follows = "flake-parts";
         fenix.follows = "fenix";
+        crane.follows = "crane";
       };
     };
     nostale-dev-env = {
@@ -62,9 +64,11 @@
     };
     aagl = {
       url = "github:ezKEa/aagl-gtk-on-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-compat.follows = "flake-compat";
-      inputs.rust-overlay.follows = "rust-overlay";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        flake-compat.follows = "flake-compat";
+        rust-overlay.follows = "rust-overlay";
+      };
     };
     vscode-server = {
       url = "github:nix-community/nixos-vscode-server";
@@ -141,6 +145,15 @@
     vicinae-extensions = {
       url = "github:vicinaehq/extensions";
       inputs.nixpkgs.follows = "nixpkgs";
+    };
+    irminsul = {
+      url = "github:zakuciael/irminsul";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        flake-parts.follows = "flake-parts";
+        fenix.follows = "fenix";
+        crane.follows = "crane";
+      };
     };
   };
 
