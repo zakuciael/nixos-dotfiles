@@ -343,7 +343,7 @@ in
           bindings = {
             ctrl-k = "git::ExpandCommitEditor";
             ctrl-s = "workspace::SaveAll";
-            "shift shift" = "command_palette::Toggle";
+            "shift shift" = "file_finder::Toggle"; # "command_palette::Toggle";
             ctrl-shift-f = "pane::DeploySearch";
             ctrl-shift-r = [
               "pane::DeploySearch"
