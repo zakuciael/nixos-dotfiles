@@ -5,6 +5,8 @@
   age-plugin-yubikey,
   nixfmt,
   nixd,
+  statix,
+  deadnix,
   ...
 }:
 mkShell {
@@ -15,5 +17,7 @@ mkShell {
     age-plugin-yubikey
     nixfmt
     nixd
+    statix
+    deadnix
   ];
 }
