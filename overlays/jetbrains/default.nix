@@ -34,20 +34,10 @@ lib.singleton (
           vmopts = null;
         };
 
-    mkJetBrainsSource =
-      callPackage "${inputs.nixpkgs}/pkgs/applications/editors/jetbrains/source/build.nix"
-        { };
-
-    mkSrcIde =
-      path: extras:
-      mkIdeWrapper (callPackage "${inputs.nixpkgs}/pkgs/applications/editors/jetbrains/${path}") (
-        { inherit mkJetBrainsSource; } // extras
-      );
-
     # The binary builds use the same libdbm and fsnotifier as the current idea-oss source build.
     mkBinIde =
       path: extras:
-      mkIdeWrapper (callPackage "${inputs.nixpkgs}/pkgs/applications/editors/jetbrains/${path}") (
+      mkIdeWrapper (callPackage path) (
         { inherit (prev.jetbrains.idea-oss) libdbm fsnotifier; } // extras
       );
 
@@ -90,20 +80,19 @@ lib.singleton (
   in
   {
     jetbrains = prev.jetbrains // {
-      clion = mkBinIde "ides/clion.nix" { inherit patchSharedLibs; };
-      datagrip = mkBinIde "ides/datagrip.nix" { };
-      dataspell = mkBinIde "ides/dataspell.nix" { };
-      gateway = mkBinIde "ides/gateway.nix" { };
-      goland = mkBinIde "ides/goland.nix" { };
-      idea = mkBinIde "ides/idea.nix" { };
-      mps = mkBinIde "ides/mps.nix" { };
-      phpstorm = mkBinIde "ides/phpstorm.nix" { };
-      pycharm = mkBinIde "ides/pycharm.nix" { inherit pyCharmCommonOverrides; };
-      pycharm-oss = mkSrcIde "ides/pycharm-oss.nix" { inherit pyCharmCommonOverrides; };
-      rider = mkBinIde "ides/rider.nix" { inherit patchSharedLibs; };
-      ruby-mine = mkBinIde "ides/ruby-mine.nix" { };
-      rust-rover = mkBinIde "ides/rust-rover.nix" { inherit patchSharedLibs; };
-      webstorm = mkBinIde "ides/webstorm.nix" { };
+      clion = mkBinIde ./ides/clion.nix { inherit patchSharedLibs; };
+      datagrip = mkBinIde ./ides/datagrip.nix { };
+      dataspell = mkBinIde ./ides/dataspell.nix { };
+      gateway = mkBinIde ./ides/gateway.nix { };
+      goland = mkBinIde ./ides/goland.nix { };
+      idea = mkBinIde ./ides/idea.nix { };
+      mps = mkBinIde ./ides/mps.nix { };
+      phpstorm = mkBinIde ./ides/phpstorm.nix { };
+      pycharm = mkBinIde ./ides/pycharm.nix { inherit pyCharmCommonOverrides; };
+      rider = mkBinIde ./ides/rider.nix { inherit patchSharedLibs; };
+      ruby-mine = mkBinIde ./ides/ruby-mine.nix { };
+      rust-rover = mkBinIde ./ides/rust-rover.nix { inherit patchSharedLibs; };
+      webstorm = mkBinIde ./ides/webstorm.nix { };
     };
   }
 )
