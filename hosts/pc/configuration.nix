@@ -169,6 +169,7 @@ in
         "clion"
         "datagrip"
         "goland"
+        "webstorm"
       ];
       vscode = {
         enable = true;
