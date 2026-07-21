@@ -181,6 +181,7 @@ in
         enable = true;
         installPath = "/media/games/linux/Other/NosTale";
       };
+      mitmproxy.enable = true;
     };
     shell = {
       tmux.enable = true;
