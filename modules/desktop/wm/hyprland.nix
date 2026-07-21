@@ -53,6 +53,7 @@ desktop.mkDesktopModule {
 
     # Apple stuff
     "librepods"
+    "cider"
 
     # VPN
     "netbird"
