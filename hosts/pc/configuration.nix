@@ -102,6 +102,20 @@ in
             ];
             wallpaper = dotfiles.wallpapers.pc."right.jpg".source;
           }
+          {
+            name = "tablet";
+            monitor = {
+              xorg = "DP-3";
+              wayland = "DP-3";
+            };
+            mode = "1920x1080@60.00Hz";
+            pos = {
+              x = 1400;
+              y = -930;
+            };
+            workspaces = mkLayoutWorkspaces [ 10 ];
+            wallpaper = dotfiles.wallpapers.pc."tablet.jpg".source;
+          }
         ];
       };
       bluetooth.enable = true;
