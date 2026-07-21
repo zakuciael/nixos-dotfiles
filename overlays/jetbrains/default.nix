@@ -29,7 +29,7 @@ lib.singleton (
     mkJetBrainsProduct =
       callPackage "${inputs.nixpkgs}/pkgs/applications/editors/jetbrains/builder/default.nix"
         {
-          jdk = final.jetbrains.jdk;
+          jdk = final.jetbrains.jdk-21;
           forceWayland = false;
           vmopts = null;
         };
