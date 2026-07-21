@@ -11,22 +11,8 @@ let
     mkIf
     types
     ;
-  inherit (lib.my.mapper) toJavaProperties;
 
   cfg = config.modules.dev.ides;
-  xdg = config.home-manager.users.${username}.xdg;
-
-  mkPropertiesFile =
-    ide:
-    let
-      caches_path = "${xdg.cacheHome}/JetBrains/${ide.pname}";
-    in
-    toJavaProperties ide.pname {
-      "idea.config.path" = "${xdg.configHome}/JetBrains/${ide.pname}";
-      "idea.system.path" = caches_path;
-      "idea.plugins.path" = "${xdg.dataHome}/JetBrains/${ide.pname}";
-      "idea.log.path" = "${caches_path}/logs";
-    };
 
   ides =
     with pkgs.jetbrains;
@@ -47,18 +33,7 @@ let
     ]
     |> map (ide: {
       name = ide.pname;
-      value = (ide.override { forceWayland = true; }).overrideAttrs (
-        finalAttrs:
-        let
-          propertiesFile = mkPropertiesFile ide;
-        in
-        {
-          postInstall = (finalAttrs.postInstall or "") + ''
-            # Add custom properties file to the install directory
-            printf "$(cat ${propertiesFile})\n\n# Default config\n\n$(cat $(makeWritable "$out/${finalAttrs.pname}/bin/idea.properties"))" > "$out/${finalAttrs.pname}/bin/idea.properties"
-          '';
-        }
-      );
+      value = ide.override { forceWayland = true; };
     })
     |> lib.listToAttrs;
 
@@ -77,7 +52,11 @@ in
         "webstorm"
       ];
       default = [ ];
-      type = ides |> builtins.attrNames |> types.enum |> types.listOf;
+      type =
+        ides
+        |> builtins.attrNames
+        |> types.enum
+        |> types.listOf;
     };
   };
 
