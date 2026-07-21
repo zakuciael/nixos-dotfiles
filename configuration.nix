@@ -224,6 +224,11 @@ with lib.my;
         packages = scripts.mkShellExports config;
       };
 
+      catppuccin = {
+        autoEnable = false;
+        enable = true;
+      };
+
       # Custom bookmarks
       gtk.gtk3.bookmarks = [
         (utils.mkGtkBookmark {
@@ -236,6 +241,11 @@ with lib.my;
         })
       ];
     };
+  };
+
+  catppuccin = {
+    autoEnable = false;
+    enable = true;
   };
 
   # Internal modules
