@@ -1,7 +1,6 @@
 {
   lib,
   pkgs,
-  inputs,
   username,
   ...
 }:
@@ -187,7 +186,7 @@ rec {
       name ? null,
       path,
     }:
-    ''file://${builtins.toPath path}${optionalString (name != null) " ${name}"}'';
+    "file://${builtins.toPath path}${optionalString (name != null) " ${name}"}";
 
   mkLiteral = value: {
     _type = "literal";
@@ -210,24 +209,22 @@ rec {
       value;
 
   mkLayoutWorkspaces =
-    names:
-    builtins.listToAttrs (
-      builtins.map (
-        name:
-        let
-          fixedName = toString name;
-        in
-        {
-          name = fixedName;
-          value = {
-            keybinds = [
-              fixedName
-              (mapKeyToNumpad name)
-            ];
-          };
-        }
-      ) names
-    );
+    values:
+    values
+    |> map (
+      value:
+      let
+        name = toString value;
+      in
+      {
+        inherit name;
+        value.keybinds = [
+          (if value == 10 then "0" else name)
+          (mapKeyToNumpad value)
+        ];
+      }
+    )
+    |> listToAttrs;
 
   toDag =
     attrs:
