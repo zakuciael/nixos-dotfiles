@@ -117,6 +117,7 @@ in
       };
       openrgb.enable = true;
       coolercontrol.enable = true;
+      swraid.enable = true;
     };
     desktop = {
       apps.enable = true;
