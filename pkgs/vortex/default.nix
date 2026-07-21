@@ -8,7 +8,7 @@
   copyDesktopItems,
   writeShellScript,
   electron_39,
-  nodejs_22, # npm_config_nodedir — node-gyp ABI must match electron's Node 22
+  nodejs-slim_22, # npm_config_nodedir — node-gyp ABI must match electron's Node 22
   pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
@@ -24,7 +24,7 @@
 let
   # Override pnpm to run under Node 22 so the engines.node=22 check passes in
   # both fetchPnpmDeps (FOD) and the main build without disabling engine-strict.
-  pnpm = pnpm_10.override { nodejs = nodejs_22; };
+  pnpm = pnpm_10.override { nodejs-slim = nodejs-slim_22; };
 
   nativeAddons = import ./native-addons.nix { inherit lib; };
   duckdb = import ./duckdb.nix { inherit fetchurl; };
@@ -71,13 +71,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm;
+    inherit pnpm;
     fetcherVersion = 3;
     hash = "sha256-WNXhNOmFC/+DS4cXztm5ybgfO3KPyzFPywxksoeSE6I=";
   };
 
   nativeBuildInputs = [
-    nodejs_22
+    nodejs-slim_22
     pnpm
     pnpmConfigHook
     jq
@@ -178,7 +178,7 @@ stdenv.mkDerivation (finalAttrs: {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     VORTEX_SKIP_SUBMODULES = "1";
     VORTEX_SKIP_PREINSTALL = "1";
-    npm_config_nodedir = "${nodejs_22}";
+    npm_config_nodedir = "${nodejs-slim_22}";
     VORTEX_VERSION = finalAttrs.version;
   };
 
