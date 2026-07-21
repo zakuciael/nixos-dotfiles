@@ -34,18 +34,75 @@ in
           enable = true;
 
           packages = with pkgs.zed-extensions; [
-            pkgs.zed-sops
-            inputs.zed-nix-extension.packages.zed-nix-extension
-
-            wakatime
-            discord-presence
+            # Themes
             catppuccin
             catppuccin-blur-plus
             colored-zed-icons-theme
-            material-icon-theme
-            codebook
-            comment
+
+            # Tracking
+            wakatime
+            discord-presence
+
+            # Git
             git-firefly
+
+            # GitHub
+            github-actions
+
+            # Web
+            html
+            scss
+            emmet
+            tsgo
+
+            # Nix
+            inputs.zed-nix-extension.packages.zed-nix-extension
+
+            # Rust
+            toml
+            tombi
+            cargo-tom
+            rust-workflow-snippets
+
+            # Command runners
+            make
+            just
+
+            # Qt
+            qml
+
+            # Protobuf
+            proto
+
+            # Lua
+            lua
+
+            # Docker
+            dockerfile
+            docker-compose
+
+            # Infrastructure as Code
+            terraform
+            ansible
+
+            # Secrets / Envs
+            pkgs.zed-sops
+            env
+
+            # Spell checking
+            harper
+
+            # Config files
+            ini
+            caddyfile
+            ssh-config
+
+            # Shells
+            fish
+
+            # Other
+            log
+            comment
           ];
         };
       };

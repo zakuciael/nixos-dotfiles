@@ -120,6 +120,7 @@ in
           dock = "left";
           tree_view = true;
           sort_by_path = false;
+          collapse_untracked_diff = true;
         };
 
         when_closing_with_no_tabs = "close_window";
@@ -133,7 +134,6 @@ in
               "statix" # Currently only supported on my fork
               "deadnix" # Currently only supported on my fork
               "!nil"
-              "!codebook"
               "..."
             ];
             formatter = {
@@ -146,6 +146,19 @@ in
               };
             };
           };
+          TypeScript.language_servers = [
+            "typescript-ls"
+            "vtsls"
+            "!typescript-language-server"
+            "..."
+          ];
+          TSX.language_servers = [
+            "typescript-ls"
+            "vtsls"
+            "!typescript-language-server"
+            "..."
+          ];
+          TOML.show_edit_predictions = false;
         };
 
         # LSP settings
@@ -162,12 +175,18 @@ in
               };
             };
           };
-          discord_presence = {
-            initialization_options = {
-              state = "Working on {folder_and_file}";
-              details = "In {workspace}";
-              git_integration = true;
-            };
+          cargo-tom.initialization_options = {
+            per_page = 25;
+            feature_display_mode = "UnusedOpt"; # Available options: All, UnusedOpt, Features,
+            hide_docs_info_message = true;
+            sort_format = false;
+            stable_version = true;
+            offline = false;
+          };
+          discord_presence.initialization_options = {
+            state = "Working on {folder_and_file}";
+            details = "In {workspace}";
+            git_integration = true;
           };
         };
 
