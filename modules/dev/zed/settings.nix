@@ -188,8 +188,10 @@ in
             details = "In {workspace}";
             git_integration = true;
           };
+          harper-ls.settings.harper-ls = {
+            dialect = "American";
+          };
         };
-
       };
     };
   };
