@@ -65,6 +65,14 @@ in
       device = "/dev/md/storage";
       fsType = "auto";
     };
+
+    "/media/games" = {
+      device = "/dev/disk/by-partlabel/games";
+      fsType = "auto";
+      options = [
+        "x-gvfs-show"
+      ];
+    };
   };
 
   swapDevices = [
