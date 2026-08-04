@@ -14,14 +14,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "amethyst-mod-manager";
-  version = "2.0.5-beta.5";
+  version = "2.0.5";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "ChrisDKN";
     repo = "Amethyst-Mod-Manager";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CfxMzfSIvior6JX2tHXgIcCzOKB1sITQHIp/lrzaGhI=";
+    hash = "sha256-TR2dLZ+7gHSO8eosskCKg5JP9b/2MCZQingd3psFK8M=";
   };
 
   nativeBuildInputs = [
@@ -51,9 +51,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ]);
 
   postPatch = /* bash */ ''
-    substituteInPlace src/LOOT/eligibility.py src/LOOT/loot_sorter.py \
-        --replace-fail 'import LOOT.loot as loot' 'import loot'
-
     substituteInPlace src/Utils/protontricks.py \
         --replace-fail '_get_tools_dir() / "winetricks"' 'Path("${lib.getExe winetricks}")' \
         --replace-fail '_get_tools_dir() / "cabextract"' 'Path("${lib.getExe cabextract}")'
