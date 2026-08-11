@@ -24,5 +24,7 @@ jobs:
         uses: DeterminateSystems/nix-installer-action@v12
         with:
           github-token: ${{ secrets.PAT }}
+          extra-substituters: "https://cache.nixos.org"
+          extra-trusted-public-keys: "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
       - name: Check repository
         run: nix --extra-experimental-features pipe-operators flake check
