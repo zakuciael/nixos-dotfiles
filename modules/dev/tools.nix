@@ -71,6 +71,10 @@ in
         statix
         deadnix
         devenv
+
+        # Bash
+        shellcheck
+        shfmt
       ];
     };
   };
