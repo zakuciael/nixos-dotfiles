@@ -155,6 +155,14 @@
         crane.follows = "crane";
       };
     };
+    browser-previews = {
+      url = "github:nix-community/browser-previews";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        flake-utils.follows = "flake-utils";
+        systems.follows = "systems";
+      };
+    };
   };
 
   outputs =
@@ -221,6 +229,9 @@
         };
         zed-nix-extension = flakeInputs.zed-nix-extension // {
           packages = flakeInputs.zed-nix-extension.packages.${system};
+        };
+        browser-previews = flakeInputs.browser-previews // {
+          packages = flakeInputs.browser-previews.packages.${system};
         };
       };
 

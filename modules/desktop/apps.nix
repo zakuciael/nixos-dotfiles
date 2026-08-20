@@ -72,9 +72,7 @@ in
 
       home.packages = with pkgs; [
         # Browser
-        (google-chrome.override {
-          commandLineArgs = "--disable-features=WaylandWpColorManagerV1"; # FIXME: Remove when new version of Hyprland is merged to nixpkgs
-        })
+        inputs.browser-previews.packages.google-chrome
 
         # Files
         kdePackages.ark

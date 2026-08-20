@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  inputs,
   username,
   ...
 }:
@@ -25,7 +26,7 @@ in
           desktopName = "Google Chrome (Dev)";
           icon = "google-chrome";
           exec = ''
-            env HOME=${browserFolder} ${getExe pkgs.google-chrome} --profile-directory=google-chrome-dev
+            env HOME=${browserFolder} ${getExe inputs.browser-previews.packages.google-chrome} --profile-directory=google-chrome-dev
           '';
         })
       ];

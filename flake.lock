@@ -65,6 +65,32 @@
         "type": "github"
       }
     },
+    "browser-previews": {
+      "inputs": {
+        "flake-utils": [
+          "flake-utils"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "systems": [
+          "systems"
+        ]
+      },
+      "locked": {
+        "lastModified": 1786651284,
+        "narHash": "sha256-yy2vNtjHaFlbhm6hx5TF1vhVwnVBORzjSUGqMk3k9bo=",
+        "owner": "nix-community",
+        "repo": "browser-previews",
+        "rev": "d8622745162ed988278a35d66adcdf0594804703",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "browser-previews",
+        "type": "github"
+      }
+    },
     "catppuccin": {
       "inputs": {
         "nixpkgs": [
@@ -722,6 +748,7 @@
       "inputs": {
         "_1pass-shell-plugins": "_1pass-shell-plugins",
         "aagl": "aagl",
+        "browser-previews": "browser-previews",
         "catppuccin": "catppuccin",
         "crane": "crane",
         "deadnix": "deadnix",
