@@ -537,7 +537,7 @@ in
           use_key_equivalents = true;
           bindings = {
             delete = "branch_picker::DeleteBranch";
-            ctrl-shift-i = "branch_picker::FilterRemotes";
+            ctrl-shift-i = "branch_picker::ToggleFilterMenu";
           };
         }
         {
