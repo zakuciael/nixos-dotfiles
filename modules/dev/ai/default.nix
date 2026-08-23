@@ -25,11 +25,14 @@ in
         opencode
 
         (t3code.override {
+          enableClaude = true;
+          enableCodex = true;
           enableCursor = true;
           enableCursorCli = true;
-          enableOpencode = true;
           enableGitHub = true;
           enableGit = true;
+          enableOpencode = true;
+          enableResourceMonitor = true;
         })
         cursor-cli
         code-cursor-fhs
