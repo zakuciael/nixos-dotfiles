@@ -111,14 +111,6 @@ in
       tools.enable = true;
       kubernetes.enable = true;
       browser.enable = true;
-      ides = [
-        "rust-rover"
-        "idea"
-        "rider"
-        "clion"
-        "datagrip"
-        "goland"
-      ];
       vscode = {
         enable = true;
         server = true;
