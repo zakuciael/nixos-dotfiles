@@ -23,6 +23,7 @@ in
       home.packages = with pkgs; [
         # Coding Agents
         opencode
+        opencode-desktop
 
         (t3code.override {
           enableClaude = true;
