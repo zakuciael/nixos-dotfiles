@@ -57,6 +57,9 @@ in
           "text/x-log" = "org.gnome.TextEditor.desktop";
           "application/json" = "org.gnome.TextEditor.desktop";
           "text/plain" = "org.gnome.TextEditor.desktop";
+
+          "video/mp4" = "vlc.desktop";
+          "video/x-matroska" = "vlc.desktop";
         };
         associations.added = {
           "image/png" = "org.gnome.eog.desktop";
@@ -67,6 +70,9 @@ in
           "text/x-log" = "org.gnome.TextEditor.desktop";
           "application/json" = "org.gnome.TextEditor.desktop";
           "text/plain" = "org.gnome.TextEditor.desktop";
+
+          "video/mp4" = "vlc.desktop";
+          "video/x-matroska" = "vlc.desktop";
         };
       };
 
