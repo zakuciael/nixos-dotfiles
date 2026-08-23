@@ -85,13 +85,10 @@ buildFHSEnv {
     p.atk
     p.cairo
     p.gdk-pixbuf
-    p.gtk2
     p.gtk3
-    p.gnome2.GConf
     p.at-spi2-atk
     p.at-spi2-core
     p.gsettings-desktop-schemas
-    p.gtk-engine-murrine
     p.gst_all_1.gstreamer
     p.gst_all_1.gst-plugins-base
     p.gst_all_1.gst-plugins-good
@@ -147,9 +144,6 @@ buildFHSEnv {
     p.lz4
     p.zstd
     p.keyutils
-    p.libappindicator-gtk2
-    p.libdbusmenu-gtk2
-    p.libindicator-gtk2
     p.mono
   ];
 
