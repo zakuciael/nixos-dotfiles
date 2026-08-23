@@ -110,7 +110,6 @@ in
       };
 
       extensions = with inputs.vicinae-extensions.packages; [
-        bluetooth
         hypr-keybinds
         wifi-commander
         nix
