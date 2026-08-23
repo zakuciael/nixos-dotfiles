@@ -289,8 +289,10 @@ with lib.my;
           hadolint
 
           # Nix
-          inputs.deadnix.default
-          inputs.statix.default
+          # inputs.deadnix.default
+          # inputs.statix.default
+          deadnix
+          statix
           nixd
           nixfmt
 

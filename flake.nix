@@ -72,19 +72,7 @@
     };
     vscode-server = {
       url = "github:nix-community/nixos-vscode-server";
-      inputs.flake-utils.follows = "flake-utils";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    deadnix = {
-      url = "github:astro/deadnix";
-      inputs = {
-        nixpkgs.follows = "nixpkgs";
-        utils.follows = "flake-utils";
-      };
-    };
-    statix = {
-      url = "github:oppiliappan/statix";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-parts.follows = "flake-parts";
     };
     disko = {
       url = "github:nix-community/disko/latest";
@@ -210,8 +198,6 @@
         vscode-server = flakeInputs.vscode-server // {
           homeManagerModule = flakeInputs.vscode-server.homeModules.default;
         };
-        deadnix = flakeInputs.deadnix.packages.${system};
-        statix = flakeInputs.statix.packages.${system};
         disko = flakeInputs.disko // {
           packages = flakeInputs.disko.packages.${system};
         };
