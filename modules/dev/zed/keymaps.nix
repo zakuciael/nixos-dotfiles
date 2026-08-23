@@ -367,6 +367,7 @@ in
             shift-alt-8 = "debugger::EvaluateSelectedText";
             shift-alt-9 = "debugger::RunToCursor";
             ctrl-shift-alt-insert = "workspace::NewFile";
+            alt-f = "workspace::ToggleZoom";
           };
         }
         {
