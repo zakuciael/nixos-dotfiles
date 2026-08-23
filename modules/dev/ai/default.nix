@@ -19,6 +19,8 @@ in
   };
 
   config = mkIf cfg.enable {
+    networking.firewall.allowedTCPPorts = [ 3773 ];
+
     home-manager.users.${username} = {
       home.packages = with pkgs; [
         # Coding Agents
