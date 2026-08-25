@@ -119,7 +119,7 @@
       };
     };
     zed-nix-extension = {
-      url = "github:zakuciael/zed-nix-extension/feat/support-linters";
+      url = "github:zakuciael/zed-nix-extension";
       inputs = {
         nixpkgs.follows = "nixpkgs";
         flake-parts.follows = "flake-parts";

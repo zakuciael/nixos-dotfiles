@@ -969,16 +969,15 @@
         ]
       },
       "locked": {
-        "lastModified": 1781728495,
-        "narHash": "sha256-IgB6YvdoL1LsZ94ZVMCNUiMAhrRq74A4vaBg/qDvAK0=",
+        "lastModified": 1787504885,
+        "narHash": "sha256-cqAMKVoLofslrkKo9lriCOBDZV/BSFGi3wOmK82Whiw=",
         "owner": "zakuciael",
         "repo": "zed-nix-extension",
-        "rev": "bfa42b916c89518e73783bd13d0782573f12845c",
+        "rev": "fd672c2103baebeaf7a3aa26cb53d83c6446c382",
         "type": "github"
       },
       "original": {
         "owner": "zakuciael",
-        "ref": "feat/support-linters",
         "repo": "zed-nix-extension",
         "type": "github"
       }
