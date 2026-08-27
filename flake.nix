@@ -151,6 +151,11 @@
         systems.follows = "systems";
       };
     };
+    # TODO: Remove when https://github.com/nix-community/home-manager/pull/8702 is merged upstream
+    home-manager-cursor-agent = {
+      url = "github:idjoo/home-manager/cursor-agent";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =

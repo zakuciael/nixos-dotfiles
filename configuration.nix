@@ -211,6 +211,8 @@ with lib.my;
       inputs._1pass-shell-plugins.hmModules.default
       inputs.zed-extensions.homeManagerModules.default
       inputs.vicinae.homeManagerModules.default
+      # TODO: Remove when https://github.com/nix-community/home-manager/pull/8702 is merged upstream
+      "${inputs.home-manager-cursor-agent}/modules/programs/cursor-agent.nix"
     ];
     useUserPackages = true;
     useGlobalPkgs = true;
@@ -220,6 +222,7 @@ with lib.my;
         stateVersion = "26.05";
         homeDirectory = "/home/${username}";
         packages = scripts.mkShellExports config;
+        preferXdgDirectories = true;
       };
 
       catppuccin = {

@@ -177,7 +177,10 @@ in
         enable = true;
         server = true;
       };
-      ai.enable = true;
+      ai = {
+        enable = true;
+        skills.enable = true;
+      };
       nostale = {
         enable = true;
         installPath = "/media/games/linux/Other/NosTale";
