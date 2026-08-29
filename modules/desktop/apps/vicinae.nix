@@ -41,6 +41,7 @@ in
 
       bind = [
         "SHIFT CTRL, space, exec, ${getExe cfg.package} toggle"
+        "SHIFT CTRL, R, exec, ${getExe cfg.package} vicinae://launch/@pavle99/vicinae-extension-zed-recents-0/open-recents"
       ];
 
       layerrule = [
