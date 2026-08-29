@@ -26,6 +26,18 @@ let
       // cfg
     );
 
+  mkDeepLink =
+    drv: command:
+    let
+      meta = builtins.fromJSON (builtins.readFile "${drv}/package.json");
+
+      inherit (drv) name;
+      inherit (meta) author commands;
+    in
+    assert lib.assertMsg (lib.any ({ name, ... }: name == command) commands)
+      "Failed to create a deep link, vicinae extension `${drv.pname}` doesn't contain the `${command}` command.";
+    "vicinae://launch/@${author}/${name}/${command}";
+
   cfg = config.home-manager.users.${username}.services.vicinae;
 in
 {
@@ -41,7 +53,7 @@ in
 
       bind = [
         "SHIFT CTRL, space, exec, ${getExe cfg.package} toggle"
-        "SHIFT CTRL, R, exec, ${getExe cfg.package} vicinae://launch/@pavle99/vicinae-extension-zed-recents-0/open-recents"
+        "SHIFT CTRL, R, exec, ${getExe cfg.package} ${mkDeepLink inputs.vicinae-extensions.packages.zed-recents "open-recents"}"
       ];
 
       layerrule = [
