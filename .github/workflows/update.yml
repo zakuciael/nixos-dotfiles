@@ -18,6 +18,8 @@ jobs:
         uses: DeterminateSystems/nix-installer-action@v12
         with:
           github-token: ${{ secrets.PAT }}
+          extra-substituters: "https://cache.nixos.org"
+          extra-trusted-public-keys: "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
       - name: Update flake.lock file
         uses: DeterminateSystems/update-flake-lock@v23
         with:
