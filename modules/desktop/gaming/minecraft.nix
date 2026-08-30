@@ -20,18 +20,16 @@ in
     home-manager.users.${username} = {
       home.packages = with pkgs; [ prismlauncher ];
 
-      wayland.windowManager.hyprland.settings = {
-        windowrule = [
-          {
-            name = "Minecraft";
-            float = true;
-            center = true;
-            maximize = true;
-            "match:class" = "(Minecraft)";
-            content = "game";
-          }
-        ];
-      };
+      wayland.windowManager.hyprland.settings.window_rule = [
+        {
+          name = "Minecraft";
+          float = true;
+          center = true;
+          maximize = true;
+          match.class = "(Minecraft)";
+          content = "game";
+        }
+      ];
     };
   };
 }

@@ -374,4 +374,40 @@ rec {
       lib.trace "applyPatches: skipping ${name}, no patches" src
     else
       lib.trace "applyPatches: creating ${name}, number of patches: ${toString numOfPatches}" patchedFlake;
+
+  hypr = {
+    inherit (lib.generators) mkLuaInline;
+    toLua = lib.generators.toLua { };
+
+    dsp = {
+      exec = cmd: mkLuaInline ''hl.dsp.exec_cmd("${cmd}")'';
+      fullscreen =
+        mode: mkLuaInline ''hl.dsp.window.fullscreen({ mode = "${mode}", action = "toggle" })'';
+      focus = dir: mkLuaInline ''hl.dsp.focus({ direction = "${dir}" })'';
+      focusWorkspace = ws: mkLuaInline ''hl.dsp.focus({ workspace = "${toString ws}" })'';
+      moveToWorkspace = ws: mkLuaInline ''hl.dsp.window.move({ workspace = "${toString ws}" })'';
+
+      float = mkLuaInline ''hl.dsp.window.float({ action = "toggle" })'';
+      close = mkLuaInline "hl.dsp.window.close()";
+      drag = mkLuaInline "hl.dsp.window.drag()";
+      resize = mkLuaInline "hl.dsp.window.resize()";
+    };
+
+    withMod = keys: mkLuaInline ''mod .. "+ ${keys}"'';
+
+    mkBind = keys: dispatcher: {
+      _args = [
+        keys
+        dispatcher
+      ];
+    };
+
+    mkBindWithOpts = keys: dispatcher: opts: {
+      _args = [
+        keys
+        dispatcher
+        opts
+      ];
+    };
+  };
 }

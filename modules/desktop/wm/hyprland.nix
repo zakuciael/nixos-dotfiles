@@ -121,155 +121,338 @@ desktop.mkDesktopModule {
         wayland.windowManager.hyprland = {
           enable = true;
           xwayland.enable = true;
-          configType = "hyprlang";
 
           # Conflicts with `programs.hyprland.withUWSM`
           systemd.enable = false;
 
-          settings = {
-            # Autostart script
-            exec-once = [
-              autostartScript
-            ];
-            # Source external file for quick debug
-            source = [ "$HOME/.config/hypr/debug.conf" ];
-
-            # Input settings
-            input = {
-              kb_layout = config.services.xserver.xkb.layout;
-              follow_mouse = 2;
-              float_switch_override_focus = 0;
-              mouse_refocus = false;
-            };
-
-            # General settings
-            general = with colorScheme.palette; {
-              gaps_in = 6;
-              gaps_out = 8;
-              border_size = 3;
-              "col.active_border" =
-                "rgba(${base0C}ff) rgba(${base0D}ff) rgba(${base0B}ff) rgba(${base0E}ff) 45deg";
-              "col.inactive_border" = "rgba(${base00}cc) rgba(${base01}cc) 45deg";
-              layout = "dwindle";
-              resize_on_border = true;
-              no_focus_fallback = true;
-            };
-
-            # Misc settings
-            misc = {
-              disable_hyprland_logo = true;
-              disable_splash_rendering = true;
-              middle_click_paste = false;
-              enable_anr_dialog = false;
-            };
-
-            # XWayland settings
-            xwayland = {
-              force_zero_scaling = true;
-              create_abstract_socket = true;
-            };
-
-            ecosystem = {
-              no_update_news = true;
-              no_donation_nag = true;
-            };
-
-            # Render settings
-            render = optionalAttrs cfg.hdr.enable {
-              cm_auto_hdr = 1;
-            };
-
-            # Decoration settings
-            decoration = {
-              rounding = 10;
-              blur = {
-                enabled = true;
-                size = 5;
-                passes = 3;
-                new_optimizations = true;
-                ignore_opacity = true;
+          configType = "lua";
+          extraConfig = /* lua */ ''
+            -- Source external file for quick debug
+            require("debug")
+          '';
+          settings =
+            let
+              inherit (lib.my.utils.hypr)
+                mkLuaInline
+                dsp
+                withMod
+                mkBind
+                mkBindWithOpts
+                ;
+            in
+            {
+              mod = {
+                _var = "SUPER";
               };
-              shadow = {
-                enabled = true;
-              };
-            };
 
-            # Animation settings
-            animations = {
-              enabled = true;
-              bezier = [
-                "wind, 0.05, 0.9, 0.1, 1.05"
-                "winIn, 0.1, 1.1, 0.1, 1.1"
-                "winOut, 0.3, -0.3, 0, 1"
-                "liner, 1, 1, 1, 1"
+              # Autostart Script
+              on = {
+                _args = [
+                  "hyprland.start"
+                  (mkLuaInline ''
+                    function()
+                      hl.exec_cmd("${autostartScript}")
+                    end'')
+                ];
+              };
+
+              config = {
+                # Input settings
+                input = {
+                  kb_layout = config.services.xserver.xkb.layout;
+                  follow_mouse = 2;
+                  float_switch_override_focus = 0;
+                  mouse_refocus = false;
+                };
+
+                # General settings
+                general = with colorScheme.palette; {
+                  gaps_in = 6;
+                  gaps_out = 8;
+                  border_size = 3;
+
+                  col = {
+                    active_border = {
+                      colors = [
+                        "rgba(${base0C}ff)"
+                        "rgba(${base0D}ff)"
+                        "rgba(${base0B}ff)"
+                        "rgba(${base0E}ff)"
+                      ];
+                      angle = 45;
+                    };
+                    inactive_border = {
+                      colors = [
+                        "rgba(${base00}cc)"
+                        "rgba(${base01}cc)"
+                      ];
+                      angle = 45;
+                    };
+                  };
+
+                  layout = "dwindle";
+                  resize_on_border = true;
+                  no_focus_fallback = true;
+                };
+
+                # Misc settings
+                misc = {
+                  disable_hyprland_logo = true;
+                  disable_splash_rendering = true;
+                  middle_click_paste = false;
+                  enable_anr_dialog = false;
+                };
+
+                # XWayland settings
+                xwayland = {
+                  force_zero_scaling = true;
+                  create_abstract_socket = true;
+                };
+
+                ecosystem = {
+                  no_update_news = true;
+                  no_donation_nag = true;
+                };
+
+                # Render settings
+                render = optionalAttrs cfg.hdr.enable {
+                  cm_auto_hdr = 1;
+                };
+
+                # Decoration settings
+                decoration = {
+                  rounding = 10;
+                  blur = {
+                    enabled = true;
+                    size = 5;
+                    passes = 3;
+                    new_optimizations = true;
+                    ignore_opacity = true;
+                  };
+                  shadow = {
+                    enabled = true;
+                  };
+                };
+
+                animations.enabled = true;
+
+                # Layout settings
+                dwindle.preserve_split = true;
+                master.new_status = "master";
+              };
+
+              # Animation settings
+              curve = [
+                {
+                  _args = [
+                    "wind"
+                    {
+                      type = "bezier";
+                      points = [
+                        [
+                          0.05
+                          0.9
+                        ]
+                        [
+                          0.1
+                          1.05
+                        ]
+                      ];
+                    }
+                  ];
+                }
+
+                {
+                  _args = [
+                    "winIn"
+                    {
+                      type = "bezier";
+                      points = [
+                        [
+                          0.1
+                          1.1
+                        ]
+                        [
+                          0.1
+                          1.1
+                        ]
+                      ];
+                    }
+                  ];
+                }
+                {
+                  _args = [
+                    "winOut"
+                    {
+                      type = "bezier";
+                      points = [
+                        [
+                          0.3
+                          (mkLuaInline "-0.3")
+                        ]
+                        [
+                          0
+                          1
+                        ]
+                      ];
+                    }
+                  ];
+                }
+                {
+                  _args = [
+                    "liner"
+                    {
+                      type = "bezier";
+                      points = [
+                        [
+                          1
+                          1
+                        ]
+                        [
+                          1
+                          1
+                        ]
+                      ];
+                    }
+                  ];
+                }
               ];
+
               animation = [
-                "windows, 1, 6, wind, slide"
-                "windowsIn, 1, 6, winIn, slide"
-                "windowsOut, 1, 5, winOut, slide"
-                "windowsMove, 1, 5, wind, slide"
-                "border, 1, 1, liner"
-                "borderangle, 1, 80, liner, loop"
-                "fade, 1, 10, default"
-                "workspaces, 1, 5, wind"
+                {
+                  leaf = "windows";
+                  enabled = true;
+                  speed = 6;
+                  bezier = "wind";
+                  style = "slide";
+                }
+
+                {
+                  leaf = "windowsIn";
+                  enabled = true;
+                  speed = 6;
+                  bezier = "winIn";
+                  style = "slide";
+                }
+                {
+                  leaf = "windowsOut";
+                  enabled = true;
+                  speed = 5;
+                  bezier = "winOut";
+                  style = "slide";
+                }
+                {
+                  leaf = "windowsMove";
+                  enabled = true;
+                  speed = 5;
+                  bezier = "wind";
+                  style = "slide";
+                }
+                {
+                  leaf = "border";
+                  enabled = true;
+                  speed = 1;
+                  bezier = "liner";
+                }
+                {
+                  leaf = "borderangle";
+                  enabled = true;
+                  speed = 80;
+                  bezier = "liner";
+                  style = "loop";
+                }
+                {
+                  leaf = "fade";
+                  enabled = true;
+                  speed = 10;
+                  bezier = "default";
+                }
+                {
+                  leaf = "workspaces";
+                  enabled = true;
+                  speed = 5;
+                  bezier = "wind";
+                }
+              ];
+
+              # Layer ryles
+              layer_rule = [
+                {
+                  match.namespace = "^swaync-(control-center|notification-window)$";
+                  blur = true;
+                  ignore_alpha = 0.5;
+                }
+              ];
+
+              # Keybinds
+              bind = [
+                # Open terminal
+                (mkBind (withMod "Return") (dsp.exec (getExe cfg.terminalPackage)))
+
+                # Lock the session
+                (mkBind (withMod "L") (dsp.exec "${getExe' pkgs.systemd "loginctl"} lock-session"))
+
+                # Kill active window
+                (mkBind (withMod "W") dsp.close)
+
+                # Toggle floating mode for active window
+                (mkBind (withMod "F") dsp.float)
+
+                # Toggle maximized mode for active window
+                (mkBind (withMod "M") (dsp.fullscreen "maximized"))
+
+                # Move focus between windows using direction keys
+                (mkBind (withMod "LEFT") (dsp.focus "left"))
+                (mkBind (withMod "RIGHT") (dsp.focus "right"))
+                (mkBind (withMod "UP") (dsp.focus "up"))
+                (mkBind (withMod "DOWN") (dsp.focus "down"))
+
+                # Open file explorer
+                (mkBind "CTRL + SHIFT + E" (dsp.exec (getExe pkgs.nemo)))
+
+                # Open power menu
+                (mkBind "CTRL + SHIFT + Q" (dsp.exec (getExe scriptPackages.rofi-powermenu)))
+
+                # Fix physical mute button for Elgato Wave 3 microphone
+                (mkBind (withMod "F23") (dsp.exec (getExe scriptPackages.elgato-mic-fix)))
+
+                # Drag / Resize active floating window with mouse buttons
+                (mkBind (withMod "mouse:272") dsp.drag)
+                (mkBind (withMod "mouse:273") dsp.resize)
+
+                # Media control keys
+                (mkBindWithOpts "XF86AudioPlay" (dsp.exec "${getExe pkgs.playerctl} play-pause") { locked = true; })
+                (mkBindWithOpts "XF86audiostop" (dsp.exec "${getExe pkgs.playerctl} stop") { locked = true; })
+                (mkBindWithOpts "XF86AudioNext" (dsp.exec "${getExe pkgs.playerctl} next") { locked = true; })
+                (mkBindWithOpts "XF86AudioPrev" (dsp.exec "${getExe pkgs.playerctl} previous") { locked = true; })
+
+                # Volume control keys
+                (mkBindWithOpts "XF86AudioMute"
+                  (dsp.exec "${getExe' pkgs.wireplumber "wpctl"} set-mute @DEFAULT_AUDIO_SINK@ toggle")
+                  { locked = true; }
+                )
+                (mkBindWithOpts "XF86AudioMicMute"
+                  (dsp.exec "${getExe' pkgs.wireplumber "wpctl"} set-mute @DEFAULT_AUDIO_SOURCE@ toggle")
+                  { locked = true; }
+                )
+                (mkBindWithOpts "XF86AudioRaiseVolume"
+                  (dsp.exec "${getExe' pkgs.wireplumber "wpctl"} set-volume @DEFAULT_AUDIO_SINK@ 5%+")
+                  { repeating = true; }
+                )
+                (mkBindWithOpts "XF86AudioLowerVolume"
+                  (dsp.exec "${getExe' pkgs.wireplumber "wpctl"} set-volume @DEFAULT_AUDIO_SINK@ 5%-")
+                  { repeating = true; }
+                )
+
+                # Brightness control keys
+                (mkBindWithOpts "XF86MonBrightnessUp" (dsp.exec "${getExe pkgs.brightnessctl} -q set 5%+") {
+                  repeating = true;
+                })
+                (mkBindWithOpts "XF86MonBrightnessDown" (dsp.exec "${getExe pkgs.brightnessctl} -q set 5%-") {
+                  repeating = true;
+                })
               ];
             };
-
-            # Layout settings
-            dwindle.preserve_split = true;
-
-            master = {
-              new_status = "master";
-            };
-
-            # Layer rules
-            layerrule = [
-              "blur on, match:namespace swaync-control-center"
-              "blur on, match:namespace swaync-notification-window"
-              "ignore_alpha 0, match:namespace swaync-control-center"
-              "ignore_alpha 0, match:namespace swaync-notification-window"
-              "ignore_alpha 0.5, match:namespace swaync-control-center"
-              "ignore_alpha 0.5, match:namespace swaync-notification-window"
-            ];
-
-            # Keybinds
-            "$mod" = "SUPER";
-            bind = [
-              "$mod, return, exec, ${getExe cfg.terminalPackage}"
-              "$mod, L, exec, ${getExe' pkgs.systemd "loginctl"} lock-session"
-              "$mod, W, killactive,"
-              "$mod, F, togglefloating,"
-              "$mod, M, fullscreen, 1"
-              "$mod, LEFT, movefocus, l"
-              "$mod, RIGHT, movefocus, r"
-              "$mod, UP, movefocus, u"
-              "$mod, DOWN, movefocus, d"
-              "$mod, KP_Subtract, exec, ${getExe scriptPackages.elgato-mic-fix}"
-              "SHIFT CTRL, E, exec, ${getExe pkgs.nemo}"
-              "SHIFT CTRL, Q, exec, ${getExe scriptPackages.rofi-powermenu}"
-            ];
-
-            bindl = with pkgs; [
-              ", XF86AudioMute, exec, ${wireplumber}/bin/wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
-              ", XF86AudioMicMute, exec, ${wireplumber}/bin/wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"
-              ", XF86AudioPlay, exec, ${getExe playerctl} play-pause"
-              ", XF86AudioNext, exec, ${getExe playerctl} next"
-              ", XF86AudioPrev, exec, ${getExe playerctl} previous"
-              ", XF86audiostop, exec, ${getExe playerctl} stop"
-            ];
-
-            binde = with pkgs; [
-              ", XF86AudioRaiseVolume, exec, ${wireplumber}/bin/wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+"
-              ", XF86AudioLowerVolume, exec, ${wireplumber}/bin/wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"
-              ", XF86MonBrightnessUp, exec, ${getExe brightnessctl} -q set 5%+"
-              ", XF86MonBrightnessDown, exec, ${getExe brightnessctl} -q set 5%-"
-            ];
-
-            bindm = [
-              "$mod, mouse:272, movewindow"
-              "$mod, mouse:273, resizewindow"
-            ];
-          };
         };
       };
     };

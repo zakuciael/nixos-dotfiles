@@ -79,25 +79,23 @@ in
         })
       ];
 
-      wayland.windowManager.hyprland.settings = {
-        windowrule = [
-          {
-            name = "AAGL Launcher";
-            "match:class" = "^(moe.launcher.an-anime-game-launcher)$";
-            float = true;
-            center = true;
-            size = "(monitor_w*0.7) (monitor_h*0.7)";
-            inherit monitor;
-          }
-          {
-            name = "Genshin Impact";
-            "match:class" = "^(genshinimpact.exe)$";
-            content = "game";
-            fullscreen = true;
-            immediate = true;
-          }
-        ];
-      };
+      wayland.windowManager.hyprland.settings.window_rule = [
+        {
+          name = "AAGL Launcher";
+          match.class = "^(moe.launcher.an-anime-game-launcher)$";
+          float = true;
+          center = true;
+          size = "(monitor_w*0.7) (monitor_h*0.7)";
+          inherit monitor;
+        }
+        {
+          name = "Genshin Impact";
+          match.class = "^(genshinimpact.exe)$";
+          content = "game";
+          fullscreen = true;
+          immediate = true;
+        }
+      ];
     };
 
     programs = {

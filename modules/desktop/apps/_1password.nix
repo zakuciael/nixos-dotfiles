@@ -118,38 +118,26 @@ in
       };
     };
 
-    wayland.windowManager.hyprland = mkIf config.modules.desktop.wm.hyprland.enable {
-      settings = {
+    wayland.windowManager.hyprland.settings =
+      let
+        inherit (lib.my.utils.hypr) mkBind dsp;
+      in
+      mkIf config.modules.desktop.wm.hyprland.enable {
         bind = [
-          "Ctrl Shift, O, exec, ${getExe pkgs'.gui} --toggle"
-          "Ctrl Shift, L, exec, ${getExe pkgs'.gui} --lock"
-          "Ctrl Shift, \, exec, ${getExe pkgs'.gui} --fill"
+          (mkBind "CTRL + SHIFT + O" (dsp.exec "${getExe pkgs'.gui} --toggle"))
+          (mkBind "CTRL + SHIFT + L" (dsp.exec "${getExe pkgs'.gui} --lock"))
+          (mkBind "CTRL + SHIFT + Backslash" (dsp.exec "${getExe pkgs'.gui} --fill"))
         ];
 
-        windowrule = [
+        window_rule = [
           {
             name = "1Password";
             center = true;
             allows_input = true;
             # inherit monitor;
-            "match:class" = "1Password";
+            match.class = "1Password";
           }
         ];
       };
-
-      # Uncomment if needing quick-access
-      /*
-        extraConfig = ''
-          bind = Ctrl Shift, P, exec, ${getExe pkgs'.gui} --quick-access
-          bind = Ctrl Shift, P, submap, 1pass
-
-          submap = 1pass
-          bind = Ctrl Shift, P, closewindow, class:^(${class})$
-          bind = Ctrl Shift, P, submap, reset
-
-          submap = reset
-        '';
-      */
-    };
   };
 }

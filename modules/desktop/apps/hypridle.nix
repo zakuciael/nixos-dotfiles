@@ -15,7 +15,7 @@ in
       general = {
         lock_cmd = "pidof hyprlock || ${getExe pkgs.hyprlock}"; # don't spawn a second instance if already running
         before_sleep_cmd = "${getExe' pkgs.systemd "loginctl"} lock-session"; # lock before suspend
-        after_sleep_cmd = "${getExe' pkgs.hyprland "hyprctl"} dispatch dpms on";
+        after_sleep_cmd = ''${getExe' pkgs.hyprland "hyprctl"} dispatch 'hl.dsp.dpms({ action = "enable" })' '';
       };
 
       listener = [

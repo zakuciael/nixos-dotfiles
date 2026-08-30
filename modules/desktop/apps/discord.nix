@@ -54,13 +54,13 @@ in
     home.packages = [ pkg ];
 
     wayland.windowManager.hyprland.settings = mkIf config.modules.desktop.wm.hyprland.enable {
-      windowrule = [
+      window_rule = [
         {
           name = "Discord";
           workspace = "${workspace.name} silent";
           no_initial_focus = true;
           suppress_event = "activate activatefocus";
-          "match:class" = "^(discord)$";
+          match.class = "^(discord)$";
         }
       ];
     };

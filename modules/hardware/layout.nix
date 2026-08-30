@@ -21,15 +21,16 @@ let
     concatMapStrings
     reverseList
     defaultTo
+    mapNullable
     ;
-  inherit (lib.my) mapper defs;
+  inherit (lib.my) defs;
 
   cfg = config.modules.hardware.layout;
 
   monitorRotations = {
-    normal = "0";
-    left = "1";
-    right = "3";
+    normal = 0;
+    left = 1;
+    right = 3;
   };
 in
 {
@@ -215,77 +216,79 @@ in
     home-manager.users.${username} = {
       # Hyprland monitor, workspace and binds configuration
       wayland.windowManager.hyprland.settings = mkIf config.programs.hyprland.enable {
-        monitorv2 =
+        monitor =
           cfg.layout
           |> map (layout: {
             output = layout.monitor.wayland;
             mode = layout.mode |> defaultTo "preferred";
             position =
-              if layout.pos != null then "${toString layout.pos.x}x${toString layout.pos.y}" else "auto"; # TODO: Check if `auto-right` can be used
+              layout.pos |> mapNullable (pos: "${toString pos.x}x${toString pos.y}") |> defaultTo "auto"; # TODO: Check if `auto-right` can be used
             scale = layout.scale |> defaultTo 1;
-            transform = if layout.rotate != null then monitorRotations.${layout.rotate} else 0;
+            transform = layout.rotate |> mapNullable (rotate: monitorRotations.${rotate}) |> defaultTo 0;
             inherit (layout) vrr;
-          });
+          })
+          |> (
+            layouts:
+            if layouts != [ ] then
+              layouts
+            else
+              [
+                # Fallback rule for when no layout is defined
+                {
+                  output = "";
+                  mode = "preferred";
+                  position = "auto";
+                  scale = 1;
+                }
+              ]
+          );
 
-        # TODO: Check if this can be achieved using the `monitorv2` syntax
-        monitor = if cfg.layout == [ ] then [ ",preferred,auto,1" ] else [ ];
-
-        workspace =
+        workspace_rule =
           let
-            disallowedExtraConfigs = [
-              "default"
-              "monitor"
-            ];
-            workspaceDefs = flatten (
-              map (
-                layout:
-                (mapAttrsToList (name: value: {
-                  inherit name;
-                  rules = lib.attrsets.mergeAttrsList [
-                    { monitor = layout.monitor.wayland; }
-                    (if value.default then { inherit (value) default; } else { })
-                    (
-                      let
-                        hasDisallowedExtraArgs = builtins.all (key: !(value.extraConfig ? "${key}")) disallowedExtraConfigs;
-                        usedDisallowedExtraArgs = map (x: ''"${x}"'') (
-                          builtins.filter (key: value.extraConfig ? "${key}") disallowedExtraConfigs
-                        );
-                      in
-                      assert assertMsg hasDisallowedExtraArgs
-                        ''workspaces."${name}".extraConfig cannot override the following rules: [${concatStringsSep ", " usedDisallowedExtraArgs}]'';
-                      value.extraConfig
-                    )
-                  ];
-                }) layout.workspaces)
-              ) cfg.layout
-            );
-            mkRules =
-              rules:
-              concatStringsSep "," (mapAttrsToList (name: value: "${name}:${mapper.toString value}") rules);
+            mkWorkspaceRule =
+              layout: workspace:
+              let
+                disallowedExtraConfigs = [
+                  "default"
+                  "monitor"
+                ];
+                hasDisallowedExtraArgs = builtins.all (
+                  key: !(workspace.cfg.extraConfig ? "${key}")
+                ) disallowedExtraConfigs;
+                usedDisallowedExtraArgs = map (x: ''"${x}"'') (
+                  builtins.filter (key: workspace.cfg.extraConfig ? "${key}") disallowedExtraConfigs
+                );
+              in
+              assert assertMsg hasDisallowedExtraArgs
+                ''workspaces."${workspace.name}".extraConfig cannot override the following rules: [${concatStringsSep ", " usedDisallowedExtraArgs}]'';
+              (
+                {
+                  workspace = workspace.name;
+                  monitor = layout.monitor.wayland;
+                  default = workspace.cfg.default |> defaultTo false;
+                }
+                // workspace.cfg.extraConfig
+              );
           in
-          map (config: "${config.name},${mkRules config.rules}") workspaceDefs;
+          cfg.layout
+          |> lib.concatMap (
+            layout:
+            layout.workspaces |> mapAttrsToList (name: cfg: mkWorkspaceRule layout { inherit name cfg; })
+          );
 
         bind =
           let
-            keybindDefs = lib.flatten (
-              map (
-                layout:
-                lib.mapAttrsToList (workspace: value: {
-                  inherit workspace;
-                  inherit (value) keybinds;
-                }) layout.workspaces
-              ) cfg.layout
-            );
+            inherit (lib.my.utils.hypr) mkBind withMod dsp;
+
+            mkWorkspaceBind =
+              workspace: cfg:
+              cfg.keybinds
+              |> map (key: [
+                (mkBind (withMod key) (dsp.focusWorkspace workspace))
+                (mkBind (withMod "SHIFT + ${key}") (dsp.moveToWorkspace workspace))
+              ]);
           in
-          lib.flatten (
-            map (
-              config:
-              map (key: [
-                "$mod, ${key}, workspace, ${config.workspace}"
-                "$mod SHIFT, ${key}, movetoworkspace, ${config.workspace}"
-              ]) config.keybinds
-            ) keybindDefs
-          );
+          cfg.layout |> map (layout: layout.workspaces |> mapAttrsToList mkWorkspaceBind) |> flatten;
       };
     };
 

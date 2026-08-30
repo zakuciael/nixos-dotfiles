@@ -48,13 +48,15 @@ in
           [[ -L "${desktopDirectory}" ]] || run ln -s $VERBOSE_ARG "${desktopEntriesDirectory}" "${desktopDirectory}"
         '';
 
-      wayland.windowManager.hyprland.settings.windowrule =
+      wayland.windowManager.hyprland.settings.window_rule =
         lib.optionals config.modules.desktop.wm.hyprland.enable
           [
             {
               name = "Steam Notifications Fix";
-              "match:class" = "^(steam)$";
-              "match:title" = "^(notificationtoasts)";
+              match = {
+                class = "^(steam)$";
+                title = "^(notificationtoasts)";
+              };
 
               inherit monitor;
               float = true;

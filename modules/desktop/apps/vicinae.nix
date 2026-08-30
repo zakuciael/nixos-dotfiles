@@ -49,24 +49,30 @@ in
 
     wayland.windowManager.hyprland.settings = {
       # Focus an application window after vicinae triggers an action related to it
-      misc.focus_on_activate = true;
+      config.misc.focus_on_activate = true;
 
-      bind = [
-        "SHIFT CTRL, space, exec, ${getExe cfg.package} toggle"
-        "SHIFT CTRL, R, exec, ${getExe cfg.package} ${mkDeepLink inputs.vicinae-extensions.packages.zed-recents "open-recents"}"
-      ];
+      bind =
+        let
+          inherit (lib.my.utils.hypr) mkBind dsp;
+        in
+        [
+          (mkBind "CTRL + SHIFT + Space" (dsp.exec "${getExe cfg.package} toggle"))
+          (mkBind "CTRL + SHIFT + R" (
+            dsp.exec "${getExe cfg.package} ${mkDeepLink inputs.vicinae-extensions.packages.zed-recents "open-recents"}"
+          ))
+        ];
 
-      layerrule = [
+      layer_rule = [
         {
           name = "vicinae-blur";
-          blur = "on";
+          blur = true;
           ignore_alpha = 0;
-          "match:namespace" = "vicinae";
+          match.namespace = "vicinae";
         }
         {
           name = "vicinae-no-animation";
-          no_anim = "on";
-          "match:namespace" = "vicinae";
+          no_anim = true;
+          match.namespace = "vicinae";
         }
       ];
     };

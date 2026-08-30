@@ -29,20 +29,19 @@ in
         r2modman
       ];
 
-      wayland.windowManager.hyprland.settings.windowrule =
+      wayland.windowManager.hyprland.settings.window_rule =
         lib.optionals config.modules.desktop.wm.hyprland.enable
           [
             {
               name = "Map Steam Games to Content Type";
-              "match:class" = "^(steam_app_.*)$";
               content = "game";
+              match.class = "^(steam_app_.*)$";
             }
-
             {
               name = "Default Rules for Games";
-              "match:content" = "game";
               inherit monitor;
               idle_inhibit = "fullscreen";
+              match.content = "game";
             }
           ];
     };
