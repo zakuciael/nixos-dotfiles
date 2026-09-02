@@ -41,13 +41,14 @@ in
 
           "hyprland/workspaces" = {
             format = "{name}";
+            tooltip = false;
             format-icons = {
               default = " ";
               active = " ";
               urgent = " ";
             };
-            on-scroll-up = "hyprctl dispatch workspace m+1";
-            on-scroll-down = "hyprctl dispatch workspace m-1";
+            on-scroll-up = ''hyprctl dispatch "hl.dsp.focus({workspace = 'm+1'})"'';
+            on-scroll-down = ''hyprctl dispatch "hl.dsp.focus({workspace = 'm-1'})"'';
           };
           "hyprland/window" = {
             max-length = 25;
