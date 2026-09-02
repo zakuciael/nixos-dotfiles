@@ -752,6 +752,7 @@
         "vicinae": "vicinae",
         "vicinae-extensions": "vicinae-extensions",
         "vscode-server": "vscode-server",
+        "waybar": "waybar",
         "zed-extensions": "zed-extensions",
         "zed-nix-extension": "zed-nix-extension",
         "zen-browser": "zen-browser"
@@ -952,6 +953,29 @@
       "original": {
         "owner": "nix-community",
         "repo": "nixos-vscode-server",
+        "type": "github"
+      }
+    },
+    "waybar": {
+      "inputs": {
+        "flake-compat": [
+          "flake-compat"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1787863049,
+        "narHash": "sha256-G6AcGuevhkYflQHhJq9GnLhEMgcI51Y6MYKBQvdRPDc=",
+        "owner": "Alexays",
+        "repo": "Waybar",
+        "rev": "6d60c8e02be67bb85bb9b1ea803f2fbcf0722002",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Alexays",
+        "repo": "Waybar",
         "type": "github"
       }
     },

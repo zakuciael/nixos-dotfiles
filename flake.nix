@@ -156,6 +156,11 @@
       url = "github:idjoo/home-manager/cursor-agent";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    waybar = {
+      url = "github:Alexays/Waybar";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-compat.follows = "flake-compat";
+    };
   };
 
   outputs =
@@ -182,6 +187,7 @@
         overlays = lib.my.overlays.pkgs ++ [
           inputs.aagl.overlays.default
           inputs.zed-extensions.overlays.default
+          inputs.waybar.overlays.default
         ];
       };
 
@@ -223,6 +229,9 @@
         };
         browser-previews = flakeInputs.browser-previews // {
           packages = flakeInputs.browser-previews.packages.${system};
+        };
+        waybar = flakeInputs.waybar // {
+          packages = flakeInputs.waybar.packages.${system};
         };
       };
 
