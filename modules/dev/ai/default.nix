@@ -24,10 +24,38 @@ in
         opencode-desktop
         skills
         postplan
+        imhex-mcp-server
       ];
 
       programs = {
-        opencode.enable = true;
+        mcp = {
+          enable = true;
+          servers.imhex = {
+            command = lib.getExe pkgs.imhex-mcp-server;
+          };
+        };
+
+        opencode = {
+          enable = true;
+          enableMcpIntegration = true;
+        };
+        claude-code = {
+          enable = true;
+          enableMcpIntegration = true;
+          configDir = "${configHome}/claude";
+        };
+        codex = {
+          enable = true;
+          enableMcpIntegration = true;
+        };
+        cursor = {
+          enable = true;
+          profiles.default.enableMcpIntegration = true;
+        };
+        cursor-agent = {
+          enable = true;
+          enableMcpIntegration = true;
+        };
         t3code = {
           enable = true;
           package = pkgs.t3code.override {
@@ -165,13 +193,6 @@ in
             };
           };
         };
-        codex.enable = true;
-        claude-code = {
-          enable = true;
-          configDir = "${configHome}/claude";
-        };
-        cursor.enable = true;
-        cursor-agent.enable = true;
       };
     };
   };

@@ -1,0 +1,123 @@
+From: nixos-dotfiles
+Subject: Adapt imhexMCP for ImHex 1.38.1 OpenResult API
+
+Upstream patch 0002 does not apply to 1.38.1 (open() now returns OpenResult,
+and open(bool) was still private). This replaces it with:
+- LIBRARY_PLUGIN for builtin so the MCP plugin can link FileProvider
+- public open(bool directAccess)
+- graceful settings handling for network/MCP opens
+- OpenResult-aware error reporting in the MCP plugin
+
+--- a/plugins/builtin/CMakeLists.txt
++++ b/plugins/builtin/CMakeLists.txt
+@@ -11,6 +11,8 @@
+     NAME
+         builtin
+ 
++    LIBRARY_PLUGIN
++
+     SOURCES
+         source/plugin_builtin.cpp
+ 
+--- a/plugins/builtin/include/content/providers/file_provider.hpp
++++ b/plugins/builtin/include/content/providers/file_provider.hpp
+@@ -44,6 +44,7 @@
+         void setPath(const std::fs::path &path);
+ 
+         [[nodiscard]] OpenResult open() override;
++        OpenResult open(bool directAccess);
+         void close() override;
+ 
+         void loadSettings(const nlohmann::json &settings) override;
+@@ -65,8 +66,6 @@
+     private:
+         void handleFileChange();
+ 
+-        OpenResult open(bool memoryMapped);
+-
+     protected:
+         std::fs::path m_path;
+         wolv::io::File m_file;
+--- a/plugins/builtin/source/content/providers/file_provider.cpp
++++ b/plugins/builtin/source/content/providers/file_provider.cpp
+@@ -199,7 +199,13 @@
+     }
+ 
+     prv::Provider::OpenResult FileProvider::open() {
+-        const size_t maxMemoryFileSize = ContentRegistry::Settings::read<u64>("hex.builtin.setting.general", "hex.builtin.setting.general.max_mem_file_size", 128_MiB);
++        // Gracefully handle missing settings (e.g. MCP network open before full init)
++        size_t maxMemoryFileSize = 128_MiB;
++        try {
++            maxMemoryFileSize = ContentRegistry::Settings::read<u64>("hex.builtin.setting.general", "hex.builtin.setting.general.max_mem_file_size", 128_MiB);
++        } catch (const std::exception &e) {
++            hex::log::debug("FileProvider::open: Settings not available, using default max memory file size ({}): {}", maxMemoryFileSize, e.what());
++        }
+ 
+         size_t fileSize = 0x00;
+         {
+@@ -294,26 +300,31 @@
+     }
+ 
+     void FileProvider::loadSettings(const nlohmann::json &settings) {
+-        Provider::loadSettings(settings);
++        // Gracefully handle incomplete settings when opened via MCP/network
++        try {
++            Provider::loadSettings(settings);
++
++            auto pathString = settings.at("path").get<std::string>();
++            std::fs::path path = std::u8string(pathString.begin(), pathString.end());
++
++            if (auto projectPath = ProjectFile::getPath(); !projectPath.empty()) {
++                std::fs::path fullPath;
++                try {
++                    fullPath = std::fs::weakly_canonical(projectPath.parent_path() / path);
++                } catch (const std::fs::filesystem_error &) {
++                    fullPath = projectPath.parent_path() / path;
++                }
+ 
+-        auto pathString = settings.at("path").get<std::string>();
+-        std::fs::path path = std::u8string(pathString.begin(), pathString.end());
++                if (!wolv::io::fs::exists(fullPath))
++                    fullPath = path;
+ 
+-        if (auto projectPath = ProjectFile::getPath(); !projectPath.empty()) {
+-            std::fs::path fullPath;
+-            try {
+-                fullPath = std::fs::weakly_canonical(projectPath.parent_path() / path);
+-            } catch (const std::fs::filesystem_error &) {
+-                fullPath = projectPath.parent_path() / path;
++                path = std::move(fullPath);
+             }
+ 
+-            if (!wolv::io::fs::exists(fullPath))
+-                fullPath = path;
+-
+-            path = std::move(fullPath);
++            this->setPath(path);
++        } catch (const std::exception &e) {
++            hex::log::warn("FileProvider::loadSettings: Failed to load settings: {}", e.what());
+         }
+-
+-        this->setPath(path);
+     }
+ 
+     nlohmann::json FileProvider::storeSettings(nlohmann::json settings) const {
+--- a/plugins/mcp/source/plugin_mcp.cpp
++++ b/plugins/mcp/source/plugin_mcp.cpp
+@@ -70,10 +70,13 @@
+                     auto fileProvider = std::make_unique<hex::plugin::builtin::FileProvider>();
+                     fileProvider->setPath(std::fs::path(request.path));
+ 
+-                    if (!fileProvider->open(false)) {
++                    auto openResult = fileProvider->open(false);
++                    if (!openResult.isSuccess()) {
+                         request.status = "error";
+-                        request.error_message = "Failed to open file";
+-                        hex::log::error("MCP: Failed to open file: {}", request.path);
++                        request.error_message = std::string(openResult.getErrorMessage());
++                        if (request.error_message.empty())
++                            request.error_message = "Failed to open file";
++                        hex::log::error("MCP: Failed to open file: {} - {}", request.path, request.error_message);
+                         continue;
+                     }
+ 
