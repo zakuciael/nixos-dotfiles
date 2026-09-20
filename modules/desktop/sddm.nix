@@ -87,14 +87,14 @@ let
         edid_data = read_edid(entry['connectorName'])
         if edid_data and len(edid_data) >= 18:
             out['edidIdentifier'], out['edidHash'] = edid_fields(edid_data)
-        outputs.append(out)
-        setups_outputs.append({
-            'enabled': entry['isMain'],
-            'outputIndex': i,
-            'position': {'x': 0, 'y': 0},
-            'priority': 1 if entry['isMain'] else 0,
-            "replicationSource": "",
-        })
+            outputs.append(out)
+            setups_outputs.append({
+                'enabled': entry['isMain'],
+                'outputIndex': i,
+                'position': {'x': 0, 'y': 0},
+                'priority': 1 if entry['isMain'] else 0,
+                "replicationSource": "",
+            })
 
     import subprocess, sys
 
