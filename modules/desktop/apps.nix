@@ -102,7 +102,6 @@ in
         figma-linux
         nvtopPackages.amd # htop but for GPU
         mission-center # GUI for monitoring resources usage
-        amethyst-mod-manager
       ];
     };
   };

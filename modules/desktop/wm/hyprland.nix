@@ -63,6 +63,7 @@ desktop.mkDesktopModule {
     "discord"
     "thunderbird"
     "zen-browser"
+    "amethyst-mod-manager"
   ];
 
   extraOptions = {
