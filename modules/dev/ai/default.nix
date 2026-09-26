@@ -114,40 +114,40 @@ in
                 model = "opencode/deepseek-v4-flash-free";
               }
               {
-                provider = "cursor";
-                model = "gpt-5.6-sol";
+                provider = "opencode";
+                model = "cursor/gpt-5.6-sol";
               }
               {
-                provider = "cursor";
-                model = "gpt-5.6-luna";
+                provider = "opencode";
+                model = "cursor/gpt-5.6-luna";
               }
               {
-                provider = "cursor";
-                model = "kimi-k3";
+                provider = "opencode";
+                model = "cursor/kimi-k3";
               }
               {
-                provider = "cursor";
-                model = "default";
+                provider = "opencode";
+                model = "cursor/default";
               }
               {
-                provider = "cursor";
-                model = "composer-2.5";
+                provider = "opencode";
+                model = "cursor/composer-2.5";
               }
               {
-                provider = "cursor";
-                model = "claude-fable-5";
+                provider = "opencode";
+                model = "cursor/claude-fable-5";
               }
               {
-                provider = "cursor";
-                model = "claude-sonnet-5";
+                provider = "opencode";
+                model = "cursor/claude-sonnet-5";
               }
               {
-                provider = "cursor";
-                model = "grok-4.6";
+                provider = "opencode";
+                model = "cursor/grok-4.6";
               }
               {
-                provider = "cursor";
-                model = "claude-opus-5";
+                provider = "opencode";
+                model = "cursor/claude-opus-5";
               }
             ];
             providerModelPreferences = {
@@ -161,21 +161,6 @@ in
               opencode = {
                 hiddenModels = [
                   "opencode/big-pickle"
-                  "anthropic/claude-fable-5"
-                  "anthropic/claude-haiku-4-5-20251001"
-                  "anthropic/claude-haiku-4-5"
-                  "anthropic/claude-opus-4-5-20251101"
-                  "anthropic/claude-opus-4-5"
-                  "anthropic/claude-opus-4-6"
-                  "anthropic/claude-opus-4-7"
-                  "anthropic/claude-opus-4-8"
-                  "anthropic/claude-opus-4-8-fast"
-                  "anthropic/claude-opus-5"
-                  "anthropic/claude-opus-5-fast"
-                  "anthropic/claude-sonnet-4-5-20250929"
-                  "anthropic/claude-sonnet-4-5"
-                  "anthropic/claude-sonnet-4-6"
-                  "anthropic/claude-sonnet-5"
                   "opencode/hy3-free"
                   "opencode/mimo-v2.5-free"
                   "opencode/muse-spark-1.2-contributor-free"
