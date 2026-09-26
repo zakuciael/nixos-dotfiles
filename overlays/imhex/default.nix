@@ -43,6 +43,9 @@ lib.singleton (
 
       src = imhexMcpSrc;
 
+      # Upstream used a JSON boolean literal in a Python dict (NameError on tools/list).
+      patches = [ ./patches/imhex-mcp-fix-json-boolean-default.patch ];
+
       nativeBuildInputs = [ final.makeWrapper ];
 
       dontConfigure = true;

@@ -1,0 +1,11 @@
+--- a/mcp-server/server.py
++++ b/mcp-server/server.py
+@@ -1213,7 +1213,7 @@
+                     "include_distribution": {
+                         "type": "boolean",
+                         "description": "Include full 256-byte distribution in results (default: false)",
+-                        "default": false
++                        "default": False
+                     }
+                 },
+                 "required": []
