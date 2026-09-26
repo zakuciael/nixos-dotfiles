@@ -104,8 +104,12 @@ desktop.mkDesktopModule {
         })
       ];
 
-      # Make chrome and electron apps run native on wayland
-      environment.sessionVariables.NIXOS_OZONE_WL = "1";
+      environment.sessionVariables = {
+        # Make apps run native on Wayland
+        NIXOS_OZONE_WL = "1";
+        # Java AWT apps (Ghidra, etc.) render blank under non-reparenting WMs like Hyprland without this.
+        _JAVA_AWT_WM_NONREPARENTING = "1";
+      };
 
       # Set default session to non-systemd hyprland
       services.displayManager.defaultSession = "hyprland-uwsm";
