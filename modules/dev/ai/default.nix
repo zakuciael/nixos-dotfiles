@@ -10,6 +10,10 @@ let
 
   cfg = config.modules.dev.ai;
   configHome = config.home-manager.users.${username}.xdg.configHome;
+
+  # Store path to the npm package root (dist + node_modules) so OpenCode can
+  # resolve package exports and runtime deps without fetching from npm at startup.
+  cursorOpencodeProvider = "${pkgs.cursor-opencode-provider}/lib/node_modules/cursor-opencode-provider";
 in
 {
   options.modules.dev.ai = {
@@ -38,6 +42,16 @@ in
         opencode = {
           enable = true;
           enableMcpIntegration = true;
+          settings = {
+            # Package-dir load uses exports["./server"], which dual-exports the
+            # classic 1.x plugin (auth + tools). Do not add V2-only "plugins".
+            plugin = [ "file://${cursorOpencodeProvider}" ];
+            provider.cursor = {
+              npm = "file://${cursorOpencodeProvider}";
+              name = "Cursor";
+              models = { };
+            };
+          };
         };
         claude-code = {
           enable = true;
