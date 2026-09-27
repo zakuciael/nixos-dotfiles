@@ -1,0 +1,90 @@
+{
+  "branch": "master",
+  "inputs": {
+    "LICENSE": "8998a19a31199a5ae2c268b71f99b7e2abaaf78e3cf8b72e8a596374279c261a",
+    "docs/manual/installation/nix-darwin.md": "c986e0207b2c10a6ff48d646c3331556d91de5774c27456d0e6f93e3dae47121",
+    "docs/manual/installation/standalone.md": "72cc1d158ba7f820005dafd2667fdcf064cb6101e6640d2a7d49325e76363be9",
+    "docs/manual/nix-flakes/nix-darwin.md": "5452a41a8cafcd7ba9ea863d9197eef4b02c85883ef97cc664d5a5a9d86bd77b",
+    "docs/manual/nix-flakes/nixos.md": "04b9f06cf0829faaad174ca97e2a5e87d4334b6c7d50a9bc19c074e9e5e28641",
+    "docs/manual/nix-flakes/standalone.md": "8eef60d45d1ba618aa4b06a1e6fc7fdd73a6bee920c81371820092dff2790c02",
+    "docs/manual/usage/configuration.md": "6915cb04d6225ee0f238a95c9335969e22e677ddb9fe6a135e258ca338792afc",
+    "docs/manual/usage/dotfiles.md": "c94aeac21a09693a0f89d78945f5b46aa92221787dc5bedad0bc65c2fc1662e2",
+    "docs/manual/usage/modular-services.md": "4f45d59164cbe1a4ca4e2607e6c8f0c4ea719d1203fb105551f9255e4867045b",
+    "docs/manual/usage/rollbacks.md": "3a4b93dbd740a7e9d44b8f9157043e621025fa4c6c7a6b38d6ad08cca500da15",
+    "docs/manual/usage/updating.md": "28271e2c44275e6bc6f4377e79483b12f195c512266d3f48e36a214043f0ec9e",
+    "docs/manual/writing-modules.md": "c26576594f5f879c3c9286bdb50ab5d05e6473f8c1668e12939b0e8629a108f1"
+  },
+  "outputs": {
+    "LICENSE": "8998a19a31199a5ae2c268b71f99b7e2abaaf78e3cf8b72e8a596374279c261a",
+    "references/configuration.md": "4425e09b0b5c0166b25369ee813ce9f7f49b0b76cbb65d8f00f9b3d6f2a9bb06",
+    "references/dotfiles.md": "3e2953ea8d99685f3e1475e5777ac605201379587cf93cf3d194cd98676ad039",
+    "references/flake-nix-darwin.md": "3628a6c2e0ff251c0f6f2825f91e1bdb29667335b942f17f571659dc09252078",
+    "references/flake-standalone.md": "b5be20f99f857e9a0eb9966080d725b146fe6ca965b79b31ad578016919a6fd0",
+    "references/install-nix-darwin.md": "c3ae6907ca66aa89e6497a2f874571edc5d8b698f47bb4f7195d0d44d99c4b0b",
+    "references/install-standalone.md": "128304aaf2df75064a179da5d0638fc2b2ef5825751f1f17346c7573c24bce99",
+    "references/modular-services.md": "9390a3d6e57c5cdb4087ea3525ffc3692677f69f94bfda3d82e734bcbee9110f",
+    "references/nixos.md": "230b2b9bc26f1730b3517917f1ccbd4767f7c30f306f178013f0ea39fbf7cf3b",
+    "references/rollbacks.md": "31877656e6e63f2a14d88c77a0f9767429bdbb38adea5d6f8c693701aeb4271e",
+    "references/updating.md": "acb884f4b213061541258c50b9f9a87f00f53bdf05557c3e349139f89e34a21e",
+    "references/writing-modules.md": "621f631ed7c0f6d71af261468d2d2d85014e72eca74bf95bc75bf688e25210bc"
+  },
+  "revision": "0b2f1129177f70c5f0f5d88bb53c49ca47d0bfc0",
+  "selection": [
+    {
+      "output": "references/nixos.md",
+      "source": "docs/manual/nix-flakes/nixos.md",
+      "title": "NixOS module"
+    },
+    {
+      "output": "references/configuration.md",
+      "source": "docs/manual/usage/configuration.md",
+      "title": "Configuration"
+    },
+    {
+      "output": "references/dotfiles.md",
+      "source": "docs/manual/usage/dotfiles.md",
+      "title": "Dotfiles"
+    },
+    {
+      "output": "references/modular-services.md",
+      "source": "docs/manual/usage/modular-services.md",
+      "title": "Modular services"
+    },
+    {
+      "output": "references/writing-modules.md",
+      "source": "docs/manual/writing-modules.md",
+      "title": "Writing modules"
+    },
+    {
+      "output": "references/install-nix-darwin.md",
+      "source": "docs/manual/installation/nix-darwin.md",
+      "title": "nix-darwin module installation"
+    },
+    {
+      "output": "references/flake-nix-darwin.md",
+      "source": "docs/manual/nix-flakes/nix-darwin.md",
+      "title": "nix-darwin module with flakes"
+    },
+    {
+      "output": "references/install-standalone.md",
+      "source": "docs/manual/installation/standalone.md",
+      "title": "Standalone installation"
+    },
+    {
+      "output": "references/flake-standalone.md",
+      "source": "docs/manual/nix-flakes/standalone.md",
+      "title": "Standalone with flakes"
+    },
+    {
+      "output": "references/rollbacks.md",
+      "source": "docs/manual/usage/rollbacks.md",
+      "title": "Rollbacks"
+    },
+    {
+      "output": "references/updating.md",
+      "source": "docs/manual/usage/updating.md",
+      "title": "Updating"
+    }
+  ],
+  "upstream": "https://github.com/nix-community/home-manager"
+}

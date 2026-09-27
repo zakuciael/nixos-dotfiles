@@ -1,16 +1,13 @@
 {
   config,
   lib,
-  pkgs,
   username,
   ...
 }:
 let
   inherit (lib)
-    mkOption
     mkEnableOption
     mkIf
-    types
     ;
   inherit (lib.my) dotfiles;
 

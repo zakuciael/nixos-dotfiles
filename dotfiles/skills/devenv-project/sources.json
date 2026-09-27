@@ -1,0 +1,511 @@
+{
+  "devenv_version": "2.3.1",
+  "documentation_inputs": {
+    "docs/public/.well-known/agent-skills/devenv-setup/SKILL.md": "77829664ed32104385c03f31d72da2423605a9e52c8fff7cf848f018d232e4ac",
+    "docs/src/content/docs/ad-hoc-developer-environments.md": "428019c9674104ac78cc4c19d0175b40cf77fbc392f99185634139f9b851278c",
+    "docs/src/content/docs/auto-activation.mdx": "92fe4ce697729eae79ed43c080e1c1c73ce30d88980e75b0103be2929171342c",
+    "docs/src/content/docs/basics.md": "8387fea0af64ba061b46146520e79fc001e300fade48737fb38b5e2fb5794aac",
+    "docs/src/content/docs/binary-caching.md": "f90f72e3fce537962b6f7586d6d62f8f33bc7c2c7f8337f0df917d4ef3c7eb57",
+    "docs/src/content/docs/blog/2022/11/11/hello-world-devenv-01.md": "a015978a00d9e71c375a2be54bb17dd0b5e65dbe60ad4695340646dee4f93800",
+    "docs/src/content/docs/blog/2022/11/14/devenv-02.md": "a181bab7148cb4b8bed7e7b90b4893b98ae0a291e3d9ecee8960cbe4d145802e",
+    "docs/src/content/docs/blog/2022/11/17/devenv-03.md": "d55cbf720298d4ec790a616c5d6b77820ae7cf52fe1edd28fc11a5796193b718",
+    "docs/src/content/docs/blog/2022/11/27/devenv-04.md": "3dec3b2f2e559fd3de1acab4c570da5a66fd9b044e0488c23770144fbef6f205",
+    "docs/src/content/docs/blog/2022/12/22/devenv-05.md": "0f73c4e79efdef55b46d55ebd633babc082eebf27330ce4203e236a7908d7169",
+    "docs/src/content/docs/blog/2023/03/02/devenv-06-generating-containers-and-instant-shell-activation.md": "7a98af4f548352232c6c2fd1c49902f32138f3bfbbc555dd8b0595cd87bb4460",
+    "docs/src/content/docs/blog/2024/03/20/devenv-10-rewrite-in-rust.md": "5366bb7d4fb5fecca42b01b6d55c42560d580f899a79036a7546865bfa5e448d",
+    "docs/src/content/docs/blog/2024/09/11/devenv-11-nested-nix-outputs-using-the-module-system.md": "7ed01ea3fb1c1a5fc0a871b0f076bbbad74ffaeca2d9257b8f356c781b5f7ed3",
+    "docs/src/content/docs/blog/2024/09/24/devenv-12-tasks-for-convergent-configuration-with-nix.md": "f7e81c82ba64c09d5d0ea9b44967b6eff94353c6f84f6a36b8fd7ef57afd58e8",
+    "docs/src/content/docs/blog/2024/10/03/devenv-13-instant-developer-environments-with-nix-caching.md": "a33930cbdbbfdf5c054a13eca79d7730237073c7c10f9a1fb66ef39cfb7b0a80",
+    "docs/src/content/docs/blog/2024/10/22/devenv-is-switching-its-nix-implementation-to-tvix.md": "fdd7265fdaa41d40a9c496fb39618be5c0fd974ffe2c3d0b1612c3fd8a31a462",
+    "docs/src/content/docs/blog/2025/02/13/devenv-14-generating-nix-developer-environments-using-ai.md": "05b48b59d9ee12f1c66afba351b183620a519e5306caed485ea71ea12511c16c",
+    "docs/src/content/docs/blog/2025/04/13/devenv-15-overlays-support-and-performance-improvements.md": "2eb1ab4aea4c8d1ff6965aa762cdd87ccd365317683c3844a6be928c97ec47b8",
+    "docs/src/content/docs/blog/2025/04/25/devenv-16-extensible-ad-hoc-nix-environments.md": "3e41676055a35b71c4296d75b5d8491ce626a1ada0f80b294294761413dc9563",
+    "docs/src/content/docs/blog/2025/07/03/devenv-17-cuda-support-enhanced-tasks-and-mcp-support.md": "094513a91f8e4e84beb23409e238c5a2f7e8ba379593f47c376dc082d88dd10c",
+    "docs/src/content/docs/blog/2025/07/21/announcing-secretspec-declarative-secrets-management.md": "cfebd2e46310edc02895264e514e0920c5621dc0a96f95cd16148a79d0d09e25",
+    "docs/src/content/docs/blog/2025/07/22/devenv-18-progress-tui-secretspec-integration-listing-tasks-and-smaller-containers.md": "f64191ca2b631bd3d51492387c4639ac1e55b573cb35d1d8eb6e0d9c094f6a5a",
+    "docs/src/content/docs/blog/2025/07/25/devenv-devlog-processes-are-now-tasks.md": "924d28de503ad016f47d9180faf489950cc3de0d8cc902c076dbc98a3fb4ae55",
+    "docs/src/content/docs/blog/2025/08/22/closing-the-nix-gap-from-environments-to-packaged-applications-for-rust.md": "c7f7824136ce4d41cb3b1afbc2f6e854649551754db0f7a746bcea224dcb8303",
+    "docs/src/content/docs/blog/2025/09/17/devenv-19-scaling-nix-projects-using-modules-and-profiles.md": "a3cdb1a90aad04cfbff4aa78b5493019077dfbfab1a7e2c9bfea62fa99c0d263",
+    "docs/src/content/docs/blog/2025/10/07/devenv-110-monorepo-nix-support-with-devenvyaml-imports.md": "f823f6e29a52fa22f6acc549cd5a2e7fc4df2d52e78eda2a20b161c153d382c5",
+    "docs/src/content/docs/blog/2025/11/26/devenv-111-module-changelogs-and-secretspec-040.md": "072c5ca50961657325b36eb13a67345b06ba7f2a79e0b3ce02ddb1c835624bb6",
+    "docs/src/content/docs/blog/2026/02/09/secretspec-07-declarative-secret-generation.md": "8e1c19622ffc226f6f7f6ff1a7180b13fd893d5a4711218d15d7d199e449c4fd",
+    "docs/src/content/docs/blog/2026/03/05/devenv-20-a-fresh-interface-to-nix.md": "cda64d136d584471633a7a48d68526c22b33168e65de6aa8f36140de81e78d0b",
+    "docs/src/content/docs/blog/2026/05/07/devenv-21-nix-with-zsh-fish-and-nushell-via-libghostty.mdx": "e28b35fd3743f051c3239619c20e6f5dee2179a45cd7524ad2115f4a6f7d63ba",
+    "docs/src/content/docs/blog/2026/06/26/making-devenv-start-fast-and-the-whole-nixpkgs-with-it.md": "4a6cabbd625609776534ab1eb661683b6d275b3ad4864f820f9aa61584c4298a",
+    "docs/src/content/docs/blog/2026/07/28/devenv-22-attach-to-running-processes-and-persistent-out-of-tree-environments.md": "2cbf00134cad5a4578eac4ce5700558ef7fed617b304b9f4a30bbf11b79910be",
+    "docs/src/content/docs/blog/2026/09/07/devenv-23-portless-and-tui-configuration.md": "7417c5c4394405b5bf64eb0a491af213806b4fb62db3805a6c081dc8db8325d8",
+    "docs/src/content/docs/cloud.md": "8a4ff492d185c03ef76a8010a7fb8b3ef1b231e1df4ed1c69f17d6686bae36aa",
+    "docs/src/content/docs/community/contributing.md": "4526332acbed340bd910d02b7e1936d75e781df5121c5d6f8d949a233b3b1f67",
+    "docs/src/content/docs/community/get-involved.md": "a15fd7aa232322e5830ce1fbaf7d742c69f5f9833eebec5e312bea5a6610908d",
+    "docs/src/content/docs/composing-using-imports.md": "dda23129ed4a4cc0353f216228e6d47ea1b3d120ff38581dc5119351a7039505",
+    "docs/src/content/docs/containers.md": "0b204f419138f0403d8bc5e2ec105067728047ac31767c3e118cf955baf6eaa9",
+    "docs/src/content/docs/creating-files.md": "42cbb502c937cb36791f6e233ea6aa0b14dd02e83de6049e3c58017a2490d64c",
+    "docs/src/content/docs/editor-support/intellij.md": "c3c6b6ed730e810effd70d3e04b8202fe4cdfb36b809108ae65fcb3196f8ca9b",
+    "docs/src/content/docs/editor-support/vscode.md": "659be0eea1e5af36e38d394ed772d64f1e21a676e18a8bc0e50cb3827309a8e9",
+    "docs/src/content/docs/editor-support/zed.md": "6ae20329b820844996ec32c6d1eb6cc89f4263a50520db72808b05940d36fe3a",
+    "docs/src/content/docs/examples.md": "d073daa716cbb43463350fa2e19ff2226a75b0d4843e58109ef91b0c7c65c419",
+    "docs/src/content/docs/extending.md": "c897348a28cb2aaa15ec6ef92089e44076799a53e7e29ab76e550f44612e76b4",
+    "docs/src/content/docs/files-and-variables.md": "ff9f48af8ee38679528b436341d40f437c97b999a5c060ead07fe6979f203aa7",
+    "docs/src/content/docs/garbage-collection.md": "a7ad87379f7d85260321727151cb14f200c695b41a9dabc0857ccc543981298f",
+    "docs/src/content/docs/getting-started.mdx": "17259d4f06f2907573c5155d9ff6193c3e7f5acfa40cff1b358c88f284b9433b",
+    "docs/src/content/docs/git-hooks.md": "81f2d0e7022a7edf1a9c251fd42715cf808ec5637fc471fbc196d7ea4e590e0a",
+    "docs/src/content/docs/guides/migrating-to-2.0.md": "89fca7524a17b3f109678ff5d056c184cffa96692b2641ec85efcc0cb21885de",
+    "docs/src/content/docs/guides/monorepo.md": "9172c9e0f877a5b190787c46a98d6d2dff6cd0e4e6a039008d229811e4c7c07d",
+    "docs/src/content/docs/guides/polyrepo.md": "f6d4b38d2aa014160bb5e1c279b101658a013c6a1710de5447cc296f29b71ebf",
+    "docs/src/content/docs/guides/using-with-flake-parts.md": "d5d90a12185ed27e031631a8e2df9785eef3741f8379a89ac90203d21a8e5d48",
+    "docs/src/content/docs/guides/using-with-flakes.md": "eabf45f330321793bf6b46c24a761f00280f096d4e15761c3e202a92e2a5927a",
+    "docs/src/content/docs/inputs.md": "3dd11d632387f4d5e8c05be544c95b1259b5e025d0cb8a399494c6593bc80eb7",
+    "docs/src/content/docs/integrations/android.md": "e83636fc31bf3dfcc16f6bb661db66119e8d508ce5271ebff22ffecd145fa251",
+    "docs/src/content/docs/integrations/claude-code.md": "ccf6007933dfac9c233fe6614743b6584a2f4c58306c2ee94af59a9247a939fb",
+    "docs/src/content/docs/integrations/codespaces-devcontainer.md": "a190697c1d4d3a56c4f0b67cbb7e18c871ec8619d913f52b8b9477945d717c69",
+    "docs/src/content/docs/integrations/delta.md": "73b3404e57af4fec2c2590fb06dacfe461e1f089381f10d4cb0e9173660369d8",
+    "docs/src/content/docs/integrations/devenv-container.mdx": "16c099cca2fa32ce5f095b315d15019185d0c19bec9b039a458785ee559e5043",
+    "docs/src/content/docs/integrations/difftastic.md": "16bf7c6fb2c0b8c5d6b52c59c0da9ac94d6a0dc8147f606db66c28c7b2cdecc2",
+    "docs/src/content/docs/integrations/direnv.mdx": "2f901889aa908d213428dae48d1e6abbd4e043defdaf599428adae59093dd922",
+    "docs/src/content/docs/integrations/dotenv.md": "9a38d4c89779444e2d73b4506ccb4742903c1fbcdcae1f65dc7b79f4c28992ff",
+    "docs/src/content/docs/integrations/github-actions.md": "3f4f4a1f7601e5e10b35464b067d9133aa223bd35283706c33be0736d9c37200",
+    "docs/src/content/docs/integrations/secretspec.md": "10542801318134aafb3eacdfca130514e1a20de4d2e3b180797772be34cad1f7",
+    "docs/src/content/docs/integrations/treefmt.md": "f7d32db4fa995d92b5100b386ddfd253fe6c7a76294745e3fcadf89f2b6b3a2b",
+    "docs/src/content/docs/integrations/wordpress.md": "7205b484100bfd0cd60721a5fa4f8b3a87eb5bcaa304855d664ca59927a03f37",
+    "docs/src/content/docs/languages/ansible.md": "22a0ed4f1e17fb5aa057f437afde308efa1d71ac79b62f8fcecb85cdc46da8b0",
+    "docs/src/content/docs/languages/c.md": "9ee53521d7cfc7e321b5cdc6bbb1be02bfc119907085d4055498705551c1a747",
+    "docs/src/content/docs/languages/clojure.md": "5ecbeee2f0b696433642ac9528d8523d406d5166d680f1098b33126cff4168a3",
+    "docs/src/content/docs/languages/cplusplus.md": "3955cc1022355ac79f9127c2a0a4f891e04250b1c9cb7995cd4afe25c43c641a",
+    "docs/src/content/docs/languages/crystal.md": "204be174a44b1d00d9a038a33d98d5c0891dc572704d684d7b9b1e1388c1bc2f",
+    "docs/src/content/docs/languages/cue.md": "972c6f9dc7dff51caa7642e6e54bbb5842e0b6968064f8a8dbb9a80ea1f17964",
+    "docs/src/content/docs/languages/dart.md": "485b89f031ca7888795463a3c7700f3976804a82a15631b9848c5cc0cf6c9054",
+    "docs/src/content/docs/languages/deno.md": "106eeb3e57121114a61569dab35d9a7527751bcf96e46383ec2c8f1c6a3ccbab",
+    "docs/src/content/docs/languages/dotnet.md": "cd22bbab7859209114ef88035ceea485cb6d4fb44706921384a74eea1de05fee",
+    "docs/src/content/docs/languages/elixir.md": "aa4d9c9641854e069bc7cf9ccbc5d120b63e5e0dc435f81266488342186290ce",
+    "docs/src/content/docs/languages/elm.md": "efa6cdd93d4e323f479eb6ecee4d5e0a16e9f1ff1275a7e56df7b6e1ce6868a3",
+    "docs/src/content/docs/languages/erlang.md": "558709ed7401512e77d714b1f0be0e529a220db57542a158d4aa37321043bff8",
+    "docs/src/content/docs/languages/fortran.md": "c3f546a97d4d999ad3ed74c46a196ce2d7f07b33bf3800ca04d301c19d5c6484",
+    "docs/src/content/docs/languages/gawk.md": "9665b680ba3a55860c8c96cf5765238567c24afa86de37203eef05175af9d5a4",
+    "docs/src/content/docs/languages/gleam.md": "a2f0c25feb6ca700e0f102ddb5fc146c20bc59bfa6f73ce8d1be220cc550d88a",
+    "docs/src/content/docs/languages/go.md": "0f79cf4e36b9fd88886795ea4add23569f1abaa6b1854e2403bae6293a6a02b9",
+    "docs/src/content/docs/languages/hare.md": "98f591acc2d2c36135e7cc08161cbf29d8a242c5c0214dbeca5a88845c52cd3f",
+    "docs/src/content/docs/languages/haskell.md": "e7fd7b57cda1d0b981031e29c5d3cd7193fedb0bb5e0ddea8b16328533fcb845",
+    "docs/src/content/docs/languages/helm.md": "41f4831f317ccac697c41cb89b0f8cfb822da4885b71527c517f4f2f873188e0",
+    "docs/src/content/docs/languages/idris.md": "4a29fad478192fdb284d3e613570599bda9101705b49ad49ffd451b2a7be5a60",
+    "docs/src/content/docs/languages/index.md": "36893c725937f1c87809295aef693f9106eba51ce43fce36cffd12e5576cd536",
+    "docs/src/content/docs/languages/java.md": "27ca67b2b620b280d35878146aa994de3a3d5f8eb2ba2c52f0b1563aa021fa6b",
+    "docs/src/content/docs/languages/javascript.md": "e4dccb7fb2f70d15b5fcc5d4afe36a1c2ffe0efd9f1dee35ce746449bee952a4",
+    "docs/src/content/docs/languages/jsonnet.md": "62d04f1d39d28471c766086d1750adc80547c1ce3a7d5f77c50b3af21956ba71",
+    "docs/src/content/docs/languages/julia.md": "6faf1f8d6ca072d5f8342db1c2efd1a4dc80c546505873a2bd39f8036c6021ee",
+    "docs/src/content/docs/languages/kotlin.md": "4b54b27825860917c5a4af068c3883b4139a2deeb97f92b8b5f68ed55474d704",
+    "docs/src/content/docs/languages/lean4.md": "1c6252255db8bfce3668fd1b215495e0910c312a9eeef2e78d55282a7140d55f",
+    "docs/src/content/docs/languages/lobster.md": "48aaf050ec6d9f24638e70880e013f3b8b8119b4c648341458fecc7591f11598",
+    "docs/src/content/docs/languages/lua.md": "12e7409c6aa2fd96e0f8313352755f25f5308c86dc8a8458135da4dfe356f3cc",
+    "docs/src/content/docs/languages/nim.md": "5100ce6e64c6cfd00b0adf03837cdf1a3b4b0e5871a2d2e03800df328ebc6785",
+    "docs/src/content/docs/languages/nix.md": "90a894b9a02b656d52b69d489a0a55747438da70f3f076576b4307bfd787ae8d",
+    "docs/src/content/docs/languages/ocaml.md": "0e28329f2d40fbd1d466f618bd52069aa80808af42a66e0406b76722b7590cd3",
+    "docs/src/content/docs/languages/odin.md": "bae3a314a115a346739554fa37ebdcdd3968a3aecd50a8be6696f1db6e3858fa",
+    "docs/src/content/docs/languages/opentofu.md": "533688ee1a9836977bc0469963a3988c694d2469231a8c95ee06a2c8e89530d1",
+    "docs/src/content/docs/languages/pascal.md": "0d75ec4e202fdb42f638c8dfc9a25d62374846406f34d28a1cd69373b3604b3c",
+    "docs/src/content/docs/languages/perl.md": "49a89c80f6bc9db2d44f4c6f3d35411365155fe5d05dfc74cad09d94c9be7d7d",
+    "docs/src/content/docs/languages/php.md": "6c0769d0f9886c49d5f96e5bf7929734144a9236bbcca0a72ef8f699defb89d8",
+    "docs/src/content/docs/languages/pkl.md": "3221785ea4cfcb71038158dc7a4824c252c52116b9e9c2cf1b2f11b5cd51c910",
+    "docs/src/content/docs/languages/purescript.md": "4e066aab230919b862a56ed99ec519baf8cb0a0e1b702f910354d5f38b52d080",
+    "docs/src/content/docs/languages/python.md": "01229c6c006becda3d8780b524e5602b9e9ddd0b2c6d9c5f8fc3e794d5fd6be0",
+    "docs/src/content/docs/languages/r.md": "cbacc7b878cb6cbc421ab7ddd9744b97884a9cf72a52766efcda5b974bf4ff60",
+    "docs/src/content/docs/languages/racket.md": "24a79ce3944a596812555c01105d9368485ee5165d50014e4828d64f7d7f360a",
+    "docs/src/content/docs/languages/raku.md": "de25a1b1f085df60a16886f6f359ebace45a3fbaa033ffe1bf490c75b014ba0b",
+    "docs/src/content/docs/languages/robotframework.md": "23d7a440548983bfd145a61c8c4485bdecd9bb2e5c04f19a0bd3fb1bcca7224f",
+    "docs/src/content/docs/languages/ruby.md": "a350e2f71050784dfb9fd726a3aa10afc0d8ea3261a66cdb0335b97f938efdc7",
+    "docs/src/content/docs/languages/rust.md": "71ba27cc64b1487d6e7093404691df8e8f778198a10a991deee9e3d47cc42f34",
+    "docs/src/content/docs/languages/scala.md": "388be3195352bd3bfcee6760e2e4849138f3b980c86ea0cbe5763e0262c94e61",
+    "docs/src/content/docs/languages/shell.md": "13e7a1a190b670334358f033fca20c53fb8b35379f10638c43e7d1f4f171fd03",
+    "docs/src/content/docs/languages/solidity.md": "cf21a40dc8dddf7171619d5ef70d5e307bebef50fd5656ba9759ae10f0b018fe",
+    "docs/src/content/docs/languages/standardml.md": "73b20bd69b1e07e0343dfc7a0a863e1fa9c2e3d83ba7e96d2405bd12b14c7ac2",
+    "docs/src/content/docs/languages/swift.md": "dd7409408954426f7ce74d11c1493baf615336a6c6b9ec82f5c27c462c075d28",
+    "docs/src/content/docs/languages/terraform.md": "96ac94b90896ea50a6e31d965295fb0cb506d6ba4d6316e5da55bf634f6965bd",
+    "docs/src/content/docs/languages/texlive.md": "37dd4dbdadbc831919561289fa531be2d9a6b432323e3b2f5320d3f43f0a7729",
+    "docs/src/content/docs/languages/typescript.md": "ad7e07eac2a6f8fe722f933b203d1d1ff0259f1405f38b20ecf1937f15ca13a5",
+    "docs/src/content/docs/languages/typst.md": "bd2b340948595d1b55eed2dfed2b508f6ec4bec44ab9d3f13792a49933d780dd",
+    "docs/src/content/docs/languages/unison.md": "295e9b4861d29d28e13531c53c8668a5333394e1abe01b65e3882d760eba5c16",
+    "docs/src/content/docs/languages/v.md": "b19994ec8c15c8e6fc4f8acb6e974a51728fd9a07f118e57327ab4fdb9a081a0",
+    "docs/src/content/docs/languages/vala.md": "afca27500b3e3ae0c7605000c076c2caa90017ac93442947f1a961a376990790",
+    "docs/src/content/docs/languages/zig.md": "52f72311518ed5f2bffe443c8f743e4a700a8bf71189dd8032c87a723a074e80",
+    "docs/src/content/docs/lsp.md": "4107d5957e428c812ad04620a523cd7eae680d7fdec2d00cbff8e7fd88b57c44",
+    "docs/src/content/docs/mcp.md": "c0e7e8dde9a2c5e825ff9449f7b7dce732adaa3e83c51d77b0ccc08b5571ed19",
+    "docs/src/content/docs/outputs.md": "f8be3d121125b83a487b9001668ef13d2e0cecc17169d99909a536606562d4e9",
+    "docs/src/content/docs/overlays.md": "17a3e915d95f38eaf017d71c962c15bb08a4e840119d75b233e8cabefc8dff6e",
+    "docs/src/content/docs/packages.md": "5f1d0a6d7fab20e40a8f196b1ce4896fa0a93ce30dc6298922a910ede75d5e0a",
+    "docs/src/content/docs/pinning.md": "b16fe8107177f6c233aebdb8f2aa00d9a3abfa2feb6fedda42fbe82c395dd16e",
+    "docs/src/content/docs/processes.md": "e30264dc95016721bb5d4b6a7735ef32350d724b4df6390a06ac4bb29ef038e7",
+    "docs/src/content/docs/profiles.md": "6572bae54593b64e1304f2b63c575bdb8795f1f2655dcece9ece3ba7f34e360b",
+    "docs/src/content/docs/recipes/containers.md": "6d916db9db4db9a09999190715791f40ee6424ceaaa5c06dc613d43c4ff8b2c5",
+    "docs/src/content/docs/recipes/cross-platform.md": "2f78f935a3795b91e6937357e088ce8d93e09d121f28a0362f7efc697cd3d744",
+    "docs/src/content/docs/recipes/macos.md": "a89fdd01e6f7c2d74ec8e15b386221b64658f9d3d277f787a66a4b11491c550c",
+    "docs/src/content/docs/recipes/nix.md": "544e610527cb75e4bb1f6f608333cd757f72ede8eb98520d0b6e2dae243ff1c0",
+    "docs/src/content/docs/reference/environment-variables.md": "3b34ca61cf56d700370203604bfc69d074e751b3bb34b776bdbed445de252311",
+    "docs/src/content/docs/reference/yaml-options.md": "14fdd621e00e50636ac569703ffc777769b9e7bb1cc3e7e1806d5ac139f837f0",
+    "docs/src/content/docs/repl.md": "8dd8682e4271b3d7112f49781ad6c8ab9d5ac0bf2f6b63f287e9d194f36b176d",
+    "docs/src/content/docs/scripts.md": "0dcf194430da28f7664f8958296dd8b51da621d68a4dbd3d8d16340d80d8124a",
+    "docs/src/content/docs/services/adminer.md": "f922e492fae79245120759016619c68e906dba7a49aaff1529f429980ba61381",
+    "docs/src/content/docs/services/blackfire.md": "5e5472098014596713fc90036e0b3f4ea4a6509b00901a1d693b70eea239baa5",
+    "docs/src/content/docs/services/caddy.md": "b3c42fc735309363512b9046a02f2e4e6dbcfe2033674483df3ac06c46007a5f",
+    "docs/src/content/docs/services/cassandra.md": "9ef2d1cbae37111e04ec946e19f1a49a8f93c1fc97a8f95aa34ae8bf32f53162",
+    "docs/src/content/docs/services/clickhouse.md": "3b97c820742f1d7973e7804ecfa22744677c63099585c66998002cd209ff1167",
+    "docs/src/content/docs/services/cockroachdb.md": "a98b792b1f98b97111953fca787c3aec4d1ea08f11146f5838adab6995e831a7",
+    "docs/src/content/docs/services/couchdb.md": "bf31002adb7fbc8f1946283c4c3fc2529c3b12f9ed83d2f665f266c01b72c63b",
+    "docs/src/content/docs/services/dynamodb-local.md": "d27176d5ab6e7ee5b34ef4f67cd9b243c55a7d2bbf4b986a945c037cbefc3aa2",
+    "docs/src/content/docs/services/elasticmq.md": "746d5408b5877cde671f641618f4b4d69ac064a3cd63e88f0ec2c616eaad8639",
+    "docs/src/content/docs/services/elasticsearch.md": "aa3f7d224a663e1ba79cd6eed5a8176c22929d724d58fc10cef9aadb89a9a54e",
+    "docs/src/content/docs/services/garage.md": "34fbaed6040fdc19391783c5ce337e3259f46741a4bc07fcde988005ebd504c6",
+    "docs/src/content/docs/services/httpbin.md": "424d8cb470d2204ddd470b4bb3c030eefacdcd9b6bff8b617a9685432de35711",
+    "docs/src/content/docs/services/index.md": "70530923de4084466d121d82006f015579e28b1e6a538bc7c75c017331211d5f",
+    "docs/src/content/docs/services/influxdb.md": "8992d69e45670b660b55f9f8eab189080efddff350d16437867a30092313c74d",
+    "docs/src/content/docs/services/kafka.md": "2898f039ef60a88a77a8d2143f1aa8d90b766f8ce4c3e97ab40cdd76342edbca",
+    "docs/src/content/docs/services/keycloak.md": "f02a38569260322b5397d84ab598e13faab732fb614e7f2cd91051131f1a0a63",
+    "docs/src/content/docs/services/mailhog.md": "a5d9dd17bc537ee4d9db123fe8fc616d9c6519028783bf6504bd69cc8187af15",
+    "docs/src/content/docs/services/mailpit.md": "3140c088ba9390873fc2b82d0222bba545d33ab48657c30fdc46c72abbf3e1dc",
+    "docs/src/content/docs/services/meilisearch.md": "4a674e42443e38ddce80da16a65ca641c32fc7f251c24ee62c1aad99e9438ede",
+    "docs/src/content/docs/services/memcached.md": "aafaeb5e044686ae4f2d6d512e726b64c36ec133270a32212d9b8f01623ecb32",
+    "docs/src/content/docs/services/minio.md": "55bb01fca2026058022114acec89b655dec2b52d920c2b1311a9b5a9a82b25e6",
+    "docs/src/content/docs/services/mongodb.md": "16441adbe620299cdac06221c97fe863c147f31b2d0df400ef7a38e8143a1546",
+    "docs/src/content/docs/services/mosquitto.md": "2af3bfda3f7bb56bab9d8321b066656f4f131ac1b0eb6d73ca31c183756ce9d0",
+    "docs/src/content/docs/services/mysql.md": "62af33003cafb9ce094fa64948e3afbe8d9787002357d75c85dc4d6b8cf0bd8e",
+    "docs/src/content/docs/services/nats.md": "831e3d85c0fb10c163d8dbbc97e0956719f149b4bd77823a1bca968953e2e4cb",
+    "docs/src/content/docs/services/nginx.md": "ff7af365926b7a5190da3de85f95de6be4335e4585e6a5a34145440238b0fc5b",
+    "docs/src/content/docs/services/nixseparatedebuginfod.md": "f411d18c75515e9b5a56e59dd8bc381dea40b39f04dc8a03c3be492c11167ee3",
+    "docs/src/content/docs/services/opensearch.md": "a8fd6c3f6e993dee1de8403f2b04838475eca035dbd6f6c254e7cc7d5bb94e13",
+    "docs/src/content/docs/services/opentelemetry-collector.md": "a2f18c40feceaf3c6cb5fe6fdecb53078ecbf5d9b72454e1a0ad6e266f992f7f",
+    "docs/src/content/docs/services/postgres.md": "0c8999edf17cb15254455db34db89d7793239eeb09e812b521ee079770acfae9",
+    "docs/src/content/docs/services/prometheus.md": "22e3ab314fe5b2c1fcf435014611cbdb5969c76b63ba66e30fb041132cc204e3",
+    "docs/src/content/docs/services/rabbitmq.md": "06326852a2b6379ebb90563bd04f3e9c1744a39935ae9ce1f46fae576d1807d4",
+    "docs/src/content/docs/services/redis.md": "5482edfd1bb4cd1268f9c70731d6829f2336bb5b9a313bc95e97076799496699",
+    "docs/src/content/docs/services/rustfs.md": "3dc324a26b16a351b4373b011d7e2329c965d1f7ee24f755deff9c3db165b9b6",
+    "docs/src/content/docs/services/sqld.md": "7d5fe3040a2b5eaef70962fe6cd5cff64562cc64278d1c3f092026fb83cf41a5",
+    "docs/src/content/docs/services/tailscale.md": "c47a49b8e2bdf5a1d33b1cec7b0dc9fac3f7d9c644ff3e226abcb9a226a81363",
+    "docs/src/content/docs/services/temporal.md": "7be3218b23a01dc43d411c1ccda42d3fb79fa8d9f28be8ae5a3371d08502069a",
+    "docs/src/content/docs/services/tideways.md": "bb18aa20a93fc1d39784166c5641bb8a5db7ee98a3dc9924daa739190740275a",
+    "docs/src/content/docs/services/trafficserver.md": "5355c883d430cc1ec677c8cbac201a79b3b56d81e9f95638fcbbdbf2f0e9896e",
+    "docs/src/content/docs/services/typesense.md": "937ce5d1cb10173f71160811433e82e249453077d85ab91a166345c22208dc79",
+    "docs/src/content/docs/services/varnish.md": "8b5152d453f8f2a16b5489a24a6a0894d3192204e182dd8b457099b181c93535",
+    "docs/src/content/docs/services/vault.md": "9cb0c96d8e7a88b7a4459adc62d14b6d8e55fa61c29773837efe08cb1e5d4995",
+    "docs/src/content/docs/services/wiremock.md": "2b419b2e9bb6c36c919286805b21f4cb6cff0063e22109d4e2e8aec788e18b92",
+    "docs/src/content/docs/supported-process-managers/hivemind.md": "7730fbd36f1273b432bbe59d097ce23754ef724c3f6cbd8a80051b793c73ae2c",
+    "docs/src/content/docs/supported-process-managers/honcho.md": "17028216d4cc48a6367a1e5e9ed255dfc174181f641311563a9c9802b40b8457",
+    "docs/src/content/docs/supported-process-managers/index.md": "140737b5f92edb07d2b847c0e880b2d9065a1bf0271af7ae25173ba860d5925d",
+    "docs/src/content/docs/supported-process-managers/mprocs.md": "6f72e5253176b0caa2816589d8467d6a03f1add35e9e575d96e4c1a22c8ec089",
+    "docs/src/content/docs/supported-process-managers/native.md": "59f851801c651d8624ba26dc5ebfc49987bfedfb6f8f22ada3dad0263fe2e1a1",
+    "docs/src/content/docs/supported-process-managers/overmind.md": "3db91a864875beea2e6d2c5a5fa3b15a0f3b2f9dfa78f6ad769af329abdabf53",
+    "docs/src/content/docs/supported-process-managers/process-compose.md": "bbe34250215dc501355703b473ce528eb1faa58b0acbb5d0cdac132f0e7b754d",
+    "docs/src/content/docs/tasks.md": "1779686609a2c7f764ff0fa127f54f9e62f5cdd416a0f7a971e3fe7ccfae56d9",
+    "docs/src/content/docs/tests.md": "6087318bb5c90197a35e5e147fca812316a41d75da01c347ed4e0777f5b60150",
+    "docs/src/content/docs/tui-customization.md": "27d43a69d87cfb051eba9b9bba9591b703e7bd0d8a8732c9d14387c656e0490a"
+  },
+  "inputs": {
+    "Cargo.toml": "f646fc83aa45a1f0809d16cf7a113278608741a59341d939a6aa8285a4a320bf",
+    "LICENSE": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+    "devenv-core/src/config.rs": "c37defdef228c0b48607a438e0894989402567c068ce6666b067bb23af76f63c",
+    "docs/gen/devenv.nix": "dc68939ffc92798858e37713d03cb54caaafc4d521362c8e561e08750e776085",
+    "docs/gen/scripts/generate-doc-options.sh": "bb523a05b5bb59a78173534875671e7e4bff243e578219e036f5b7f358e2dddf",
+    "docs/gen/scripts/generate-individual-docs.sh": "7491ecd4e82cba2a16eb54b2fd52dfbdf7d4e88e397a753923d455d33afb4e41",
+    "docs/public/.well-known/agent-skills/devenv-setup/SKILL.md": "77829664ed32104385c03f31d72da2423605a9e52c8fff7cf848f018d232e4ac",
+    "docs/src/content/docs/auto-activation.mdx": "92fe4ce697729eae79ed43c080e1c1c73ce30d88980e75b0103be2929171342c",
+    "docs/src/content/docs/basics.md": "8387fea0af64ba061b46146520e79fc001e300fade48737fb38b5e2fb5794aac",
+    "docs/src/content/docs/composing-using-imports.md": "dda23129ed4a4cc0353f216228e6d47ea1b3d120ff38581dc5119351a7039505",
+    "docs/src/content/docs/files-and-variables.md": "ff9f48af8ee38679528b436341d40f437c97b999a5c060ead07fe6979f203aa7",
+    "docs/src/content/docs/git-hooks.md": "81f2d0e7022a7edf1a9c251fd42715cf808ec5637fc471fbc196d7ea4e590e0a",
+    "docs/src/content/docs/inputs.md": "3dd11d632387f4d5e8c05be544c95b1259b5e025d0cb8a399494c6593bc80eb7",
+    "docs/src/content/docs/integrations/direnv.mdx": "2f901889aa908d213428dae48d1e6abbd4e043defdaf599428adae59093dd922",
+    "docs/src/content/docs/languages/go.md": "0f79cf4e36b9fd88886795ea4add23569f1abaa6b1854e2403bae6293a6a02b9",
+    "docs/src/content/docs/languages/javascript.md": "e4dccb7fb2f70d15b5fcc5d4afe36a1c2ffe0efd9f1dee35ce746449bee952a4",
+    "docs/src/content/docs/languages/python.md": "01229c6c006becda3d8780b524e5602b9e9ddd0b2c6d9c5f8fc3e794d5fd6be0",
+    "docs/src/content/docs/languages/rust.md": "71ba27cc64b1487d6e7093404691df8e8f778198a10a991deee9e3d47cc42f34",
+    "docs/src/content/docs/packages.md": "5f1d0a6d7fab20e40a8f196b1ce4896fa0a93ce30dc6298922a910ede75d5e0a",
+    "docs/src/content/docs/pinning.md": "b16fe8107177f6c233aebdb8f2aa00d9a3abfa2feb6fedda42fbe82c395dd16e",
+    "docs/src/content/docs/processes.md": "e30264dc95016721bb5d4b6a7735ef32350d724b4df6390a06ac4bb29ef038e7",
+    "docs/src/content/docs/profiles.md": "6572bae54593b64e1304f2b63c575bdb8795f1f2655dcece9ece3ba7f34e360b",
+    "docs/src/content/docs/reference/yaml-options.md": "14fdd621e00e50636ac569703ffc777769b9e7bb1cc3e7e1806d5ac139f837f0",
+    "docs/src/content/docs/scripts.md": "0dcf194430da28f7664f8958296dd8b51da621d68a4dbd3d8d16340d80d8124a",
+    "docs/src/content/docs/services/postgres.md": "0c8999edf17cb15254455db34db89d7793239eeb09e812b521ee079770acfae9",
+    "docs/src/content/docs/tasks.md": "1779686609a2c7f764ff0fa127f54f9e62f5cdd416a0f7a971e3fe7ccfae56d9",
+    "docs/src/content/docs/tests.md": "6087318bb5c90197a35e5e147fca812316a41d75da01c347ed4e0777f5b60150",
+    "docs/src/data/options.json": "5ef9eb765b8e9318047200021e5ac377037d81a6eacb00fd061e2ee275ae2b7f",
+    "docs/src/individual-docs/languages/go.md": "158e44edeb8e8ef71fd2d04b91f1544af97d14371d1cf760f68c9d0cba332bdc",
+    "docs/src/individual-docs/languages/javascript.md": "158e44edeb8e8ef71fd2d04b91f1544af97d14371d1cf760f68c9d0cba332bdc",
+    "docs/src/individual-docs/languages/python.md": "bdd01c5db1541e8dd3abafde189c945255b2db4e62708274903c43a47d6f99c2",
+    "docs/src/individual-docs/languages/rust.md": "0911c2f85febc0bbb02434a4abfc7fa66f21daadef673bb87117ac5851d4d0e4",
+    "docs/src/individual-docs/services/postgres.md": "158e44edeb8e8ef71fd2d04b91f1544af97d14371d1cf760f68c9d0cba332bdc",
+    "flake.lock": "2ddbf060ebb56dc92814bd32dc2eb33da6b4c70ff404f7f2f531fcde1cc63ee6",
+    "flake.nix": "1083faeb77cdf862fe372b0108c57b6454011e3d3097ba11be7b75b825c9700e"
+  },
+  "option_inputs": {
+    "enterShell": "e32063f888af6695decb52aca51c61b2c3d92e0da18a07853a8ce6ca695c12ac",
+    "enterTest": "db7326a2112de3916c4fa5b9d7a5e337e53b5e8fb2dee28c26f4a053d1a0213a",
+    "env": "3c749ada7151d5acd9df0dfbf7fe03f685e6456731957e14273e9e04842d5795",
+    "languages.go.enable": "80969cf3de97f4380f3f92b95fb553871e3890c489306d0c155fe64d79c4af44",
+    "languages.javascript.enable": "68f59814f414bcea0bfd0ebb627b1fe624f5dc69a8177d65ee93c23024fc0b79",
+    "languages.javascript.npm.enable": "24330c94d64c5772c5951cf32c609e4a950bc1023e16b0c3446566060328f1db",
+    "languages.python.enable": "98b2d945ae4105359dc982012a18868da20b991d39a963f5fa6e066260efc5ae",
+    "languages.python.venv.enable": "d86f772401135f2e94c9a924a6a502b9ce64e590482670435208eb449ab183ec",
+    "languages.rust.enable": "8f4e89eba34c93de19c7012ddebde84a32384962355623c74480f2c21e282077",
+    "packages": "7e76ee73c6fed2367a8538ed89322c275cda00ca5cf9722011debb443a5433e5",
+    "processes.<name>.exec": "b5a7da2a9a132dc5d626ea89ced7bb3005ba3a18c615e3544062357eb9065490",
+    "scripts.<name>.exec": "eac49af6b6e166159c61b086b16df27521787a732512b03656dc77ad9a943329",
+    "services.postgres.enable": "cb67c8a9a3de5093f9ee32ee15b459fbf767922e62cd00f890257d70b3bb8b28",
+    "tasks.<name>.after": "d5666d89b732b9a2e6cb6b7791e62f96b8321e4f2f9c2b0b0ca4b7b5cdbb5864",
+    "tasks.<name>.before": "9c9507d3cbed65a7aedb5db35bbf8a996fa0d1db818f839c580d0b31d71fc2f7",
+    "tasks.<name>.exec": "9628759e3e3fae51c51c0a3502f4713fa5b7fb67fc556d1cf0426725e4bad9fb",
+    "tasks.<name>.status": "edb921880799e56e3317768cf9b844fbf90d30aa85c4521436ab435b9358ab60"
+  },
+  "outputs": {
+    "LICENSE": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+    "references/configuration.md": "c56ee146cfe011dcffd422452244e4055e424716febb7ec8f843c8b40aafd20c",
+    "references/options.md": "8ab3024c3c11fce84056064a479af1e166bda78ae2651e2a9c40bbb1d2894d49",
+    "references/workflows.md": "6f3bf8c1800e80d26725730befa397aa16e105f294b3b2b1b141d17a4de277b9"
+  },
+  "release": "v2.3.1",
+  "revision": "2418e1b43797c44de5166176622c8d8fa0149871",
+  "selection": {
+    "options": [
+      "env",
+      "packages",
+      "enterShell",
+      "enterTest",
+      "scripts.<name>.exec",
+      "tasks.<name>.exec",
+      "tasks.<name>.before",
+      "tasks.<name>.after",
+      "tasks.<name>.status",
+      "processes.<name>.exec",
+      "languages.python.enable",
+      "languages.python.venv.enable",
+      "languages.javascript.enable",
+      "languages.javascript.npm.enable",
+      "languages.rust.enable",
+      "languages.go.enable",
+      "services.postgres.enable"
+    ],
+    "provenance": [
+      "flake.nix",
+      "flake.lock",
+      "docs/gen/devenv.nix",
+      "docs/gen/scripts/generate-doc-options.sh",
+      "docs/gen/scripts/generate-individual-docs.sh",
+      "devenv-core/src/config.rs",
+      "docs/src/individual-docs/languages/python.md",
+      "docs/src/individual-docs/languages/javascript.md",
+      "docs/src/individual-docs/languages/rust.md",
+      "docs/src/individual-docs/languages/go.md",
+      "docs/src/individual-docs/services/postgres.md",
+      "Cargo.toml"
+    ],
+    "sections": [
+      {
+        "heading": "Basics",
+        "path": "basics.md",
+        "reference": "configuration"
+      },
+      {
+        "heading": "Environment Summary",
+        "path": "basics.md",
+        "reference": "configuration"
+      },
+      {
+        "heading": "Files",
+        "path": "files-and-variables.md",
+        "reference": "configuration"
+      },
+      {
+        "heading": "Following inputs",
+        "path": "inputs.md",
+        "reference": "configuration"
+      },
+      {
+        "heading": "Locking and updating inputs",
+        "path": "inputs.md",
+        "reference": "configuration"
+      },
+      {
+        "heading": "How it works",
+        "path": "pinning.md",
+        "reference": "configuration"
+      },
+      {
+        "heading": "Pinning a nixpkgs revision",
+        "path": "pinning.md",
+        "reference": "configuration"
+      },
+      {
+        "heading": "Updating pins",
+        "path": "pinning.md",
+        "reference": "configuration"
+      },
+      {
+        "heading": "Commit the lockfile",
+        "path": "pinning.md",
+        "reference": "configuration"
+      },
+      {
+        "heading": "Packages",
+        "path": "packages.md",
+        "reference": "configuration"
+      },
+      {
+        "heading": "Searching",
+        "path": "packages.md",
+        "reference": "configuration"
+      },
+      {
+        "heading": "Composing using imports",
+        "path": "composing-using-imports.md",
+        "reference": "configuration"
+      },
+      {
+        "heading": "Basics",
+        "path": "profiles.md",
+        "reference": "configuration"
+      },
+      {
+        "heading": "Referencing `config` in profiles",
+        "path": "profiles.md",
+        "reference": "configuration"
+      },
+      {
+        "heading": "Profile priorities",
+        "path": "profiles.md",
+        "reference": "configuration"
+      },
+      {
+        "heading": "imports",
+        "path": "reference/yaml-options.md",
+        "reference": "configuration"
+      },
+      {
+        "heading": "require_version",
+        "path": "reference/yaml-options.md",
+        "reference": "configuration"
+      },
+      {
+        "heading": "Setup",
+        "path": "auto-activation.mdx",
+        "reference": "workflows"
+      },
+      {
+        "heading": "Trusting a project",
+        "path": "auto-activation.mdx",
+        "reference": "workflows"
+      },
+      {
+        "heading": "Revoking trust",
+        "path": "auto-activation.mdx",
+        "reference": "workflows"
+      },
+      {
+        "heading": "How it works",
+        "path": "auto-activation.mdx",
+        "reference": "workflows"
+      },
+      {
+        "heading": "Comparison with direnv",
+        "path": "auto-activation.mdx",
+        "reference": "workflows"
+      },
+      {
+        "heading": "Configure shell activation",
+        "path": "integrations/direnv.mdx",
+        "reference": "workflows"
+      },
+      {
+        "heading": "Approving and loading the shell",
+        "path": "integrations/direnv.mdx",
+        "reference": "workflows"
+      },
+      {
+        "heading": "Scripts",
+        "path": "scripts.md",
+        "reference": "workflows"
+      },
+      {
+        "heading": "Aliases & args",
+        "path": "scripts.md",
+        "reference": "workflows"
+      },
+      {
+        "heading": "Runtime packages",
+        "path": "scripts.md",
+        "reference": "workflows"
+      },
+      {
+        "heading": "Defining tasks",
+        "path": "tasks.md",
+        "reference": "workflows"
+      },
+      {
+        "heading": "Dependencies between tasks",
+        "path": "tasks.md",
+        "reference": "workflows"
+      },
+      {
+        "heading": "enterShell / enterTest",
+        "path": "tasks.md",
+        "reference": "workflows"
+      },
+      {
+        "heading": "Basic Example",
+        "path": "processes.md",
+        "reference": "workflows"
+      },
+      {
+        "heading": "Using Pre-built Services",
+        "path": "processes.md",
+        "reference": "workflows"
+      },
+      {
+        "heading": "Tests",
+        "path": "tests.md",
+        "reference": "workflows"
+      },
+      {
+        "heading": "Writing your first test",
+        "path": "tests.md",
+        "reference": "workflows"
+      },
+      {
+        "heading": "Git Hooks",
+        "path": "git-hooks.md",
+        "reference": "workflows"
+      },
+      {
+        "heading": "Managing the `.pre-commit-config.yaml` file",
+        "path": "git-hooks.md",
+        "reference": "workflows"
+      },
+      {
+        "heading": "Getting started",
+        "path": "languages/python.md",
+        "reference": "options"
+      },
+      {
+        "heading": "Virtual environments",
+        "path": "languages/python.md",
+        "reference": "options"
+      },
+      {
+        "heading": "Getting started",
+        "path": "languages/rust.md",
+        "reference": "options"
+      },
+      {
+        "heading": "languages.javascript.enable",
+        "path": "languages/javascript.md",
+        "reference": "options"
+      },
+      {
+        "heading": "languages.go.enable",
+        "path": "languages/go.md",
+        "reference": "options"
+      },
+      {
+        "heading": "services.postgres.enable",
+        "path": "services/postgres.md",
+        "reference": "options"
+      }
+    ]
+  },
+  "upstream": "https://github.com/cachix/devenv"
+}

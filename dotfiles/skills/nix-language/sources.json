@@ -1,0 +1,159 @@
+{
+  "inputs": {
+    ".version": "50127cb5ee9245bea0dd7ed92aa228611a5f4b0e9d39ec26e2da186a16c95e4e",
+    "COPYING": "20e50fe7aae3e56378ebf0417d9de904f55a0e61e4df315333e632a4d3555d95",
+    "doc/manual/generate-builtins.nix": "f2fa55f7d940609f0e75c01a69e893fbe446848e90326b3a5bc62462780a2443",
+    "doc/manual/source/language/derivations.md": "ffa79995a45066a581e89e374049be2ad4b308656e2daff16142b6d3258242ca",
+    "doc/manual/source/language/evaluation.md": "9caccc9ced84cbfd3963590564ddbef1864001c1b31a7dff937738c86b7f1e07",
+    "doc/manual/source/language/operators.md": "6fc957e0fda9ad80d346018e0ae1cca2b6d59bddbeb3ad4f48d77ef059468dc2",
+    "doc/manual/source/language/scope.md": "264d5dc35773fb3aa679620077ac130c96992cd5e829152e0ca36fee0a747754",
+    "doc/manual/source/language/string-context.md": "b76e77e4cf5d6b6c1b5aeb03d276d7f644b495d99a7ffccf314db88c9cede6c7",
+    "doc/manual/source/language/string-interpolation.md": "72904ebba7b564686a4c252c24fdc2d485adfdb561ba08bec86f2e482874d738",
+    "doc/manual/source/language/string-literals.md": "e6e4b05f53faf0b2623df892b573a6a6748c29a77eb3fb1607359b528a20204c",
+    "doc/manual/source/language/syntax.md": "4eab376987dc24490d37917abc0ca5a42362ec864378ef304f875434245d87fb",
+    "doc/manual/source/language/types.md": "eb9dbe73db9844a279a7a91c22a04b49338d51f27727732a223fbf1b5554c3ab",
+    "doc/manual/utils.nix": "b2136a0c094e0d7ff0417aa0a911420aadd21d5691cfee54b578b11eed0bb256",
+    "flake.lock": "1ec27d32a6fdc525f0bd17d5fb2beeb801bd7488d4c632e69346eec0c02bcd9e",
+    "flake.nix": "ad78689c022b7bea4225bb485ddedfe8ca140108a336f2ac74a564953dd3a7df",
+    "generated:language.json": "368c92920a50dae0a4744d23a379e3b2c1e1a26f4626848f8eac59fc892ef301"
+  },
+  "language_inputs": {
+    "doc/manual/source/language/advanced-attributes.md": "b33ee5a442ff0411f25b4ed4fdecac322b0d247319dea0ef6136ad7e259a8fbf",
+    "doc/manual/source/language/builtins-prefix.md": "faeade3cddec6b039288ae7cd31213dbbf7ef3fd33d5da792de75486817f219a",
+    "doc/manual/source/language/builtins-suffix.md": "0890d42b7cedd59723566374c5ce7b6ce13b31717501e6320712a314fd01c776",
+    "doc/manual/source/language/constructs.md": "4ee6ddc7400d1ae2ca048ab0136b2ccd60f591a192ca62c2f116eb6d003d53b8",
+    "doc/manual/source/language/constructs/lookup-path.md": "b730a0f7370105b360453dec737d3ffeca9b06df7db2eae2fc08e349d4208e92",
+    "doc/manual/source/language/derivations.md": "ffa79995a45066a581e89e374049be2ad4b308656e2daff16142b6d3258242ca",
+    "doc/manual/source/language/evaluation.md": "9caccc9ced84cbfd3963590564ddbef1864001c1b31a7dff937738c86b7f1e07",
+    "doc/manual/source/language/identifiers.md": "59aaff1246b538f3fd2194383cecee72da4ef7ef531bd4a7d2a8ffe69cc2d171",
+    "doc/manual/source/language/import-from-derivation.md": "9428f356fa3e2b326f99b800802d19eff7642461009cbda8ee0672ddc97099a3",
+    "doc/manual/source/language/index.md": "70da79d50629e471baf0d239f7ee97d55c72c57303cfbb3c4fdcb4a4e56a9424",
+    "doc/manual/source/language/operators.md": "6fc957e0fda9ad80d346018e0ae1cca2b6d59bddbeb3ad4f48d77ef059468dc2",
+    "doc/manual/source/language/scope.md": "264d5dc35773fb3aa679620077ac130c96992cd5e829152e0ca36fee0a747754",
+    "doc/manual/source/language/string-context.md": "b76e77e4cf5d6b6c1b5aeb03d276d7f644b495d99a7ffccf314db88c9cede6c7",
+    "doc/manual/source/language/string-interpolation.md": "72904ebba7b564686a4c252c24fdc2d485adfdb561ba08bec86f2e482874d738",
+    "doc/manual/source/language/string-literals.md": "e6e4b05f53faf0b2623df892b573a6a6748c29a77eb3fb1607359b528a20204c",
+    "doc/manual/source/language/syntax.md": "4eab376987dc24490d37917abc0ca5a42362ec864378ef304f875434245d87fb",
+    "doc/manual/source/language/types.md": "eb9dbe73db9844a279a7a91c22a04b49338d51f27727732a223fbf1b5554c3ab",
+    "doc/manual/source/language/values.md": "412ec5722be681b8dfccb8008ca378ac446187a9c58b0bb9a3ccd346afa07bc6",
+    "doc/manual/source/language/variables.md": "b38fefa325170abf97c5313af9300b32cfc85578d9dfb9c1d060c315c48d145e"
+  },
+  "nix_version": "2.35.2",
+  "outputs": {
+    "COPYING": "20e50fe7aae3e56378ebf0417d9de904f55a0e61e4df315333e632a4d3555d95",
+    "references/builtins.md": "2a52e0bf223694f6c56cfaffc61443f1cfd6f3aca5916a508a3805b833f4ad67",
+    "references/language.md": "7fc744dc1ffea46789d8a84428b4badb3b1829fc083ba122f5f1db97e82131ea"
+  },
+  "release": "2.35.2",
+  "revision": "2c73b59da29606068c0c98db015dd3a66955525d",
+  "selection": {
+    "builtins": [
+      "attrNames",
+      "currentSystem",
+      "deepSeq",
+      "filter",
+      "foldl'",
+      "getContext",
+      "getEnv",
+      "hasAttr",
+      "import",
+      "isAttrs",
+      "listToAttrs",
+      "map",
+      "mapAttrs",
+      "outputOf",
+      "readFile",
+      "seq",
+      "toString",
+      "trace",
+      "tryEval",
+      "typeOf"
+    ],
+    "sections": [
+      {
+        "heading": "Data Types",
+        "path": "language/types.md"
+      },
+      {
+        "heading": "Path {#type-path}",
+        "path": "language/types.md"
+      },
+      {
+        "heading": "List {#list-literal}",
+        "path": "language/syntax.md"
+      },
+      {
+        "heading": "Attribute Set {#attrs-literal}",
+        "path": "language/syntax.md"
+      },
+      {
+        "heading": "Recursive sets",
+        "path": "language/syntax.md"
+      },
+      {
+        "heading": "Let-expressions",
+        "path": "language/syntax.md"
+      },
+      {
+        "heading": "Functions",
+        "path": "language/syntax.md"
+      },
+      {
+        "heading": "With-expressions",
+        "path": "language/syntax.md"
+      },
+      {
+        "heading": "Operators",
+        "path": "language/operators.md"
+      },
+      {
+        "heading": "Update",
+        "path": "language/operators.md"
+      },
+      {
+        "heading": "Scoping rules",
+        "path": "language/scope.md"
+      },
+      {
+        "heading": "Laziness and thunks {#laziness}",
+        "path": "language/evaluation.md"
+      },
+      {
+        "heading": "Strictness",
+        "path": "language/evaluation.md"
+      },
+      {
+        "heading": "String literals",
+        "path": "language/string-literals.md"
+      },
+      {
+        "heading": "Interpolated expression",
+        "path": "language/string-interpolation.md"
+      },
+      {
+        "heading": "String context",
+        "path": "language/string-context.md"
+      },
+      {
+        "heading": "Inspecting string contexts",
+        "path": "language/string-context.md"
+      },
+      {
+        "heading": "Clearing string contexts",
+        "path": "language/string-context.md"
+      },
+      {
+        "heading": "Derivations",
+        "path": "language/derivations.md"
+      },
+      {
+        "heading": "Required",
+        "link_definitions": {
+          "`system` configuration option": "@docroot@/command-ref/conf-file.md#conf-system"
+        },
+        "path": "language/derivations.md"
+      }
+    ]
+  },
+  "upstream": "https://github.com/NixOS/nix"
+}
