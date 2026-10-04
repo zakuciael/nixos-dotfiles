@@ -101,11 +101,6 @@
       url = "github:nix-community/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nix-search-tv = {
-      url = "github:3timeslazy/nix-search-tv";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "flake-utils";
-    };
     steam-presence = {
       url = "github:JustTemmie/steam-presence";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -216,9 +211,6 @@
         };
         onex-explorer = flakeInputs.onex-explorer // {
           packages = flakeInputs.onex-explorer.packages.${system};
-        };
-        nix-search-tv = flakeInputs.nix-search-tv // {
-          packages = flakeInputs.nix-search-tv.packages.${system};
         };
         vicinae = flakeInputs.vicinae // {
           packages = flakeInputs.vicinae.packages.${system};

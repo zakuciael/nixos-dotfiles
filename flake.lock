@@ -510,29 +510,6 @@
         "type": "github"
       }
     },
-    "nix-search-tv": {
-      "inputs": {
-        "flake-utils": [
-          "flake-utils"
-        ],
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1786891245,
-        "narHash": "sha256-FLiUAztKoFScjg4gfnPfo1jSfIn8xQuJNKrgYhUDo0k=",
-        "owner": "3timeslazy",
-        "repo": "nix-search-tv",
-        "rev": "f01e964b630a5d22670b3f868188891b530041c2",
-        "type": "github"
-      },
-      "original": {
-        "owner": "3timeslazy",
-        "repo": "nix-search-tv",
-        "type": "github"
-      }
-    },
     "nixos-hardware": {
       "inputs": {
         "nixpkgs": "nixpkgs_3"
@@ -736,7 +713,6 @@
         "irminsul": "irminsul",
         "nix-colors": "nix-colors",
         "nix-index-database": "nix-index-database",
-        "nix-search-tv": "nix-search-tv",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs_4",
         "nixpkgs-lib": [
