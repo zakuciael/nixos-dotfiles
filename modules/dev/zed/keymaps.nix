@@ -483,6 +483,7 @@ in
           context = "ProjectPanel";
           bindings = {
             alt-1 = "workspace::CloseActiveDock";
+            alt-insert = "project_panel::NewFile";
             ctrl-c = "project_panel::Copy";
             ctrl-d = "project_panel::CompareMarkedFiles";
             ctrl-v = "project_panel::Paste";
