@@ -38,6 +38,20 @@ in
       programs = {
         fish = {
           enable = true;
+          plugins = [
+            # Keep fish_complete_path in sync when direnv changes XDG_DATA_DIRS
+            # (nix/direnv packages otherwise get no tab completions).
+            # https://github.com/direnv/direnv/issues/1539
+            {
+              name = "completion-sync";
+              src = pkgs.fetchFromGitHub {
+                owner = "iynaix";
+                repo = "fish-completion-sync";
+                rev = "4f058ad2986727a5f510e757bc82cbbfca4596f0";
+                hash = "sha256-kHpdCQdYcpvi9EFM/uZXv93mZqlk1zCi2DRhWaDyK5g=";
+              };
+            }
+          ];
           functions = {
             fish_greeting = ''
               ${pkgs.krabby}/bin/krabby random --no-title
