@@ -92,15 +92,6 @@ with lib.my;
     variables = {
       NH_FLAKE = "/run/media/${username}/Shared/Projects/nixos-dotfiles";
     };
-
-    etc."determinate/config.json" = {
-      enable = true;
-      text = lib.generators.toJSON { } {
-        authentication.additionalNetrcSources = [
-          config.sops.templates."nix/netrc".path
-        ];
-      };
-    };
   };
 
   # Linux Kernel settings
@@ -156,29 +147,6 @@ with lib.my;
                 |> lib.concatStringsSep " "
               }
             '';
-          };
-        "nix/netrc" =
-          let
-            base = "nix/cache_auth";
-            secrets = utils.readSecrets {
-              inherit config base;
-            };
-          in
-          {
-            mode = "0440";
-            group = config.users.groups.keys.name;
-            content =
-              builtins.attrNames secrets
-              |> map (
-                key:
-                "machine ${key} password ${
-                  utils.mkSecretPlaceholder config [
-                    base
-                    key
-                  ]
-                }"
-              )
-              |> lib.concatStringsSep "\n";
           };
       };
       secrets = {
@@ -259,6 +227,7 @@ with lib.my;
       xdg.enable = true;
       thumbnail.enable = true;
       upower.enable = true;
+      niks3-auto-upload.enable = true;
     };
     hardware = {
       grub.enable = true;

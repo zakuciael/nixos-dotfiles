@@ -44,6 +44,7 @@ with lib.my;
         inputs.steam-presence.nixosModules.steam-presence
         inputs.determinate.nixosModules.default
         inputs.irminsul.nixosModules.default
+        inputs.niks3.nixosModules.niks3-auto-upload
       ]
       ++ (utils.recursiveReadDir ./../modules {
         ignoredDirs = [ "apps" ];
