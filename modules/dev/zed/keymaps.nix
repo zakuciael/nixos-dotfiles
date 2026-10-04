@@ -334,8 +334,12 @@ in
             alt-7 = "outline_panel::ToggleFocus";
             alt-8 = "agent::ToggleFocus";
             alt-9 = "git_graph::Open";
-            alt-left = "pane::ActivatePreviousItem";
-            alt-right = "pane::ActivateNextItem";
+            alt-shift-left = "pane::ActivatePreviousItem";
+            alt-shift-right = "pane::ActivateNextItem";
+            alt-left = "workspace::ActivatePaneLeft";
+            alt-right = "workspace::ActivatePaneRight";
+            alt-up = "workspace::ActivatePaneUp";
+            alt-down = "workspace::ActivatePaneDown";
           };
         }
         {
