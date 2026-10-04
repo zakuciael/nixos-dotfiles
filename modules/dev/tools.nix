@@ -43,10 +43,11 @@ in
         ghidra-bin
         imhex
 
-        # MongoDB
+        # Database
         mongosh
         mongodb-tools
         mongodb-compass
+        dbeaver-bin
 
         # HTTP Clients
         httpie
