@@ -5,9 +5,15 @@
   username,
   ...
 }:
-with lib;
-with lib.my;
 let
+  inherit (lib)
+    mkIf
+    mkEnableOption
+    mkOption
+    types
+    optionalString
+    ;
+
   cfg = config.modules.hardware.yubikey;
   hmConfig = config.home-manager.users.${username};
   configDirectory = hmConfig.xdg.configHome;
@@ -15,6 +21,11 @@ in
 {
   options.modules.hardware.yubikey = {
     enable = mkEnableOption "YubiKey support";
+    lockOnRemove = mkOption {
+      description = "Whether to enable a configuration that locks the system when the YubiKey is removed";
+      type = types.bool;
+      default = false;
+    };
   };
 
   config = mkIf cfg.enable {
@@ -76,7 +87,7 @@ in
       pcscd.enable = true;
       udev = {
         packages = with pkgs; [ yubikey-manager ];
-        extraRules = ''
+        extraRules = optionalString cfg.lockOnRemove ''
           ACTION=="remove",\
            ENV{ID_BUS}=="usb",\
            ENV{ID_MODEL_ID}=="0407",\
