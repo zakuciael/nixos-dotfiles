@@ -41,10 +41,6 @@ let
 in
 {
   options.modules = {
-    test = mkOption {
-      type = types.listOf types.package;
-      default = installed_ides;
-    };
     dev.ides = mkOption {
       description = "A list of JetBrains IDEs names to install";
       example = [
