@@ -469,7 +469,6 @@ in
               "terminal::SendKeystroke"
               "enter"
             ];
-            ctrl-shift-a = "editor::SelectAll";
             ctrl-o = [
               "terminal::SendKeystroke"
               "ctrl-o"
