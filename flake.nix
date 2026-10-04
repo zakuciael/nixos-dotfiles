@@ -243,13 +243,24 @@
           };
         }
       );
-    in
-    {
-      nixosConfigurations =
+
+      configurations =
         let
           inherit (lib.my.hosts) mkHost;
         in
         builtins.readDir ./hosts |> builtins.mapAttrs (name: _: mkHost { inherit name; });
+    in
+    {
+      nixosConfigurations = configurations;
+
+      checks.${system} =
+        configurations
+        |> lib.mapAttrs' (
+          name: value: {
+            name = "${name}-nixos";
+            value = value.config.system.build.toplevel;
+          }
+        );
 
       devShells.${system}.default = pkgs.callPackage ./shell.nix { };
 
