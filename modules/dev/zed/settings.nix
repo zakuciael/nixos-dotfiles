@@ -94,7 +94,7 @@ in
         ];
 
         # Autocompletion
-        auto_signature_help = true;
+        auto_signature_help = false;
 
         # UI
         toolbar.breadcrumbs = true;

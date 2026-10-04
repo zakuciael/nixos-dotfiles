@@ -29,6 +29,21 @@ in
   networking = {
     hostName = mkDefault hostname;
     networkmanager.enable = true;
+
+    # FIXME: Remove when done testing Zitadel and NetBird
+    hosts = {
+      "127.0.0.1" = [
+        "users.zakku.eu"
+        "auth.zakku.eu"
+        "sso.zakku.eu"
+        "netbird.zakku.eu"
+        "proxy.zakku.eu"
+        # "ci.zakku.eu"
+        # "cache.zakku.eu"
+        # "niks3.zakku.eu"
+      ];
+    };
+
     firewall = {
       enable = true;
       allowPing = false;
