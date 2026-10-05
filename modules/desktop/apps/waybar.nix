@@ -34,6 +34,7 @@ in
             "clock"
           ];
           modules-right = [
+            "idle_inhibitor"
             "upower#keyboard"
             "upower#mouse"
             "tray"
@@ -134,6 +135,15 @@ in
               warning = 30;
               critical = 15;
             };
+          };
+          "idle_inhibitor" = {
+            format = "{icon}";
+            format-icons = {
+              activated = "󰅶";
+              deactivated = "󰾪";
+            };
+            tooltip-format-activated = "Idle inhibitor on";
+            tooltip-format-deactivated = "Idle inhibitor off";
           };
           "upower#keyboard" = {
             native-path = "/org/bluez/hci0/dev_E9_20_B7_50_6C_FD";
@@ -299,6 +309,17 @@ in
             background: #${base00};
             ${borderRight}
             ${modulesPadding}
+          }
+
+          #idle_inhibitor {
+            color: #${base0A};
+            background: #${base00};
+            ${borderRight}
+            ${modulesPadding}
+          }
+
+          #idle_inhibitor.activated {
+            color: #${base0B};
           }
         '';
     };
