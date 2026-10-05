@@ -53,7 +53,7 @@ _internal_update_ides:
     set -o pipefail
 
     just _info "Updating IDE versions..."
-    overlays/jetbrains/updater/main.py --no-src --no-maven-deps && just _success "Updated IDE versions successfully!"
+    ./overlays/jetbrains/updater/main.py && just _success "Updated IDE versions successfully!"
 
 [private]
 _internal_check_config:
@@ -84,8 +84,8 @@ _internal_commit_ides:
     set -o nounset
     set -o pipefail
 
-    if ! git diff --quiet --exit-code ./overlays/jetbrains/versions.json; then
-      git commit -i ./overlays/jetbrains/versions.json -m "chore(overlays): update JetBrains IDEs"
+    if ! git diff --quiet --exit-code ./overlays/jetbrains/packages; then
+      git commit -i ./overlays/jetbrains/packages -m "chore(overlays/jetbrains): update IDEs versions"
     fi
 
 [private]
