@@ -1,6 +1,26 @@
 {
   description = "A Super-Duper Invincible Shining Sparkly Magic NixOS Config"; # Credits: Genshin Impact
 
+  nixConfig = {
+    extra-experimental-features = [ "pipe-operators" ];
+    extra-substituters = [
+      "https://cache.thalheim.io"
+      "https://ezkea.cachix.org"
+      "https://install.determinate.systems"
+      "https://vicinae.cachix.org"
+      "https://catppuccin.cachix.org"
+      "https://cache.zakku.eu"
+    ];
+    extra-trusted-public-keys = [
+      "cache.thalheim.io-1:R7msbosLEZKrxk/lKxf9BTjOOH7Ax3H0Qj0/6wiHOgc="
+      "ezkea.cachix.org-1:ioBmUbJTZIKsHmWWXPe1FSFbeVe+afhfgqgTSNd34eI="
+      "cache.flakehub.com-3:hJuILl5sVK4iKm86JzgdXW12Y2Hwd5G07qKtHTOcDCM="
+      "vicinae.cachix.org-1:1kDrfienkGHPYbkpNj1mWTr7Fm1+zcenzgTizIcI3oc="
+      "catppuccin.cachix.org-1:noG/4HkbhJb+lUAdKrph6LaozJvAeEEZj4N732IysmU="
+      "cache.zakku.eu-1:X219JrBeYMjhvMb0BXYci2gyAAiOQj4dGizzf+yCVcI="
+    ];
+  };
+
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/*";
