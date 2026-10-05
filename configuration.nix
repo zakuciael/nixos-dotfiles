@@ -29,6 +29,7 @@ with lib.my;
         "catppuccin.cachix.org-1:noG/4HkbhJb+lUAdKrph6LaozJvAeEEZj4N732IysmU="
       ];
       trusted-users = [ "@wheel" ];
+      nix-path = [ "nixpkgs=${inputs.nixpkgs}" ];
     };
     extraOptions = ''
       eval-cores = 2
@@ -37,7 +38,6 @@ with lib.my;
       experimental-features = nix-command flakes pipe-operators
       !include ${config.sops.templates."nix/access_tokens.conf".path}
     '';
-    nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
   };
 
   nixpkgs.pkgs = pkgs;
