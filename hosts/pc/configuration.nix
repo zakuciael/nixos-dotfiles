@@ -186,6 +186,9 @@ in
         installPath = "/media/games/linux/Other/NosTale";
       };
       mitmproxy.enable = true;
+      ides = [
+        "rust-rover"
+      ];
     };
     shell = {
       tmux.enable = true;
