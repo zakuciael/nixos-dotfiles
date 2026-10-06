@@ -153,7 +153,7 @@ stdenv.mkDerivation {
     # make it possible to run disableBreakingUpdates standalone
     inherit disableBreakingUpdates;
     inherit source;
-    updateScript = ./update.py;
+    updateScript = ../update.py;
 
     tests = {
       withVencord = self.override {

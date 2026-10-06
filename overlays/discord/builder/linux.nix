@@ -405,7 +405,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit disableBreakingUpdates;
     # Exposed so reviewers can inspect which distro modules are pinned
     inherit source moduleVersions;
-    updateScript = ./update.py;
+    updateScript = ../update.py;
 
     tests = {
       withVencord = self.override {

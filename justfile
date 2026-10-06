@@ -46,14 +46,48 @@ _internal_update_flake:
     nix flake update && just _success "Updated flake.lock file successfully!"
 
 [private]
+_internal_run_updater name script:
+    #!/usr/bin/env bash
+    set -o errexit
+    set -o nounset
+    set -o pipefail
+
+    just _info "Updating overlay '{{ name }}' via {{ script }}..."
+    chmod +x "{{ script }}"
+    "{{ script }}"
+    just _success "Updated overlay '{{ name }}' successfully!"
+
+[private]
+_internal_update_overlays:
+    #!/usr/bin/env bash
+    set -o errexit
+    set -o nounset
+    set -o pipefail
+
+    just _info "Discovering overlay updaters..."
+    mapfile -t entries < <(nix eval --json --impure .#lib.my.overlays.updaters \
+      | jq -r 'to_entries[] | "\(.key)\t\(.value)"')
+
+    if [[ ''${#entries[@]} -eq 0 ]]; then
+      just _info "No overlay updaters registered."
+      exit 0
+    fi
+
+    for entry in "${entries[@]}"; do
+      name="${entry%%$'\t'*}"
+      script="${entry#*$'\t'}"
+      just _internal_run_updater "$name" "$script"
+    done
+
+[private]
 _internal_update_ides:
     #!/usr/bin/env bash
     set -o errexit
     set -o nounset
     set -o pipefail
 
-    just _info "Updating IDE versions..."
-    ./overlays/jetbrains/updater/main.py && just _success "Updated IDE versions successfully!"
+    script="$(nix eval --json --impure .#lib.my.overlays.updaters.jetbrains | jq -r .)"
+    just _internal_run_updater jetbrains "$script"
 
 [private]
 _internal_check_config:
@@ -75,6 +109,17 @@ _internal_commit_flake:
     just _info "Commiting changes..."
     if ! git diff --quiet --exit-code ./flake.lock; then
       git commit -i ./flake.lock -m "chore(deps): update flake.lock file"
+    fi
+
+[private]
+_internal_commit_overlays:
+    #!/usr/bin/env bash
+    set -o errexit
+    set -o nounset
+    set -o pipefail
+
+    if ! git diff --quiet --exit-code ./overlays; then
+      git commit -i ./overlays -m "chore(deps): update overlays"
     fi
 
 [private]
@@ -100,11 +145,11 @@ update:
     set -o pipefail
 
     just _internal_update_flake
-    just _internal_update_ides
+    just _internal_update_overlays
     just _internal_check_config
 
     just _internal_commit_flake
-    just _internal_commit_ides
+    just _internal_commit_overlays
 
     just _internal_update_complete_msg
 
@@ -117,6 +162,18 @@ update_flake:
     just _internal_update_flake
     just _internal_check_config
     just _internal_commit_flake
+
+    just _internal_update_complete_msg
+
+update_overlays:
+    #!/usr/bin/env bash
+    set -o errexit
+    set -o nounset
+    set -o pipefail
+
+    just _internal_update_overlays
+    just _internal_check_config
+    just _internal_commit_overlays
 
     just _internal_update_complete_msg
 

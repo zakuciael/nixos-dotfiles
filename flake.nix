@@ -180,12 +180,17 @@
       url = "github:Mic92/niks3";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nixbot = {
+      url = "github:Mic92/nixbot";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
     {
       nixpkgs,
       home-manager,
+      nixbot,
       ...
     }@flakeInputs:
     let
@@ -273,6 +278,10 @@
           inherit (lib.my.hosts) mkHost;
         in
         builtins.readDir ./hosts |> builtins.mapAttrs (name: _: mkHost { inherit name; });
+
+      overlayUpdateEffects = import ./lib/overlay-update-effect.nix {
+        inherit lib pkgs nixbot;
+      };
     in
     {
       nixosConfigurations = configurations;
@@ -293,6 +302,10 @@
           type = "app";
           program = "${inputs.disko.packages.disko}/bin/disko";
         };
+      };
+
+      herculesCI = _: {
+        onSchedule = overlayUpdateEffects.mkOnSchedule lib.my.overlays.updaters;
       };
 
       inherit pkgs inputs lib;

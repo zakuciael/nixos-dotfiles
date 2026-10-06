@@ -1,0 +1,41 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended", "schedule:weekly"],
+  "enabledManagers": ["nix"],
+  "nix": {
+    "enabled": true
+  },
+  "lockFileMaintenance": {
+    "enabled": false
+  },
+  "labels": ["type: deps"],
+  "semanticCommits": "enabled",
+  "automerge": true,
+  "platformAutomerge": true,
+  "automergeType": "pr",
+  "automergeStrategy": "squash",
+  "packageRules": [
+    {
+      "description": "Pinned / temporary flake inputs — re-enable via Dependency Dashboard",
+      "matchManagers": ["nix"],
+      "matchDepNames": [
+        "home-manager-cursor-agent",
+        "vicinae",
+        "rofi-jetbrains",
+        "zen-browser"
+      ],
+      "enabled": false
+    },
+    {
+      "description": "Pinned / temporary flake inputs (packageName form)",
+      "matchManagers": ["nix"],
+      "matchPackageNames": [
+        "idjoo/home-manager",
+        "vicinaehq/vicinae",
+        "zakuciael/rofi-jetbrains",
+        "0xc000022070/zen-browser-flake"
+      ],
+      "enabled": false
+    }
+  ]
+}
