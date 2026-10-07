@@ -281,11 +281,13 @@
         }
       );
 
+      # Avoid pipe-operators here: Renovate runs `nix flake update` without
+      # --accept-flake-config, so nixConfig.extra-experimental-features is ignored.
       configurations =
         let
           inherit (lib.my.hosts) mkHost;
         in
-        builtins.readDir ./hosts |> builtins.mapAttrs (name: _: mkHost { inherit name; });
+        builtins.mapAttrs (name: _: mkHost { inherit name; }) (builtins.readDir ./hosts);
 
       overlayUpdateEffects = import ./lib/overlay-update-effect.nix {
         inherit lib pkgs nixbot;
@@ -294,14 +296,10 @@
     {
       nixosConfigurations = configurations;
 
-      checks.${system} =
-        configurations
-        |> lib.mapAttrs' (
-          name: value: {
-            name = "${name}-nixos";
-            value = value.config.system.build.toplevel;
-          }
-        );
+      checks.${system} = lib.mapAttrs' (name: value: {
+        name = "${name}-nixos";
+        value = value.config.system.build.toplevel;
+      }) configurations;
 
       devShells.${system}.default = pkgs.callPackage ./shell.nix { };
 
