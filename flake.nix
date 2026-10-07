@@ -284,6 +284,10 @@
       overlayUpdateEffects = import ./lib/overlay-update-effect.nix {
         inherit lib pkgs nixbot;
       };
+
+      dependabotAutoMergeEffects = import ./lib/dependabot-auto-merge-effect.nix {
+        inherit pkgs nixbot;
+      };
     in
     {
       nixosConfigurations = configurations;
@@ -308,6 +312,7 @@
 
       herculesCI = _: {
         onSchedule = overlayUpdateEffects.mkOnSchedule lib.my.overlays.updaters;
+        inherit (dependabotAutoMergeEffects) onEvent;
       };
 
       inherit pkgs inputs lib;
