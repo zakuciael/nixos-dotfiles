@@ -6,7 +6,8 @@
     "enabled": true
   },
   "lockFileMaintenance": {
-    "enabled": false
+    "enabled": true,
+    "automerge": true
   },
   "labels": ["type: deps"],
   "semanticCommits": "enabled",
@@ -14,31 +15,25 @@
   "platformAutomerge": true,
   "automergeType": "pr",
   "automergeStrategy": "squash",
+  "hostRules": [
+    {
+      "description": "Read access to private nostale-dev-env flake input. Add the PAT as secret NOSTALE_DEV_ENV_TOKEN in developer.mend.io (Contents: Read).",
+      "matchHost": "https://api.github.com/repos/zakuciael/nostale-dev-env",
+      "hostType": "github",
+      "token": "{{ secrets.NOSTALE_DEV_ENV_TOKEN }}"
+    },
+    {
+      "description": "git ls-remote for private nostale-dev-env over HTTPS",
+      "matchHost": "https://github.com/zakuciael/nostale-dev-env",
+      "token": "{{ secrets.NOSTALE_DEV_ENV_TOKEN }}"
+    }
+  ],
   "packageRules": [
     {
-      "description": "Root nixpkgs — stay on nixos-unstable; only bump flake.lock digests. packageName override avoids FlakeHub transitive lock-node collision",
+      "description": "FlakeHub URLs are not git remotes — Renovate cannot git-refs them (usually transitive Determinate inputs colliding on lock-node names)",
       "matchManagers": ["nix"],
-      "matchDepNames": ["nixpkgs"],
-      "packageName": "https://github.com/NixOS/nixpkgs",
-      "followTag": "nixos-unstable"
-    },
-    {
-      "description": "home-manager-cursor-agent — stay on cursor-agent branch; only bump flake.lock digests",
-      "matchManagers": ["nix"],
-      "matchDepNames": ["home-manager-cursor-agent"],
-      "followTag": "cursor-agent"
-    },
-    {
-      "description": "rofi-jetbrains — stay on feat/direnv-support branch; only bump flake.lock digests",
-      "matchManagers": ["nix"],
-      "matchDepNames": ["rofi-jetbrains"],
-      "followTag": "feat/direnv-support"
-    },
-    {
-      "description": "zen-browser — stay on beta branch; only bump flake.lock digests",
-      "matchManagers": ["nix"],
-      "matchDepNames": ["zen-browser"],
-      "followTag": "beta"
+      "matchPackageNames": ["/^https:\\/\\/flakehub\\.com\\//"],
+      "enabled": false
     }
   ]
 }
