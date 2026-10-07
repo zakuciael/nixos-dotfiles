@@ -8,13 +8,13 @@
 }:
 buildNpmPackage (finalAttrs: {
   pname = "postplan";
-  version = "0.0.4";
+  version = "0.0.5";
   src = stdenvNoCC.mkDerivation {
     pname = "postplan-source";
     inherit (finalAttrs) version;
     src = fetchurl {
       url = "https://registry.npmjs.org/postplan/-/postplan-${finalAttrs.version}.tgz";
-      hash = "sha512-ctOrqRP+MhkhbUi9xCPO8k9lYLbwzWs7IfKnBy1nTiFeLtWVLntWdvII4kIhtNJSioa+b4nOx/8+qAYN2aBUvg==";
+      hash = "sha512-b23n1iJGJgFON4v0mNsqUungKhonqgQCejVFFWEsmwzXiyP0CV+8D92kLfnTCUjPIKQfbHauJGs+5/vezpPd2A==";
     };
 
     installPhase = ''
@@ -26,7 +26,7 @@ buildNpmPackage (finalAttrs: {
     '';
   };
 
-  npmDepsHash = "sha256-OuvS2ojMw2Sn6GC0FzGm2MqXrW1ZIeg0z7Ci9pgtNqE=";
+  npmDepsHash = "sha256-wfQjMjBtEos6wtzBdMBm+Mi6A8Fvdzoj/vcrf50Cacg=";
   dontNpmBuild = true;
   nativeBuildInputs = [ makeWrapper ];
 
