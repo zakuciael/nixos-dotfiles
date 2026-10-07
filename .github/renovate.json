@@ -5,6 +5,9 @@
   "nix": {
     "enabled": true
   },
+  "env": {
+    "NIX_CONFIG": "extra-experimental-features = nix-command flakes pipe-operators\naccept-flake-config = true"
+  },
   "lockFileMaintenance": {
     "enabled": true,
     "automerge": true
