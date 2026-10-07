@@ -16,26 +16,29 @@
   "automergeStrategy": "squash",
   "packageRules": [
     {
-      "description": "Pinned / temporary flake inputs — re-enable via Dependency Dashboard",
+      "description": "Root nixpkgs — stay on nixos-unstable; only bump flake.lock digests. packageName override avoids FlakeHub transitive lock-node collision",
       "matchManagers": ["nix"],
-      "matchDepNames": [
-        "home-manager-cursor-agent",
-        "vicinae",
-        "rofi-jetbrains",
-        "zen-browser"
-      ],
-      "enabled": false
+      "matchDepNames": ["nixpkgs"],
+      "packageName": "https://github.com/NixOS/nixpkgs",
+      "followTag": "nixos-unstable"
     },
     {
-      "description": "Pinned / temporary flake inputs (packageName form)",
+      "description": "home-manager-cursor-agent — stay on cursor-agent branch; only bump flake.lock digests",
       "matchManagers": ["nix"],
-      "matchPackageNames": [
-        "idjoo/home-manager",
-        "vicinaehq/vicinae",
-        "zakuciael/rofi-jetbrains",
-        "0xc000022070/zen-browser-flake"
-      ],
-      "enabled": false
+      "matchDepNames": ["home-manager-cursor-agent"],
+      "followTag": "cursor-agent"
+    },
+    {
+      "description": "rofi-jetbrains — stay on feat/direnv-support branch; only bump flake.lock digests",
+      "matchManagers": ["nix"],
+      "matchDepNames": ["rofi-jetbrains"],
+      "followTag": "feat/direnv-support"
+    },
+    {
+      "description": "zen-browser — stay on beta branch; only bump flake.lock digests",
+      "matchManagers": ["nix"],
+      "matchDepNames": ["zen-browser"],
+      "followTag": "beta"
     }
   ]
 }
