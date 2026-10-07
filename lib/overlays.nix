@@ -54,23 +54,29 @@ let
     }) overlayFiles
   );
 
-  privatePkgsOverlays =
-    let
-      suffix = "default.nix";
-    in
-    map (
-      file:
-      (
-        final: _:
-        let
-          pkg = final.callPackage file { };
-          name = lib.last (builtins.filter (x: x != suffix) (lib.flatten (builtins.split "/" file)));
-        in
-        {
-          "${name}" = pkg;
-        }
-      )
-    ) (utils.recursiveReadDir ./../pkgs { suffixes = [ suffix ]; });
+  privatePkgSuffix = "default.nix";
+
+  privatePkgFiles = utils.recursiveReadDir ./../pkgs {
+    suffixes = [ privatePkgSuffix ];
+  };
+
+  mkPrivatePkgName =
+    file:
+    lib.last (
+      builtins.filter (x: x != privatePkgSuffix) (lib.flatten (builtins.split "/" file))
+    );
+
+  privatePkgNames = map mkPrivatePkgName privatePkgFiles;
+
+  privatePkgsOverlays = map (
+    file:
+    (
+      final: _:
+      {
+        ${mkPrivatePkgName file} = final.callPackage file { };
+      }
+    )
+  ) privatePkgFiles;
 
   updaters = filterAttrs (_: script: script != null) (
     mapAttrs (_name: mod: mod.updateScript) modules
@@ -79,6 +85,9 @@ in
 {
   # Each module's `overlays` is already a list (possibly empty).
   pkgs = privatePkgsOverlays ++ flatten (mapAttrsToList (_: mod: mod.overlays) modules);
+
+  # Attr names of packages under pkgs/, for flake checks
+  inherit privatePkgNames;
 
   # name → repo-relative update script path (string), for nixbot effects / just
   inherit updaters;

@@ -293,13 +293,16 @@
       nixosConfigurations = configurations;
 
       checks.${system} =
-        configurations
-        |> lib.mapAttrs' (
-          name: value: {
-            name = "${name}-nixos";
-            value = value.config.system.build.toplevel;
-          }
-        );
+        (
+          configurations
+          |> lib.mapAttrs' (
+            name: value: {
+              name = "${name}-nixos";
+              value = value.config.system.build.toplevel;
+            }
+          )
+        )
+        // (lib.genAttrs lib.my.overlays.privatePkgNames (name: pkgs.${name}));
 
       devShells.${system}.default = pkgs.callPackage ./shell.nix { };
 
