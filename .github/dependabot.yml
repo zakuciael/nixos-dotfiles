@@ -1,17 +1,10 @@
-# https://docs.github.com/en/code-security/dependabot/dependabot-version-updates
 version: 2
 updates:
   - package-ecosystem: "nix"
     directory: "/"
     schedule:
       interval: "weekly"
-    # One PR refreshing all outdated flake.lock inputs (keeps flake.nix refs).
-    groups:
-      flake-inputs:
-        patterns:
-          - "*"
     labels:
       - "type: deps"
-    # Private flake inputs are not supported by Dependabot's nix ecosystem.
     ignore:
       - dependency-name: "nostale-dev-env"

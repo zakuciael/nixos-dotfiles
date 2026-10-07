@@ -23,13 +23,7 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    determinate = {
-      url = "github:DeterminateSystems/determinate";
-      inputs = {
-        nix.inputs.flake-parts.follows = "flake-parts";
-        nix.inputs.git-hooks-nix.inputs.flake-compat.follows = "flake-compat";
-      };
-    };
+    determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/*";
     nixos-hardware = {
       url = "github:NixOS/nixos-hardware/master";
       inputs.nixpkgs.follows = "nixpkgs";
