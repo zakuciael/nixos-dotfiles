@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i bash -p nodejs nix prefetch-npm-deps curl jq findutils
+#! nix-shell -i bash -p gnused nix nodejs
 # shellcheck shell=bash
 set -euo pipefail
 
@@ -14,23 +14,31 @@ if [[ "${UPDATE_NIX_OLD_VERSION:-$old_version}" == "$version" ]]; then
   exit 0
 fi
 
-url="https://registry.npmjs.org/@withgraphite/graphite-cli/-/graphite-cli-${version}.tgz"
-src_hash="$(nix store prefetch-file --json --hash-type sha256 "$url" | jq -r .hash)"
+sed -i "s#version = \"${old_version}\"#version = \"${version}\"#" default.nix
 
 tmpdir="$(mktemp -d)"
 trap 'rm -rf "$tmpdir"' EXIT
 
-curl -fsSL "$url" | tar xz -C "$tmpdir"
-pkgdir="$(find "$tmpdir" -mindepth 1 -maxdepth 1 -type d | head -n1)"
+# npm platform suffix → Nixpkgs system attr used in default.nix hash map
+declare -A systems=(
+  [linux-x64]=x86_64-linux
+  [linux-arm64]=aarch64-linux
+  [darwin-arm64]=aarch64-darwin
+)
 
-pushd "$pkgdir" >/dev/null
-npm install --package-lock-only --ignore-scripts
-cp package-lock.json "$ROOT/package-lock.json"
-npm_deps_hash="$(prefetch-npm-deps package-lock.json)"
-popd >/dev/null
+for platform in "${!systems[@]}"; do
+  (
+    url="https://registry.npmjs.org/@withgraphite/graphite-cli-${platform}/-/graphite-cli-${platform}-${version}.tgz"
+    sha256="$(nix-prefetch-url "$url")"
+    nix-hash --to-sri --type sha256 "$sha256" >"$tmpdir/$platform"
+  ) &
+done
+wait
 
-sed -i "s/version = \"${old_version}\"/version = \"${version}\"/" default.nix
-sed -i "s#hash = \"sha256-[^\"]*\"#hash = \"${src_hash}\"#" default.nix
-sed -i "s#npmDepsHash = \"sha256-[^\"]*\"#npmDepsHash = \"${npm_deps_hash}\"#" default.nix
+for platform in "${!systems[@]}"; do
+  system="${systems[$platform]}"
+  hash="$(cat "$tmpdir/$platform")"
+  sed -i "/${system} = \"sha256-/s#\"sha256-[^\"]*\"#\"${hash}\"#" default.nix
+done
 
 echo "Updated graphite-cli to ${version}"
