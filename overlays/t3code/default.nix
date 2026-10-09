@@ -42,9 +42,9 @@
         postFixup = withNodePtyRpath old;
       });
 
-      nightlyVersion = "0.0.46-nightly.20261007.2761";
-      nightlySrcHash = "sha256-JQo4Aokab1PvmuAdD6m6XTo1zZdzaMNS6p/ttN7JDwc=";
-      nightlyPnpmDepsHash = "sha256-4IE8MzK1AxYwd30YEn9R6XaVEr5XSFIWDdSh+X3Xdyw=";
+      nightlyVersion = "0.0.46-nightly.20261009.2861";
+      nightlySrcHash = "sha256-V4wxw9wrWTAoFpNHmtEQhRHsDwlyf2n3RL/Nj+dxXyc=";
+      nightlyPnpmDepsHash = "sha256-G3EHVkAEJrl2eOd6dvLjUfwmAurHvq2FZyYM92SFFmE=";
 
       nightlySrc = final.fetchFromGitHub {
         owner = "pingdotgg";
