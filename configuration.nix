@@ -171,6 +171,9 @@ with lib.my;
     useUserPackages = true;
     useGlobalPkgs = true;
     users.${username} = {
+      # Can be removed when this is merged upstream: https://github.com/nix-community/home-manager/pull/8942
+      manual.manpages.enable = false;
+
       home = {
         inherit username;
         stateVersion = "26.05";
