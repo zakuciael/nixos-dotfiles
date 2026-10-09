@@ -72,7 +72,7 @@ in
         };
         t3code = {
           enable = true;
-          package = pkgs.t3code.override {
+          package = pkgs.t3code-nightly.override {
             enableClaude = true;
             enableCodex = true;
             enableCursor = true;
