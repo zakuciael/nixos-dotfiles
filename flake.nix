@@ -297,12 +297,27 @@
           configurations
           |> lib.mapAttrs' (
             name: value: {
-              name = "${name}-nixos";
+              name = "nixos-${name}";
               value = value.config.system.build.toplevel;
             }
           )
         )
-        // (lib.genAttrs lib.my.overlays.privatePkgNames (name: pkgs.${name}));
+        // (
+          lib.my.overlays.privatePkgNames
+          |> map (name: {
+            name = "package-${name}";
+            value = pkgs.${name};
+          })
+          |> builtins.listToAttrs
+        )
+        // (
+          lib.my.overlays.overlayPkgNames
+          |> map (name: {
+            name = "overlay-${builtins.replaceStrings [ "." ] [ "-" ] name}";
+            value = lib.getAttrFromPath (lib.splitString "." name) pkgs;
+          })
+          |> builtins.listToAttrs
+        );
 
       devShells.${system}.default = pkgs.callPackage ./shell.nix { };
 

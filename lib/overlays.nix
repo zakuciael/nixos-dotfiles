@@ -22,19 +22,22 @@ let
       {
         overlays = [ ];
         updateScript = null;
+        packages = null;
       }
     else if isList raw then
       {
         overlays = raw;
         updateScript = null;
+        packages = null;
       }
     else if isAttrs raw && raw ? overlays then
       {
         inherit (raw) overlays;
         updateScript = raw.updateScript or null;
+        packages = raw.packages or null;
       }
     else
-      throw "overlay module must return null, a list of overlays, or { overlays, updateScript? }";
+      throw "overlay module must return null, a list of overlays, or { overlays, updateScript?, packages? }";
 
   overlayFiles = utils.recursiveImportDir ./../overlays { };
 
@@ -78,6 +81,24 @@ let
     )
   ) privatePkgFiles;
 
+  # Top-level derivation attrs from an overlay; nested sets (jetbrains, vimPlugins) are skipped.
+  overlayAttrNames =
+    overlay:
+    let
+      result = overlay pkgs pkgs;
+    in
+    filter (name: isDerivation result.${name}) (attrNames result);
+
+  modulePkgNames =
+    mod:
+    if mod.packages != null then
+      mod.packages
+    else
+      unique (concatMap overlayAttrNames mod.overlays);
+
+  # Attr paths of packages defined by overlays/, for flake checks
+  overlayPkgNames = unique (flatten (mapAttrsToList (_: mod: modulePkgNames mod) modules));
+
   updaters = filterAttrs (_: script: script != null) (
     mapAttrs (_name: mod: mod.updateScript) modules
   );
@@ -88,6 +109,9 @@ in
 
   # Attr names of packages under pkgs/, for flake checks
   inherit privatePkgNames;
+
+  # Attr paths of packages from overlays/, for flake checks
+  inherit overlayPkgNames;
 
   # name → repo-relative update script path (string), for nixbot effects / just
   inherit updaters;
