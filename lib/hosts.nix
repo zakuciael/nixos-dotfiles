@@ -15,7 +15,6 @@ with lib.my;
       specialArgs = {
         inherit
           lib
-          pkgs
           inputs
           username
           dotfiles
@@ -25,9 +24,11 @@ with lib.my;
       };
 
       modules = [
+        inputs.nixpkgs.nixosModules.readOnlyPkgs
+        { nixpkgs.pkgs = pkgs; }
+
         ./../configuration.nix
         ./../hosts/${name}/configuration.nix
-        inputs.nixpkgs.nixosModules.readOnlyPkgs
 
         inputs.home-manager.nixosModules.default
         inputs.sops-nix.nixosModules.default

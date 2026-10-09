@@ -26,8 +26,6 @@ with lib.my;
     '';
   };
 
-  nixpkgs.pkgs = pkgs;
-
   # System time
   time.timeZone = "Europe/Warsaw";
   time.hardwareClockInLocalTime = false;
