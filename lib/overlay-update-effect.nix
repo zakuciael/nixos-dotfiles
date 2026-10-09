@@ -15,6 +15,8 @@ let
   baseBranch = "main";
   # Heads created by update-overlay-* schedule effects.
   overlayPrHeadPrefix = "chore/deps-overlay-";
+  # Serialize schedule updates and onPush rebases that touch the same PR heads.
+  overlayUpdateLock = "overlay-update-prs";
 
   ghInputs = with pkgs; [
     gh
@@ -25,7 +27,7 @@ let
   # Shared by schedule updates and the onPush rebase effect.
   # Expects: $baseBranch, $GH_TOKEN, a git checkout with origin.
   # Optional: $overlayPrHeadPrefix for bulk rebase.
-  prHelpers = ''
+  prHelpers = /* bash */ ''
     open_pr_number() {
       local head="$1"
       gh pr list --head "$head" --base "$baseBranch" --state open \
@@ -90,6 +92,7 @@ let
     name: script:
     mkEffect {
       name = "update-overlay-${name}";
+      lock = overlayUpdateLock;
       checkout = true;
       inputs = ghInputs ++ [ pkgs.nix ];
 
@@ -104,7 +107,7 @@ let
       updateScript = script;
       inherit baseBranch;
 
-      effectScript = ''
+      effectScript = /* bash */ ''
         set -euo pipefail
 
         git config --global user.name "$(readSecretString git-author .username)"
@@ -182,12 +185,13 @@ in
   # rebased as soon as main moves (required for GitHub auto-merge).
   onPush.default.outputs.effects.rebase-overlay-update-prs = mkEffect {
     name = "rebase-overlay-update-prs";
+    lock = overlayUpdateLock;
     checkout = true;
     inputs = ghInputs;
     secretsMap.github.type = "GitToken";
     inherit baseBranch overlayPrHeadPrefix;
 
-    effectScript = ''
+    effectScript = /* bash */ ''
       set -euo pipefail
 
       git config --global safe.directory '*'
