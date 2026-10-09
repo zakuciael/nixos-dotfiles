@@ -330,6 +330,7 @@
 
       herculesCI = _: {
         onSchedule = overlayUpdateEffects.mkOnSchedule lib.my.overlays.updaters;
+        inherit (overlayUpdateEffects) onPush;
         inherit (dependabotAutoMergeEffects) onEvent;
       };
 
