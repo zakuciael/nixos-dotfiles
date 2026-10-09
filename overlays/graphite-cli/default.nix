@@ -13,6 +13,12 @@
         installShellFiles
         ;
 
+      # Patched version of OpenSSH fixing an issue of checking `~/.ssh/config` file permissions
+      patched-openssh = prev.openssh.overrideAttrs (old: {
+        patches = (old.patches or [ ]) ++ [ ./patches/openssh-no-check-permission.patch ];
+        doCheck = false;
+      });
+
       selectSystem =
         attrs:
         attrs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
@@ -107,6 +113,7 @@
               unwrapped
               pkgs.stdenv.cc.cc.lib
               git
+              patched-openssh
             ];
 
             runScript = "gt";
