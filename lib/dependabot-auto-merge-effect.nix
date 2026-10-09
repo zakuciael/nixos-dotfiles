@@ -8,7 +8,11 @@ in
 {
   onEvent.pull_request.dependabot-auto-merge = mkEffect {
     name = "dependabot-auto-merge";
-    inputs = with pkgs; [ gh ];
+    checkout = true;
+    inputs = with pkgs; [
+      gh
+      git
+    ];
     secretsMap.github = {
       type = "GitToken";
     };

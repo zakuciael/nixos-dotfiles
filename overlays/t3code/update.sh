@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p gh nurl nix
+#!nix-shell -i bash -p curl jq nurl nix
 # shellcheck shell=bash
 set -euo pipefail
 
@@ -13,9 +13,10 @@ if [[ ! -f "$NIX_DRV" ]]; then
 fi
 
 old_version="$(grep -oP 'nightlyVersion = "\K[^"]+' "$NIX_DRV")"
+# Public GitHub API via curl — avoids requiring `gh` auth for the version check.
 version="$(
-  gh api repos/pingdotgg/t3code/releases \
-    --jq '[.[] | select(.prerelease == true and (.tag_name | contains("nightly")))][0].tag_name' \
+  curl -fsSL https://api.github.com/repos/pingdotgg/t3code/releases \
+    | jq -r '[.[] | select(.prerelease == true and (.tag_name | contains("nightly")))][0].tag_name' \
     | sed 's/^v//'
 )"
 

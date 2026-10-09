@@ -17,7 +17,6 @@ let
     mkEffect {
       name = "update-overlay-${name}";
       checkout = true;
-      secretsMap.git-author = "git-author";
       inputs = with pkgs; [
         git
         gh
@@ -25,8 +24,13 @@ let
         nix
       ];
 
-      # Passed through to mkDerivation as env (name is reserved for the drv).
+      secretsMap = {
+        git-author = "git-author";
+        github.type = "GitToken";
+      };
+
       NIX_PATH = "nixpkgs=${pkgs.path}";
+      NIX_CONFIG = "experimental-features = nix-command flakes pipe-operators";
       overlayName = name;
       updateScript = script;
 
@@ -37,11 +41,17 @@ let
         git config --global user.email "$(readSecretString git-author .email)"
         git config --global safe.directory '*'
 
+        export GH_TOKEN
+        GH_TOKEN=$(readSecretString github .token)
+
         if [[ ! -f "$updateScript" ]]; then
           echo "update script missing: $updateScript" >&2
           exit 1
         fi
-        chmod +x "$updateScript"
+
+        # Git often stores updater scripts as 100644; helpers (e.g. update-sources.py) too.
+        find "$(dirname "$updateScript")" -maxdepth 1 -type f \( -name '*.sh' -o -name '*.py' \) \
+          -exec chmod +x {} +
         "$updateScript"
 
         if git diff --quiet && git diff --cached --quiet; then
