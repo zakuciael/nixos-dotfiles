@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i python3 -p python3 python3.pkgs.packaging python3.pkgs.xmltodict python3.pkgs.requests
+
 """Minimal JetBrains binary IDE updater for this overlay.
 
 Based on nixpkgs' pkgs/applications/editors/jetbrains/updater, trimmed to
@@ -43,7 +44,9 @@ def main() -> None:
     config = UpdaterConfig(parser.parse_args())
     print(f"[i] running jetbrains overlay updater with: {config}")
 
-    with open(config.jetbrains_root / "updater" / "updateInfo.json", encoding="utf-8") as f:
+    with open(
+        config.jetbrains_root / "updater" / "updateInfo.json", encoding="utf-8"
+    ) as f:
         update_info = json.load(f)
 
     version_fetcher = VersionFetcher()

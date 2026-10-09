@@ -12,8 +12,8 @@ APP_UPDATES_URI_BASE="https://app-updates.agilebits.com/check/2/99/aarch64/OPM8/
 
 CURL=(
   "curl" "--silent" "--show-error" "--fail"
-  "--proto" "=https" # enforce https
-  "--tlsv1.2" # do not accept anything below tls 1.2
+  "--proto" "=https"                                  # enforce https
+  "--tlsv1.2"                                         # do not accept anything below tls 1.2
   "-H" "user-agent: nixpkgs#_1password-gui update.sh" # repology requires a descriptive user-agent
 )
 
@@ -22,7 +22,6 @@ JQ=(
   "--raw-output"
   "--exit-status" # exit non-zero if no output is produced
 )
-
 
 read_local_versions() {
   local channel="$1"
@@ -41,28 +40,28 @@ read_remote_versions() {
 
   if [[ ${channel} == "stable" ]]; then
     remote_versions["stable/linux"]=$(
-      "${CURL[@]}" "${REPOLOGY_PROJECT_URI}" \
-        | "${JQ[@]}" '.[] | select(.repo == "aur" and .srcname == "1password" and .status == "newest") | .version'
+      "${CURL[@]}" "${REPOLOGY_PROJECT_URI}" |
+        "${JQ[@]}" '.[] | select(.repo == "aur" and .srcname == "1password" and .status == "newest") | .version'
     )
 
     remote_versions["stable/darwin"]=$(
-      "${CURL[@]}" "${APP_UPDATES_URI_BASE}/N" \
-        | "${JQ[@]}" 'select(.available == "1") | .version'
+      "${CURL[@]}" "${APP_UPDATES_URI_BASE}/N" |
+        "${JQ[@]}" 'select(.available == "1") | .version'
     )
   else
     remote_versions["beta/linux"]=$(
       # AUR version string uses underscores instead of dashes for betas.
       # We fix that with a `sub` in jq query.
-      "${CURL[@]}" "${REPOLOGY_PROJECT_URI}" \
-        | "${JQ[@]}" '.[] | select(.repo == "aur" and .srcname == "1password-beta") | .version | sub("_"; "-")'
+      "${CURL[@]}" "${REPOLOGY_PROJECT_URI}" |
+        "${JQ[@]}" '.[] | select(.repo == "aur" and .srcname == "1password-beta") | .version | sub("_"; "-")'
     )
 
     # Handle macOS Beta app-update feed quirk.
     # If there is a newer release in the stable channel, queries for beta
     # channel will return the stable channel version; masking the current beta.
     darwin_beta_maybe=$(
-      "${CURL[@]}" "${APP_UPDATES_URI_BASE}/Y" \
-        | "${JQ[@]}" 'select(.available == "1") | .version'
+      "${CURL[@]}" "${APP_UPDATES_URI_BASE}/Y" |
+        "${JQ[@]}" 'select(.available == "1") | .version'
     )
     # Only consider versions that end with '.BETA'
     if [[ ${darwin_beta_maybe} =~ \.BETA$ ]]; then
@@ -78,44 +77,53 @@ render_versions_json() {
     value="${local_versions[${key}]}"
     echo "${key}"
     echo "${value}"
-  done \
-    | jq -nR 'reduce inputs as $i ({}; . + { $i: input })'
+  done |
+    jq -nR 'reduce inputs as $i ({}; . + { $i: input })'
 }
-
 
 cd -- "$(dirname "${BASH_SOURCE[0]}")"
 
-attr_path=${UPDATE_NIX_ATTR_PATH}
-case "${attr_path}" in
+attr_paths=()
+if [[ -z "${UPDATE_NIX_ATTR_PATH:-}" ]]; then
+  attr_paths+=(_1password-gui _1password-gui-beta)
+else
+  attr_paths+=("${UPDATE_NIX_ATTR_PATH}")
+fi
+
+for attr_path in "${attr_paths[@]}"; do
+  case "${attr_path}" in
   _1password-gui) channel="stable" ;;
   _1password-gui-beta) channel="beta" ;;
   *)
     echo "Unknown attribute path ${attr_path}" >&2
     exit 1
-esac
+    ;;
+  esac
 
-declare -A local_versions remote_versions
-declare -a new_version_available=()
-read_local_versions "${channel}"
-read_remote_versions "${channel}"
-for i in "${!remote_versions[@]}"; do
-  if [[ "${local_versions[$i]}" != "${remote_versions[$i]}" ]]; then
-    old_version="${local_versions[$i]}"
-    new_version="${remote_versions[$i]}"
-    new_version_available+=("$i/$new_version")
+  declare -A local_versions=() remote_versions=()
+  declare -a new_version_available=()
+  unset os_specific_update old_version new_version
+  read_local_versions "${channel}"
+  read_remote_versions "${channel}"
+  for i in "${!remote_versions[@]}"; do
+    if [[ "${local_versions[$i]}" != "${remote_versions[$i]}" ]]; then
+      old_version="${local_versions[$i]}"
+      new_version="${remote_versions[$i]}"
+      new_version_available+=("$i/$new_version")
+    fi
+  done
+
+  num_updates=${#new_version_available[@]}
+  if ((num_updates == 0)); then
+    echo "No updates for ${attr_path}"
+    continue
+  elif ((num_updates == 1)); then
+    os=$(cut -d / -f 2 <<<"${new_version_available[@]}")
+    os_specific_update=" (${os} only)"
   fi
-done
 
-num_updates=${#new_version_available[@]}
-if (( num_updates == 0 )); then
-  exit # up to date
-elif (( num_updates == 1 )); then
-  os=$(cut -d / -f 2 <<<"${new_version_available[@]}")
-  os_specific_update=" (${os} only)"
-fi
-
-./update-sources.py "${new_version_available[@]}"
-cat <<EOF
+  ./update-sources.py "${new_version_available[@]}"
+  cat <<EOF
 [
   {
     "attrPath": "${attr_path}",
@@ -127,3 +135,4 @@ cat <<EOF
   }
 ]
 EOF
+done
