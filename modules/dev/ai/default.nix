@@ -108,48 +108,36 @@ in
             timestampFormat = "24-hour";
             wordWrap = true;
 
-            favorites = [
-              {
-                provider = "opencode";
-                model = "opencode/deepseek-v4-flash-free";
-              }
-              {
-                provider = "opencode";
-                model = "cursor/gpt-5.6-sol";
-              }
-              {
-                provider = "opencode";
-                model = "cursor/gpt-5.6-luna";
-              }
-              {
-                provider = "opencode";
-                model = "cursor/kimi-k3";
-              }
-              {
-                provider = "opencode";
-                model = "cursor/default";
-              }
-              {
-                provider = "opencode";
-                model = "cursor/composer-2.5";
-              }
-              {
-                provider = "opencode";
-                model = "cursor/claude-fable-5";
-              }
-              {
-                provider = "opencode";
-                model = "cursor/claude-sonnet-5";
-              }
-              {
-                provider = "opencode";
-                model = "cursor/grok-4.6";
-              }
-              {
-                provider = "opencode";
-                model = "cursor/claude-opus-5";
-              }
-            ];
+            favorites =
+              let
+                sharedModels = [
+                  "cursor/gpt-5.6-sol"
+                  "cursor/gpt-5.6-luna"
+                  "cursor/kimi-k3"
+                  "cursor/default"
+                  "cursor/composer-2.5"
+                  "cursor/claude-fable-5"
+                  "cursor/claude-sonnet-5"
+                  "cursor/grok-4.6"
+                  "cursor/claude-opus-5"
+                ];
+
+                mkProviderSharedModels =
+                  provider: stripPrefix:
+                  sharedModels
+                  |> map (model: {
+                    inherit provider;
+                    model = if stripPrefix then lib.removePrefix "${provider}/" model else model;
+                  });
+              in
+              (mkProviderSharedModels "opencode" false)
+              ++ (mkProviderSharedModels "cursor" true)
+              ++ [
+                {
+                  provider = "opencode";
+                  model = "opencode/deepseek-v4-flash-free";
+                }
+              ];
             providerModelPreferences = {
               claudeAgent = {
                 hiddenModels = [
