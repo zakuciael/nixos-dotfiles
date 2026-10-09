@@ -51,6 +51,7 @@ in
               fileMode = false;
               editor = "nvim";
             };
+            pull.rebase = true;
             init.defaultBranch = "main";
           };
         };
