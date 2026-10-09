@@ -14,6 +14,17 @@ let
   # Store path to the npm package root (dist + node_modules) so OpenCode can
   # resolve package exports and runtime deps without fetching from npm at startup.
   cursorOpencodeProvider = "${pkgs.cursor-opencode-provider}/lib/node_modules/cursor-opencode-provider";
+
+  # Cursor's agent harness injects Co-authored-by even when attribution is disabled
+  # in cli-config; strip it (and the Made-with trailer) in commit-msg.
+  stripCursorAttribution = pkgs.writeShellScript "git-commit-msg-strip-cursor-attribution" ''
+    set -euo pipefail
+    msg_file="$1"
+    ${pkgs.gnused}/bin/sed -i \
+      -e '/^Co-authored-by: Cursor <cursoragent@cursor\.com>$/d' \
+      -e '/^Made-with: Cursor$/d' \
+      "$msg_file"
+  '';
 in
 {
   options.modules.dev.ai = {
@@ -38,6 +49,8 @@ in
             command = lib.getExe pkgs.imhex-mcp-server;
           };
         };
+
+        git.hooks.commit-msg = stripCursorAttribution;
 
         opencode = {
           enable = true;
@@ -69,6 +82,12 @@ in
         cursor-agent = {
           enable = true;
           enableMcpIntegration = true;
+          settings = {
+            attribution = {
+              attributeCommitsToAgent = false;
+              attributePRsToAgent = false;
+            };
+          };
         };
         t3code = {
           enable = true;
