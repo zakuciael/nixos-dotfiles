@@ -1,0 +1,26 @@
+--- a/packages/provider-cursor/src/server/textGeneration.ts
++++ b/packages/provider-cursor/src/server/textGeneration.ts
+@@ -99,7 +99,10 @@
+       const cwd = yield* fs.makeTempDirectoryScoped({ prefix: "t3-cursor-text-" });
+       const agentOptions = {
+         apiKey,
+-        mode: "plan",
++        // Plan mode wraps the reply in CreatePlan; run.result is then prose and
++        // JSON decode fails. Agent + empty tools keeps a text-only JSON reply.
++        mode: "agent",
++        tools: [],
+         model: cursorSdkModelSelection(modelSelection),
+         local: {
+           cwd,
+--- a/packages/provider-cursor/src/server/textGeneration.test.ts
++++ b/packages/provider-cursor/src/server/textGeneration.test.ts
+@@ -122,7 +122,8 @@
+       expect(prompt).toContain("Staged patch:");
+       expect(options).toEqual({
+         apiKey: "test-cursor-key",
+-        mode: "plan",
++        mode: "agent",
++        tools: [],
+         model: {
+           id: "gpt-5.4",
+           params: [

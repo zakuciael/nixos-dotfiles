@@ -14,13 +14,23 @@
       # addons; leave foreign-platform vendored binaries alone.
       # https://github.com/NixOS/nixpkgs/pull/570343
       # https://github.com/NixOS/nixpkgs/pull/569702
-      withNodePtyRpath =
+      #
+      # @cursor/sdk-linux-* ships cursorsandbox without the executable bit under
+      # pnpm; T3's Cursor SDK text-generation walk-up then hits EACCES.
+      # PATH exposure is handled by the cursor-cli overlay; chmod covers in-tree lookup.
+      withLinuxFixes =
         old:
         (old.postFixup or "")
         + lib.optionalString stdenv.hostPlatform.isLinux ''
           find "$out"/libexec/t3code -name '*.node' -path '*linux-${stdenv.hostPlatform.node.arch}*' \
             -exec patchelf --add-rpath ${lib.makeLibraryPath [ stdenv.cc.cc.lib ]} {} +
+          find "$out"/libexec/t3code -path '*/@cursor/sdk-linux-*/bin/cursorsandbox' \
+            -exec chmod +x {} +
         '';
+
+      # Cursor SDK text gen used mode:"plan", so CreatePlan ate the JSON and
+      # generateCommitMessage failed with "invalid structured output".
+      cursorTextGenPatches = [ ./patches/cursor-text-gen-agent-mode.patch ];
 
       version = "0.0.45";
 
@@ -34,12 +44,14 @@
       t3code-unwrapped = prev.t3code.unwrapped.overrideAttrs (old: {
         inherit version src;
 
+        patches = (old.patches or [ ]) ++ cursorTextGenPatches;
+
         pnpmDeps = old.pnpmDeps.override {
           inherit version src;
           hash = "sha256-2dGEHOQrnidTei54NlZTJh5u5/i810hb2LddK4XfUNQ=";
         };
 
-        postFixup = withNodePtyRpath old;
+        postFixup = withLinuxFixes old;
       });
 
       nightlyVersion = "0.0.46-nightly.20261009.2861";
@@ -58,6 +70,8 @@
         version = nightlyVersion;
         src = nightlySrc;
 
+        patches = (old.patches or [ ]) ++ cursorTextGenPatches;
+
         pnpmDeps = old.pnpmDeps.override {
           pname = "t3code-nightly-unwrapped";
           version = nightlyVersion;
@@ -65,7 +79,7 @@
           hash = nightlyPnpmDepsHash;
         };
 
-        postFixup = withNodePtyRpath old;
+        postFixup = withLinuxFixes old;
       });
     in
     {
