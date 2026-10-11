@@ -1,5 +1,6 @@
 {
   lib,
+  pkgs,
   inputs,
   username,
   dotfiles,
@@ -179,7 +180,7 @@ in
       };
       ai = {
         enable = true;
-        skills.enable = true;
+        skills = pkgs.ai-skills;
       };
       nostale = {
         enable = true;
