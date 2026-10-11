@@ -48,9 +48,9 @@
         postFixup = withLinuxFixes old;
       });
 
-      nightlyVersion = "0.0.46-nightly.20261009.2861";
-      nightlySrcHash = "sha256-V4wxw9wrWTAoFpNHmtEQhRHsDwlyf2n3RL/Nj+dxXyc=";
-      nightlyPnpmDepsHash = "sha256-G3EHVkAEJrl2eOd6dvLjUfwmAurHvq2FZyYM92SFFmE=";
+      nightlyVersion = "0.0.46-nightly.20261011.2967";
+      nightlySrcHash = "sha256-1TUSFoLJIBXfr8ZvOdArI07NjNdLU9W7hPXlrPm9CHQ=";
+      nightlyPnpmDepsHash = "sha256-reXWayWahyOJKTDp6GyOq9n5TsS4BpAMclWycpIxygo=";
 
       nightlySrc = final.fetchFromGitHub {
         owner = "pingdotgg";
