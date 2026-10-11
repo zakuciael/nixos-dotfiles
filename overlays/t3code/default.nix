@@ -28,12 +28,6 @@
             -exec chmod +x {} +
         '';
 
-      # Nightly Cursor SDK text gen used mode:"plan", so CreatePlan ate the JSON
-      # and generateCommitMessage failed with "invalid structured output".
-      # Stable 0.0.45 still uses ACP text gen (no packages/provider-cursor paths),
-      # so this patch is nightly-only.
-      cursorTextGenPatches = [ ./patches/cursor-text-gen-agent-mode.patch ];
-
       version = "0.0.45";
 
       src = final.fetchFromGitHub {
@@ -70,7 +64,9 @@
         version = nightlyVersion;
         src = nightlySrc;
 
-        patches = (old.patches or [ ]) ++ cursorTextGenPatches;
+        # Cursor SDK text gen used mode:"plan", so CreatePlan ate the JSON and
+        # generateCommitMessage failed with "invalid structured output".
+        patches = (old.patches or [ ]) ++ [ ./patches/cursor-text-gen-agent-mode.patch ];
 
         pnpmDeps = old.pnpmDeps.override {
           pname = "t3code-nightly-unwrapped";
