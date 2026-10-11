@@ -60,8 +60,58 @@
         ]
       );
 
-      withBrowserLibraries =
-        pkg:
+      # SnapShot helpers are only staged by upstream's electron-builder pipeline.
+      # The Nix build launches Electron unpackaged, so the desktop app looks under
+      # libexec/t3code/native/<backend>-snap-shot/target/release/. Helpers must be
+      # regular files (not symlinks): install copies their bytes into ~/.local/share.
+      installCaptureHelpers =
+        {
+          src,
+          hyprlandSnapShot,
+          kdeSnapShot,
+        }:
+        lib.optionalString stdenv.hostPlatform.isLinux ''
+          install -Dm755 ${lib.getExe hyprlandSnapShot} \
+            "$out"/libexec/t3code/native/hyprland-snap-shot/target/release/t3-hyprland-snap-shot
+          # BSD protocol XML must ship with the binary distribution.
+          rm -rf "$out"/libexec/t3code/native/hyprland-snap-shot/target/release/protocols
+          cp -R ${src}/native/hyprland-snap-shot/protocols \
+            "$out"/libexec/t3code/native/hyprland-snap-shot/target/release/protocols
+          install -Dm755 ${lib.getExe kdeSnapShot} \
+            "$out"/libexec/t3code/native/kde-snap-shot/target/release/t3-kde-snap-shot
+        '';
+
+      mkCaptureHelpers =
+        {
+          src,
+          version,
+          hyprlandCargoHash,
+          kdeCargoHash,
+        }:
+        rec {
+          hyprlandSnapShot = final.callPackage ./hyprland-snap-shot.nix {
+            inherit src version;
+            cargoHash = hyprlandCargoHash;
+          };
+          kdeSnapShot = final.callPackage ./kde-snap-shot.nix {
+            inherit src version;
+            cargoHash = kdeCargoHash;
+          };
+          # Bake helpers into unwrapped so __dirname realpath lookups succeed.
+          installUnwrapped =
+            old: (old.postInstall or "") + installCaptureHelpers { inherit src hyprlandSnapShot kdeSnapShot; };
+          # symlinkJoin would otherwise leave store symlinks; SnapShot rejects those.
+          installJoined = installCaptureHelpers {
+            inherit
+              src
+              hyprlandSnapShot
+              kdeSnapShot
+              ;
+          };
+        };
+
+      withDesktopFixes =
+        captureHelpers: pkg:
         pkg.overrideAttrs (old: {
           nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ final.makeBinaryWrapper ];
           # nixpkgs' t3code uses symlinkJoin with __structuredAttrs; its wrap lives in
@@ -77,6 +127,7 @@
                   --prefix LD_LIBRARY_PATH : ${lib.escapeShellArg browserLibraryPath} \
                   --unset ELECTRON_RUN_AS_NODE
               done
+              ${captureHelpers.installJoined}
             '';
         });
 
@@ -89,6 +140,19 @@
         hash = "sha256-8drTHjFqa2vJ96jhpRZXmNbtbXtKk1q40jOEp9dohNc=";
       };
 
+      # Shared across current stable/nightly; update.sh refreshes nightly hashes.
+      hyprlandCargoHash = "sha256-oki1DAzUJ/8YIFhaJlw2wOukiQMcAaexdJqxDcFXFW4=";
+      kdeCargoHash = "sha256-ZbetrRAvnNLLS51IwR9xLb1NhnpFQB4J1ahn4CthJy0=";
+
+      captureHelpers = mkCaptureHelpers {
+        inherit
+          src
+          version
+          hyprlandCargoHash
+          kdeCargoHash
+          ;
+      };
+
       t3code-unwrapped = prev.t3code.unwrapped.overrideAttrs (old: {
         inherit version src;
 
@@ -97,6 +161,7 @@
           hash = "sha256-2dGEHOQrnidTei54NlZTJh5u5/i810hb2LddK4XfUNQ=";
         };
 
+        postInstall = captureHelpers.installUnwrapped old;
         postFixup = withLinuxFixes old;
       });
 
@@ -109,6 +174,13 @@
         repo = "t3code";
         tag = "v${nightlyVersion}";
         hash = nightlySrcHash;
+      };
+
+      nightlyCaptureHelpers = mkCaptureHelpers {
+        src = nightlySrc;
+        version = nightlyVersion;
+        hyprlandCargoHash = nightlyHyprlandCargoHash;
+        kdeCargoHash = nightlyKdeCargoHash;
       };
 
       t3code-nightly-unwrapped = prev.t3code.unwrapped.overrideAttrs (old: {
@@ -127,17 +199,18 @@
           hash = nightlyPnpmDepsHash;
         };
 
+        postInstall = nightlyCaptureHelpers.installUnwrapped old;
         postFixup = withLinuxFixes old;
       });
     in
     {
-      t3code = withBrowserLibraries (
+      t3code = withDesktopFixes captureHelpers (
         prev.t3code.override {
           inherit t3code-unwrapped;
         }
       );
 
-      t3code-nightly = withBrowserLibraries (
+      t3code-nightly = withDesktopFixes nightlyCaptureHelpers (
         (prev.t3code.override {
           t3code-unwrapped = t3code-nightly-unwrapped;
         }).overrideAttrs
@@ -145,6 +218,9 @@
             pname = "t3code-nightly";
           }
       );
+
+      t3-hyprland-snap-shot = nightlyCaptureHelpers.hyprlandSnapShot;
+      t3-kde-snap-shot = nightlyCaptureHelpers.kdeSnapShot;
     }
   );
 }

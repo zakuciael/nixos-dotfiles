@@ -26,7 +26,7 @@ if [[ -z "$version" || "$version" == "null" ]]; then
 fi
 
 has_placeholder_hash=0
-if grep -q 'nightlySrcHash = "sha256-AAAA' "$NIX_DRV" || grep -q 'nightlyPnpmDepsHash = "sha256-AAAA' "$NIX_DRV"; then
+if grep -qE 'nightly(SrcHash|PnpmDepsHash|HyprlandCargoHash|KdeCargoHash) = "sha256-AAAA' "$NIX_DRV"; then
   has_placeholder_hash=1
 fi
 
@@ -51,32 +51,51 @@ sed -i \
   -e "s/nightlyVersion = \"${old_version}\"/nightlyVersion = \"${version}\"/" \
   -e "s#nightlySrcHash = \"sha256-[^\"]*\"#nightlySrcHash = \"${src_hash}\"#" \
   -e "s#nightlyPnpmDepsHash = \"sha256-[^\"]*\"#nightlyPnpmDepsHash = \"${fake_hash}\"#" \
+  -e "s#nightlyHyprlandCargoHash = \"sha256-[^\"]*\"#nightlyHyprlandCargoHash = \"${fake_hash}\"#" \
+  -e "s#nightlyKdeCargoHash = \"sha256-[^\"]*\"#nightlyKdeCargoHash = \"${fake_hash}\"#" \
   "$NIX_DRV"
 
-echo "Prefetching pnpmDeps (this may take a while)..."
 build_log="$(mktemp)"
 trap 'rm -f "$build_log"' EXIT
 
-set +e
-nix build --impure --no-link "${REPO_ROOT}#pkgs.t3code-nightly.unwrapped.pnpmDeps" >"$build_log" 2>&1
-build_status=$?
-set -e
+prefetch_got_hash() {
+  local attr="$1"
+  local label="$2"
 
-if [[ $build_status -eq 0 ]]; then
-  echo "ERROR: pnpmDeps built successfully with the fake hash" >&2
-  exit 1
-fi
+  echo "Prefetching ${label} (this may take a while)..."
+  set +e
+  nix build --impure --no-link "${REPO_ROOT}#pkgs.${attr}" >"$build_log" 2>&1
+  local build_status=$?
+  set -e
 
-pnpm_hash="$(grep -oE 'got:[[:space:]]+sha256-[A-Za-z0-9+/=]+' "$build_log" | head -n1 | awk '{print $2}' || true)"
+  if [[ $build_status -eq 0 ]]; then
+    echo "ERROR: ${attr} built successfully with the fake hash" >&2
+    exit 1
+  fi
 
-if [[ -z "$pnpm_hash" ]]; then
-  cat "$build_log" >&2
-  echo "ERROR: failed to extract pnpmDeps hash from nix build output" >&2
-  exit 1
-fi
+  local got_hash
+  got_hash="$(grep -oE 'got:[[:space:]]+sha256-[A-Za-z0-9+/=]+' "$build_log" | head -n1 | awk '{print $2}' || true)"
 
+  if [[ -z "$got_hash" ]]; then
+    cat "$build_log" >&2
+    echo "ERROR: failed to extract ${label} hash from nix build output" >&2
+    exit 1
+  fi
+
+  printf '%s\n' "$got_hash"
+}
+
+pnpm_hash="$(prefetch_got_hash "t3code-nightly.unwrapped.pnpmDeps" "pnpmDeps")"
 sed -i "s#nightlyPnpmDepsHash = \"${fake_hash}\"#nightlyPnpmDepsHash = \"${pnpm_hash}\"#" "$NIX_DRV"
 
+hyprland_hash="$(prefetch_got_hash "t3-hyprland-snap-shot" "hyprland capture helper cargoHash")"
+sed -i "s#nightlyHyprlandCargoHash = \"${fake_hash}\"#nightlyHyprlandCargoHash = \"${hyprland_hash}\"#" "$NIX_DRV"
+
+kde_hash="$(prefetch_got_hash "t3-kde-snap-shot" "kde capture helper cargoHash")"
+sed -i "s#nightlyKdeCargoHash = \"${fake_hash}\"#nightlyKdeCargoHash = \"${kde_hash}\"#" "$NIX_DRV"
+
 echo "Updated t3code-nightly to ${version}"
-echo "  src hash:  ${src_hash}"
-echo "  pnpm hash: ${pnpm_hash}"
+echo "  src hash:       ${src_hash}"
+echo "  pnpm hash:      ${pnpm_hash}"
+echo "  hyprland cargo: ${hyprland_hash}"
+echo "  kde cargo:      ${kde_hash}"
