@@ -19,17 +19,24 @@ let
       }
     );
 
-  # Install every immediate subdirectory that contains SKILL.md into $out.
+  # Install skills from a directory into $out:
+  # - If the directory itself contains SKILL.md, symlink it as one skill.
+  # - Otherwise install every immediate subdirectory that contains SKILL.md.
   # Later calls overwrite earlier ones on name conflicts (same as attrset //).
   installSkillsFromDir =
     dir: # bash
     ''
-      if [ -d ${lib.escapeShellArg dir} ]; then
-        for skill in ${lib.escapeShellArg dir}/*; do
-          [ -d "$skill" ] || continue
-          [ -f "$skill/SKILL.md" ] || continue
-          ln -sfn "$skill" "$out/$(basename "$skill")"
-        done
+      source=${lib.escapeShellArg dir}
+      if [ -d "$source" ]; then
+        if [ -f "$source/SKILL.md" ]; then
+          ln -sfn "$source" "$out/$(basename "$source")"
+        else
+          for skill in "$source"/*; do
+            [ -d "$skill" ] || continue
+            [ -f "$skill/SKILL.md" ] || continue
+            ln -sfn "$skill" "$out/$(basename "$skill")"
+          done
+        fi
       fi
     '';
 
@@ -84,6 +91,31 @@ stdenvNoCC.mkDerivation {
         "visual-pr/skills"
       ];
     }}
+
+    ${installSkillsFromDir "${sources.claude-code}/plugins/frontend-design/skills"}
+
+    ${installSkillsFrom {
+      src = sources.vercel-labs-agent-skills;
+      base = "skills";
+      subpaths = [
+        "react-best-practices"
+        "react-view-transitions"
+        "web-design-guidelines"
+        "writing-guidelines"
+        "composition-patterns"
+      ];
+    }}
+
+    ${installSkillsFromDir "${sources.ecc}/skills/react-patterns"}
+
+    # Repo root is the skill; only SKILL.md + rules/ are needed.
+    mkdir -p "$out/rust-skills"
+    ln -sfn ${sources.rust-skills}/SKILL.md "$out/rust-skills/SKILL.md"
+    ln -sfn ${sources.rust-skills}/rules "$out/rust-skills/rules"
+
+    ${installSkillsFromDir "${sources.actionbook-rust-skills}/skills"}
+    ${installSkillsFromDir "${sources.cnwzhu-gpui-skills}"}
+    ${installSkillsFromDir "${sources.longbridge-gpui-kit}/skills"}
 
     runHook postInstall
   '';

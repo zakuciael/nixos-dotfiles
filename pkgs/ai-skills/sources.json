@@ -22,5 +22,47 @@
     "repo": "plugins",
     "rev": "d73344bee8cf22e53b9d5f4cf5749d38ba38c174",
     "hash": "sha256-Rxc5mywyFL01pUMyIB26Ag1ICGUlwQn2rzXbSuuawKA="
+  },
+  "claude-code": {
+    "owner": "anthropics",
+    "repo": "claude-code",
+    "rev": "2301018b1f61073c501a8e7a4813ef48c239163b",
+    "hash": "sha256-Ef0gzkBAMGTz8g1xlZOIZfHTmPsPPa+QdBDxOQKZjW8="
+  },
+  "vercel-labs-agent-skills": {
+    "owner": "vercel-labs",
+    "repo": "agent-skills",
+    "rev": "063bee94c3f4df8453406c830b0a7df0f2860278",
+    "hash": "sha256-tTSJf53OQltUfxTH4hdqcnw5ywCjCZP8/JqQ593cyB8="
+  },
+  "ecc": {
+    "owner": "affaan-m",
+    "repo": "ECC",
+    "rev": "8ce348fbea0d66f5c49c7b35e8ba8bb143b15132",
+    "hash": "sha256-4OIVhBQBglMZnCoxBfk7zIcUeVoX8oR5vvRY7FKZjsU="
+  },
+  "rust-skills": {
+    "owner": "leonardomso",
+    "repo": "rust-skills",
+    "rev": "fd2a861ab0406a4ac536a55274d14ea6fd1ca9c9",
+    "hash": "sha256-B6E8JP78/wDdJYHp1l5cpEgxRuCzAhOhUtst4pueMw0="
+  },
+  "actionbook-rust-skills": {
+    "owner": "actionbook",
+    "repo": "rust-skills",
+    "rev": "5c40d3ad785193231b7d0dbfb8e1eb447e5edd94",
+    "hash": "sha256-IWK5ftgsABvASRNyGLLlQJNkA9U38esEeHkQz/sfMFE="
+  },
+  "cnwzhu-gpui-skills": {
+    "owner": "cnwzhu",
+    "repo": "gpui-skills",
+    "rev": "393a3da0a6e0d379d0e8aaeb7d856951641b47cf",
+    "hash": "sha256-UaFTur5z9bUodA/strhY2AKVa0RTkQ/Ifhy3AnkT1QU="
+  },
+  "longbridge-gpui-kit": {
+    "owner": "longbridge",
+    "repo": "gpui-kit",
+    "rev": "1ccf011620da24d633f7cd6d3c11ca2e97798dcf",
+    "hash": "sha256-4G4fkbpo6z8CxLu+xdrhfaFjn2zJEgIiTheb7Mm450Q="
   }
 }
