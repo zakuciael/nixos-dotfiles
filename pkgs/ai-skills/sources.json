@@ -64,5 +64,17 @@
     "repo": "gpui-kit",
     "rev": "1ccf011620da24d633f7cd6d3c11ca2e97798dcf",
     "hash": "sha256-4G4fkbpo6z8CxLu+xdrhfaFjn2zJEgIiTheb7Mm450Q="
+  },
+  "vicinaehq-extensions": {
+    "owner": "vicinaehq",
+    "repo": "extensions",
+    "rev": "56b0e02307f7dea3ca013e8a5c96128c700eec75",
+    "hash": "sha256-x500JT5z1ef6AHgjU4IMS8AFVWW+UVn925mYkYGWZVc="
+  },
+  "anthropics-skills": {
+    "owner": "anthropics",
+    "repo": "skills",
+    "rev": "dbd4588f9e1033efb41dad4bef2f7947c8993d44",
+    "hash": "sha256-+UIqBnzyeIOvJSKYaDaE3GYPEpLw7qQqyUw5S971AfU="
   }
 }

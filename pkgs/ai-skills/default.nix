@@ -117,6 +117,9 @@ stdenvNoCC.mkDerivation {
     ${installSkillsFromDir "${sources.cnwzhu-gpui-skills}"}
     ${installSkillsFromDir "${sources.longbridge-gpui-kit}/skills"}
 
+    ${installSkillsFromDir "${sources.vicinaehq-extensions}/skills/extension-reviewer"}
+    ${installSkillsFromDir "${sources.anthropics-skills}/skills/skill-creator"}
+
     runHook postInstall
   '';
 
