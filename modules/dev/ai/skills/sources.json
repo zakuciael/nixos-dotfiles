@@ -1,0 +1,26 @@
+{
+  "mattpocock-skills": {
+    "owner": "mattpocock",
+    "repo": "skills",
+    "rev": "49dd158d1076134a641b33efb035946536778336",
+    "hash": "sha256-NljCSZNI3sZ+vbCw7pRdrwR7try4BxOFp4gdjuWYtzs="
+  },
+  "nix-skills": {
+    "owner": "olafkfreund",
+    "repo": "nix-skills",
+    "rev": "f5c8e8b3b3255e323e5b84192d0b6ed2e79ef4f4",
+    "hash": "sha256-kpfzu06HYAMP/pmu3CRPQb+skIjZGByxvaUy7F08axw="
+  },
+  "humanlayer-skills": {
+    "owner": "humanlayer",
+    "repo": "skills",
+    "rev": "653b6411c1f70c275a18e37673b042ff99f67ceb",
+    "hash": "sha256-W3dFEdIi4sz4CAZvaj1xjtN7xTRebF/WHOTQYCIe2Xo="
+  },
+  "cursor-plugins": {
+    "owner": "cursor",
+    "repo": "plugins",
+    "rev": "d73344bee8cf22e53b9d5f4cf5749d38ba38c174",
+    "hash": "sha256-Rxc5mywyFL01pUMyIB26Ag1ICGUlwQn2rzXbSuuawKA="
+  }
+}
