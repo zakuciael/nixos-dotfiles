@@ -17,16 +17,14 @@ import os
 import sys
 from pathlib import Path
 
-config_home = {
-    "darwin": os.path.join(os.path.expanduser("~"), "Library", "Application Support"),
-    "linux": os.environ.get("XDG_CONFIG_HOME") or os.path.join(os.path.expanduser("~"), ".config")
-}.get(sys.platform, None)
-
-if config_home is None:
+if sys.platform != "linux":
     print("[Nix] Unsupported operating system.")
     sys.exit(1)
 
-config_dir_name = "@configDirName@".replace(" ", "") if sys.platform == "darwin" else "@configDirName@"
+config_home = os.environ.get("XDG_CONFIG_HOME") or os.path.join(
+    os.path.expanduser("~"), ".config"
+)
+config_dir_name = "@configDirName@"
 
 settings_path = Path(f"{config_home}/{config_dir_name}/settings.json")
 settings_path_temp = Path(f"{config_home}/{config_dir_name}/settings.json.tmp")

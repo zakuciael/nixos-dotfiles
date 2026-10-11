@@ -61,7 +61,6 @@
   libunity,
   speechd-minimal,
   wayland,
-  branch,
   withOpenASAR ? false,
   openasar,
   withVencord ? false,
@@ -79,7 +78,6 @@
   commandLineArgs ? "",
   krispSrc ? null,
   withKrisp ? withOpenASAR || withVencord || withEquicord || withMoonlight,
-  unzip,
 }:
 
 let
@@ -90,31 +88,15 @@ let
   ];
   enabledDiscordModsCount = builtins.length (lib.filter (x: x) discordMods);
 
-  # Starting with discord-development 0.0.235, the linux tarball ships only a
-  # small `updater_bootstrap` ELF that downloads the real app at first launch
-  #
-  # That binary always fetches the latest version from Discord's CDN with no way
-  # to pin, making the build impure and the nix version a lie
-  #
-  # Instead we fetch the app directly from the distributions API at build time:
-  # https://updates.discord.com/distributions/app/manifests/latest?channel=...
-  # The host + module distros are brotli-compressed tars on Discord's CDN at
-  # predictable URLs with SHA256 hashes in the manifest
-  isDistro = source.kind == "distro";
-
+  # Host + module distros from Discord's distributions API: brotli-compressed
+  # tars on the CDN with SHA256 digests published in the manifest
   inherit (source) version;
 
-  src =
-    if isDistro then
-      fetchurl { inherit (source.distro) url hash; }
-    else
-      fetchurl { inherit (source) url hash; };
+  src = fetchurl { inherit (source.distro) url sha256; };
 
-  moduleSrcs = lib.optionalAttrs isDistro (
-    lib.mapAttrs (_: mod: fetchurl { inherit (mod) url hash; }) source.modules
-  );
+  moduleSrcs = lib.mapAttrs (_: mod: fetchurl { inherit (mod) url sha256; }) source.modules;
 
-  moduleVersions = lib.optionalAttrs isDistro (lib.mapAttrs (_: mod: mod.version) source.modules);
+  moduleVersions = lib.mapAttrs (_: mod: mod.version) source.modules;
 
   stagedModuleSrcs =
     if krispSrc != null && withKrisp then
@@ -206,22 +188,14 @@ let
   patchedKrisp = lib.optionalAttrs (krispSrc != null && withKrisp) (
     runCommand "discord-krisp-patched"
       {
-        nativeBuildInputs = lib.optionals isDistro [ brotli ] ++ [
-          unzip
-          (python3.withPackages (ps: [
-            ps.lief
-            ps.capstone
-          ]))
+        nativeBuildInputs = [
+          brotli
+          (python3.withPackages (ps: [ ps.lief ]))
         ];
       }
       ''
         mkdir -p "$out"
-        ${
-          if isDistro then
-            ''brotli -d < ${krispSrc} | tar xf - --strip-components=1 -C "$out"''
-          else
-            ''unzip ${krispSrc} -d "$out"''
-        }
+        brotli -d < ${krispSrc} | tar xf - --strip-components=1 -C "$out"
         python3 ${../patch-krisp.py} "$out/discord_krisp.node"
       ''
   );
@@ -256,6 +230,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     autoPatchelfHook
+    brotli
     cups
     libdrm
     libuuid
@@ -267,30 +242,27 @@ stdenv.mkDerivation (finalAttrs: {
     libxshmfence
     wrapGAppsHook3
     makeShellWrapper
-  ]
-  ++ lib.optionals isDistro [ brotli ];
+  ];
 
   dontWrapGApps = true;
 
   buildInputs = [
     alsa-lib
     libgbm
+    libpulseaudio
     nspr
     nss
-  ]
-  # The new distro layout ships prebuilt `.node` modules:
-  # discord_dispatch is linked against openssl 1.1, discord_voice against libpulseaudio.
-  # Ignore the missing dependency on insecure openssl_1_1: discord_dispatch is
-  # effectively unused in practice.
-  ++ lib.optionals isDistro [ libpulseaudio ];
+  ];
 
   strictDeps = true;
 
-  dontUnpack = isDistro;
+  # Distro host is a brotli stream, not a normal tarball unpack
+  dontUnpack = true;
 
   inherit libPath;
 
-  autoPatchelfIgnoreMissingDeps = lib.optionals isDistro [
+  # discord_dispatch is linked against openssl 1.1 and effectively unused
+  autoPatchelfIgnoreMissingDeps = [
     "libssl.so.1.1"
     "libcrypto.so.1.1"
   ];
@@ -299,41 +271,25 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p $out/{bin,opt/${binaryName},share/icons/hicolor/256x256/apps}
-  ''
-  + (
-    if isDistro then
-      ''
-        # Distro layout (currently discord-ptb, discord-canary and discord-development):
-        #
-        # The host distro is a brotli-compressed tar with all files under a `files/`
-        # prefix (the channel binary, libffmpeg.so, resources/, etc). Module distros
-        # follow the same format with module contents under `files/`
-        #
-        # The module directory layout must match what Discord's node runtime
-        # expects: modules/<name>/ (the moduleUpdater extracts zips into
-        # path.join(moduleInstallPath, moduleName) see processUnzipQueue)
 
-        brotli -d < $src | tar xf - --strip-components=1 -C $out/opt/${binaryName}
-        chmod +x $out/opt/${binaryName}/${binaryName}
+    # The host distro is a brotli-compressed tar with all files under a `files/`
+    # prefix (the channel binary, libffmpeg.so, resources/, etc). Module distros
+    # follow the same format with module contents under `files/`
+    #
+    # The module directory layout must match what Discord's node runtime
+    # expects: modules/<name>/ (the moduleUpdater extracts zips into
+    # path.join(moduleInstallPath, moduleName) see processUnzipQueue)
 
-        # Extract native modules
-        ${lib.concatStringsSep "\n" (
-          lib.mapAttrsToList (name: src: ''
-            mkdir -p $out/opt/${binaryName}/modules/${name}
-            brotli -d < ${src} | tar xf - --strip-components=1 -C $out/opt/${binaryName}/modules/${name}
-          '') stagedModuleSrcs
-        )}
+    brotli -d < $src | tar xf - --strip-components=1 -C $out/opt/${binaryName}
+    chmod +x $out/opt/${binaryName}/${binaryName}
 
-      ''
-    else
-      ''
-        # Tarball layout (stable): the tarball unpacks into a
-        # directory containing the channel binary directly
-        mv * $out/opt/${binaryName}
-        chmod +x $out/opt/${binaryName}/${binaryName}
-      ''
-  )
-  + ''
+    # Extract native modules
+    ${lib.concatStringsSep "\n" (
+      lib.mapAttrsToList (name: src: ''
+        mkdir -p $out/opt/${binaryName}/modules/${name}
+        brotli -d < ${src} | tar xf - --strip-components=1 -C $out/opt/${binaryName}/modules/${name}
+      '') stagedModuleSrcs
+    )}
 
     wrapProgramShell $out/opt/${binaryName}/${binaryName} \
         "''${gappsWrapperArgs[@]}" \
@@ -346,7 +302,7 @@ stdenv.mkDerivation (finalAttrs: {
         --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
         --prefix LD_LIBRARY_PATH : ${finalAttrs.libPath}:$out/opt/${binaryName} \
         ${lib.strings.optionalString disableUpdates "--run ${lib.getExe disableBreakingUpdates}"} \
-        ${lib.strings.optionalString isDistro ''--run "${stageModules} $out/opt/${binaryName}/modules"''} \
+        --run "${stageModules} $out/opt/${binaryName}/modules" \
         ${
           lib.strings.optionalString (krispSrc != null && withKrisp) "--run ${lib.getExe deployKrisp}"
         } \
