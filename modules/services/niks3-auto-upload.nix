@@ -17,7 +17,7 @@ in
 
     services.niks3-auto-upload = {
       enable = true;
-      serverUrl = "https://cache.zakku.eu";
+      serverUrl = "https://niks3.zakku.eu";
       authTokenFile = config.sops.secrets.niks3-auth-token.path;
     };
   };
