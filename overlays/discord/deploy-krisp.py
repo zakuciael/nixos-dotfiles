@@ -31,9 +31,8 @@ VERSION = "@discordVersion@"
 CONFIG_DIR = "@configDirName@"
 
 # Marker file written alongside the deployed krisp to track which nix store
-# path it came from. On case-insensitive filesystems (macOS APFS) another
-# Discord install can silently overwrite our files, so a content hash alone
-# isn't enough
+# path it came from. A content hash alone isn't enough if another install
+# overwrites our files with different bytes that happen to match later checks
 MARKER = ".nix-krisp-source"
 PARENT_CHECK_INTERVAL = 1
 WATCHED_EVENTS = [
@@ -50,9 +49,6 @@ WATCHED_EVENTS = [
 
 
 def modules_dir() -> Path:
-    if sys.platform == "darwin":
-        base = Path.home() / "Library" / "Application Support"
-        return base / CONFIG_DIR.replace(" ", "") / VERSION / "modules"
     home = Path(os.environ.get("XDG_CONFIG_HOME") or Path.home() / ".config")
     return home / CONFIG_DIR / VERSION / "modules"
 
@@ -211,10 +207,10 @@ def main() -> None:
     else:
         deploy(dest)
 
-    # Do not create installed.json on fresh legacy installs: Discord needs a
-    # missing manifest to bootstrap discord_desktop_core and friends. A short
-    # watcher repairs krisp if the module updater overwrites it during launch,
-    # then registers it once the real manifest exists.
+    # Do not create installed.json on fresh installs: Discord needs a missing
+    # manifest to bootstrap discord_desktop_core and friends. A short watcher
+    # repairs krisp if the module updater overwrites it during launch, then
+    # registers it once the real manifest exists.
     register(manifest, create=False)
     start_watcher(dest, manifest)
 

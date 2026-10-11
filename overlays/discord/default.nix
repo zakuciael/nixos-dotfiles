@@ -5,78 +5,46 @@
   updateScript = "overlays/discord/update.py";
 
   overlays = lib.singleton (
-    final: prev:
+    final: _:
     let
       inherit (final)
         callPackage
         fetchurl
-        stdenv
         discord
         discord-ptb
         discord-canary
         discord-development
         ;
 
-      variants = rec {
-        x86_64-linux = {
-          discord = rec {
-            branch = "stable";
-            binaryName = desktopName;
-            desktopName = "Discord";
-            self = discord;
-          };
-          discord-ptb = {
-            branch = "ptb";
-            binaryName = "DiscordPTB";
-            desktopName = "Discord PTB";
-            self = discord-ptb;
-          };
-          discord-canary = {
-            branch = "canary";
-            binaryName = "DiscordCanary";
-            desktopName = "Discord Canary";
-            self = discord-canary;
-          };
-          discord-development = {
-            branch = "development";
-            binaryName = "DiscordDevelopment";
-            desktopName = "Discord Development";
-            self = discord-development;
-          };
+      variants = {
+        discord = rec {
+          branch = "stable";
+          binaryName = desktopName;
+          desktopName = "Discord";
+          self = discord;
         };
-        x86_64-darwin = {
-          discord = rec {
-            branch = "stable";
-            binaryName = desktopName;
-            desktopName = "Discord";
-            self = discord;
-          };
-          discord-ptb = rec {
-            branch = "ptb";
-            binaryName = desktopName;
-            desktopName = "Discord PTB";
-            self = discord-ptb;
-          };
-          discord-canary = rec {
-            branch = "canary";
-            binaryName = desktopName;
-            desktopName = "Discord Canary";
-            self = discord-canary;
-          };
-          discord-development = rec {
-            branch = "development";
-            binaryName = desktopName;
-            desktopName = "Discord Development";
-            self = discord-development;
-          };
+        discord-ptb = {
+          branch = "ptb";
+          binaryName = "DiscordPTB";
+          desktopName = "Discord PTB";
+          self = discord-ptb;
         };
-
-        aarch64-darwin = x86_64-darwin;
-        default = x86_64-linux; # Used for unsupported platforms, so we can return *something* there.
+        discord-canary = {
+          branch = "canary";
+          binaryName = "DiscordCanary";
+          desktopName = "Discord Canary";
+          self = discord-canary;
+        };
+        discord-development = {
+          branch = "development";
+          binaryName = "DiscordDevelopment";
+          desktopName = "Discord Development";
+          self = discord-development;
+        };
       };
 
       meta = {
-        description = "All-in-one cross-platform voice and text chat for gamers";
+        description = "All-in-one voice and text chat for gamers";
         downloadPage = "https://discordapp.com/download";
         homepage = "https://discordapp.com/";
         license = lib.licenses.unfree;
@@ -88,33 +56,21 @@
           jopejoe1
           Scrumplex
         ];
-        platforms = [
-          "x86_64-linux"
-          "x86_64-darwin"
-          "aarch64-darwin"
-        ];
+        platforms = [ "x86_64-linux" ];
         sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
       };
-      package = if stdenv.hostPlatform.isLinux then ./builder/linux.nix else ./builder/darwin.nix;
 
       sources = lib.importJSON ./sources.json;
     in
     lib.genAttrs [ "discord" "discord-ptb" "discord-canary" "discord-development" ] (
       pname:
       let
-        args = (variants.${stdenv.hostPlatform.system} or variants.default).${pname};
-        platformName = if stdenv.hostPlatform.isDarwin then "osx" else "linux";
-        source = sources."${platformName}-${args.branch}";
-        krispSource =
-          if sources ? "${platformName}-${args.branch}-krisp" then
-            sources."${platformName}-${args.branch}-krisp"
-          else if source ? modules && source.modules ? discord_krisp then
-            source.modules.discord_krisp
-          else
-            null;
+        args = variants.${pname};
+        source = sources."linux-${args.branch}";
+        krispSource = source.modules.discord_krisp or null;
       in
-      callPackage package (
-        args
+      callPackage ./builder/linux.nix (
+        (lib.removeAttrs args [ "branch" ])
         // {
           inherit pname source;
           meta = meta // {
@@ -122,10 +78,7 @@
           };
         }
         // lib.optionalAttrs (krispSource != null) {
-          krispSrc = fetchurl {
-            inherit (krispSource) url;
-            hash = krispSource.hash or lib.fakeHash;
-          };
+          krispSrc = fetchurl { inherit (krispSource) url sha256; };
         }
       )
     )

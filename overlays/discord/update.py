@@ -1,37 +1,27 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i python3 -p python3
+#!nix-shell -i python3 -p python3 brotli
 
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import asdict, dataclass, field
 from enum import StrEnum
-from typing import List
-from subprocess import PIPE, Popen
+from typing import Optional
+import hashlib
 import json
-import urllib.request
-import re
 import os.path
+import subprocess
+import tarfile
 import tempfile
-import zipfile
-
-SRC_NAME = "source"
-
-VERSION_REGEX = re.compile(r"\/([\d.]+)\/")
+import urllib.request
 
 # pmovmskb %xmm0, %eax + cmp $0xffff, %eax
 KRISP_PATCH_SIGNATURE = b"\x66\x0f\xd7\xc0\x3d\xff\xff\x00\x00"
-# Apple Security framework API used as the anchor for Mach-O call-chain tracing
-ANCHOR_IMPORT = b"_SecStaticCodeCreateWithPath"
 
+BRANCHES = ("stable", "ptb", "canary", "development")
 
-class Platform(StrEnum):
-    LINUX = "linux"
-    MACOS = "osx"
-
-    def format_type(self):
-        if self.value == Platform.LINUX.value:
-            return "tar.gz"
-        elif self.value == Platform.MACOS.value:
-            return "dmg"
-        raise RuntimeError("Invalid platform")
+# The distributions API rejects requests that don't send a Discord-Updater
+# User-Agent, so we can't identify ourselves as Nixpkgs here
+DISTRO_USER_AGENT = "Discord-Updater/1"
+HTTP_USER_AGENT = "Nixpkgs-Discord-Update-Script/0.0.0"
 
 
 class Branch(StrEnum):
@@ -41,84 +31,17 @@ class Branch(StrEnum):
     DEVELOPMENT = "development"
 
 
-class Kind(StrEnum):
-    # Single tarball or dmg fetched via discord.com/api/download redirect
-    LEGACY = "legacy"
-    # Brotli-compressed host + module distros from the distributions API
-    DISTRO = "distro"
-
-
-@dataclass(frozen=True)
-class Variant:
-    platform: Platform
-    branch: Branch
-    kind: Kind
-
-
-# The distributions API rejects requests that don't send a Discord-Updater
-# User-Agent, so we can't identify ourselves as Nixpkgs here
-DISTRO_USER_AGENT = "Discord-Updater/1"
-
-
-def serialize_variant(variant: Variant) -> str:
-    return f"{variant.platform}-{variant.branch}"
-
-
-def url_for_variant(variant: Variant) -> str:
-    return f"https://discord.com/api/download/{variant.branch.value}?platform={variant.platform.value}&format={variant.platform.format_type()}"
-
-
-def distro_manifest_url_for_variant(variant: Variant) -> str:
-    return f"https://updates.discord.com/distributions/app/manifests/latest?channel={variant.branch.value}&platform={variant.platform.value}&arch=x64"
-
-
-def fetch_redirect_url(url: str) -> str:
-    headers = {"user-agent": "Nixpkgs-Discord-Update-Script/0.0.0"}
-    # note that urllib follows redirects by default. So we can extract the final url from the response object
-    req = urllib.request.Request(url, headers=headers)
-    with urllib.request.urlopen(req) as response:
-        return response.url
-
-
-def version_from_url(url: str) -> str:
-    matches = VERSION_REGEX.search(url)
-    assert matches, f"Url {url} must contain version number"
-    version = matches.group(1)
-    assert version
-    return version
-
-
-def prefetch(url: str) -> str:
-    with Popen(["nix-prefetch-url", "--name", "source", url], stdout=PIPE) as p:
-        assert p.stdout
-        b32_hash = p.stdout.read().decode("utf-8").strip()
-    with Popen(
-        ["nix-hash", "--to-sri", "--type", "sha256", b32_hash], stdout=PIPE
-    ) as p:
-        assert p.stdout
-        sri_hash = p.stdout.read().decode("utf-8").strip()
-    return sri_hash
-
-
-@dataclass
-class LegacySource:
-    version: str
-    url: str
-    hash: str
-    kind: Kind = Kind.LEGACY
-
-
 @dataclass
 class DistroRef:
     url: str
-    hash: str
+    sha256: str
 
 
 @dataclass
 class DistroModule:
     version: int
     url: str
-    hash: str
+    sha256: str
 
 
 @dataclass
@@ -126,12 +49,26 @@ class DistroSource:
     version: str
     distro: DistroRef
     modules: dict[str, DistroModule] = field(default_factory=dict)
-    kind: Kind = Kind.DISTRO
+    kind: str = "distro"
 
 
-def fetch_distro_manifest(variant: Variant) -> dict:
-    url = distro_manifest_url_for_variant(variant)
-    req = urllib.request.Request(url, headers={"User-Agent": DISTRO_USER_AGENT})
+def sha256_file_hex(path: str) -> str:
+    h = hashlib.sha256()
+    with open(path, "rb") as f:
+        for chunk in iter(lambda: f.read(1024 * 1024), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def distro_manifest_url(branch: Branch) -> str:
+    return (
+        "https://updates.discord.com/distributions/app/manifests/latest"
+        f"?channel={branch.value}&platform=linux&arch=x64"
+    )
+
+
+def fetch_json(url: str, user_agent: str) -> dict:
+    req = urllib.request.Request(url, headers={"User-Agent": user_agent})
     with urllib.request.urlopen(req) as response:
         return json.loads(response.read())
 
@@ -140,145 +77,212 @@ def version_triple_to_str(triple: list) -> str:
     return ".".join(str(x) for x in triple)
 
 
-def fetch_distro_source(variant: Variant) -> DistroSource:
-    manifest = fetch_distro_manifest(variant)
+def load_existing_sources() -> dict:
+    path = os.path.join(os.path.dirname(__file__), "sources.json")
+    if not os.path.exists(path):
+        return {}
+    with open(path) as f:
+        return json.load(f)
 
-    distro_url = manifest["full"]["url"]
-    modules = {
-        name: DistroModule(
-            version=mod["full"]["module_version"],
-            url=mod["full"]["url"],
-            hash=prefetch(mod["full"]["url"]),
+
+def existing_entry_matches(existing: Optional[dict], url: str, version) -> Optional[str]:
+    """Return the existing sha256 if url (+ optional version) already match."""
+    if not existing:
+        return None
+    if existing.get("url") != url:
+        return None
+    if version is not None and existing.get("version") != version:
+        return None
+    h = existing.get("sha256")
+    return h if isinstance(h, str) else None
+
+
+def fetch_distro_source(branch: Branch, existing: dict) -> DistroSource:
+    manifest = fetch_json(distro_manifest_url(branch), DISTRO_USER_AGENT)
+    host = manifest["full"]
+    version = version_triple_to_str(host["host_version"])
+    distro_url = host["url"]
+
+    prev = existing.get(f"linux-{branch.value}", {})
+    prev_distro = prev.get("distro") if isinstance(prev, dict) else None
+    prev_modules = prev.get("modules") if isinstance(prev, dict) else {}
+
+    # Host version lives on the parent source entry, not on distro itself
+    reused = (
+        existing_entry_matches(prev_distro, distro_url, None)
+        if isinstance(prev, dict) and prev.get("version") == version
+        else None
+    )
+    if reused:
+        distro_sha256 = reused
+        print(f"  [{branch.value}] reusing host sha256 (unchanged URL/version)")
+    else:
+        distro_sha256 = host["package_sha256"]
+        print(f"  [{branch.value}] host sha256 from package_sha256")
+
+    modules: dict[str, DistroModule] = {}
+    reused_mods = 0
+    for name, mod in manifest["modules"].items():
+        full = mod["full"]
+        mod_url = full["url"]
+        mod_version = full["module_version"]
+        prev_mod = prev_modules.get(name) if isinstance(prev_modules, dict) else None
+        reused_mod = existing_entry_matches(prev_mod, mod_url, mod_version)
+        if reused_mod:
+            reused_mods += 1
+            mod_sha256 = reused_mod
+        else:
+            mod_sha256 = full["package_sha256"]
+        modules[name] = DistroModule(
+            version=mod_version, url=mod_url, sha256=mod_sha256
         )
-        for name, mod in manifest["modules"].items()
-    }
+
+    print(
+        f"  [{branch.value}] {len(modules)} modules"
+        f" ({reused_mods} reused, {len(modules) - reused_mods} from package_sha256)"
+    )
 
     return DistroSource(
-        version=version_triple_to_str(manifest["full"]["host_version"]),
-        distro=DistroRef(url=distro_url, hash=prefetch(distro_url)),
+        version=version,
+        distro=DistroRef(url=distro_url, sha256=distro_sha256),
         modules=modules,
     )
 
 
-def fetch_legacy_source(variant: Variant) -> LegacySource:
-    url = fetch_redirect_url(url_for_variant(variant))
-    return LegacySource(
-        version=version_from_url(url),
-        url=url,
-        hash=prefetch(url),
-    )
+def download_to(path: str, url: str) -> None:
+    req = urllib.request.Request(url, headers={"user-agent": HTTP_USER_AGENT})
+    with urllib.request.urlopen(req) as resp, open(path, "wb") as f:
+        while True:
+            chunk = resp.read(1024 * 1024)
+            if not chunk:
+                break
+            f.write(chunk)
 
 
-def fetch_krisp_module_url(branch, version, platform):
-    """Return the krisp module download URL, or None if unavailable."""
-    headers = {"user-agent": "Nixpkgs-Discord-Update-Script/0.0.0"}
-    url = f"https://discord.com/api/modules/{branch.value}/versions.json?host_version={version}&platform={platform.value}"
-    req = urllib.request.Request(url, headers=headers)
-    with urllib.request.urlopen(req) as response:
-        modules = json.loads(response.read())
+def extract_krisp_node(distro_path: str, dest_dir: str) -> Optional[str]:
+    """Extract discord_krisp.node from a brotli-compressed distro tar."""
+    decompressed = os.path.join(dest_dir, "krisp.tar")
+    with open(distro_path, "rb") as inp, open(decompressed, "wb") as out:
+        subprocess.run(["brotli", "-d"], stdin=inp, stdout=out, check=True)
 
-    if "discord_krisp" not in modules:
-        return None
+    with tarfile.open(decompressed, "r:") as tf:
+        member = next(
+            (m for m in tf.getmembers() if os.path.basename(m.name) == "discord_krisp.node"),
+            None,
+        )
+        if member is None:
+            return None
+        tf.extract(member, dest_dir)
+        return os.path.join(dest_dir, member.name)
 
-    krisp_ver = modules["discord_krisp"]
-    download_url = f"https://discord.com/api/modules/{branch.value}/discord_krisp/{krisp_ver}?host_version={version}&platform={platform.value}"
-    return fetch_redirect_url(download_url)
 
+def verify_krisp_patchable_from_file(node_path: str) -> bool:
+    with open(node_path, "rb") as f:
+        data = f.read()
 
-def verify_krisp_patchable(url):
-    """Download krisp and check it contains the expected patchable target."""
-    headers = {"user-agent": "Nixpkgs-Discord-Update-Script/0.0.0"}
-    with tempfile.TemporaryDirectory() as tmpdir:
-        zip_path = os.path.join(tmpdir, "krisp.zip")
-        req = urllib.request.Request(url, headers=headers)
-        with urllib.request.urlopen(req) as resp, open(zip_path, "wb") as f:
-            f.write(resp.read())
-
-        with zipfile.ZipFile(zip_path) as zf:
-            if "discord_krisp.node" not in zf.namelist():
-                print("  WARNING: discord_krisp.node not found in zip")
-                return False
-            zf.extract("discord_krisp.node", tmpdir)
-
-        with open(os.path.join(tmpdir, "discord_krisp.node"), "rb") as f:
-            data = f.read()
-
-        # ELF: check for MD5 comparison byte pattern (exactly 1 match)
-        if data[:4] == b"\x7fELF":
-            count = data.count(KRISP_PATCH_SIGNATURE)
-            if count != 1:
-                print(f"  WARNING: found {count} ELF signature matches (expected 1)")
-                return False
-            print("  Verified: ELF signature pattern found (1 unique match)")
-            return True
-
-        if ANCHOR_IMPORT in data:
-            print("  Verified: Mach-O contains _SecStaticCodeCreateWithPath import")
-            return True
-
-        print("  WARNING: no patchable target found")
+    if data[:4] != b"\x7fELF":
+        print("  WARNING: discord_krisp.node is not an ELF binary")
         return False
+
+    count = data.count(KRISP_PATCH_SIGNATURE)
+    if count != 1:
+        print(f"  WARNING: found {count} ELF signature matches (expected 1)")
+        return False
+    print("  Verified: ELF signature pattern found (1 unique match)")
+    return True
+
+
+def verify_and_hash_krisp(url: str) -> Optional[str]:
+    """Download Krisp once, verify patchability, return hex sha256 of the archive."""
+    with tempfile.TemporaryDirectory() as tmpdir:
+        archive_path = os.path.join(tmpdir, "krisp.distro")
+        download_to(archive_path, url)
+        node_path = extract_krisp_node(archive_path, tmpdir)
+        if node_path is None:
+            print("  WARNING: discord_krisp.node not found in distro")
+            return None
+        if not verify_krisp_patchable_from_file(node_path):
+            return None
+        return sha256_file_hex(archive_path)
+
+
+def process_branch(branch: Branch, existing: dict) -> tuple[str, DistroSource, Optional[str]]:
+    """Return (key, source, optional warning about krisp)."""
+    print(f"Fetching linux/{branch.value} distro manifest...")
+    source = fetch_distro_source(branch, existing)
+
+    krisp = source.modules.get("discord_krisp")
+    if krisp is None:
+        return (
+            f"linux-{branch.value}",
+            source,
+            f"no discord_krisp module for linux/{branch.value}",
+        )
+
+    prev = existing.get(f"linux-{branch.value}", {})
+    prev_mod = (
+        prev.get("modules", {}).get("discord_krisp") if isinstance(prev, dict) else None
+    )
+    # Skip verify when content is unchanged. CDN hostnames can rotate while
+    # package_sha256 stays the same, so match on version + digest, not URL.
+    if (
+        isinstance(prev_mod, dict)
+        and prev_mod.get("version") == krisp.version
+        and prev_mod.get("sha256") == krisp.sha256
+    ):
+        print(
+            f"  [{branch.value}] krisp unchanged"
+            f" (v{krisp.version}); skipping patchability download"
+        )
+        return f"linux-{branch.value}", source, None
+
+    print(
+        f"  [{branch.value}] verifying krisp patchability"
+        f" (v{krisp.version}, single download)..."
+    )
+    local_sha256 = verify_and_hash_krisp(krisp.url)
+    if local_sha256 is None:
+        return (
+            f"linux-{branch.value}",
+            source,
+            f"krisp for linux/{branch.value} is NOT patchable",
+        )
+
+    if local_sha256 != krisp.sha256:
+        print(
+            f"  [{branch.value}] WARNING: local krisp sha256 differs from"
+            f" package_sha256; using local sha256"
+        )
+        krisp.sha256 = local_sha256
+    else:
+        print(f"  [{branch.value}] krisp sha256 matches package_sha256")
+
+    return f"linux-{branch.value}", source, None
 
 
 def main():
-    variants: List[Variant] = [
-        Variant(Platform.LINUX, Branch.STABLE, Kind.DISTRO),
-        Variant(Platform.LINUX, Branch.PTB, Kind.DISTRO),
-        Variant(Platform.LINUX, Branch.CANARY, Kind.DISTRO),
-        Variant(Platform.LINUX, Branch.DEVELOPMENT, Kind.DISTRO),
-        Variant(Platform.MACOS, Branch.STABLE, Kind.LEGACY),
-        Variant(Platform.MACOS, Branch.PTB, Kind.LEGACY),
-        Variant(Platform.MACOS, Branch.CANARY, Kind.LEGACY),
-        Variant(Platform.MACOS, Branch.DEVELOPMENT, Kind.LEGACY),
-    ]
+    existing = load_existing_sources()
+    branches = [Branch(b) for b in BRANCHES]
+    sources: dict = {}
+    warnings: list[str] = []
 
-    sources = {}
+    with ThreadPoolExecutor(max_workers=len(branches)) as pool:
+        futures = [pool.submit(process_branch, branch, existing) for branch in branches]
+        for fut in as_completed(futures):
+            key, source, warning = fut.result()
+            sources[key] = asdict(source)
+            if warning:
+                warnings.append(warning)
+                print(f"  WARNING: {warning}")
 
-    for v in variants:
-        source = (
-            fetch_distro_source(v) if v.kind == Kind.DISTRO else fetch_legacy_source(v)
-        )
-        sources[serialize_variant(v)] = asdict(source)
-
-    for v in variants:
-        platform, branch = v.platform, v.branch
-        version = sources[serialize_variant(v)]["version"]
-        print(
-            f"Fetching krisp module for {platform.value}/{branch.value} (v{version})..."
-        )
-
-        try:
-            krisp_url = fetch_krisp_module_url(branch, version, platform)
-            if krisp_url is None:
-                print(
-                    f"  No krisp module available for {platform.value}/{branch.value}"
-                )
-                continue
-
-            if not verify_krisp_patchable(krisp_url):
-                print(
-                    f"  WARNING: Krisp for {platform.value}/{branch.value} is NOT patchable, skipping"
-                )
-                continue
-
-            krisp_hash = prefetch(krisp_url)
-            sources[f"{serialize_variant(v)}-krisp"] = {
-                "url": krisp_url,
-                "version": krisp_url
-                .rsplit("/", 1)[-1]
-                .split("?")[0]
-                .replace("discord_krisp-", "")
-                .replace(".zip", ""),
-                "hash": krisp_hash,
-            }
-            print(f"  OK: krisp for {platform.value}/{branch.value}")
-
-        except Exception as exc:
-            print(f"  Failed to fetch krisp for {platform.value}/{branch.value}: {exc}")
-
-    with open(os.path.join(os.path.dirname(__file__), "sources.json"), "w") as f:
+    out_path = os.path.join(os.path.dirname(__file__), "sources.json")
+    with open(out_path, "w") as f:
         json.dump(sources, f, indent=2, sort_keys=True)
         f.write("\n")
+
+    print(f"Wrote {len(sources)} linux sources to {out_path}")
+    if warnings:
+        print(f"{len(warnings)} warning(s) during update")
 
 
 if __name__ == "__main__":
