@@ -28,10 +28,6 @@
             -exec chmod +x {} +
         '';
 
-      # Cursor SDK text gen used mode:"plan", so CreatePlan ate the JSON and
-      # generateCommitMessage failed with "invalid structured output".
-      cursorTextGenPatches = [ ./patches/cursor-text-gen-agent-mode.patch ];
-
       version = "0.0.45";
 
       src = final.fetchFromGitHub {
@@ -43,8 +39,6 @@
 
       t3code-unwrapped = prev.t3code.unwrapped.overrideAttrs (old: {
         inherit version src;
-
-        patches = (old.patches or [ ]) ++ cursorTextGenPatches;
 
         pnpmDeps = old.pnpmDeps.override {
           inherit version src;
@@ -70,7 +64,9 @@
         version = nightlyVersion;
         src = nightlySrc;
 
-        patches = (old.patches or [ ]) ++ cursorTextGenPatches;
+        # Cursor SDK text gen used mode:"plan", so CreatePlan ate the JSON and
+        # generateCommitMessage failed with "invalid structured output".
+        patches = (old.patches or [ ]) ++ [ ./patches/cursor-text-gen-agent-mode.patch ];
 
         pnpmDeps = old.pnpmDeps.override {
           pname = "t3code-nightly-unwrapped";
