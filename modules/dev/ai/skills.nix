@@ -16,13 +16,19 @@ in
   };
 
   config = mkIf cfg.enable {
-    home-manager.users.${username} = {
-      programs = {
-        opencode.skills = pkgs.ai-skills;
-        codex.skills = pkgs.ai-skills;
-        claude-code.skills = pkgs.ai-skills;
-        cursor-agent.skillsDir = pkgs.ai-skills;
+    home-manager.users.${username} =
+      let
+        # Coerce to a store path string: a derivation is an attrset, so either(attrs, path)
+        # types would otherwise try to merge drv internals into skills.
+        skills = "${pkgs.ai-skills}";
+      in
+      {
+        programs = {
+          opencode.skills = skills;
+          codex.skills = skills;
+          claude-code.skills = skills;
+          cursor-agent.skillsDir = skills;
+        };
       };
-    };
   };
 }
