@@ -28,6 +28,58 @@
             -exec chmod +x {} +
         '';
 
+      # T3 downloads an unpatched chrome-headless-shell under ~/.t3/tools; `t3 browser
+      # setup` only installs Debian packages via apt. Prefix the wrapper so the
+      # server (and the chrome child it spawns) can resolve the shell's .so deps.
+      browserLibraryPath = lib.makeLibraryPath (
+        with final;
+        [
+          alsa-lib
+          at-spi2-atk
+          at-spi2-core
+          atk
+          cairo
+          cups
+          dbus
+          expat
+          glib
+          gtk3
+          libdrm
+          libgbm
+          libx11
+          libxcb
+          libxcomposite
+          libxdamage
+          libxext
+          libxfixes
+          libxkbcommon
+          libxrandr
+          nspr
+          nss
+          pango
+        ]
+      );
+
+      withBrowserLibraries =
+        pkg:
+        pkg.overrideAttrs (old: {
+          nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ final.makeBinaryWrapper ];
+          # nixpkgs' t3code uses symlinkJoin with __structuredAttrs; its wrap lives in
+          # buildCommand (postBuild is already inlined), so append here.
+          buildCommand =
+            (old.buildCommand or "")
+            + lib.optionalString stdenv.hostPlatform.isLinux ''
+              for program in "$out/bin"/*; do
+                # Drop ELECTRON_RUN_AS_NODE so t3code-desktop is not forced into
+                # Node mode when launched from an Electron/agent shell (which then
+                # hits require("electron") and tries to download into the store).
+                wrapProgram "$program" \
+                  --prefix LD_LIBRARY_PATH : ${lib.escapeShellArg browserLibraryPath} \
+                  --unset ELECTRON_RUN_AS_NODE
+              done
+            '';
+        });
+
       version = "0.0.45";
 
       src = final.fetchFromGitHub {
@@ -79,17 +131,20 @@
       });
     in
     {
-      t3code = prev.t3code.override {
-        inherit t3code-unwrapped;
-      };
+      t3code = withBrowserLibraries (
+        prev.t3code.override {
+          inherit t3code-unwrapped;
+        }
+      );
 
-      t3code-nightly =
+      t3code-nightly = withBrowserLibraries (
         (prev.t3code.override {
           t3code-unwrapped = t3code-nightly-unwrapped;
         }).overrideAttrs
           {
             pname = "t3code-nightly";
-          };
+          }
+      );
     }
   );
 }
