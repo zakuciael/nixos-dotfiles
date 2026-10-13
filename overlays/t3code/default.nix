@@ -190,7 +190,15 @@
 
         # Cursor SDK text gen used mode:"plan", so CreatePlan ate the JSON and
         # generateCommitMessage failed with "invalid structured output".
-        patches = (old.patches or [ ]) ++ [ ./patches/cursor-text-gen-agent-mode.patch ];
+        #
+        # Cursor Agent SDK sessions often omit personal/slash-only skills from
+        # the catalog, so `$skill` → `/skill` alone leaves the model hunting
+        # under ~/.cursor/skills*. Pin discovered SKILL.md paths on invoke, and
+        # use non-failing discover for the slash-menu snapshot.
+        patches = (old.patches or [ ]) ++ [
+          ./patches/cursor-text-gen-agent-mode.patch
+          ./patches/cursor-skills-path-pin.patch
+        ];
 
         pnpmDeps = old.pnpmDeps.override {
           pname = "t3code-nightly-unwrapped";

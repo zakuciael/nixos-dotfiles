@@ -1,0 +1,186 @@
+--- a/packages/provider-cursor/src/server/skills.ts
++++ b/packages/provider-cursor/src/server/skills.ts
+@@ -282,11 +282,42 @@
+   return HAS_SKILL_MENTION_PATTERN.test(prompt);
+ }
+ 
++/**
++ * Rewrite composer `$name` mentions to Cursor's `/name` form and pin each
++ * resolved SKILL.md path onto the prompt.
++ *
++ * The Cursor Agent SDK loads ambient skills only through settingSources, and
++ * personal/slash-only skills (Home Manager symlink farms, disable-model-
++ * invocation) often never appear in the session catalog. Without the path,
++ * `/name` is opaque text and the model hunts under ~/.cursor/skills*.
++ */
+ export function rewriteCursorSkillMentions(
+   prompt: string,
+-  skillNames: ReadonlySet<string>,
++  skillsByName: ReadonlyMap<string, string>,
+ ): string {
+-  return prompt.replace(SKILL_MENTION_PATTERN, (match, prefix: string, name: string) =>
+-    skillNames.has(name) ? `${prefix}/${name}` : match,
++  const mentioned = new Map<string, string>();
++  const rewritten = prompt.replace(
++    SKILL_MENTION_PATTERN,
++    (match, prefix: string, name: string) => {
++      const skillPath = skillsByName.get(name);
++      if (skillPath === undefined) return match;
++      mentioned.set(name, skillPath);
++      return `${prefix}/${name}`;
++    },
++  );
++  if (mentioned.size === 0) return rewritten;
++
++  const lines = [...mentioned.entries()]
++    .sort(([left], [right]) => left.localeCompare(right))
++    .map(
++      ([name, skillPath]) =>
++        `- \`/${name}\`: Read \`${skillPath}\` immediately and follow it. Do not search the filesystem for this skill.`,
++    );
++  return (
++    `${rewritten}\n\n` +
++    "<t3_cursor_skill_invocation>\n" +
++    "The user invoked Cursor Agent Skill(s) by name. Use these resolved paths instead of looking the skills up:\n" +
++    `${lines.join("\n")}\n` +
++    "</t3_cursor_skill_invocation>"
+   );
+ }
+--- a/packages/provider-cursor/src/server/skills.test.ts
++++ b/packages/provider-cursor/src/server/skills.test.ts
+@@ -244,18 +244,44 @@
+     expect(hasCursorSkillMention("use $Review_Pr:V2 here")).toBe(true);
+     expect(hasCursorSkillMention("please $review this")).toBe(true);
+     expect(
+-      rewriteCursorSkillMentions("use $review, keep $HOME and 5$review", new Set(["review"])),
++      rewriteCursorSkillMentions(
++        "use $review, keep $HOME and 5$review",
++        new Map([["review", "/skills/review/SKILL.md"]]),
++      ),
+     ).toBe("use $review, keep $HOME and 5$review");
+-    expect(rewriteCursorSkillMentions("please $review this", new Set(["review"]))).toBe(
+-      "please /review this",
++    expect(
++      rewriteCursorSkillMentions(
++        "please $review this",
++        new Map([["review", "/skills/review/SKILL.md"]]),
++      ),
++    ).toBe(
++      [
++        "please /review this",
++        "",
++        "<t3_cursor_skill_invocation>",
++        "The user invoked Cursor Agent Skill(s) by name. Use these resolved paths instead of looking the skills up:",
++        "- `/review`: Read `/skills/review/SKILL.md` immediately and follow it. Do not search the filesystem for this skill.",
++        "</t3_cursor_skill_invocation>",
++      ].join("\n"),
+     );
+   });
+   it("detects and invokes digit-leading Cursor skills without rewriting money", () => {
+-    const names = new Set(["2spec", "20k", "100M", "1e6"]);
++    const skills = new Map(
++      ["2spec", "20k", "100M", "1e6"].map((name) => [name, `/skills/${name}/SKILL.md`] as const),
++    );
+     expect(hasCursorSkillMention("use $2spec here")).toBe(true);
+     expect(hasCursorSkillMention("use $2spec here")).toBe(true);
+-    expect(rewriteCursorSkillMentions("use $2spec here", names)).toBe("use /2spec here");
+-    expect(rewriteCursorSkillMentions("use $2spec here", new Set())).toBe("use $2spec here");
++    expect(rewriteCursorSkillMentions("use $2spec here", skills)).toBe(
++      [
++        "use /2spec here",
++        "",
++        "<t3_cursor_skill_invocation>",
++        "The user invoked Cursor Agent Skill(s) by name. Use these resolved paths instead of looking the skills up:",
++        "- `/2spec`: Read `/skills/2spec/SKILL.md` immediately and follow it. Do not search the filesystem for this skill.",
++        "</t3_cursor_skill_invocation>",
++      ].join("\n"),
++    );
++    expect(rewriteCursorSkillMentions("use $2spec here", new Map())).toBe("use $2spec here");
+     for (const text of [
+       "pay $20 tomorrow",
+       "budget $20k here",
+@@ -263,7 +289,7 @@
+       "limit $1e6 here",
+     ]) {
+       expect(hasCursorSkillMention(text)).toBe(false);
+-      expect(rewriteCursorSkillMentions(text, names)).toBe(text);
++      expect(rewriteCursorSkillMentions(text, skills)).toBe(text);
+     }
+   });
+ });
+--- a/packages/provider-cursor/src/server/adapter.ts
++++ b/packages/provider-cursor/src/server/adapter.ts
+@@ -2107,7 +2107,7 @@
+           return next;
+         });
+ 
+-        let cursorSkillNames: ReadonlySet<string> | undefined;
++        let cursorSkillPaths: ReadonlyMap<string, string> | undefined;
+         const resolveUserMessage = Effect.fnUntraced(function* (
+           turnInput: ProviderAdapter.ProviderAdapterV2TurnInput,
+           mcpServers: Record<string, McpServerConfig> | undefined,
+@@ -2116,7 +2116,7 @@
+           if (rawText.trim() === "/compress" && turnInput.message.attachments.length === 0) {
+             return "/compress";
+           }
+-          if (hasCursorSkillMention(rawText) && cursorSkillNames === undefined) {
++          if (hasCursorSkillMention(rawText) && cursorSkillPaths === undefined) {
+             const skills = yield* discoverCursorSkills(
+               turnInput.runtimePolicy.cwd ?? undefined,
+               adapterOptions.environment,
+@@ -2124,18 +2124,18 @@
+               Effect.provideService(FileSystem.FileSystem, fileSystem),
+               Effect.provideService(Path.Path, path),
+             );
+-            cursorSkillNames = new Set(
++            cursorSkillPaths = new Map(
+               skills
+                 .filter((skill) => skill.enabled && skill.userInvocable !== false)
+-                .map((skill) => skill.name),
++                .map((skill) => [skill.name, skill.path] as const),
+             );
+           }
+           const userText = t3OrchestrationPromptForFirstRun({
+             prompt: providerMessageTextWithAttachmentPaths({
+               text:
+-                cursorSkillNames === undefined
++                cursorSkillPaths === undefined
+                   ? rawText
+-                  : rewriteCursorSkillMentions(rawText, cursorSkillNames),
++                  : rewriteCursorSkillMentions(rawText, cursorSkillPaths),
+               attachments: turnInput.message.attachments,
+               resolveAttachmentPath: host.resolveAttachmentPath,
+             }),
+--- a/packages/provider-cursor/src/server/driver.ts
++++ b/packages/provider-cursor/src/server/driver.ts
+@@ -36,7 +36,7 @@
+   makeProviderSnapshotSettingsSource,
+   type ProviderSnapshotSettings,
+ } from "@t3tools/provider-core/server/snapshotSettings";
+-import { probeCursorSkills } from "./skills.ts";
++import { discoverCursorSkills } from "./skills.ts";
+ import { makeCursorAuth } from "./auth.ts";
+ import * as CursorCredentialStore from "./credentialStore.ts";
+ import * as CursorAgentSdk from "./CursorAgentSdk.ts";
+@@ -286,18 +286,11 @@
+             ? snapshot.getSnapshot
+             : Effect.all([
+                 snapshot.getSnapshot,
+-                probeCursorSkills(cwd, processEnv).pipe(
++                // Prefer discover over probe: a single unreadable root must not
++                // wipe the slash-menu skill list (Home Manager farms still work).
++                discoverCursorSkills(cwd, processEnv).pipe(
+                   Effect.provideService(FileSystem.FileSystem, fileSystem),
+                   Effect.provideService(Path.Path, path),
+-                  Effect.mapError(
+-                    (cause) =>
+-                      new ProviderDriverError({
+-                        driver: DRIVER_KIND,
+-                        instanceId,
+-                        detail: `Failed to discover Cursor skills for '${cwd}'`,
+-                        cause,
+-                      }),
+-                  ),
+                 ),
+               ]).pipe(Effect.map(([machineSnapshot, skills]) => ({ ...machineSnapshot, skills }))),
+         orchestrationAdapter,
