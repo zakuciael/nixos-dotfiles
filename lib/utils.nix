@@ -381,6 +381,19 @@ rec {
 
     dsp = {
       exec = cmd: mkLuaInline ''hl.dsp.exec_cmd("${cmd}")'';
+      global = name: mkLuaInline ''hl.dsp.global("${name}")'';
+      pass =
+        {
+          window ? "activewindow",
+        }:
+        mkLuaInline ''hl.dsp.pass({ window = "${window}" })'';
+      send_shortcut =
+        {
+          window ? "activewindow",
+          mods,
+          key,
+        }:
+        ''hl.dsp.pass({ window = "${window}", mods = "${mods}", key = "${key}" })'';
       fullscreen =
         mode: mkLuaInline ''hl.dsp.window.fullscreen({ mode = "${mode}", action = "toggle" })'';
       focus = dir: mkLuaInline ''hl.dsp.focus({ direction = "${dir}" })'';
