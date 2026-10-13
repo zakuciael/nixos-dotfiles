@@ -50,6 +50,18 @@ in
             config.lib.file.mkOutOfStoreSymlink "/run/media/${username}/Shared/Projects";
         };
 
+        # Global shortcut for `t3code` capture window
+        wayland.windowManager.hyprland.settings.bind =
+          let
+            inherit (lib.my.utils.hypr)
+              dsp
+              mkBind
+              ;
+          in
+          [
+            (mkBind "CTRL + SHIFT + 2" (dsp.global "com.t3tools.T3Code:capture-window"))
+          ];
+
         programs = {
           mcp = {
             enable = true;
