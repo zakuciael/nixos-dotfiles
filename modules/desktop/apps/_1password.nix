@@ -124,9 +124,9 @@ in
       in
       mkIf config.modules.desktop.wm.hyprland.enable {
         bind = [
-          (mkBind "CTRL + SHIFT + O" (dsp.exec "${getExe pkgs'.gui} --toggle"))
           (mkBind "CTRL + SHIFT + L" (dsp.exec "${getExe pkgs'.gui} --lock"))
-          (mkBind "CTRL + SHIFT + Backslash" (dsp.exec "${getExe pkgs'.gui} --fill"))
+          (mkBind "CTRL + SHIFT + O" (dsp.exec "${getExe pkgs'.gui} --toggle"))
+          (mkBind "CTRL + SHIFT + P" (dsp.exec "${getExe pkgs'.gui} --quick-access"))
         ];
 
         window_rule = [
