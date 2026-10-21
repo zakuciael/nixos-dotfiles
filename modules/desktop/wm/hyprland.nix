@@ -419,7 +419,7 @@ desktop.mkDesktopModule {
                 (mkBind "CTRL + SHIFT + Q" (dsp.exec (getExe scriptPackages.rofi-powermenu)))
 
                 # Fix physical mute button for Elgato Wave 3 microphone
-                (mkBind (withMod "KP_Subtract") (dsp.exec (getExe scriptPackages.elgato-mic-fix))) # or F23 key
+                (mkBind (withMod "F23") (dsp.exec (getExe scriptPackages.elgato-mic-fix))) # or KP_Subtract key
 
                 # Drag / Resize active floating window with mouse buttons
                 (mkBind (withMod "mouse:272") dsp.drag)
