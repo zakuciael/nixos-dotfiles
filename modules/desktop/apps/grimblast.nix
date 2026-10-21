@@ -18,15 +18,15 @@
       [
         # Screenshot entire monitor
         (mkBind "Print" (dsp.exec "${grimblastExec} copy output")) # Copy to clipboard
-        (mkBind (withMod "Print") (dsp.exec "${grimblastExec} save output")) # Save to file
+        (mkBind (withMod "Print") (dsp.exec "${grimblastExec} copysave output")) # Save to file
 
         # Screenshot active window
         (mkBind "ALT + Print" (dsp.exec "${grimblastExec} copy active")) # Copy to clipboard
-        (mkBind (withMod "ALT + Print") (dsp.exec "${grimblastExec} save active")) # Save to file
+        (mkBind (withMod "ALT + Print") (dsp.exec "${grimblastExec} copysave active")) # Save to file
 
         # Screenshot selected region
         (mkBind "CTRL + Print" (dsp.exec "${grimblastExec} --freeze copy area")) # Copy to clipboard
-        (mkBind (withMod "CTRL + Print") (dsp.exec "${grimblastExec} --freeze save area")) # Save to file
+        (mkBind (withMod "CTRL + Print") (dsp.exec "${grimblastExec} --freeze copysave area")) # Save to file
       ];
   };
 }
