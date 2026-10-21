@@ -140,7 +140,7 @@
         hash = "sha256-8drTHjFqa2vJ96jhpRZXmNbtbXtKk1q40jOEp9dohNc=";
       };
 
-      # Shared across current stable/nightly; update.sh refreshes nightly hashes.
+      # Stable capture-helper cargoHashes; nightly has its own pair below.
       hyprlandCargoHash = "sha256-oki1DAzUJ/8YIFhaJlw2wOukiQMcAaexdJqxDcFXFW4=";
       kdeCargoHash = "sha256-ZbetrRAvnNLLS51IwR9xLb1NhnpFQB4J1ahn4CthJy0=";
 
@@ -165,9 +165,12 @@
         postFixup = withLinuxFixes old;
       });
 
-      nightlyVersion = "0.1.1-nightly.20261017.3272";
-      nightlySrcHash = "sha256-x3QdfuaqhT64RUhXWuBNFzPow77tTvWRC4tyg/I/Z/E=";
-      nightlyPnpmDepsHash = "sha256-OUbKUtz+5qKxzjwXqn1eheRaKs/wZZv4U0hEK/uO2Aw=";
+      nightlyVersion = "0.1.2-nightly.20261021.3473";
+      nightlySrcHash = "sha256-D6SfLE/cCM/dUDm1GgLUIg5qAlLfOJd60bOZKVyQBaU=";
+      nightlyPnpmDepsHash = "sha256-MPT3TfzJN7XsGjDCeoqrkr4qWpqNRRwCESnMgfosl9g=";
+      # Prefetched by update.sh alongside src/pnpm hashes.
+      nightlyHyprlandCargoHash = "sha256-oki1DAzUJ/8YIFhaJlw2wOukiQMcAaexdJqxDcFXFW4=";
+      nightlyKdeCargoHash = "sha256-ZbetrRAvnNLLS51IwR9xLb1NhnpFQB4J1ahn4CthJy0=";
 
       nightlySrc = final.fetchFromGitHub {
         owner = "pingdotgg";

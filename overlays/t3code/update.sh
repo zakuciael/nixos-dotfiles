@@ -42,17 +42,23 @@ src_hash="$(
     owner = \"pingdotgg\";
     repo = \"t3code\";
     tag = \"v${version}\";
-  }"
+  }" | grep -oE 'sha256-[A-Za-z0-9+/=]+' | tail -n1
 )"
+
+if [[ -z "$src_hash" ]]; then
+  echo "ERROR: could not determine src hash for v${version}" >&2
+  exit 1
+fi
 
 fake_hash="sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
 
+# Use '|' delimiters so base64 '/' in SRI hashes cannot break sed.
 sed -i \
-  -e "s/nightlyVersion = \"${old_version}\"/nightlyVersion = \"${version}\"/" \
-  -e "s#nightlySrcHash = \"sha256-[^\"]*\"#nightlySrcHash = \"${src_hash}\"#" \
-  -e "s#nightlyPnpmDepsHash = \"sha256-[^\"]*\"#nightlyPnpmDepsHash = \"${fake_hash}\"#" \
-  -e "s#nightlyHyprlandCargoHash = \"sha256-[^\"]*\"#nightlyHyprlandCargoHash = \"${fake_hash}\"#" \
-  -e "s#nightlyKdeCargoHash = \"sha256-[^\"]*\"#nightlyKdeCargoHash = \"${fake_hash}\"#" \
+  -e "s|nightlyVersion = \"${old_version}\"|nightlyVersion = \"${version}\"|" \
+  -e "s|nightlySrcHash = \"sha256-[^\"]*\"|nightlySrcHash = \"${src_hash}\"|" \
+  -e "s|nightlyPnpmDepsHash = \"sha256-[^\"]*\"|nightlyPnpmDepsHash = \"${fake_hash}\"|" \
+  -e "s|nightlyHyprlandCargoHash = \"sha256-[^\"]*\"|nightlyHyprlandCargoHash = \"${fake_hash}\"|" \
+  -e "s|nightlyKdeCargoHash = \"sha256-[^\"]*\"|nightlyKdeCargoHash = \"${fake_hash}\"|" \
   "$NIX_DRV"
 
 build_log="$(mktemp)"
@@ -62,7 +68,8 @@ prefetch_got_hash() {
   local attr="$1"
   local label="$2"
 
-  echo "Prefetching ${label} (this may take a while)..."
+  # Progress must go to stderr: stdout is captured into the hash variable.
+  echo "Prefetching ${label} (this may take a while)..." >&2
   set +e
   nix build --impure --no-link "${REPO_ROOT}#pkgs.${attr}" >"$build_log" 2>&1
   local build_status=$?
@@ -86,13 +93,13 @@ prefetch_got_hash() {
 }
 
 pnpm_hash="$(prefetch_got_hash "t3code-nightly.unwrapped.pnpmDeps" "pnpmDeps")"
-sed -i "s#nightlyPnpmDepsHash = \"${fake_hash}\"#nightlyPnpmDepsHash = \"${pnpm_hash}\"#" "$NIX_DRV"
+sed -i "s|nightlyPnpmDepsHash = \"${fake_hash}\"|nightlyPnpmDepsHash = \"${pnpm_hash}\"|" "$NIX_DRV"
 
 hyprland_hash="$(prefetch_got_hash "t3-hyprland-snap-shot" "hyprland capture helper cargoHash")"
-sed -i "s#nightlyHyprlandCargoHash = \"${fake_hash}\"#nightlyHyprlandCargoHash = \"${hyprland_hash}\"#" "$NIX_DRV"
+sed -i "s|nightlyHyprlandCargoHash = \"${fake_hash}\"|nightlyHyprlandCargoHash = \"${hyprland_hash}\"|" "$NIX_DRV"
 
 kde_hash="$(prefetch_got_hash "t3-kde-snap-shot" "kde capture helper cargoHash")"
-sed -i "s#nightlyKdeCargoHash = \"${fake_hash}\"#nightlyKdeCargoHash = \"${kde_hash}\"#" "$NIX_DRV"
+sed -i "s|nightlyKdeCargoHash = \"${fake_hash}\"|nightlyKdeCargoHash = \"${kde_hash}\"|" "$NIX_DRV"
 
 echo "Updated t3code-nightly to ${version}"
 echo "  src hash:       ${src_hash}"

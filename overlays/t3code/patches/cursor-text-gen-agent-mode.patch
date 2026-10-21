@@ -1,7 +1,7 @@
 --- a/packages/provider-cursor/src/server/textGeneration.ts
 +++ b/packages/provider-cursor/src/server/textGeneration.ts
-@@ -99,7 +99,10 @@
-       const cwd = yield* fs.makeTempDirectoryScoped({ prefix: "t3-cursor-text-" });
+@@ -107,7 +107,10 @@
+       );
        const agentOptions = {
          apiKey,
 -        mode: "plan",
@@ -14,13 +14,17 @@
            cwd,
 --- a/packages/provider-cursor/src/server/textGeneration.test.ts
 +++ b/packages/provider-cursor/src/server/textGeneration.test.ts
-@@ -122,7 +122,8 @@
-       expect(prompt).toContain("Staged patch:");
-       expect(options).toEqual({
-         apiKey: "test-cursor-key",
--        mode: "plan",
+@@ -125,9 +125,13 @@
+       expect(generated.subject).toBe("Add generated commit message");
+       expect(cursorSdkMock.create).toHaveBeenCalledTimes(2);
+       expect(cursorSdkMock.create.mock.calls[0]?.[0]).toMatchObject({
 +        mode: "agent",
 +        tools: [],
-         model: {
-           id: "gpt-5.4",
-           params: [
+         local: { sandboxOptions: { enabled: true } },
+       });
+       expect(cursorSdkMock.create.mock.calls[1]?.[0]).toMatchObject({
++        mode: "agent",
++        tools: [],
+         local: {
+           cwd: "/isolated-text-generation",
+           store: { dispose: cursorSdkMock.storeDispose },
