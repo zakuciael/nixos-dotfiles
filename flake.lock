@@ -452,11 +452,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1782065067,
-        "narHash": "sha256-0bmSibcdqvgpedq9m87/U1azM5JgMW33vYgtP3F5GZo=",
+        "lastModified": 1792684371,
+        "narHash": "sha256-tL/jhLrIOPDz0Qa54R1BdXVUg/8Mo5W0+0foxoXQ3qk=",
         "owner": "zakuciael",
         "repo": "irminsul",
-        "rev": "1bfc97c4cbd7f61be5cfe82dfeef6447a0731a0c",
+        "rev": "3ac3ea587a644b582f8478b46a7490f422342a2f",
         "type": "github"
       },
       "original": {
