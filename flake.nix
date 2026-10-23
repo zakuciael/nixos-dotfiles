@@ -212,11 +212,14 @@
           ];
         };
 
-        overlays = lib.my.overlays.pkgs ++ [
+        # Apply input overlays first so local overlays (e.g. waybar checks) can
+        # override the final packages those inputs provide.
+        overlays = [
           inputs.aagl.overlays.default
           inputs.zed-extensions.overlays.default
           inputs.waybar.overlays.default
-        ];
+        ]
+        ++ lib.my.overlays.pkgs;
       };
 
       inputs = flakeInputs // {

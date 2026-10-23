@@ -58,7 +58,6 @@
   pipewire,
   python3,
   runCommand,
-  libunity,
   speechd-minimal,
   wayland,
   withOpenASAR ? false,
@@ -129,7 +128,6 @@ let
       libnotify
       libx11
       libxcomposite
-      libunity
       libuuid
       libva
       libxcursor
