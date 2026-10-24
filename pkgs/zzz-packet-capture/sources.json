@@ -1,0 +1,15 @@
+{
+  "zzz-packet-capture": {
+    "owner": "AleXu224",
+    "repo": "zzz_packet_capture",
+    "version": "0-unstable-2026-10-24",
+    "rev": "863990eba20daa69a4c5eb056b35384104db5651",
+    "hash": "sha256-NcL1b5k27HvYBt8Pg1EZ80PtW8m9/PjxQiIM/4APm1A="
+  },
+  "glt": {
+    "owner": "AleXu224",
+    "repo": "glt",
+    "rev": "ffc0282e993b08ac4601f9551d636195df80507b",
+    "hash": "sha256-XWSwRY7GLceRkvdFPbjXdM9TdmmTKpq7xMzsiRskATg="
+  }
+}

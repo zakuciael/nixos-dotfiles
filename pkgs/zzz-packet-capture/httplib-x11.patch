@@ -1,0 +1,20 @@
+diff --git a/src/networking.cpp b/src/networking.cpp
+--- a/src/networking.cpp
++++ b/src/networking.cpp
+@@ -1,5 +1,16 @@
+ #include "networking.hpp"
+ 
++// X11 headers (pulled in via the Vulkan PCH) define Success/Status/None as
++// macros, which break cpp-httplib's ErrorCode enum and related types.
++#ifdef Success
++#undef Success
++#endif
++#ifdef Status
++#undef Status
++#endif
++#ifdef None
++#undef None
++#endif
+ #include "httplib.h"
+ #include "skyr/url.hpp"
+ 

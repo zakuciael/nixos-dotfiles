@@ -12,9 +12,13 @@ with lib.my.utils;
 let
   inherit (pkgs) makeDesktopItem symlinkJoin;
   inherit (pkgs.stdenv) mkDerivation;
+  inherit (lib.hm) dag;
   cfg = config.modules.desktop.gaming.mihoyo;
   layout = findLayoutConfig config ({ name, ... }: name == "main"); # Main monitor
   monitor = getLayoutMonitor layout "wayland";
+
+  zzzDataDir = "/home/${username}/.local/share/zzz-packet-capture";
+  zzzPacketCapture = pkgs.zzz-packet-capture.override { dataDir = zzzDataDir; };
 
   mkGameShortcut =
     {
@@ -68,6 +72,7 @@ in
   config = mkIf cfg.enable {
     home-manager.users.${username} = {
       home.packages = [
+        zzzPacketCapture
         (mkGameShortcut {
           name = "genshin-impact";
           desktopName = "Genshin Impact";
@@ -78,6 +83,19 @@ in
           package = config.programs.anime-game-launcher.package;
         })
       ];
+
+      home.activation.seedZzzPacketCaptureAssets = dag.entryAfter [ "writeBoundary" ] ''
+        store_assets="${zzzPacketCapture}/share/zzz-packet-capture/assets"
+        mkdir -p "${zzzDataDir}/assets"
+        for f in "$store_assets"/*; do
+          [ -e "$f" ] || continue
+          dest="${zzzDataDir}/assets/$(${pkgs.coreutils}/bin/basename "$f")"
+          if [ ! -e "$dest" ]; then
+            cp "$f" "$dest"
+            chmod 644 "$dest"
+          fi
+        done
+      '';
 
       wayland.windowManager.hyprland.settings.window_rule = [
         {
@@ -96,6 +114,13 @@ in
           immediate = true;
         }
       ];
+    };
+
+    security.wrappers.zzz_packet_capture = {
+      source = getExe zzzPacketCapture;
+      owner = "root";
+      group = "root";
+      capabilities = "cap_net_raw,cap_net_admin+eip";
     };
 
     programs = {
