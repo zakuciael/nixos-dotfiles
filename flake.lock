@@ -1058,11 +1058,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1791624794,
-        "narHash": "sha256-rFpOLh4pKMy07LHOTz1oUlGWKON03EJHmuF7bYiSqoA=",
+        "lastModified": 1792828513,
+        "narHash": "sha256-2xretcWJDQ4XEjlHBlV3bvLb8PIMCdjfjpCnjAila5o=",
         "owner": "DuskSystems",
         "repo": "nix-zed-extensions",
-        "rev": "6aa5b31bdf63c619d8296c458c3a995f8adde529",
+        "rev": "0bf157397c8c18152082f930f8159db2fc2e32a1",
         "type": "github"
       },
       "original": {
