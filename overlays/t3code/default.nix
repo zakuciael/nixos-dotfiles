@@ -167,7 +167,7 @@
 
       nightlyVersion = "0.1.3-nightly.20261024.3643";
       nightlySrcHash = "sha256-hzsSWIOFDPjz/PQlbVgt0svtSLLF+oRZ8tH0bYrfvhA=";
-      nightlyPnpmDepsHash = "sha256-xRmOrOZbBljaF1IJr0JFUFzdhkld6+ehLIlpVOg/J3E=";
+      nightlyPnpmDepsHash = "sha256-SvNUylZW3EgFF44kRZY8YEAMPidP8/OhrSvX3aYNcfA=";
       # Prefetched by update.sh alongside src/pnpm hashes.
       nightlyHyprlandCargoHash = "sha256-oki1DAzUJ/8YIFhaJlw2wOukiQMcAaexdJqxDcFXFW4=";
       nightlyKdeCargoHash = "sha256-ZbetrRAvnNLLS51IwR9xLb1NhnpFQB4J1ahn4CthJy0=";
