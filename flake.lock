@@ -336,7 +336,7 @@
     "flake-parts_2": {
       "inputs": {
         "nixpkgs-lib": [
-          "nixpkgs-lib"
+          "nixpkgs"
         ]
       },
       "locked": {
@@ -512,7 +512,7 @@
       "inputs": {
         "base16-schemes": "base16-schemes",
         "nixpkgs-lib": [
-          "nixpkgs-lib"
+          "nixpkgs"
         ]
       },
       "locked": {
@@ -766,9 +766,6 @@
         "nixbot": "nixbot",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs_3",
-        "nixpkgs-lib": [
-          "nixpkgs"
-        ],
         "nostale-dev-env": "nostale-dev-env",
         "onex-explorer": "onex-explorer",
         "rofi-jetbrains": "rofi-jetbrains",
