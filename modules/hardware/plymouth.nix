@@ -38,11 +38,6 @@ in
         inherit (cfg) theme themePackages;
       };
 
-      initrd = {
-        verbose = false;
-        systemd.enable = true;
-      };
-
       consoleLogLevel = 3;
       kernelParams = [
         "quiet"
