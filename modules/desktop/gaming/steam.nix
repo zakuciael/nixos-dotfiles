@@ -121,7 +121,8 @@ in
 
           extraPkgs =
             p:
-            (lib.optionals config.programs.gamemode.enable [ p.gamemode ])
+            [ p.pkgsCross.mingw32.wine-discord-ipc-bridge ]
+            ++ (lib.optionals config.programs.gamemode.enable [ p.gamemode ])
             ++ (lib.optionals config.programs.gamescope.enable (
               with p;
               [
