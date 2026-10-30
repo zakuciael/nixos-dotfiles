@@ -49,6 +49,26 @@
         "type": "github"
       }
     },
+    "amethyst-mod-manager": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1793304786,
+        "narHash": "sha256-HMXyP3zTt94YUh4gsW/vcJkEmO5RIUKrO7COuM9TzpE=",
+        "owner": "ChrisDKN",
+        "repo": "Amethyst-Mod-Manager",
+        "rev": "c25cffff2585a5615433c5dc96d0be47d9a68bb9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ChrisDKN",
+        "repo": "Amethyst-Mod-Manager",
+        "type": "github"
+      }
+    },
     "base16-schemes": {
       "flake": false,
       "locked": {
@@ -747,6 +767,7 @@
       "inputs": {
         "_1pass-shell-plugins": "_1pass-shell-plugins",
         "aagl": "aagl",
+        "amethyst-mod-manager": "amethyst-mod-manager",
         "browser-previews": "browser-previews",
         "catppuccin": "catppuccin",
         "crane": "crane",

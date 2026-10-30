@@ -1,11 +1,12 @@
 {
+  inputs,
   pkgs,
   username,
   ...
 }:
 {
   home-manager.users.${username} = {
-    home.packages = [ pkgs.amethyst-mod-manager ];
+    home.packages = [ inputs.amethyst-mod-manager.packages.default ];
 
     xdg.mimeApps = {
       defaultApplications = {

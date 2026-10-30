@@ -185,6 +185,10 @@
       url = "github:Mic92/nixbot";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    amethyst-mod-manager = {
+      url = "github:ChrisDKN/Amethyst-Mod-Manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -259,6 +263,9 @@
         };
         waybar = flakeInputs.waybar // {
           packages = flakeInputs.waybar.packages.${system};
+        };
+        amethyst-mod-manager = flakeInputs.amethyst-mod-manager // {
+          packages = flakeInputs.amethyst-mod-manager.packages.${system};
         };
       };
 
