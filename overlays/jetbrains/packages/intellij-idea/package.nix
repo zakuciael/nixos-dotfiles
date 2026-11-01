@@ -17,16 +17,16 @@ let
   # update-script-start: urls
   urls = {
     x86_64-linux = {
-      url = "https://download.jetbrains.com/idea/ideaIU-2026.2.3.tar.gz";
-      hash = "sha256-aHUciuTUlAclHNGX33lfvtkbb9yF0QxzxGSameSWqzc=";
+      url = "https://download.jetbrains.com/idea/ideaIU-2026.2.4.tar.gz";
+      hash = "sha256-zGsp3bgsfcxlbVxyjO+yyResdn60uDaPEghzKEb7tb0=";
     };
     aarch64-linux = {
-      url = "https://download.jetbrains.com/idea/ideaIU-2026.2.3-aarch64.tar.gz";
-      hash = "sha256-hzKG3WQGlxojEYJ+3WbFYGDDRVgqSmsXdOOSUYOwLsU=";
+      url = "https://download.jetbrains.com/idea/ideaIU-2026.2.4-aarch64.tar.gz";
+      hash = "sha256-FYuX37w6iAdfoU/PX58sF7M59FJ+QkWzozyvGAUMKuI=";
     };
     aarch64-darwin = {
-      url = "https://download.jetbrains.com/idea/ideaIU-2026.2.3-aarch64.dmg";
-      hash = "sha256-qsPNxthEG5QFJHP+43qWeSQqNvSfYP3ObM6qPnrUbjM=";
+      url = "https://download.jetbrains.com/idea/ideaIU-2026.2.4-aarch64.dmg";
+      hash = "sha256-d+QqNE34FpJuy+dufE4GdPY/1x5+oFloAaU8kylFidg=";
     };
   };
   # update-script-end: urls
@@ -41,8 +41,8 @@ jetbrains.mkJetBrainsProduct {
   productShort = "IDEA";
 
   # update-script-start: version
-  version = "2026.2.3";
-  buildNumber = "262.10968.63";
+  version = "2026.2.4";
+  buildNumber = "262.11879.100";
   # update-script-end: version
 
   src = fetchurl (urls.${system} or (throw "Unsupported system: ${system}"));
