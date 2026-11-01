@@ -57,6 +57,7 @@ in
           exiftool # ExifTool meta information reader/writer
           just # Just a command runner
           jq # Command-line JSON processor
+          jqp # TUI playground for exploring jq
           tre-command # Tree command, improved.
           lazydocker # The lazier way to manage everything docker
           lazygit # simple terminal UI for git commands
@@ -73,6 +74,7 @@ in
           unzip # Extraction utility for archives compressed in .zip format
           p7zip # Command line version of 7-Zip for Linux
           motrix # A full-featured download manager
+          tuxedo # A fast, keyboard-driven terminal UI for todo.txt
         ];
       };
 
