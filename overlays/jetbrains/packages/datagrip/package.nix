@@ -13,16 +13,16 @@ let
   # update-script-start: urls
   urls = {
     x86_64-linux = {
-      url = "https://download.jetbrains.com/datagrip/datagrip-2026.2.6.tar.gz";
-      hash = "sha256-cybg7kTklbnJLAmuNvU9Cmk0fezCMzGIjOyFpkhs0S0=";
+      url = "https://download.jetbrains.com/datagrip/datagrip-2026.2.6.1.tar.gz";
+      hash = "sha256-ASewtG6ai9L2UTCzlosM0E/zDYOfkfKzgJ5kk025ieo=";
     };
     aarch64-linux = {
-      url = "https://download.jetbrains.com/datagrip/datagrip-2026.2.6-aarch64.tar.gz";
-      hash = "sha256-/0Y+l9ct/Zd8SwvD+glkPyaNHBFHGwPyKXsdfsiFC50=";
+      url = "https://download.jetbrains.com/datagrip/datagrip-2026.2.6.1-aarch64.tar.gz";
+      hash = "sha256-9ZPBU2AtHZZDo291lH8K0N5W8vqEN9W93RnszeLBRo8=";
     };
     aarch64-darwin = {
-      url = "https://download.jetbrains.com/datagrip/datagrip-2026.2.6-aarch64.dmg";
-      hash = "sha256-z592LjsbyALA8JYhXTDKz+OHj6SOEiM8va9plYjH27I=";
+      url = "https://download.jetbrains.com/datagrip/datagrip-2026.2.6.1-aarch64.dmg";
+      hash = "sha256-6lX9Z0uHyYPrpFoRUnSmI/D7f+Nlah3Z/tQJ1fhtHZ0=";
     };
   };
   # update-script-end: urls
@@ -36,8 +36,8 @@ jetbrains.mkJetBrainsProduct {
   product = "DataGrip";
 
   # update-script-start: version
-  version = "2026.2.6";
-  buildNumber = "262.10968.148";
+  version = "2026.2.6.1";
+  buildNumber = "262.11879.103";
   # update-script-end: version
 
   src = fetchurl (urls.${system} or (throw "Unsupported system: ${system}"));
