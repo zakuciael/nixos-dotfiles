@@ -102,6 +102,9 @@ in
         figma-linux
         nvtopPackages.amd # htop but for GPU
         mission-center # GUI for monitoring resources usage
+        drawy # KDE's Infinite whiteboard app
+        gradia # Screenshot Tool
+        upscaler # Upscale and enhance images
       ];
     };
   };
