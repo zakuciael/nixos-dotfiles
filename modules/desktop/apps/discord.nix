@@ -10,8 +10,10 @@ let
   inherit (lib.my.utils) findLayoutConfig findLayoutWorkspace;
   pkg = pkgs.discord.override {
     # TODO: Re-enable when this issue is resolved: https://github.com/NixOS/nixpkgs/issues/515106
-    # withOpenASAR = true;
-    withKrisp = true;
+    withOpenASAR = true;
+    withTTS = true;
+    disableUpdates = true;
+    enableAutoscroll = true;
   };
   leftLayout = findLayoutConfig config ({ name, ... }: name == "left"); # Try and find left monitor
   # Left monitor or main if not found
