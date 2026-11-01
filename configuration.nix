@@ -222,6 +222,7 @@ with lib.my;
     };
     shell = {
       nix.enable = true;
+      atuin.enable = true;
       television.enable = true;
       neovim = {
         enable = true;

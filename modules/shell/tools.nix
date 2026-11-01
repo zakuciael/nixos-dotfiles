@@ -80,13 +80,11 @@ in
 
       catppuccin = {
         btop.enable = true;
-        fzf.enable = true;
         cava.enable = true;
       };
 
       programs = {
         btop.enable = true;
-        fzf.enable = true;
         cava.enable = true;
       };
     };
