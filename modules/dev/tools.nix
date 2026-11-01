@@ -10,7 +10,7 @@ let
 
   cfg = config.modules.dev.tools;
 
-  gtCli = lib.getExe pkgs.graphite-cli;
+  gtCli = getExe pkgs.graphite-cli;
 in
 {
   options.modules.dev.tools = {
@@ -38,6 +38,8 @@ in
         # Git
         graphite-cli
         gh
+        git-spice
+        ghgrab
 
         # Reverse Engineering
         ghidra-bin
