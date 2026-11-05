@@ -146,7 +146,10 @@ in
       };
       gaming = {
         enable = true;
-        steam.enable = true;
+        steam = {
+          enable = true;
+          vr.enable = true;
+        };
         mihoyo.enable = true;
         minecraft.enable = true;
         heroic.enable = true;
