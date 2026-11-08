@@ -13,7 +13,12 @@ let
   secretNames = utils.recursiveReadSecretNames { inherit config base; };
   secrets = utils.readSecrets { inherit config base; };
 
-  mkKeyValue = key: value: "${key} ${value}";
+  mkKeyValue =
+    key: value:
+    if builtins.isList value then
+      value |> concatMapStringsSep "\n" (v: "${key} ${v}")
+    else
+      "${key} ${value}";
   mkSecretSettings =
     secret:
     if hasSuffix "/public_key" secret then
@@ -27,14 +32,30 @@ let
   mkPublicKeySettings =
     host:
     if (hasAttrByPath [ host "public_key" ] secrets) then
-      {
-        IdentityFile = utils.mkSecretPath config [
-          base
-          host
-          "public_key"
-        ];
-        IdentitiesOnly = "yes";
-      }
+      if (builtins.isAttrs (getAttrFromPath [ host "public_key" ] secrets)) then
+        {
+          IdentityFile =
+            getAttrFromPath [ host "public_key" ] secrets
+            |> attrNames
+            |> map (
+              name:
+              utils.mkSecretPath config [
+                base
+                host
+                "public_key"
+                name
+              ]
+            );
+        }
+      else
+        {
+          IdentityFile = utils.mkSecretPath config [
+            base
+            host
+            "public_key"
+          ];
+          IdentitiesOnly = "yes";
+        }
     else
       { };
 
@@ -44,7 +65,7 @@ let
       settings =
         if (hasAttrByPath [ host "settings" ] secrets) then
           listToAttrs (
-            builtins.map (v: {
+            map (v: {
               name = v;
               value = utils.mkSecretPlaceholder config [
                 base
@@ -68,7 +89,7 @@ let
       ]
     }
     ${utils.indentLines "  " (
-      concatLines (builtins.map (v: mkKeyValue v.name v.value) (attrsToList settings))
+      concatLines (map (v: mkKeyValue v.name v.value) (attrsToList settings))
     )}'';
 in
 {
@@ -83,21 +104,21 @@ in
     };
   };
 
-  config = mkIf (cfg.enable) {
+  config = mkIf cfg.enable {
     sops = {
       templates = {
         "ssh/hosts.conf" = {
           mode = "600";
           owner = username;
           content = lib.concatLines (
-            builtins.map (host: mkHost host (mkHostSettings host)) (builtins.attrNames secrets)
+            map (host: mkHost host (mkHostSettings host)) (builtins.attrNames secrets)
           );
         };
       };
-      secrets = lib.listToAttrs (builtins.map (v: lib.nameValuePair v (mkSecretSettings v)) secretNames);
+      secrets = lib.listToAttrs (map (v: lib.nameValuePair v (mkSecretSettings v)) secretNames);
     };
 
-    services.openssh = mkIf (cfg.server.enable) {
+    services.openssh = mkIf cfg.server.enable {
       enable = true;
       openFirewall = true;
       allowSFTP = true;
