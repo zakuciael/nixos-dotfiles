@@ -5,6 +5,7 @@
   imagemagick,
   openssh-fhs-compat,
   kitty,
+  rsync,
 }:
 let
   pname = "frame-control";
@@ -16,20 +17,46 @@ let
     hash = "sha256-5vAsbEDGf2gT62KAwEfNq6NtcJmUFX3/uVTf2v8RdmQ=";
   };
 
+  # wrapType2 only forwards pname/version/src into extract, so patch via a custom
+  # contents derivation and wrapAppImage instead.
   appimageContents = appimageTools.extract {
     inherit pname version src;
+    postExtract = ''
+      # Nix store paths are 0444/0555. Frame Control syncs them to the headset with
+      # rsync -a / scp -r, which preserves those modes. A 0555 staging dir then makes
+      # `rm -rf ~/.devkit-utils.frame-control` fail with "Permission denied".
+      substituteInPlace $out/resources/ui/frame_titles.py \
+        --replace-fail \
+          "cmd = ['rsync', '-a', *(['--delete'] if delete else []), '-e', shlex.join(['ssh', *opts])," \
+          "cmd = ['rsync', '-a', '--chmod=ugo=rwX', *(['--delete'] if delete else []), '-e', shlex.join(['ssh', *opts]),"
+
+      # Clear leftover 0555 staging dirs from earlier broken syncs.
+      substituteInPlace $out/resources/ui/frame_titles.py \
+        --replace-fail \
+          "ssh(f'rm -rf {tmp}', timeout=30)" \
+          "ssh(f'chmod -R u+rwX {tmp} 2>/dev/null; rm -rf {tmp}', timeout=30)"
+
+      # Ensure the copied tree is writable before merge / cleanup.
+      substituteInPlace $out/resources/ui/frame_titles.py \
+        --replace-fail \
+          "ssh(f'mkdir -p {UTILS} && cp -R {tmp}/. {UTILS}/ && rm -rf {tmp} {UTILS}/__pycache__ '" \
+          "ssh(f'chmod -R u+rwX {tmp} && mkdir -p {UTILS} && cp -R {tmp}/. {UTILS}/ && chmod -R u+rwX {UTILS} && rm -rf {tmp} {UTILS}/__pycache__ '"
+    '';
   };
 
   icon = "${appimageContents}/usr/share/icons/hicolor/1024x1024/apps/${pname}.png";
 in
-appimageTools.wrapType2 {
-  inherit pname version src;
+appimageTools.wrapAppImage {
+  inherit pname version;
+  contents = appimageContents;
 
   # Host SSH via -F wrapper (HM ~/.ssh/config is store-owned inside FHS).
   # x64 builds already bundle adb. kitty is used for the in-app terminal.
+  # rsync is preferred for Frame syncs (see frame_titles._copy_tree).
   extraPkgs = pkgs: [
     openssh-fhs-compat
     kitty
+    rsync
   ];
 
   extraInstallCommands = ''
