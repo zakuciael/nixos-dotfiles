@@ -70,7 +70,6 @@ in
           tokei # Count your code, quickly.
           nix-prefetch-github # Prefetch sources from github for nix build tool
           nix-prefetch-git # Script used to obtain source hashes for fetchgit
-          unrar # Utility for RAR archives
           unzip # Extraction utility for archives compressed in .zip format
           zip # Compressor/archiver for creating and modifying zipfiles
           rar # Utility for RAR archives
