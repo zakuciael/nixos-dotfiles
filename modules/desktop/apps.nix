@@ -94,6 +94,9 @@ in
         # VPN, Zero-Trust, etc.
         proton-vpn
 
+        # Interactive Videos
+        intiface-central
+
         # Other
         czkawka
         font-manager
