@@ -91,6 +91,9 @@ in
         gnome-calculator
         gnome-calendar
 
+        # VPN, Zero-Trust, etc.
+        proton-vpn
+
         # Other
         czkawka
         font-manager
