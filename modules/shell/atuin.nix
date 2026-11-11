@@ -91,6 +91,7 @@ in
           search_mode = "fuzzy";
           data_dir = dataDir;
           key_path = keySecretPath;
+          filter_mode_shell_up_key_binding = "session-preload";
         };
       };
 
