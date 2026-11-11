@@ -112,7 +112,11 @@ desktop.mkDesktopModule {
       services.displayManager.defaultSession = "hyprland-uwsm";
 
       home-manager.users.${username} = {
-        home.packages = with pkgs; [ wl-clipboard ];
+        home.packages = with pkgs; [
+          wl-clipboard
+          hyprpicker
+          wev
+        ];
 
         xdg.portal = {
           enable = true;
