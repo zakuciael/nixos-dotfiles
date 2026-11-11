@@ -108,6 +108,7 @@ in
         drawy # KDE's Infinite whiteboard app
         gradia # Screenshot Tool
         upscaler # Upscale and enhance images
+        megasync
       ];
     };
   };
