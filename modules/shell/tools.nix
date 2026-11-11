@@ -72,6 +72,8 @@ in
           nix-prefetch-git # Script used to obtain source hashes for fetchgit
           unrar # Utility for RAR archives
           unzip # Extraction utility for archives compressed in .zip format
+          zip # Compressor/archiver for creating and modifying zipfiles
+          rar # Utility for RAR archives
           p7zip # Command line version of 7-Zip for Linux
           motrix # A full-featured download manager
           tuxedo # A fast, keyboard-driven terminal UI for todo.txt
