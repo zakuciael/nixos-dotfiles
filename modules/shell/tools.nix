@@ -77,6 +77,8 @@ in
           p7zip # Command line version of 7-Zip for Linux
           motrix # A full-featured download manager
           tuxedo # A fast, keyboard-driven terminal UI for todo.txt
+          lsof # Tool to list open files
+          usbutils # Tools for working with USB devices, such as lsusb
         ];
       };
 
