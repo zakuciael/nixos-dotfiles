@@ -120,8 +120,18 @@ desktop.mkDesktopModule {
 
         xdg.portal = {
           enable = true;
-          extraPortals = with pkgs; [ xdg-desktop-portal-gtk ];
+          extraPortals = with pkgs; [
+            xdg-desktop-portal-gtk
+            kdePackages.xdg-desktop-portal-kde
+          ];
           xdgOpenUsePortal = false;
+          config.hyprland = {
+            default = [
+              "hyprland"
+              "gtk"
+            ];
+            "org.freedesktop.impl.portal.FileChooser" = [ "kde" ];
+          };
         };
 
         wayland.windowManager.hyprland = {
