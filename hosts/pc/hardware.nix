@@ -62,8 +62,8 @@ in
     };
 
     "/media/storage" = {
-      device = "/dev/md/storage";
-      fsType = "auto";
+      device = "/dev/disk/by-label/storage";
+      fsType = "ext4";
     };
 
     "/media/games" = {
