@@ -50,7 +50,10 @@ in
       rejectPackets = true;
 
       # Open ports in the firewall.
-      # allowedTCPPorts = [ ... ];
+      allowedTCPPorts = [
+        9999
+        12345
+      ];
       # allowedUDPPorts = [ ... ];
     };
   };
