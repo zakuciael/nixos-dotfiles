@@ -42,6 +42,7 @@ desktop.mkDesktopModule {
     "nh"
     "grimblast"
     "nmgui"
+    "motrix"
 
     # System components
     "hyprlock"
