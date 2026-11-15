@@ -6,10 +6,21 @@
   ...
 }:
 let
-  inherit (lib) mkEnableOption mkIf getExe getExe';
+  inherit (lib)
+    mkEnableOption
+    mkIf
+    mkOption
+    getExe
+    getExe'
+    types
+    ;
+  inherit (lib.hm) dag;
 
   cfg = config.modules.dev.ai;
   configHome = config.home-manager.users.${username}.xdg.configHome;
+
+  # Used when `projectsDirectory` is unavailable so ~/.t3/projects stays writable.
+  projectsFallbackDir = "/home/${username}/Projects";
 
   # Store path to the npm package root (dist + node_modules) so OpenCode can
   # resolve package exports and runtime deps without fetching from npm at startup.
@@ -25,10 +36,41 @@ let
       -e '/^Made-with: Cursor$/d' \
       "$msg_file"
   '';
+
+  linkT3Projects = pkgs.writeShellScript "link-t3-projects" ''
+    set -euo pipefail
+    projects=${lib.escapeShellArg cfg.projectsDirectory}
+    fallback=${lib.escapeShellArg projectsFallbackDir}
+    target="$HOME/.t3/projects"
+
+    mkdir -p "$HOME/.t3" "$fallback"
+    if [ -d "$projects" ]; then
+      ln -sfn "$projects" "$target"
+    else
+      ln -sfn "$fallback" "$target"
+    fi
+  '';
 in
 {
   options.modules.dev.ai = {
     enable = mkEnableOption "AI tooling";
+
+    projectsDirectory = mkOption {
+      type = types.str;
+      example = "/home/${username}/Projects";
+      description = ''
+        Absolute path used as t3code's project base (`addProjectBaseDirectory`)
+        and as the preferred `~/.t3/projects` target when that directory exists.
+      '';
+    };
+
+    worktreesDirectory = mkOption {
+      type = types.str;
+      example = "/home/${username}/Worktrees";
+      description = ''
+        Absolute path used as t3code's worktrees directory (`worktreesDirectory`).
+      '';
+    };
   };
 
   config = mkIf cfg.enable {
@@ -46,9 +88,35 @@ in
             imhex-mcp-server
           ];
 
-          # New Project always writes under ~/.t3/projects; point that at Projects.
-          file.".t3/projects".source =
-            config.lib.file.mkOutOfStoreSymlink "/run/media/${username}/Shared/Projects";
+          # Seed the local fallback directory for `linkT3Projects`.
+          file."Projects/.keep".text = "";
+        };
+
+        # Point ~/.t3/projects at `projectsDirectory` when present, otherwise
+        # at the local fallback so t3code can still write projects.
+        home.activation.linkT3Projects = dag.entryAfter [ "writeBoundary" ] ''
+          run ${linkT3Projects}
+        '';
+
+        systemd.user = {
+          services.t3-projects-link = {
+            Unit.Description = "Link ~/.t3/projects to modules.dev.ai.projectsDirectory or local fallback";
+            Service = {
+              Type = "oneshot";
+              RemainAfterExit = true;
+              ExecStart = "${linkT3Projects}";
+            };
+            Install.WantedBy = [ "default.target" ];
+          };
+
+          paths.t3-projects-link = {
+            Unit.Description = "Re-link ~/.t3/projects when projectsDirectory appears or media mounts change";
+            Path = {
+              PathExists = cfg.projectsDirectory;
+              PathChanged = "/run/media/${username}";
+            };
+            Install.WantedBy = [ "default.target" ];
+          };
         };
 
         # Global shortcut for `t3code` capture window
@@ -221,13 +289,17 @@ in
 
             userSettings = {
               enableProviderUpdateChecks = false;
-              continueThreadsAfterServerUpdate = true;
+              requireConnectDeviceApproval = true;
               defaultAutoPull = true;
               removeAgentCreditsOnMerge = true;
               branchNamingMode = "semantic";
               environmentIcon = "linux";
-              addProjectBaseDirectory = "/run/media/${username}/Shared/Projects";
-              worktreesDirectory = "/run/media/${username}/Shared/Worktrees";
+              linkedEnvironmentsEnabled = true;
+              projectSettingsFolded = true;
+              idleCompaction = "onReturn";
+              pullRequestMergeMethod = "squash";
+              addProjectBaseDirectory = cfg.projectsDirectory;
+              worktreesDirectory = cfg.worktreesDirectory;
               defaultModelSelection = {
                 instanceId = "cursor";
                 model = "default";
