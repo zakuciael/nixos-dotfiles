@@ -62,6 +62,17 @@ in
             (mkBind "CTRL + SHIFT + 2" (dsp.global "com.t3tools.T3Code:capture-window"))
           ];
 
+        # Declarative `t3code://` handler so OAuth/Connect callbacks survive
+        # home-manager mimeapps.list regeneration (runtime xdg-mime default does not).
+        xdg.mimeApps = {
+          defaultApplications = {
+            "x-scheme-handler/t3code" = [ "t3code.desktop" ];
+          };
+          associations.added = {
+            "x-scheme-handler/t3code" = [ "t3code.desktop" ];
+          };
+        };
+
         programs = {
           mcp = {
             enable = true;
