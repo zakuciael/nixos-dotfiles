@@ -86,7 +86,10 @@ in
       };
 
       programs = {
-        btop.enable = true;
+        btop = {
+          enable = true;
+          settings.show_gpu_info = "Off";
+        };
         cava.enable = true;
       };
     };
