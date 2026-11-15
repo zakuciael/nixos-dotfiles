@@ -1,5 +1,6 @@
 {
   lib,
+  pkgs,
   inputs,
   username,
   dotfiles,
@@ -108,6 +109,10 @@ in
       };
     };
     dev = {
+      ai = {
+        enable = true;
+        skills = pkgs.ai-skills;
+      };
       tools.enable = true;
       kubernetes.enable = true;
       browser.enable = true;
