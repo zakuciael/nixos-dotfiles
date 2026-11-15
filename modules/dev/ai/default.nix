@@ -6,7 +6,7 @@
   ...
 }:
 let
-  inherit (lib) mkEnableOption mkIf;
+  inherit (lib) mkEnableOption mkIf getExe getExe';
 
   cfg = config.modules.dev.ai;
   configHome = config.home-manager.users.${username}.xdg.configHome;
@@ -42,6 +42,7 @@ in
             opencode-desktop
             skills
             postplan
+            claude-real-video
             imhex-mcp-server
           ];
 
@@ -76,8 +77,13 @@ in
         programs = {
           mcp = {
             enable = true;
-            servers.imhex = {
-              command = lib.getExe pkgs.imhex-mcp-server;
+            servers = {
+              imhex = {
+                command = getExe pkgs.imhex-mcp-server;
+              };
+              crv = {
+                command = getExe' pkgs.claude-real-video "crv-mcp";
+              };
             };
           };
 
