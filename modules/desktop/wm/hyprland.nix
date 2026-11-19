@@ -117,6 +117,7 @@ desktop.mkDesktopModule {
           wl-clipboard
           hyprpicker
           wev
+          waypipe
         ];
 
         xdg.portal = {
