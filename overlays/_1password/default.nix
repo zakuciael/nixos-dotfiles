@@ -12,13 +12,13 @@ in
       inherit (stdenv.hostPlatform) system;
 
       pname = "1password-cli";
-      version = "2.43.0-beta.02";
+      version = "2.44.0-beta.02";
       sources = rec {
-        aarch64-linux = fetch "linux_arm64" "sha256-rqvDCUCsYz6T6pA5cxCrjO58y5Shyhec/ouQDROBt+A=" "zip";
-        i686-linux = fetch "linux_386" "sha256-37EEUGMmf3V2VGcmEAZPYyC4AnlYqP7BzHEEEA7kERg=" "zip";
-        x86_64-linux = fetch "linux_amd64" "sha256-epLhYke+pOXYl1hPQ/xVRxLthyPRNoYCm7N+xKKMZiY=" "zip";
+        aarch64-linux = fetch "linux_arm64" "sha256-fJO5xTe3Irme60ApyxRV+PSEyxM3BN7KCQ44WUTM+Dg=" "zip";
+        i686-linux = fetch "linux_386" "sha256-HmMEhJif6u9MWGrpJn1PUik3AJ01nBgZLqiJyGfz9WU=" "zip";
+        x86_64-linux = fetch "linux_amd64" "sha256-tidkiDFROrAuRBcs2d6Fe10pY4vZQ8AHTZ6MZsyRTGs=" "zip";
         aarch64-darwin =
-          fetch "apple_universal" "sha256-/UD4P4HOcejLzOZPzaAsOcPEnFA6dMH32ythJh2PjqA="
+          fetch "apple_universal" "sha256-nRMcFPjg3sgdbYu8pjSTHuzHZw4qUQfOG9OUszVyTOA="
             "pkg";
         x86_64-darwin = aarch64-darwin;
       };
