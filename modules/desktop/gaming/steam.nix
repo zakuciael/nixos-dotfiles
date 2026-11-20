@@ -79,6 +79,7 @@ in
         gamescope-wsi # For HDR support in gamescope
         protonup-qt
         pkgsCross.mingw32.wine-discord-ipc-bridge
+        sgdboop # Custom assets from SteamGridDB
       ];
 
       programs = {
