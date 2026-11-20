@@ -211,7 +211,6 @@
           allowDeprecatedx86_64Darwin = true;
           permittedInsecurePackages = [
             "openssl-1.1.1w"
-            "electron-39.8.10" # Used by Vortex app
           ];
         };
 

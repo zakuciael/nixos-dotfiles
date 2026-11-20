@@ -1,6 +1,6 @@
 --- a/packages/provider-cursor/src/server/skills.ts
 +++ b/packages/provider-cursor/src/server/skills.ts
-@@ -285,11 +285,42 @@
+@@ -298,11 +298,42 @@
    return HAS_SKILL_MENTION_PATTERN.test(prompt);
  }
  
@@ -46,9 +46,10 @@
 +    "</t3_cursor_skill_invocation>"
    );
  }
+ 
 --- a/packages/provider-cursor/src/server/skills.test.ts
 +++ b/packages/provider-cursor/src/server/skills.test.ts
-@@ -218,18 +218,44 @@
+@@ -309,26 +309,52 @@
      expect(hasCursorSkillMention("use $Review_Pr:V2 here")).toBe(true);
      expect(hasCursorSkillMention("please $review this")).toBe(true);
      expect(
@@ -99,7 +100,7 @@
      for (const text of [
        "pay $20 tomorrow",
        "budget $20k here",
-@@ -237,7 +263,7 @@
+       "cost $100M total",
        "limit $1e6 here",
      ]) {
        expect(hasCursorSkillMention(text)).toBe(false);
@@ -110,47 +111,18 @@
  });
 --- a/packages/provider-cursor/src/server/adapter.ts
 +++ b/packages/provider-cursor/src/server/adapter.ts
-@@ -2169,7 +2169,7 @@
-           return next;
-         });
- 
--        let cursorSkillNames: ReadonlySet<string> | undefined;
-+        let cursorSkillPaths: ReadonlyMap<string, string> | undefined;
-         const resolveUserMessage = Effect.fnUntraced(function* (
-           turnInput: ProviderAdapter.ProviderAdapterV2TurnInput,
-           mcpServers: Record<string, McpServerConfig> | undefined,
-@@ -2178,7 +2178,7 @@
-           if (rawText.trim() === "/compress" && turnInput.message.attachments.length === 0) {
-             return "/compress";
-           }
--          if (hasCursorSkillMention(rawText) && cursorSkillNames === undefined) {
-+          if (hasCursorSkillMention(rawText) && cursorSkillPaths === undefined) {
-             const skills = yield* discoverCursorSkills(
-               turnInput.runtimePolicy.cwd ?? undefined,
-               adapterOptions.environment,
-@@ -2186,18 +2186,18 @@
-               Effect.provideService(FileSystem.FileSystem, fileSystem),
-               Effect.provideService(Path.Path, path),
-             );
--            cursorSkillNames = new Set(
-+            cursorSkillPaths = new Map(
-               skills
-                 .filter((skill) => skill.enabled && skill.userInvocable !== false)
--                .map((skill) => skill.name),
-+                .map((skill) => [skill.name, skill.path] as const),
-             );
-           }
-           const userText = t3OrchestrationPromptForFirstRun({
-             prompt: providerMessageTextWithAttachmentPaths({
-               text:
--                cursorSkillNames === undefined
-+                cursorSkillPaths === undefined
-                   ? rawText
--                  : rewriteCursorSkillMentions(rawText, cursorSkillNames),
-+                  : rewriteCursorSkillMentions(rawText, cursorSkillPaths),
-               attachments: turnInput.message.attachments,
-               resolveAttachmentPath: host.resolveAttachmentPath,
-             }),
+@@ -2427,7 +2427,10 @@
+             }
+             if (cursorSkills === undefined) return rawText;
+             const skillsByName = cursorSkills;
+-            const text = rewriteCursorSkillMentions(rawText, new Set(skillsByName.keys()));
++            const text = rewriteCursorSkillMentions(
++              rawText,
++              new Map([...skillsByName.entries()].map(([name, skill]) => [name, skill.path])),
++            );
+             const invoked = yield* Effect.forEach(cursorSlashSkillNames(text), (name) => {
+               const skill = skillsByName.get(name);
+               return skill?.userInvocationOnly === true
 --- a/packages/provider-cursor/src/server/driver.ts
 +++ b/packages/provider-cursor/src/server/driver.ts
 @@ -32,7 +32,7 @@
@@ -162,7 +134,7 @@
  import { makeCursorAuth } from "./auth.ts";
  import * as CursorCredentialStore from "./credentialStore.ts";
  import * as CursorAgentSdk from "./CursorAgentSdk.ts";
-@@ -294,18 +294,11 @@
+@@ -287,18 +287,11 @@
            ? snapshot.getSnapshot
            : Effect.all([
                snapshot.getSnapshot,

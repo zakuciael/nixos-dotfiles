@@ -42,6 +42,7 @@ desktop.mkDesktopModule {
     "nh"
     "grimblast"
     "nmgui"
+    "motrix"
 
     # System components
     "hyprlock"
@@ -116,6 +117,7 @@ desktop.mkDesktopModule {
           wl-clipboard
           hyprpicker
           wev
+          waypipe
         ];
 
         xdg.portal = {
