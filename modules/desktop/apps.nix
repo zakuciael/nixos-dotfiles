@@ -111,7 +111,8 @@ in
         drawy # KDE's Infinite whiteboard app
         gradia # Screenshot Tool
         upscaler # Upscale and enhance images
-        megasync
+        megasync # Easy automated syncing between your computers and your MEGA Cloud Drive
+        frameport # Port games to work with the Steam Frame
       ];
     };
   };

@@ -110,6 +110,19 @@
           };
         };
 
+      # Source builds leave T3 Connect disabled (`t3 connect` → "missing T3 Connect
+      # public configuration") unless the public Clerk/relay identifiers are present
+      # at build time. `.env.example` is the same public config official releases bake
+      # in — not secrets (docs/operations/connect-setup.md).
+      withConnectPublicConfig =
+        old:
+        (old.postPatch or "")
+        + ''
+          if [[ -f .env.example && ! -f .env ]]; then
+            cp .env.example .env
+          fi
+        '';
+
       withDesktopFixes =
         captureHelpers: pkg:
         pkg.overrideAttrs (old: {
@@ -161,13 +174,14 @@
           hash = "sha256-2dGEHOQrnidTei54NlZTJh5u5/i810hb2LddK4XfUNQ=";
         };
 
+        postPatch = withConnectPublicConfig old;
         postInstall = captureHelpers.installUnwrapped old;
         postFixup = withLinuxFixes old;
       });
 
-      nightlyVersion = "0.1.3-nightly.20261024.3643";
-      nightlySrcHash = "sha256-hzsSWIOFDPjz/PQlbVgt0svtSLLF+oRZ8tH0bYrfvhA=";
-      nightlyPnpmDepsHash = "sha256-SvNUylZW3EgFF44kRZY8YEAMPidP8/OhrSvX3aYNcfA=";
+      nightlyVersion = "0.1.10-nightly.20261114.4695";
+      nightlySrcHash = "sha256-S2B/BDO2/ejVtNJntj/1HkKPQAfYfvjvxmkKa+UapUU=";
+      nightlyPnpmDepsHash = "sha256-pYb9FqBoYJp1AW3HK0uwNinmi0TgcTbQJQA8Yv1Hr8I=";
       # Prefetched by update.sh alongside src/pnpm hashes.
       nightlyHyprlandCargoHash = "sha256-oki1DAzUJ/8YIFhaJlw2wOukiQMcAaexdJqxDcFXFW4=";
       nightlyKdeCargoHash = "sha256-ZbetrRAvnNLLS51IwR9xLb1NhnpFQB4J1ahn4CthJy0=";
@@ -210,6 +224,7 @@
           hash = nightlyPnpmDepsHash;
         };
 
+        postPatch = withConnectPublicConfig old;
         postInstall = nightlyCaptureHelpers.installUnwrapped old;
         postFixup = withLinuxFixes old;
       });

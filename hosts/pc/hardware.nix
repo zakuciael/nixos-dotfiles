@@ -62,7 +62,7 @@ in
     };
 
     "/media/storage" = {
-      device = "/dev/disk/by-label/storage";
+      device = "/dev/disk/by-label/Storage";
       fsType = "ext4";
     };
 
