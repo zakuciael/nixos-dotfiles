@@ -3,6 +3,7 @@
   stdenvNoCC,
   fetchFromGitHub,
   postplan,
+  claude-real-video,
 }:
 let
   sources =
@@ -72,6 +73,7 @@ stdenvNoCC.mkDerivation {
 
     # Single skill directory (not a container of skills).
     ln -sfn ${sources.cursor-plugins}/pstack/skills/unslop "$out/unslop"
+    ln -sfn ${claude-real-video.src}/skills/claude-real-video "$out/claude-real-video"
 
     ${installSkillsFrom {
       src = sources.mattpocock-skills;

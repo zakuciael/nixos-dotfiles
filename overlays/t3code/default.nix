@@ -110,6 +110,19 @@
           };
         };
 
+      # Source builds leave T3 Connect disabled (`t3 connect` → "missing T3 Connect
+      # public configuration") unless the public Clerk/relay identifiers are present
+      # at build time. `.env.example` is the same public config official releases bake
+      # in — not secrets (docs/operations/connect-setup.md).
+      withConnectPublicConfig =
+        old:
+        (old.postPatch or "")
+        + ''
+          if [[ -f .env.example && ! -f .env ]]; then
+            cp .env.example .env
+          fi
+        '';
+
       withDesktopFixes =
         captureHelpers: pkg:
         pkg.overrideAttrs (old: {
@@ -161,6 +174,7 @@
           hash = "sha256-2dGEHOQrnidTei54NlZTJh5u5/i810hb2LddK4XfUNQ=";
         };
 
+        postPatch = withConnectPublicConfig old;
         postInstall = captureHelpers.installUnwrapped old;
         postFixup = withLinuxFixes old;
       });
@@ -210,6 +224,7 @@
           hash = nightlyPnpmDepsHash;
         };
 
+        postPatch = withConnectPublicConfig old;
         postInstall = nightlyCaptureHelpers.installUnwrapped old;
         postFixup = withLinuxFixes old;
       });

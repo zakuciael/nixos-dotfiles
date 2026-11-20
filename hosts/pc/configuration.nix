@@ -183,6 +183,8 @@ in
       ai = {
         enable = true;
         skills = pkgs.ai-skills;
+        projectsDirectory = "/run/media/${username}/Shared/Projects";
+        worktreesDirectory = "/run/media/${username}/Shared/Worktrees";
       };
       nostale = {
         enable = true;
