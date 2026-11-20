@@ -2,12 +2,16 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Iterable, TypedDict
+from typing import Iterable, NotRequired, TypedDict
 
 
 class UpdateInfo(TypedDict):
     channel: str
     urls: dict[str, str]
+    # When true, the weekly updater leaves this IDE alone (manual pin).
+    skip: NotRequired[bool]
+    skipReason: NotRequired[str]
+
 
 
 @dataclass(slots=True)

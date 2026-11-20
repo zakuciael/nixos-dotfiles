@@ -60,6 +60,11 @@ def main() -> None:
     success = True
     for ide in ides:
         print(f"[@] updating {ide.name}")
+        if ide.update_info and ide.update_info.get("skip"):
+            reason = ide.update_info.get("skipReason") or "skip=true in updateInfo.json"
+            print(f"[o] skipping {ide.name}: {reason}")
+            continue
+
         info = version_fetcher.latest_version_info(ide)
         if info is None:
             success = False
