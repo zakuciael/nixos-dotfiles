@@ -20,7 +20,7 @@
 
 let
   pname = "motrix";
-  version = "2.4.1";
+  version = "2.4.5";
 
   # Upstream currently pins Electron 45.x; nixpkgs for this flake provides 44.x.
   # Match the AUR packaging approach and rebuild native modules against system Electron.
@@ -40,17 +40,17 @@ let
     owner = "agalwood";
     repo = "Motrix";
     tag = "v${version}";
-    hash = "sha256-PneNIfJgnTyHq+hV0whTn3s6KPiGQcRk7OJmNBksbEw=";
+    hash = "sha256-eCsWZhXkk7qj+J5jcxfNiv6LYg+sxEo8k8X9PeJSbu8=";
   };
 
   # Pinned by scripts/engine.lock.json for this Motrix release.
-  engineVersion = "1.37.0-motrix.24";
+  engineVersion = "1.37.0-motrix.25";
   engine = fetchurl {
     url = "https://github.com/motrixapp/aria2/releases/download/v${engineVersion}/aria2c-${engineVersion}-linux-${electronArch}.tar.gz";
     hash =
       {
-        x64 = "sha256-+Ufuhyv6KU2ViRNQPcRwFAwkfJfMLoO3XRluemutFV4=";
-        arm64 = "sha256-rbcsu+smPqxnlTkjCT4W1MklH+86NkiqeUthW2BSebs=";
+        x64 = "sha256-iBxRhDQe2iLEfYEzDp9IaX+cU4nl8lmTJNrogc2lBxk=";
+        arm64 = "sha256-H5qBhzBbhIrQsP+pA1jycS/GS93m6runaVWjxF7Ooe0=";
       }
       .${electronArch};
   };
@@ -123,7 +123,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-CiMNZW/vx5jkGsZhEy9LiQ8wfTzn5Tt5f2XZDqbBHk4=";
+    hash = "sha256-3knXcyj//IXTc16yxjQ7Vgyg+fEGx+M1mmn6LLo3J6g=";
   };
 
   nativeBuildInputs = [
