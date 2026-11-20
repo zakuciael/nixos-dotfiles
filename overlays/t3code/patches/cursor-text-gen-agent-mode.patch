@@ -9,14 +9,14 @@
 +        // JSON decode fails. Agent + empty tools keeps a text-only JSON reply.
 +        mode: "agent",
 +        tools: [],
-         model: cursorSdkModelSelection(modelSelection, getModels?.() ?? []),
+         model: cursorSdkModelSelection(modelSelection, getModels?.() ?? [], getSdkModels?.() ?? []),
          local: {
            cwd,
 --- a/packages/provider-cursor/src/server/textGeneration.test.ts
 +++ b/packages/provider-cursor/src/server/textGeneration.test.ts
-@@ -128,9 +128,13 @@
-       expect(generated.subject).toBe("Add generated commit message");
-       expect(cursorSdkMock.create).toHaveBeenCalledTimes(2);
+@@ -151,9 +151,13 @@
+       expect(cursorSdkMock.prompt).toHaveBeenCalledTimes(2);
+       expect(cursorSdkMock.close).toHaveBeenCalledTimes(3);
        expect(cursorSdkMock.create.mock.calls[0]?.[0]).toMatchObject({
 +        mode: "agent",
 +        tools: [],
