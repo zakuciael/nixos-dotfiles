@@ -1,6 +1,6 @@
 --- a/packages/provider-cursor/src/server/skills.ts
 +++ b/packages/provider-cursor/src/server/skills.ts
-@@ -298,11 +298,42 @@
+@@ -298,12 +298,43 @@
    return HAS_SKILL_MENTION_PATTERN.test(prompt);
  }
  
@@ -49,7 +49,7 @@
  
 --- a/packages/provider-cursor/src/server/skills.test.ts
 +++ b/packages/provider-cursor/src/server/skills.test.ts
-@@ -309,26 +309,52 @@
+@@ -309,18 +309,44 @@
      expect(hasCursorSkillMention("use $Review_Pr:V2 here")).toBe(true);
      expect(hasCursorSkillMention("please $review this")).toBe(true);
      expect(
@@ -100,7 +100,7 @@
      for (const text of [
        "pay $20 tomorrow",
        "budget $20k here",
-       "cost $100M total",
+@@ -328,7 +354,7 @@
        "limit $1e6 here",
      ]) {
        expect(hasCursorSkillMention(text)).toBe(false);
@@ -111,7 +111,7 @@
  });
 --- a/packages/provider-cursor/src/server/adapter.ts
 +++ b/packages/provider-cursor/src/server/adapter.ts
-@@ -2427,7 +2427,10 @@
+@@ -2799,7 +2799,10 @@
              }
              if (cursorSkills === undefined) return rawText;
              const skillsByName = cursorSkills;
@@ -125,7 +125,7 @@
                return skill?.userInvocationOnly === true
 --- a/packages/provider-cursor/src/server/driver.ts
 +++ b/packages/provider-cursor/src/server/driver.ts
-@@ -32,7 +32,7 @@
+@@ -34,7 +34,7 @@
    makeProviderSnapshotSettingsSource,
    type ProviderSnapshotSettings,
  } from "@t3tools/provider-core/server/snapshotSettings";
@@ -134,7 +134,7 @@
  import { makeCursorAuth } from "./auth.ts";
  import * as CursorCredentialStore from "./credentialStore.ts";
  import * as CursorAgentSdk from "./CursorAgentSdk.ts";
-@@ -287,18 +287,11 @@
+@@ -306,18 +306,11 @@
            ? snapshot.getSnapshot
            : Effect.all([
                snapshot.getSnapshot,
