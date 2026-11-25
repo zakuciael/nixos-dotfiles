@@ -179,9 +179,9 @@
         postFixup = withLinuxFixes old;
       });
 
-      nightlyVersion = "0.1.12-nightly.20261120.4994";
-      nightlySrcHash = "sha256-ijKa0LiDu1ds6dwUF0T++bbJeYG1rGU5l0jDnak8Dws=";
-      nightlyPnpmDepsHash = "sha256-aqJYujlMFpJG3i+kn35Zd3tjymzxZ7Ero9dQQHPXXpE=";
+      nightlyVersion = "0.1.12-nightly.20261121.5064";
+      nightlySrcHash = "sha256-ECKWvjkSaZcRPYjaHg6p/kCAKr+Klxk9CH4M8eUljZw=";
+      nightlyPnpmDepsHash = "sha256-i2Rpux1/w4po7UDS9G9Rxo6eR8/8jzKgO5Jjrr9Jrco=";
       # Prefetched by update.sh alongside src/pnpm hashes.
       nightlyHyprlandCargoHash = "sha256-oki1DAzUJ/8YIFhaJlw2wOukiQMcAaexdJqxDcFXFW4=";
       nightlyKdeCargoHash = "sha256-ZbetrRAvnNLLS51IwR9xLb1NhnpFQB4J1ahn4CthJy0=";
